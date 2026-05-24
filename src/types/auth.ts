@@ -1,13 +1,13 @@
 export interface UserProfile {
-  id: string;
-  email: string;
-  fullName?: string;
-  avatarUrl?: string;
-  createdAt: string;
+    id: string;
+    email: string;
+    fullName?: string;
+    avatarUrl?: string;
+    createdAt: string;
 }
 
 export interface AuthState {
-  user: UserProfile | null;
-  isLoading: boolean;
-  error: string | null;
+    user: UserProfile | null;
+    isLoading: boolean;
+    error: string | null;
 }
