@@ -1,5 +1,8 @@
 import { useState } from "react";
 import api from "./api/api.ts";
+import { ENDPOINTS } from "./api/endpoints.ts";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const App = () => {
     const [status, setStatus] = useState("Unknown Status");
@@ -7,7 +10,7 @@ const App = () => {
 
     const getStatus = async () => {
         try {
-            const { data } = await api.get("/health");
+            const { data } = await api.get(ENDPOINTS.HEALTH);
             setStatus(data.status);
         } catch (error) {
             console.error("Error fetching status:", error);
@@ -16,7 +19,7 @@ const App = () => {
 
     const getSetting = async () => {
         try {
-            const { data } = await api.get("/settings");
+            const { data } = await api.get(ENDPOINTS.SETTINGS);
             setSetting(data);
         } catch (error) {
             console.error("Error fetching setting:", error);
@@ -24,26 +27,28 @@ const App = () => {
     };
 
     return (
-        <div className="container mx-auto p-4">
-            <h2 className="text-xl font-bold mb-4">Health Status</h2>
-            <p className="text-lg mb-4">{status}</p>
-            <button
-                onClick={getStatus}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-            >
-                Get Status
-            </button>
+        <div className="container mx-auto p-4 flex flex-col gap-6">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Health Status</CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-4">
+                    <p className="text-lg">{status}</p>
+                    <Button onClick={getStatus}>Get Status</Button>
+                </CardContent>
+            </Card>
 
-            <h2 className="text-xl font-bold mb-4">Setting</h2>
-            <code className="text-lg">{JSON.stringify(setting, null, 2)}</code>
-            <br className="mb-4" />
-
-            <button
-                onClick={getSetting}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-            >
-                Get Setting
-            </button>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Setting</CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-4">
+                    <code className="text-sm">
+                        {JSON.stringify(setting, null, 2)}
+                    </code>
+                    <Button onClick={getSetting}>Get Setting</Button>
+                </CardContent>
+            </Card>
         </div>
     );
 };
