@@ -1,9 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { ROUTES } from "@/lib/constants";
 
-export default function DashboardPage() {
+const DashboardPage = () => {
     const navigate = useNavigate();
+    const { logout } = useAuth();
+
+    const handleLogout = () => {
+        logout();
+        navigate(ROUTES.LOGIN);
+    };
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-background p-6">
@@ -16,9 +24,11 @@ export default function DashboardPage() {
                         Welcome to the admin dashboard! You have successfully
                         logged in.
                     </p>
-                    <Button onClick={() => navigate("/login")}>Logout</Button>
+                    <Button onClick={handleLogout}>Logout</Button>
                 </CardContent>
             </Card>
         </div>
     );
-}
+};
+
+export default DashboardPage;
