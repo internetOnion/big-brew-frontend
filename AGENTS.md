@@ -38,6 +38,7 @@ Applied from https://tweakcn.com/r/themes/caffeine.json. Warm brown/amber palett
 - **Prettier**: 4-space indent, semicolons ON, double quotes — non-standard; run `npm run format` before committing
 - **TS strictness**: `noUnusedLocals`, `noUnusedParameters`, `erasableSyntaxOnly` — no explicit `import type` needed
 - **No `baseUrl`** in tsconfig — deprecated in TS 6; paths resolve relative to tsconfig location
+- **Arrow functions only**: Always use arrow functions (`const fn = () => {}`), never `function` declarations
 - **API**: `src/api/api.ts` (axios), base URL from `VITE_API_BASE_URL` env var
 
 ## Shadcn CLI Gotchas

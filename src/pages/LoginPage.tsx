@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -6,15 +6,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/hooks/useAuth";
+import { ROUTES } from "@/lib/constants";
 
-export default function LoginPage() {
+const LoginPage = () => {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const handleLogin = (e: FormEvent<HTMLFormElement>) => {
+    const handleLogin = (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!email.trim() || !password.trim()) {
@@ -24,9 +27,8 @@ export default function LoginPage() {
 
         setError("");
         // TODO: Add login API call
-        console.log("Login submitted:", email.trim());
-        // Navigate to dashboard (you can change this route)
-        navigate("/dashboard");
+        login(email.trim());
+        navigate(ROUTES.DASHBOARD);
     };
 
     return (
@@ -105,4 +107,6 @@ export default function LoginPage() {
             </Card>
         </div>
     );
-}
+};
+
+export default LoginPage;

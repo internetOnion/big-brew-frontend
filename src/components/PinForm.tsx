@@ -3,10 +3,31 @@ import { useNavigate } from "react-router-dom";
 import { Delete } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { ROUTES } from "@/lib/constants";
 
-export default function PinForm() {
+const KEYPAD_KEYS = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "",
+    "0",
+    "del",
+];
+
+const PIN_DOTS = Array.from({ length: 6 });
+
+const PinForm = () => {
     const navigate = useNavigate();
+    const { verifyPin } = useAuth();
     const [pin, setPin] = useState("");
+    const [error, setError] = useState("");
 
     const handleNumber = (num: string) => {
         if (pin.length < 6) {
@@ -20,30 +41,13 @@ export default function PinForm() {
 
     const handleLogin = () => {
         // TODO: Replace with actual PIN validation
-        if (pin === "123456") {
-            console.log("PIN correct, unlocking...");
-            // Navigate to menu/POS (you can change this route)
-            navigate("/menu");
+        if (verifyPin(pin)) {
+            navigate(ROUTES.MENU);
         } else {
-            alert("Incorrect PIN");
             setPin("");
+            setError("Incorrect PIN");
         }
     };
-
-    const keypad = [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "",
-        "0",
-        "del",
-    ];
 
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-background p-6">
@@ -57,9 +61,9 @@ export default function PinForm() {
                 </p>
             </div>
 
-            {/* PIN Indicator - iPhone Style Dots */}
+            {/* PIN Indicator */}
             <div className="mb-12 flex gap-4">
-                {[...Array(6)].map((_, index) => (
+                {PIN_DOTS.map((_, index) => (
                     <div
                         key={index}
                         className={`h-5 w-5 rounded-full border-2 transition-all duration-200 ${
@@ -73,7 +77,7 @@ export default function PinForm() {
 
             {/* Keypad */}
             <div className="grid w-full max-w-sm grid-cols-3 gap-4">
-                {keypad.map((key, index) => {
+                {KEYPAD_KEYS.map((key, index) => {
                     if (key === "") {
                         return <div key={index} />;
                     }
@@ -115,6 +119,12 @@ export default function PinForm() {
             >
                 Unlock
             </Button>
+
+            {error ? (
+                <p className="mt-4 text-sm text-destructive">{error}</p>
+            ) : null}
         </div>
     );
-}
+};
+
+export default PinForm;

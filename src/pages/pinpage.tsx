@@ -1,5 +1,7 @@
-import PinForm from "@/components/ui/pinform";
+import PinForm from "@/components/PinForm";
 
-export default function PinPage() {
+const PinPage = () => {
     return <PinForm />;
-}
+};
+
+export default PinPage;

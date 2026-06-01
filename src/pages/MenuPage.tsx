@@ -1,9 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { ROUTES } from "@/lib/constants";
 
-export default function MenuPage() {
+const MenuPage = () => {
     const navigate = useNavigate();
+    const { logout } = useAuth();
+
+    const handleLock = () => {
+        logout();
+        navigate(ROUTES.PIN);
+    };
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-background p-6">
@@ -16,11 +24,11 @@ export default function MenuPage() {
                         Welcome to the POS system! You have successfully
                         unlocked with your PIN.
                     </p>
-                    <Button onClick={() => navigate("/pin")}>
-                        Lock System
-                    </Button>
+                    <Button onClick={handleLock}>Lock System</Button>
                 </CardContent>
             </Card>
         </div>
     );
-}
+};
+
+export default MenuPage;
