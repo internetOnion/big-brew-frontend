@@ -11,23 +11,19 @@ import { ROUTES } from "@/lib/constants";
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { login, error, isLoading } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
 
-    const handleLogin = (e: SubmitEvent<HTMLFormElement>) => {
+    const handleLogin = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!email.trim() || !password.trim()) {
-            setError("Enter an email and password to continue.");
             return;
         }
 
-        setError("");
-        // TODO: Add login API call
-        login(email.trim());
+        await login(email.trim(), password.trim());
         navigate(ROUTES.DASHBOARD);
     };
 
@@ -99,8 +95,9 @@ const LoginPage = () => {
                         <Button
                             type="submit"
                             className="h-12 w-full rounded-xl text-base font-medium"
+                            disabled={isLoading}
                         >
-                            Continue
+                            {isLoading ? "Signing in..." : "Continue"}
                         </Button>
                     </form>
                 </CardContent>

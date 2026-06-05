@@ -25,7 +25,7 @@ const PIN_DOTS = Array.from({ length: 6 });
 
 const PinForm = () => {
     const navigate = useNavigate();
-    const { verifyPin } = useAuth();
+    const { verifyPin, isLoading } = useAuth();
     const [pin, setPin] = useState("");
     const [error, setError] = useState("");
 
@@ -39,11 +39,12 @@ const PinForm = () => {
         setPin((prev) => prev.slice(0, -1));
     };
 
-    const handleLogin = () => {
-        // TODO: Replace with actual PIN validation
-        if (verifyPin(pin)) {
+    const handleLogin = async () => {
+        setError("");
+        try {
+            await verifyPin(pin);
             navigate(ROUTES.MENU);
-        } else {
+        } catch {
             setPin("");
             setError("Incorrect PIN");
         }
@@ -115,9 +116,9 @@ const PinForm = () => {
                 size="lg"
                 className="mt-8 h-16 w-full max-w-sm rounded-2xl text-xl font-medium"
                 onClick={handleLogin}
-                disabled={pin.length !== 6}
+                disabled={pin.length !== 6 || isLoading}
             >
-                Unlock
+                {isLoading ? "Unlocking..." : "Unlock"}
             </Button>
 
             {error ? (
