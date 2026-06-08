@@ -3,12 +3,15 @@ import { toast } from "sonner";
 import { ENDPOINTS } from "./endpoints";
 
 let accessToken: string | null = null;
-
 export const setAccessToken = (token: string | null) => {
     accessToken = token;
 };
-
 export const getAccessToken = () => accessToken;
+
+let onTokenRefreshed: ((token: string) => void) | null = null;
+export const setOnTokenRefreshed = (cb: ((token: string) => void) | null) => {
+    onTokenRefreshed = cb;
+};
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || "https://localhost:3000/api",
@@ -46,7 +49,7 @@ api.interceptors.response.use(
     (response) => response,
     async (error) => {
         if (!error.response) {
-            toast.error("Network error. Check your connection.");
+            toast.error("Network error. Check your connection");
             return Promise.reject(error);
         }
 
@@ -76,9 +79,13 @@ api.interceptors.response.use(
                     },
                 );
 
-                const newToken = data.access_token;
+                const newToken = data.data?.access_token;
                 setAccessToken(newToken);
                 processQueue(null, newToken);
+
+                if (onTokenRefreshed) {
+                    onTokenRefreshed(newToken);
+                }
 
                 originalRequest.headers.Authorization = `Bearer ${newToken}`;
                 return api(originalRequest);
@@ -87,7 +94,7 @@ api.interceptors.response.use(
                 setAccessToken(null);
                 if (!error.config?.silent) {
                     toast.error(
-                        "Your session has expired. Please log in again.",
+                        "Your session has expired. Please log in again",
                     );
                 }
                 return Promise.reject(refreshError);
@@ -97,15 +104,15 @@ api.interceptors.response.use(
         }
 
         if (status === 403) {
-            toast.error("You don't have permission to do that.");
+            toast.error("You don't have permission to do that");
         }
 
         if (status === 404) {
-            toast.error("Resource not found.");
+            toast.error("Resource not found");
         }
 
         if (status >= 500) {
-            toast.error("Something went wrong. Please try again later.");
+            toast.error("Something went wrong. Please try again later");
         }
 
         return Promise.reject(error);

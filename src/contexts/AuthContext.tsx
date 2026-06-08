@@ -1,6 +1,13 @@
-import { createContext, useState, useEffect, useRef, type ReactNode } from "react";
+import {
+    createContext,
+    useState,
+    useEffect,
+    useCallback,
+    useRef,
+    type ReactNode,
+} from "react";
 import type { UserProfile } from "@/types/auth";
-import api, { setAccessToken } from "@/api/api";
+import api, { setAccessToken, setOnTokenRefreshed } from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
 
 export interface AuthContextValue {
@@ -29,30 +36,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [error, setError] = useState<string | null>(null);
     const initializedRef = useRef(false);
 
-    const refreshSession = async () => {
-        try {
-            const { data } = await api.post(
-                ENDPOINTS.AUTH.REFRESH,
-                {},
-                { silent: true },
-            );
-            const { access_token } = data.data;
-            setAccessToken(access_token);
-
-            const meRes = await api.get(ENDPOINTS.AUTH.ME);
-            setUser(mapUser(meRes.data.data as Record<string, unknown>));
-        } catch {
-            setAccessToken(null);
-            setUser(null);
-        }
-    };
+    const fetchUser = useCallback(async () => {
+        const meRes = await api.get(ENDPOINTS.AUTH.ME);
+        setUser(mapUser(meRes.data.data as Record<string, unknown>));
+    }, []);
 
     useEffect(() => {
         if (initializedRef.current) return;
         initializedRef.current = true;
 
-        refreshSession().finally(() => setIsInitialized(true));
-    }, []);
+        setOnTokenRefreshed(() => {
+            fetchUser().catch(() => {
+                setAccessToken(null);
+                setUser(null);
+            });
+        });
+
+        const init = async () => {
+            try {
+                const { data } = await api.post(
+                    ENDPOINTS.AUTH.REFRESH,
+                    {},
+                    { silent: true },
+                );
+                setAccessToken(data.data?.access_token);
+                await fetchUser();
+            } catch {
+                setAccessToken(null);
+                setUser(null);
+            } finally {
+                setIsInitialized(true);
+            }
+        };
+
+        init();
+
+        return () => setOnTokenRefreshed(null);
+    }, [fetchUser]);
 
     const login = async (email: string, password: string) => {
         setIsLoading(true);
@@ -63,11 +83,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 email,
                 password,
             });
-            const { access_token, user } = data.data;
-            setAccessToken(access_token);
-            setUser(mapUser(user as Record<string, unknown>));
+            setAccessToken(data.data?.access_token);
+            await fetchUser();
         } catch {
-            setError("Invalid email or password.");
+            setError("Invalid email or password");
             throw new Error("Login failed");
         } finally {
             setIsLoading(false);
@@ -93,9 +112,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setError(null);
         try {
             const { data } = await api.post(ENDPOINTS.AUTH.PIN, { pin });
-            const { access_token, user } = data.data;
-            setAccessToken(access_token);
-            setUser(mapUser(user as Record<string, unknown>));
+            setAccessToken(data.data?.access_token);
+            await fetchUser();
         } catch {
             setError("Invalid PIN.");
             throw new Error("PIN verification failed");
