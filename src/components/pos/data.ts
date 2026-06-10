@@ -52,7 +52,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: false,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "americano",
@@ -62,7 +62,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: true,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1551030173-122aabc4489c?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "cappuccino",
@@ -72,7 +72,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: true,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "macchiato",
@@ -82,7 +82,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: true,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1485808191679-5f86510681a2?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "latte",
@@ -92,7 +92,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: true,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "flat-white",
@@ -102,7 +102,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: true,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "oat-latte",
@@ -112,7 +112,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: true,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1632054010678-7f2e5a1a7355?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "cortado",
@@ -122,7 +122,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: true,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "matcha-latte",
@@ -132,7 +132,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: true,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1515825838458-f2a94b20105a?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "chai-latte",
@@ -142,7 +142,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: true,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "earl-grey",
@@ -152,7 +152,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: false,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "cold-brew",
@@ -162,7 +162,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: true,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "iced-latte",
@@ -172,7 +172,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: true,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "frappuccino",
@@ -182,7 +182,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: true,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "croissant",
@@ -192,7 +192,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: false,
         hasToppings: false,
         hasSugar: false,
-        image: "https://images.unsplash.com/photo-1623334044303-241021148842?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "banana-bread",
@@ -202,7 +202,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: false,
         hasToppings: false,
         hasSugar: false,
-        image: "https://images.unsplash.com/photo-1601314002592-b8734bca6604?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "avocado-toast",
@@ -212,7 +212,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: false,
         hasToppings: false,
         hasSugar: false,
-        image: "https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
     {
         id: "granola-bowl",
@@ -222,7 +222,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: false,
         hasToppings: false,
         hasSugar: false,
-        image: "https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?w=400&h=300&fit=crop&auto=format",
+        image: "https://placehold.co/400x300/3a2518/3a2518",
     },
 ];
 
