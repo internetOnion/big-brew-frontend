@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
 import {
     ListOrdered,
     UtensilsCrossed,
@@ -66,45 +65,31 @@ export const OrderQueue = () => {
 
     const isUrgent = (time: string) => parseTime(time) >= 8;
 
+    const handleCompleteClick = (queueNumber: number, e: React.MouseEvent) => {
+        e.stopPropagation();
+        handleComplete(queueNumber);
+    };
+
+    const handleVoidClick = (queueNumber: number, e: React.MouseEvent) => {
+        e.stopPropagation();
+        handleVoid(queueNumber);
+    };
+
     return (
-        <div
-            className="flex h-full w-[220px] shrink-0 flex-col overflow-hidden"
-            style={{
-                background: "#F4EFE8",
-                borderRight: "1px solid #E2D8CC",
-            }}
-        >
-            {/* Header */}
-            <div
-                className="flex items-center justify-between px-3 py-3"
-                style={{ borderBottom: "1px solid #E2D8CC" }}
-            >
+        <div className="flex h-full w-[220px] shrink-0 flex-col overflow-hidden border-r border-border bg-background">
+            <div className="flex items-center justify-between border-b border-border px-3 py-3">
                 <div className="flex items-center gap-2">
-                    <ListOrdered
-                        className="h-4 w-4"
-                        style={{ color: "#4A2512" }}
-                    />
-                    <span
-                        className="text-sm font-bold"
-                        style={{
-                            fontFamily: "'Bricolage Grotesque', sans-serif",
-                            color: "#1A0F0A",
-                        }}
-                    >
+                    <ListOrdered className="h-4 w-4 text-primary" />
+                    <span className="font-sans text-sm font-bold text-foreground">
                         Queue
                     </span>
                 </div>
-                <span
-                    className="flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-bold text-white"
-                    style={{ background: "#4A2512" }}
-                >
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-bold text-white">
                     {queue.length}
                 </span>
             </div>
 
-            {/* Queue Items */}
             <div className="flex-1 overflow-y-auto px-2 py-2">
-                <AnimatePresence initial={false}>
                     {queue.map((order) => {
                         const urgent = isUrgent(order.time);
                         const TypeIcon =
@@ -112,47 +97,18 @@ export const OrderQueue = () => {
                                 ? UtensilsCrossed
                                 : ShoppingBag;
                         return (
-                            <motion.button
+                            <div
                                 key={order.queueNumber}
-                                layout
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{
-                                    opacity: 0,
-                                    x: -50,
-                                    height: 0,
-                                    marginBottom: 0,
-                                }}
                                 onClick={() => setSelectedOrder(order)}
-                                className="mb-2 flex w-full flex-col rounded-xl p-2.5 text-left transition-transform hover:scale-[1.01] active:scale-[0.99]"
-                                style={{
-                                    background: urgent
-                                        ? "rgba(192,57,43,0.06)"
-                                        : "#FFFFFF",
-                                    border: urgent
-                                        ? "1px solid rgba(192,57,43,0.3)"
-                                        : "1px solid #E2D8CC",
-                                }}
+                                className={`mb-2 flex w-full cursor-pointer flex-col rounded-xl p-2.5 text-left transition-transform hover:scale-[1.01] active:scale-[0.99] ${urgent ? "border border-destructive/30 bg-destructive/6" : "border border-border bg-card"}`}
                             >
                                 <div className="mb-1.5 flex items-center justify-between">
-                                    <span
-                                        className="text-xs font-bold tabular-nums"
-                                        style={{
-                                            fontFamily: "'DM Mono', monospace",
-                                            color: "#4A2512",
-                                        }}
-                                    >
+                                    <span className="font-mono text-xs font-bold tabular-nums text-primary">
                                         #{order.queueNumber}
                                     </span>
                                     <div className="flex items-center gap-1.5">
-                                        <TypeIcon
-                                            className="h-3 w-3"
-                                            style={{ color: "#8B7A67" }}
-                                        />
-                                        <span
-                                            className="text-[10px] capitalize"
-                                            style={{ color: "#8B7A67" }}
-                                        >
+                                        <TypeIcon className="h-3 w-3 text-muted-foreground" />
+                                        <span className="text-[10px] capitalize text-muted-foreground">
                                             {order.type}
                                         </span>
                                     </div>
@@ -172,14 +128,8 @@ export const OrderQueue = () => {
                                                 key={idx}
                                                 className="flex items-center gap-1"
                                             >
-                                                <CategoryIcon
-                                                    className="h-3 w-3 shrink-0"
-                                                    style={{ color: "#8B7A67" }}
-                                                />
-                                                <span
-                                                    className="truncate text-[11px] font-medium"
-                                                    style={{ color: "#1A0F0A" }}
-                                                >
+                                                <CategoryIcon className="h-3 w-3 shrink-0 text-muted-foreground" />
+                                                <span className="truncate text-[11px] font-medium text-foreground">
                                                     {li.name}
                                                     {li.size && ` (${li.size})`}
                                                 </span>
@@ -190,66 +140,47 @@ export const OrderQueue = () => {
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-1">
                                         <Clock
-                                            className="h-3 w-3"
-                                            style={{
-                                                color: urgent
-                                                    ? "#c0392b"
-                                                    : "#8B7A67",
-                                            }}
+                                            className={`h-3 w-3 ${urgent ? "text-destructive" : "text-muted-foreground"}`}
                                         />
                                         <span
-                                            className="text-[10px] font-medium tabular-nums"
-                                            style={{
-                                                fontFamily:
-                                                    "'DM Mono', monospace",
-                                                color: urgent
-                                                    ? "#c0392b"
-                                                    : "#8B7A67",
-                                            }}
+                                            className={`font-mono text-[10px] font-medium tabular-nums ${urgent ? "text-destructive" : "text-muted-foreground"}`}
                                         >
                                             {order.time}
                                         </span>
                                     </div>
                                     <div className="flex gap-1">
                                         <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleComplete(
+                                            onClick={(e) =>
+                                                handleCompleteClick(
                                                     order.queueNumber,
-                                                );
-                                            }}
+                                                    e,
+                                                )
+                                            }
                                             className="flex h-6 w-6 items-center justify-center rounded-md transition-colors hover:bg-green-50"
                                             title="Done"
                                         >
-                                            <CheckCircle2
-                                                className="h-3.5 w-3.5"
-                                                style={{ color: "#5C8A5C" }}
-                                            />
+                                            <CheckCircle2 className="h-3.5 w-3.5 text-[#5C8A5C]" />
                                         </button>
                                         <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleVoid(order.queueNumber);
-                                            }}
+                                            onClick={(e) =>
+                                                handleVoidClick(
+                                                    order.queueNumber,
+                                                    e,
+                                                )
+                                            }
                                             className="flex h-6 w-6 items-center justify-center rounded-md transition-colors hover:bg-red-50"
                                             title="Void"
                                         >
-                                            <XCircle
-                                                className="h-3.5 w-3.5"
-                                                style={{ color: "#c0392b" }}
-                                            />
+                                            <XCircle className="h-3.5 w-3.5 text-destructive" />
                                         </button>
                                     </div>
                                 </div>
-                            </motion.button>
+                            </div>
                         );
                     })}
-                </AnimatePresence>
             </div>
 
-            {/* Order Detail Modal */}
-            <AnimatePresence>
-                {selectedOrder && (
+            {selectedOrder && (
                     <OrderDetailModal
                         order={selectedOrder}
                         onComplete={() =>
@@ -259,7 +190,6 @@ export const OrderQueue = () => {
                         onCancel={() => setSelectedOrder(null)}
                     />
                 )}
-            </AnimatePresence>
         </div>
     );
 };

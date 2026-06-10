@@ -9,7 +9,7 @@ export interface MenuItem {
     image: string;
 }
 
-export interface Topping {
+interface Topping {
     name: string;
     price: number;
 }
@@ -28,7 +28,7 @@ export interface CartItem {
     price: number;
 }
 
-export interface OrderLineItem {
+interface OrderLineItem {
     name: string;
     size?: string;
     sugarLevel?: string;
@@ -162,7 +162,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: true,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=300&fit=crop&auto=format",
+        image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop&auto=format",
     },
     {
         id: "iced-latte",
@@ -182,7 +182,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: true,
         hasToppings: true,
         hasSugar: true,
-        image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=400&h=300&fit=crop&auto=format",
+        image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop&auto=format",
     },
     {
         id: "croissant",
@@ -192,7 +192,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: false,
         hasToppings: false,
         hasSugar: false,
-        image: "https://images.unsplash.com/photo-1555507036-ab1f4038024a?w=400&h=300&fit=crop&auto=format",
+        image: "https://images.unsplash.com/photo-1623334044303-241021148842?w=400&h=300&fit=crop&auto=format",
     },
     {
         id: "banana-bread",
@@ -212,7 +212,7 @@ export const MENU_ITEMS: MenuItem[] = [
         hasSizes: false,
         hasToppings: false,
         hasSugar: false,
-        image: "https://images.unsplash.com/photo-1588137372308-15f75323ca8d?w=400&h=300&fit=crop&auto=format",
+        image: "https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=400&h=300&fit=crop&auto=format",
     },
     {
         id: "granola-bowl",
@@ -299,12 +299,4 @@ export const CATEGORY_ICONS: Record<string, string> = {
     food: "Croissant",
 };
 
-let cartIdCounter = 0;
-export const getNextCartId = () => {
-    cartIdCounter += 1;
-    return `cart-${cartIdCounter}`;
-};
-
-export const resetCartIdCounter = () => {
-    cartIdCounter = 0;
-};
+export const generateCartId = () => crypto.randomUUID();

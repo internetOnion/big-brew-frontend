@@ -6,7 +6,6 @@ let accessToken: string | null = null;
 export const setAccessToken = (token: string | null) => {
     accessToken = token;
 };
-export const getAccessToken = () => accessToken;
 
 let onTokenRefreshed: ((token: string) => void) | null = null;
 export const setOnTokenRefreshed = (cb: ((token: string) => void) | null) => {
@@ -120,4 +119,3 @@ api.interceptors.response.use(
 );
 
 export default api;
-export { api };

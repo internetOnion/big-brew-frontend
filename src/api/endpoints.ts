@@ -1,6 +1,4 @@
 export const ENDPOINTS = {
-    HEALTH: "/health",
-    SETTINGS: "/settings",
     AUTH: {
         LOGIN: "/auth/login",
         LOGOUT: "/auth/logout",
@@ -9,4 +7,3 @@ export const ENDPOINTS = {
         ME: "/auth/me",
     },
 } as const;
-export default ENDPOINTS;

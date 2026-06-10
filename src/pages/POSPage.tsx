@@ -1,7 +1,15 @@
-import { POSScreen } from "@/components/pos/POSScreen";
+import { POSProvider } from "@/contexts/POSContext";
+import { CategoryProvider } from "@/components/pos/CategoryContext";
+import POSLayout from "@/layouts/POSLayout";
 
-const POSPage = () => {
-    return <POSScreen />;
+export const POSPage = () => {
+    return (
+        <CategoryProvider>
+            <POSProvider>
+                <POSLayout />
+            </POSProvider>
+        </CategoryProvider>
+    );
 };
 
 export default POSPage;

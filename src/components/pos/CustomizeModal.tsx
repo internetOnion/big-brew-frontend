@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "motion/react";
 import {
     Coffee,
     Milk,
@@ -19,6 +18,7 @@ import {
     SIZE_PRICES,
     CATEGORY_ICONS,
 } from "./data";
+import { cn } from "@/lib/utils";
 
 export interface CustomizeOptions {
     size: string;
@@ -35,6 +35,8 @@ interface CustomizeModalProps {
     onClose: () => void;
     onAdd: (item: MenuItem, options: CustomizeOptions) => void;
 }
+
+const EMPTY_TOPPINGS: { name: string; qty: number; price: number }[] = [];
 
 const categoryIconMap: Record<string, React.ElementType> = {
     Coffee,
@@ -53,7 +55,7 @@ export const CustomizeModal = ({
     const [size, setSize] = useState<string>(initialOptions?.size || "M");
     const [toppings, setToppings] = useState<
         { name: string; qty: number; price: number }[]
-    >(initialOptions?.toppings || []);
+    >(initialOptions?.toppings ?? EMPTY_TOPPINGS);
     const [sugarLevel, setSugarLevel] = useState<string>(
         initialOptions?.sugarLevel || "50%",
     );
@@ -121,54 +123,25 @@ export const CustomizeModal = ({
         categoryIconMap[CATEGORY_ICONS[item.category]] || Coffee;
 
     return (
-        <AnimatePresence>
-            <motion.div
+            <div
                 className="fixed inset-0 z-50 flex items-center justify-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
             >
                 <div
                     className="absolute inset-0 bg-black/40 backdrop-blur-sm"
                     onClick={onClose}
                 />
-                <motion.div
-                    className="relative z-10 flex max-h-[90vh] w-full max-w-md flex-col overflow-hidden rounded-2xl shadow-2xl"
-                    style={{
-                        background: "#FFFFFF",
-                        border: "1px solid #E2D8CC",
-                    }}
-                    initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                    animate={{ scale: 1, opacity: 1, y: 0 }}
-                    exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                    transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                <div
+                    className="relative z-10 flex max-h-[90vh] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl"
                 >
-                    {/* Header */}
-                    <div
-                        className="flex items-center gap-3 px-5 py-4"
-                        style={{
-                            background: "#F4EFE8",
-                            borderBottom: "1px solid #E2D8CC",
-                        }}
-                    >
-                        <div
-                            className="flex h-10 w-10 items-center justify-center rounded-xl"
-                            style={{ background: "#4A2512" }}
-                        >
+                    <div className="flex items-center gap-3 border-b border-border bg-background px-5 py-4">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
                             <CategoryIcon className="h-5 w-5 text-white" />
                         </div>
                         <div className="flex-1">
-                            <h3
-                                className="text-lg font-bold leading-tight"
-                                style={{
-                                    fontFamily:
-                                        "'Bricolage Grotesque', sans-serif",
-                                    color: "#1A0F0A",
-                                }}
-                            >
+                            <h3 className="font-sans text-lg font-bold leading-tight text-foreground">
                                 {item.name}
                             </h3>
-                            <p className="text-sm" style={{ color: "#8B7A67" }}>
+                            <p className="text-sm text-muted-foreground">
                                 Base ${item.basePrice.toFixed(2)}
                             </p>
                         </div>
@@ -176,22 +149,14 @@ export const CustomizeModal = ({
                             onClick={onClose}
                             className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-black/5"
                         >
-                            <X
-                                className="h-5 w-5"
-                                style={{ color: "#8B7A67" }}
-                            />
+                            <X className="h-5 w-5 text-muted-foreground" />
                         </button>
                     </div>
 
-                    {/* Scrollable Content */}
                     <div className="flex-1 overflow-y-auto px-5 py-4">
-                        {/* Size */}
                         {item.hasSizes && (
                             <div className="mb-5">
-                                <label
-                                    className="mb-2 block text-xs font-semibold uppercase tracking-wider"
-                                    style={{ color: "#8B7A67" }}
-                                >
+                                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                                     Size
                                 </label>
                                 <div className="flex gap-2">
@@ -199,35 +164,23 @@ export const CustomizeModal = ({
                                         <button
                                             key={s}
                                             onClick={() => setSize(s)}
-                                            className="flex flex-1 flex-col items-center gap-1 rounded-xl border-2 px-3 py-2.5 transition-all"
-                                            style={{
-                                                borderColor:
-                                                    size === s
-                                                        ? "#4A2512"
-                                                        : "#E2D8CC",
-                                                background:
-                                                    size === s
-                                                        ? "#4A2512"
-                                                        : "#FFFFFF",
-                                                color:
-                                                    size === s
-                                                        ? "#FFFFFF"
-                                                        : "#1A0F0A",
-                                            }}
+                                            className={cn(
+                                                "flex flex-1 flex-col items-center gap-1 rounded-xl border-2 px-3 py-2.5 transition-all",
+                                                size === s
+                                                    ? "border-primary bg-primary text-white"
+                                                    : "border-border bg-card text-foreground",
+                                            )}
                                         >
                                             <span className="text-sm font-bold">
                                                 {s}
                                             </span>
                                             <span
-                                                className="text-xs"
-                                                style={{
-                                                    color:
-                                                        size === s
-                                                            ? "#FFFFFF"
-                                                            : "#8B7A67",
-                                                    opacity:
-                                                        size === s ? 0.8 : 1,
-                                                }}
+                                                className={cn(
+                                                    "text-xs",
+                                                    size === s
+                                                        ? "text-white/80"
+                                                        : "text-muted-foreground",
+                                                )}
                                             >
                                                 +${SIZE_PRICES[s].toFixed(2)}
                                             </span>
@@ -237,13 +190,9 @@ export const CustomizeModal = ({
                             </div>
                         )}
 
-                        {/* Sugar */}
                         {item.hasSugar && (
                             <div className="mb-5">
-                                <label
-                                    className="mb-2 block text-xs font-semibold uppercase tracking-wider"
-                                    style={{ color: "#8B7A67" }}
-                                >
+                                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                                     Sugar Level
                                 </label>
                                 <div className="flex gap-1.5">
@@ -251,21 +200,12 @@ export const CustomizeModal = ({
                                         <button
                                             key={sl}
                                             onClick={() => setSugarLevel(sl)}
-                                            className="flex-1 rounded-lg border px-2 py-2 text-xs font-semibold transition-all"
-                                            style={{
-                                                borderColor:
-                                                    sugarLevel === sl
-                                                        ? "#4A2512"
-                                                        : "#E2D8CC",
-                                                background:
-                                                    sugarLevel === sl
-                                                        ? "#4A2512"
-                                                        : "#FFFFFF",
-                                                color:
-                                                    sugarLevel === sl
-                                                        ? "#FFFFFF"
-                                                        : "#1A0F0A",
-                                            }}
+                                            className={cn(
+                                                "flex-1 rounded-lg border px-2 py-2 text-xs font-semibold transition-all",
+                                                sugarLevel === sl
+                                                    ? "border-primary bg-primary text-white"
+                                                    : "border-border bg-card text-foreground",
+                                            )}
                                         >
                                             {sl}
                                         </button>
@@ -274,13 +214,9 @@ export const CustomizeModal = ({
                             </div>
                         )}
 
-                        {/* Toppings */}
                         {item.hasToppings && (
                             <div className="mb-5">
-                                <label
-                                    className="mb-2 block text-xs font-semibold uppercase tracking-wider"
-                                    style={{ color: "#8B7A67" }}
-                                >
+                                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                                     Toppings
                                 </label>
                                 <div className="flex flex-col gap-2">
@@ -292,26 +228,13 @@ export const CustomizeModal = ({
                                         return (
                                             <div
                                                 key={t.name}
-                                                className="flex items-center justify-between rounded-xl px-3 py-2.5"
-                                                style={{
-                                                    background: "#F0EBE3",
-                                                }}
+                                                className="flex items-center justify-between rounded-xl bg-secondary px-3 py-2.5"
                                             >
                                                 <div>
-                                                    <p
-                                                        className="text-sm font-medium"
-                                                        style={{
-                                                            color: "#1A0F0A",
-                                                        }}
-                                                    >
+                                                    <p className="text-sm font-medium text-foreground">
                                                         {t.name}
                                                     </p>
-                                                    <p
-                                                        className="text-xs"
-                                                        style={{
-                                                            color: "#8B7A67",
-                                                        }}
-                                                    >
+                                                    <p className="text-xs text-muted-foreground">
                                                         +${t.price.toFixed(2)}
                                                     </p>
                                                 </div>
@@ -324,22 +247,12 @@ export const CustomizeModal = ({
                                                                 -1,
                                                             )
                                                         }
-                                                        className="flex h-7 w-7 items-center justify-center rounded-lg transition-colors hover:bg-black/5"
-                                                        style={{
-                                                            border: "1px solid #E2D8CC",
-                                                        }}
+                                                        className="flex h-7 w-7 items-center justify-center rounded-lg border border-border transition-colors hover:bg-black/5"
                                                         disabled={qty === 0}
                                                     >
                                                         <Minus className="h-3.5 w-3.5" />
                                                     </button>
-                                                    <span
-                                                        className="w-4 text-center text-sm font-semibold tabular-nums"
-                                                        style={{
-                                                            fontFamily:
-                                                                "'DM Mono', monospace",
-                                                            color: "#1A0F0A",
-                                                        }}
-                                                    >
+                                                    <span className="w-4 text-center font-mono text-sm font-semibold tabular-nums text-foreground">
                                                         {qty}
                                                     </span>
                                                     <button
@@ -350,10 +263,7 @@ export const CustomizeModal = ({
                                                                 1,
                                                             )
                                                         }
-                                                        className="flex h-7 w-7 items-center justify-center rounded-lg transition-colors hover:bg-black/5"
-                                                        style={{
-                                                            border: "1px solid #E2D8CC",
-                                                        }}
+                                                        className="flex h-7 w-7 items-center justify-center rounded-lg border border-border transition-colors hover:bg-black/5"
                                                     >
                                                         <Plus className="h-3.5 w-3.5" />
                                                     </button>
@@ -365,41 +275,24 @@ export const CustomizeModal = ({
                             </div>
                         )}
 
-                        {/* Note */}
                         <div className="mb-5">
-                            <label
-                                className="mb-2 block text-xs font-semibold uppercase tracking-wider"
-                                style={{ color: "#8B7A67" }}
-                            >
+                            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                                 Note
                             </label>
                             <div className="relative">
-                                <FileText
-                                    className="absolute left-3 top-2.5 h-4 w-4"
-                                    style={{ color: "#8B7A67" }}
-                                />
+                                <FileText className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                                 <textarea
                                     value={note}
                                     onChange={(e) => setNote(e.target.value)}
                                     placeholder="Any special requests..."
-                                    className="w-full resize-none rounded-xl px-3 py-2 pl-9 text-sm outline-none transition-colors focus:ring-2"
-                                    style={{
-                                        background: "#F0EBE3",
-                                        border: "1px solid #E2D8CC",
-                                        color: "#1A0F0A",
-                                        minHeight: 72,
-                                    }}
+                                    className="min-h-[72px] w-full resize-none rounded-xl border border-border bg-secondary px-3 py-2 pl-9 text-sm text-foreground outline-none transition-colors focus:ring-2"
                                     rows={3}
                                 />
                             </div>
                         </div>
 
-                        {/* Quantity */}
                         <div className="mb-2">
-                            <label
-                                className="mb-2 block text-xs font-semibold uppercase tracking-wider"
-                                style={{ color: "#8B7A67" }}
-                            >
+                            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                                 Quantity
                             </label>
                             <div className="flex items-center gap-3">
@@ -407,25 +300,17 @@ export const CustomizeModal = ({
                                     onClick={() =>
                                         setQuantity((q) => Math.max(1, q - 1))
                                     }
-                                    className="flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-black/5"
-                                    style={{ border: "1px solid #E2D8CC" }}
+                                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-border transition-colors hover:bg-black/5"
                                     disabled={quantity <= 1}
                                 >
                                     <Minus className="h-4 w-4" />
                                 </button>
-                                <span
-                                    className="w-8 text-center text-lg font-bold tabular-nums"
-                                    style={{
-                                        fontFamily: "'DM Mono', monospace",
-                                        color: "#1A0F0A",
-                                    }}
-                                >
+                                <span className="w-8 text-center font-mono text-lg font-bold tabular-nums text-foreground">
                                     {quantity}
                                 </span>
                                 <button
                                     onClick={() => setQuantity((q) => q + 1)}
-                                    className="flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-black/5"
-                                    style={{ border: "1px solid #E2D8CC" }}
+                                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-border transition-colors hover:bg-black/5"
                                 >
                                     <Plus className="h-4 w-4" />
                                 </button>
@@ -433,39 +318,24 @@ export const CustomizeModal = ({
                         </div>
                     </div>
 
-                    {/* Footer */}
-                    <div
-                        className="flex items-center gap-3 px-5 py-4"
-                        style={{
-                            borderTop: "1px solid #E2D8CC",
-                            background: "#F4EFE8",
-                        }}
-                    >
+                    <div className="flex items-center gap-3 border-t border-border bg-background px-5 py-4">
                         <div className="flex-1">
-                            <p className="text-xs" style={{ color: "#8B7A67" }}>
+                            <p className="text-xs text-muted-foreground">
                                 Unit: ${unitPrice.toFixed(2)}
                             </p>
-                            <p
-                                className="text-xl font-bold tabular-nums"
-                                style={{
-                                    fontFamily: "'DM Mono', monospace",
-                                    color: "#1A0F0A",
-                                }}
-                            >
+                            <p className="font-mono text-xl font-bold tabular-nums text-foreground">
                                 ${finalPrice.toFixed(2)}
                             </p>
                         </div>
                         <button
                             onClick={handleAdd}
-                            className="rounded-xl px-6 py-3 text-sm font-bold text-white transition-all hover:brightness-110 active:scale-95"
-                            style={{ background: "#4A2512" }}
+                            className="rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white transition-all hover:brightness-110 active:scale-95"
                         >
                             {initialOptions ? "Save Changes" : "Add to Order"}
                         </button>
                     </div>
-                </motion.div>
-            </motion.div>
-        </AnimatePresence>
+                </div>
+        </div>
     );
 };
 
