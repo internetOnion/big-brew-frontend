@@ -1,19 +1,45 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
-import AuthLayout from "./layouts/AuthLayout";
-import DashboardLayout from "./layouts/DashboardLayout";
-import ProtectedRoute from "./components/common/ProtectedRoute";
-import { ROUTES } from "./lib/constants";
-import { Skeleton } from "./components/ui/skeleton";
 
 const LoginPage = lazy(() => import("./pages/LoginPage"));
-const PinPage = lazy(() => import("./pages/PinPage"));
-const DashboardPage = lazy(() => import("./pages/DashboardPage"));
-const MenuPage = lazy(() => import("./pages/MenuPage"));
+const POSScreen = lazy(() => import("./components/pos/POSScreen"));
 
 const SuspenseFallback = (
-    <div className="flex min-h-screen items-center justify-center bg-background p-6">
-        <Skeleton className="h-96 w-full max-w-md rounded-[2rem]" />
+    <div
+        style={{
+            display: "flex",
+            height: "100vh",
+            width: "100vw",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "#F4EFE8",
+        }}
+    >
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+            <div
+                style={{
+                    width: "40px",
+                    height: "40px",
+                    border: "4px solid #E2D8CC",
+                    borderTopColor: "#4A2512",
+                    borderRadius: "50%",
+                    animation: "spin 0.8s linear infinite",
+                }}
+            />
+            <span style={{
+                fontSize: "14px",
+                fontWeight: 500,
+                color: "#8B7A67",
+                fontFamily: "'DM Mono', monospace",
+            }}>
+                Loading...
+            </span>
+        </div>
+        <style>{`
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+        `}</style>
     </div>
 );
 
@@ -21,23 +47,9 @@ const App = () => {
     return (
         <Suspense fallback={SuspenseFallback}>
             <Routes>
-                <Route element={<AuthLayout />}>
-                    <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-                    <Route path={ROUTES.PIN} element={<PinPage />} />
-                </Route>
-                <Route element={<ProtectedRoute />}>
-                    <Route element={<DashboardLayout />}>
-                        <Route
-                            path={ROUTES.DASHBOARD}
-                            element={<DashboardPage />}
-                        />
-                        <Route path={ROUTES.MENU} element={<MenuPage />} />
-                    </Route>
-                </Route>
-                <Route
-                    path="/"
-                    element={<Navigate to={ROUTES.LOGIN} replace />}
-                />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/" element={<POSScreen />} />
+                <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
         </Suspense>
     );

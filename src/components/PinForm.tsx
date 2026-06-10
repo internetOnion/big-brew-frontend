@@ -43,7 +43,7 @@ const PinForm = () => {
         setError("");
         try {
             await verifyPin(pin);
-            navigate(ROUTES.MENU);
+            navigate(ROUTES.POS);
         } catch {
             setPin("");
             setError("Incorrect PIN");
