@@ -3,11 +3,29 @@ import {
     useState,
     useCallback,
     useMemo,
+    useEffect,
     type ReactNode,
 } from "react";
 import type { MenuItem, CartItem } from "@/components/pos/data";
 import { SIZE_PRICES, generateCartId } from "@/components/pos/data";
 import type { CustomizeOptions } from "@/components/pos/CustomizeModal";
+
+const CART_STORAGE_KEY = "pos-cart";
+const ORDER_TYPE_STORAGE_KEY = "pos-order-type";
+
+const loadCart = (): CartItem[] => {
+    try {
+        const raw = localStorage.getItem(CART_STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+    } catch {
+        return [];
+    }
+};
+
+const loadOrderType = (): "dine-in" | "takeout" => {
+    const raw = localStorage.getItem(ORDER_TYPE_STORAGE_KEY);
+    return raw === "takeout" ? "takeout" : "dine-in";
+};
 
 interface POSContextValue {
     cartItems: CartItem[];
@@ -29,9 +47,9 @@ interface POSContextValue {
 const POSContext = createContext<POSContextValue | null>(null);
 
 const POSProvider = ({ children }: { children: ReactNode }) => {
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [cartItems, setCartItems] = useState<CartItem[]>(loadCart);
     const [orderType, setOrderType] = useState<"dine-in" | "takeout">(
-        "dine-in",
+        loadOrderType,
     );
     const [editingItemId, setEditingItemId] = useState<string | null>(null);
     const [customizeItem, setCustomizeItem] = useState<MenuItem | null>(null);
@@ -43,6 +61,14 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
         const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
         return subtotal * 1.07;
     }, [cartItems]);
+
+    useEffect(() => {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+    }, [cartItems]);
+
+    useEffect(() => {
+        localStorage.setItem(ORDER_TYPE_STORAGE_KEY, orderType);
+    }, [orderType]);
 
     const addItem = useCallback(
         (item: MenuItem, options: CustomizeOptions) => {
@@ -148,6 +174,7 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
 
     const resetCart = useCallback(() => {
         setCartItems([]);
+        localStorage.removeItem(CART_STORAGE_KEY);
     }, []);
 
     const openCustomize = useCallback((item: MenuItem) => {
