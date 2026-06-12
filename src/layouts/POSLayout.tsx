@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import { Coffee, Shield } from "lucide-react";
 import OrderQueue from "@/components/pos/OrderQueue";
 import CustomizeModal from "@/components/pos/CustomizeModal";
-import { usePOS } from "@/contexts/POSContext";
+import { usePOS } from "@/hooks/usePos";
 
 const POSLayout = () => {
     const { customizeItem, customizeInitial, closeCustomize, addItem } =

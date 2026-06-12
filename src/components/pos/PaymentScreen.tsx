@@ -14,7 +14,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/lib/constants";
-import { usePOS } from "@/contexts/POSContext";
+import { usePOS } from "@/hooks/usePos";
+import type { CartItem } from "@/components/pos/data";
 
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
     espresso: Coffee,
@@ -78,7 +79,7 @@ const PaymentScreen = () => {
             ? `$${val.toFixed(2)}`
             : `៛${Math.round(val).toLocaleString()}`;
 
-    const itemCount = cartItems.reduce((s, i) => s + i.quantity, 0);
+    const itemCount = cartItems.reduce((s: number, i) => s + i.quantity, 0);
 
     if (success) {
         return (
@@ -250,7 +251,7 @@ const PaymentScreen = () => {
                     </div>
 
                     <div className="flex-1 overflow-y-auto flex flex-col gap-2 px-4 pb-3 [scrollbar-width:none]">
-                        {cartItems.map((item) => {
+                        {cartItems.map((item: CartItem) => {
                             const Icon =
                                 CATEGORY_ICONS[item.category] ?? Coffee;
                             return (
@@ -284,17 +285,21 @@ const PaymentScreen = () => {
                                                         Sugar {item.sugarLevel}
                                                     </span>
                                                 )}
-                                            {item.toppings.map((topping) => (
-                                                <span
-                                                    key={topping.name}
-                                                    className="text-[10px] text-muted-foreground bg-secondary rounded px-[5px] py-px border border-border"
-                                                >
-                                                    {topping.qty > 1
-                                                        ? `${topping.qty}× `
-                                                        : "+"}
-                                                    {topping.name}
-                                                </span>
-                                            ))}
+                                            {item.toppings.map(
+                                                (
+                                                    topping: (typeof item.toppings)[number],
+                                                ) => (
+                                                    <span
+                                                        key={topping.name}
+                                                        className="text-[10px] text-muted-foreground bg-secondary rounded px-[5px] py-px border border-border"
+                                                    >
+                                                        {topping.qty > 1
+                                                            ? `${topping.qty}× `
+                                                            : "+"}
+                                                        {topping.name}
+                                                    </span>
+                                                ),
+                                            )}
                                         </div>
                                     </div>
                                     <span className="font-mono text-xs text-foreground font-semibold shrink-0 text-right">

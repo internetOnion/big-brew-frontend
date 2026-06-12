@@ -1,6 +1,5 @@
 import {
     createContext,
-    useContext,
     useState,
     useCallback,
     useMemo,
@@ -29,13 +28,7 @@ interface POSContextValue {
 
 const POSContext = createContext<POSContextValue | null>(null);
 
-export const usePOS = () => {
-    const ctx = useContext(POSContext);
-    if (!ctx) throw new Error("usePOS must be used within POSProvider");
-    return ctx;
-};
-
-export const POSProvider = ({ children }: { children: ReactNode }) => {
+const POSProvider = ({ children }: { children: ReactNode }) => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [orderType, setOrderType] = useState<"dine-in" | "takeout">(
         "dine-in",
@@ -190,3 +183,5 @@ export const POSProvider = ({ children }: { children: ReactNode }) => {
         </POSContext.Provider>
     );
 };
+
+export { POSContext, POSProvider };

@@ -14,7 +14,7 @@ import {
     Croissant,
 } from "lucide-react";
 import { CATEGORY_ICONS } from "./data";
-import { usePOS } from "@/contexts/POSContext";
+import { usePOS } from "@/hooks/usePos";
 import { ROUTES } from "@/lib/constants";
 
 const categoryIconMap: Record<string, React.ElementType> = {

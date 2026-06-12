@@ -6,4 +6,7 @@ export const ENDPOINTS = {
         PIN: "/auth/pin",
         ME: "/auth/me",
     },
+    MENU: {
+        ITEMS: "/menu-items",
+    },
 } as const;
