@@ -31,8 +31,15 @@ import type { Settings, Order } from "@/types/order";
 import { getCategoryIconName } from "@/types/menu";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
 
 const DEFAULT_KHR_RATE = 4100;
+const STATIC_QR_CODE_URL = "https://djscleluxtunyhuqrfrq.supabase.co/storage/v1/object/public/assets/uploads/3bffaf1b-aef9-4fc9-b721-f55316fde49a.png";
 
 const KEYS = [
     ["1", "2", "3"],
@@ -47,10 +54,10 @@ const PaymentScreen = () => {
     const [entered, setEntered] = useState("");
     const [currency, setCurrency] = useState<"USD" | "KHR">("USD");
     const [paymentMethod, setPaymentMethod] = useState<"cash" | "qr">("cash");
+    const [qrDialogOpen, setQrDialogOpen] = useState(false);
     const [success, setSuccess] = useState(false);
     const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
-    const [settings, setSettings] = useState<Settings | null>(null);
     const [khrRate, setKhrRate] = useState(DEFAULT_KHR_RATE);
 
     useEffect(() => {
@@ -59,10 +66,9 @@ const PaymentScreen = () => {
                 const { data } = await api.get<Settings>(
                     ENDPOINTS.SETTINGS.BASE,
                 );
-                setSettings(data);
                 if (data.khrRate) setKhrRate(data.khrRate);
             } catch {
-                // Settings fetch failed, QR code won't be available
+                // Settings fetch failed, using default KHR rate
             }
         };
         fetchSettings();
@@ -214,7 +220,10 @@ const PaymentScreen = () => {
                                 paymentMethod === "qr" ? "default" : "ghost"
                             }
                             size="default"
-                            onClick={() => setPaymentMethod("qr")}
+                            onClick={() => {
+                                setPaymentMethod("qr");
+                                setQrDialogOpen(true);
+                            }}
                             className="flex-1 text-xs"
                         >
                             <QrCode />
@@ -222,158 +231,101 @@ const PaymentScreen = () => {
                         </Button>
                     </div>
 
-                    {paymentMethod === "qr" ? (
-                        <div className="flex flex-1 flex-col items-center justify-center gap-4">
-                            {settings?.qrCodeUrl ? (
-                                <div className="rounded-xl bg-white p-4">
-                                    <img
-                                        src={settings.qrCodeUrl}
-                                        alt="QR Code"
-                                        className="size-48 object-contain"
-                                    />
-                                </div>
-                            ) : (
-                                <div className="flex size-48 items-center justify-center rounded-xl bg-secondary">
-                                    <QrCode
-                                        size={64}
-                                        className="text-muted-foreground"
-                                    />
-                                </div>
-                            )}
-                            <p className="text-center text-sm text-muted-foreground">
-                                Scan to pay ${total.toFixed(2)}
+                    <>
+                        <div className="text-center">
+                            <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                                Total Due
                             </p>
-                            <motion.div
-                                animate={
-                                    !isProcessing
-                                        ? { scale: [1, 1.01, 1] }
-                                        : { scale: 1 }
-                                }
-                                transition={
-                                    !isProcessing
-                                        ? {
-                                              duration: 1.6,
-                                              repeat: Infinity,
-                                              ease: "easeInOut",
-                                          }
-                                        : {}
-                                }
-                                className="w-full"
-                            >
-                                <Button
-                                    onClick={handleQrConfirm}
-                                    disabled={isProcessing}
-                                    className={cn(
-                                        "h-auto w-full flex-col gap-1 py-4",
-                                        isProcessing &&
-                                            "cursor-not-allowed opacity-50",
-                                    )}
-                                >
-                                    <span className="text-[15px] font-bold">
-                                        {isProcessing
-                                            ? "Processing..."
-                                            : "Confirm Payment Received"}
-                                    </span>
-                                </Button>
-                            </motion.div>
+                            <p className="font-mono text-4xl font-bold leading-none text-primary">
+                                {formatDisplay(totalInCurrency)}
+                            </p>
+                            {currency === "KHR" && (
+                                <p className="mt-1 font-mono text-[13px] text-muted-foreground">
+                                    ≈ ${total.toFixed(2)}
+                                </p>
+                            )}
                         </div>
-                    ) : (
-                        <>
-                            <div className="text-center">
-                                <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-                                    Total Due
-                                </p>
-                                <p className="font-mono text-4xl font-bold leading-none text-primary">
-                                    {formatDisplay(totalInCurrency)}
-                                </p>
-                                {currency === "KHR" && (
-                                    <p className="mt-1 font-mono text-[13px] text-muted-foreground">
-                                        ≈ ${total.toFixed(2)}
-                                    </p>
+
+                        <div className="flex gap-3">
+                            <div
+                                className={cn(
+                                    "flex-1 rounded-xl border-[1.5px] bg-secondary px-4 py-3 text-right transition-colors duration-150",
+                                    entered
+                                        ? "border-accent"
+                                        : "border-border",
                                 )}
+                            >
+                                <p className="mb-0.5 font-mono text-[10px] tracking-[0.1em] text-muted-foreground">
+                                    Amount Given
+                                </p>
+                                <p className="min-h-7 font-mono text-xl font-semibold text-foreground">
+                                    {entered ? (
+                                        `${currencySymbol}${currency === "KHR" ? parseInt(entered || "0").toLocaleString() : entered}`
+                                    ) : (
+                                        <span className="opacity-40 text-muted-foreground">
+                                            {formatDisplay(0)}
+                                        </span>
+                                    )}
+                                </p>
                             </div>
 
-                            <div className="flex gap-3">
-                                <div
+                            <div
+                                className={cn(
+                                    "flex-1 rounded-xl border-[1.5px] px-4 py-3 text-right transition-colors duration-150",
+                                    change >= 0 && enteredAmount > 0
+                                        ? "border-chart-4/30 bg-chart-4/8"
+                                        : change < 0
+                                          ? "border-destructive/30 bg-destructive/8"
+                                          : "border-border bg-secondary",
+                                )}
+                            >
+                                <p className="mb-0.5 font-mono text-[10px] tracking-[0.1em] text-muted-foreground">
+                                    Change
+                                </p>
+                                <p
                                     className={cn(
-                                        "flex-1 rounded-xl border-[1.5px] bg-secondary px-4 py-3 text-right transition-colors duration-150",
-                                        entered
-                                            ? "border-accent"
-                                            : "border-border",
-                                    )}
-                                >
-                                    <p className="mb-0.5 font-mono text-[10px] tracking-[0.1em] text-muted-foreground">
-                                        Amount Given
-                                    </p>
-                                    <p className="min-h-7 font-mono text-xl font-semibold text-foreground">
-                                        {entered ? (
-                                            `${currencySymbol}${currency === "KHR" ? parseInt(entered || "0").toLocaleString() : entered}`
-                                        ) : (
-                                            <span className="opacity-40 text-muted-foreground">
-                                                {formatDisplay(0)}
-                                            </span>
-                                        )}
-                                    </p>
-                                </div>
-
-                                <div
-                                    className={cn(
-                                        "flex-1 rounded-xl border-[1.5px] px-4 py-3 text-right transition-colors duration-150",
+                                        "min-h-7 font-mono text-xl font-semibold",
                                         change >= 0 && enteredAmount > 0
-                                            ? "border-chart-4/30 bg-chart-4/8"
+                                            ? "text-chart-4"
                                             : change < 0
-                                              ? "border-destructive/30 bg-destructive/8"
-                                              : "border-border bg-secondary",
+                                              ? "text-destructive"
+                                              : "text-muted-foreground",
                                     )}
                                 >
-                                    <p className="mb-0.5 font-mono text-[10px] tracking-[0.1em] text-muted-foreground">
-                                        Change
-                                    </p>
-                                    <p
-                                        className={cn(
-                                            "min-h-7 font-mono text-xl font-semibold",
-                                            change >= 0 && enteredAmount > 0
-                                                ? "text-chart-4"
-                                                : change < 0
-                                                  ? "text-destructive"
-                                                  : "text-muted-foreground",
-                                        )}
-                                    >
-                                        {enteredAmount === 0
-                                            ? "—"
-                                            : change >= 0
-                                              ? formatDisplay(change)
-                                              : `-${currency === "USD" ? "$" : ""}${currency === "KHR" ? "៛" + Math.round(Math.abs(change)).toLocaleString() : Math.abs(change).toFixed(2)}`}
-                                    </p>
-                                </div>
+                                    {enteredAmount === 0
+                                        ? "—"
+                                        : change >= 0
+                                          ? formatDisplay(change)
+                                          : `-${currency === "USD" ? "$" : ""}${currency === "KHR" ? "៛" + Math.round(Math.abs(change)).toLocaleString() : Math.abs(change).toFixed(2)}`}
+                                </p>
                             </div>
+                        </div>
 
-                            <div className="grid grid-cols-3 gap-1.5">
-                                {KEYS.flat().map((k) => (
-                                    <motion.button
-                                        key={k}
-                                        whileTap={{ scale: 0.93 }}
-                                        onClick={() =>
-                                            k === "⌫"
-                                                ? handleDelete()
-                                                : handleKey(k)
-                                        }
-                                        className={cn(
-                                            "flex items-center justify-center rounded-lg border border-border py-3.5 font-mono text-lg font-semibold",
-                                            k === "⌫"
-                                                ? "bg-destructive/12 text-destructive"
-                                                : "bg-secondary text-foreground",
-                                            k === "." &&
-                                                currency === "KHR" &&
-                                                "pointer-events-none opacity-25",
-                                        )}
-                                    >
-                                        {k === "⌫" ? <Delete size={16} /> : k}
-                                    </motion.button>
-                                ))}
-                            </div>
-                        </>
-                    )}
+                        <div className="grid grid-cols-3 gap-1.5">
+                            {KEYS.flat().map((k) => (
+                                <motion.button
+                                    key={k}
+                                    whileTap={{ scale: 0.93 }}
+                                    onClick={() =>
+                                        k === "⌫"
+                                            ? handleDelete()
+                                            : handleKey(k)
+                                    }
+                                    className={cn(
+                                        "flex items-center justify-center rounded-lg border border-border py-3.5 font-mono text-lg font-semibold",
+                                        k === "⌫"
+                                            ? "bg-destructive/12 text-destructive"
+                                            : "bg-secondary text-foreground",
+                                        k === "." &&
+                                            currency === "KHR" &&
+                                            "pointer-events-none opacity-25",
+                                    )}
+                                >
+                                    {k === "⌫" ? <Delete size={16} /> : k}
+                                </motion.button>
+                            ))}
+                        </div>
+                    </>
                 </div>
 
                 <div className="flex w-[280px] flex-col border-l border-border">
@@ -381,26 +333,24 @@ const PaymentScreen = () => {
                         <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground">
                             Order Summary
                         </p>
-                        {paymentMethod === "cash" && (
-                            <div className="mb-3 flex overflow-hidden rounded-lg bg-secondary p-0.5 gap-0.5">
-                                {(["USD", "KHR"] as const).map((c) => (
-                                    <Button
-                                        key={c}
-                                        variant={
-                                            currency === c ? "default" : "ghost"
-                                        }
-                                        size="sm"
-                                        onClick={() => {
-                                            setCurrency(c);
-                                            setEntered("");
-                                        }}
-                                        className="flex-1 font-mono font-semibold"
-                                    >
-                                        {c === "USD" ? "$ USD" : "៛ KHR"}
-                                    </Button>
-                                ))}
-                            </div>
-                        )}
+                        <div className="mb-3 flex overflow-hidden rounded-lg bg-secondary p-0.5 gap-0.5">
+                            {(["USD", "KHR"] as const).map((c) => (
+                                <Button
+                                    key={c}
+                                    variant={
+                                        currency === c ? "default" : "ghost"
+                                    }
+                                    size="sm"
+                                    onClick={() => {
+                                        setCurrency(c);
+                                        setEntered("");
+                                    }}
+                                    className="flex-1 font-mono font-semibold"
+                                >
+                                    {c === "USD" ? "$ USD" : "៛ KHR"}
+                                </Button>
+                            ))}
+                        </div>
                     </div>
 
                     <div className="flex flex-1 flex-col gap-2 overflow-y-auto px-4 pb-3 scrollbar-hide">
@@ -465,8 +415,7 @@ const PaymentScreen = () => {
                                         </div>
                                     </div>
                                     <span className="shrink-0 text-right font-mono text-xs font-semibold text-foreground">
-                                        {currency === "KHR" &&
-                                        paymentMethod === "cash"
+                                        {currency === "KHR"
                                             ? "៛" +
                                               Math.round(
                                                   item.price * khrRate,
@@ -479,49 +428,106 @@ const PaymentScreen = () => {
                     </div>
 
                     <div className="border-t border-border p-4 pb-5">
-                        {paymentMethod === "cash" && (
-                            <motion.div
-                                animate={
+                        <motion.div
+                            animate={
+                                isFullyPaid && !isProcessing
+                                    ? { scale: [1, 1.01, 1] }
+                                    : { scale: 1 }
+                            }
+                            transition={
+                                isFullyPaid && !isProcessing
+                                    ? {
+                                          duration: 1.6,
+                                          repeat: Infinity,
+                                          ease: "easeInOut",
+                                      }
+                                    : {}
+                            }
+                        >
+                            <Button
+                                onClick={handleConfirmPayment}
+                                disabled={!isFullyPaid || isProcessing}
+                                className={cn(
+                                    "h-auto w-full flex-col gap-1 py-4",
                                     isFullyPaid && !isProcessing
-                                        ? { scale: [1, 1.01, 1] }
-                                        : { scale: 1 }
-                                }
-                                transition={
-                                    isFullyPaid && !isProcessing
-                                        ? {
-                                              duration: 1.6,
-                                              repeat: Infinity,
-                                              ease: "easeInOut",
-                                          }
-                                        : {}
-                                }
+                                        ? "cursor-pointer opacity-100"
+                                        : "cursor-not-allowed opacity-30",
+                                )}
                             >
-                                <Button
-                                    onClick={handleConfirmPayment}
-                                    disabled={!isFullyPaid || isProcessing}
-                                    className={cn(
-                                        "h-auto w-full flex-col gap-1 py-4",
-                                        isFullyPaid && !isProcessing
-                                            ? "cursor-pointer opacity-100"
-                                            : "cursor-not-allowed opacity-30",
-                                    )}
-                                >
-                                    <span className="text-[15px] font-bold">
-                                        {isProcessing
-                                            ? "Processing..."
-                                            : "Confirm Payment"}
+                                <span className="text-[15px] font-bold">
+                                    {isProcessing
+                                        ? "Processing..."
+                                        : "Confirm Payment"}
+                                </span>
+                                {!isFullyPaid && !isProcessing && (
+                                    <span className="text-[10px] opacity-70">
+                                        Enter full amount
                                     </span>
-                                    {!isFullyPaid && !isProcessing && (
-                                        <span className="text-[10px] opacity-70">
-                                            Enter full amount
-                                        </span>
-                                    )}
-                                </Button>
-                            </motion.div>
-                        )}
+                                )}
+                            </Button>
+                        </motion.div>
                     </div>
                 </div>
             </div>
+
+            <Dialog
+                open={qrDialogOpen}
+                onOpenChange={(open) => {
+                    setQrDialogOpen(open);
+                    if (!open) setPaymentMethod("cash");
+                }}
+            >
+                <DialogContent className="w-fit sm:max-w-none">
+                    <DialogHeader>
+                        <DialogTitle>Scan to Pay</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex flex-col items-center gap-4 py-2">
+                        <div className="rounded-xl bg-white p-4">
+                            <img
+                                src={STATIC_QR_CODE_URL}
+                                alt="QR Code"
+                                className="size-96 object-contain"
+                            />
+                        </div>
+                        <p className="font-mono text-lg font-bold text-primary">
+                            ${total.toFixed(2)}
+                        </p>
+                        <motion.div
+                            animate={
+                                !isProcessing
+                                    ? { scale: [1, 1.01, 1] }
+                                    : { scale: 1 }
+                            }
+                            transition={
+                                !isProcessing
+                                    ? {
+                                          duration: 1.6,
+                                          repeat: Infinity,
+                                          ease: "easeInOut",
+                                      }
+                                    : {}
+                            }
+                            className="w-full"
+                        >
+                            <Button
+                                onClick={handleQrConfirm}
+                                disabled={isProcessing}
+                                className={cn(
+                                    "h-auto w-full flex-col gap-1 py-4",
+                                    isProcessing &&
+                                        "cursor-not-allowed opacity-50",
+                                )}
+                            >
+                                <span className="text-[15px] font-bold">
+                                    {isProcessing
+                                        ? "Processing..."
+                                        : "Confirm Payment Received"}
+                                </span>
+                            </Button>
+                        </motion.div>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 };
