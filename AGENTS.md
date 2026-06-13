@@ -51,9 +51,9 @@ Warm brown/amber palette applied from https://tweakcn.com/r/themes/caffeine.json
 
 - **Router**: `BrowserRouter` declarative mode — routes defined with JSX `<Routes>/<Route>` in `App.tsx`, not data routers (`createBrowserRouter`). No loaders, actions, or `useLoaderData`. Use `useNavigate`, `useParams`, `useSearchParams`. Initial entry is `/login`. Protected routes redirect to `/login`.
 - **Auth**: Two auth flows — email/password login and PIN verification. Token refresh is automatic via axios interceptor with a queuing system.
-  - `AuthProvider` is wired into `main.tsx` — wraps the entire app tree.
-  - Access token is managed as module-level state in `api.ts` (not React state).
-  - Pass `silent: true` in axios request config to suppress toast errors (used during silent token refresh).
+    - `AuthProvider` is wired into `main.tsx` — wraps the entire app tree.
+    - Access token is managed as module-level state in `api.ts` (not React state).
+    - Pass `silent: true` in axios request config to suppress toast errors (used during silent token refresh).
 - **POS page**: Route-level page at `pages/POSPage.tsx` wraps `POSProvider` + `CategoryProvider` + `POSLayout`. The main views (`MenuView`, `PaymentView`) live in `components/pos/` as child routes under `/`.
 - **Contexts**: Two providers — `AuthContext` (auth state, login/logout/PIN verify) and `POSContext` (cart items, order type, customization, editing). `POSContext` must be used within `POSProvider`.
 

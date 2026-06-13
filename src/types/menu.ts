@@ -51,15 +51,11 @@ export type MenuItemResponse = MenuItemListResponse & {
 const FALLBACK_IMAGE = "https://placehold.co/400x300/3a2518/3a2518";
 
 export const toMenuItem = (item: MenuItemResponse): MenuItem => {
-    const hasSizes = item.modifierGroups.some((g) =>
-        /size/i.test(g.name),
-    );
+    const hasSizes = item.modifierGroups.some((g) => /size/i.test(g.name));
     const hasToppings = item.modifierGroups.some((g) =>
         /topping/i.test(g.name),
     );
-    const hasSugar = item.modifierGroups.some((g) =>
-        /sugar/i.test(g.name),
-    );
+    const hasSugar = item.modifierGroups.some((g) => /sugar/i.test(g.name));
 
     return {
         id: item.id,

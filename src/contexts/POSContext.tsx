@@ -9,6 +9,9 @@ import {
 import type { MenuItem, CartItem } from "@/components/pos/data";
 import { SIZE_PRICES, generateCartId } from "@/components/pos/data";
 import type { CustomizeOptions } from "@/components/pos/CustomizeModal";
+import api from "@/api/api";
+import { ENDPOINTS } from "@/api/endpoints";
+import type { Order, CreateOrderPayload } from "@/types/order";
 
 const CART_STORAGE_KEY = "pos-cart";
 const ORDER_TYPE_STORAGE_KEY = "pos-order-type";
@@ -33,8 +36,11 @@ interface POSContextValue {
     editingItemId: string | null;
     customizeItem: MenuItem | null;
     customizeInitial: CustomizeOptions | undefined;
+    discountId: string | null;
+    subtotal: number;
     total: number;
     setOrderType: (t: "dine-in" | "takeout") => void;
+    setDiscountId: (id: string | null) => void;
     addItem: (item: MenuItem, options: CustomizeOptions) => void;
     removeItem: (id: string) => void;
     changeQuantity: (id: string, delta: number) => void;
@@ -42,6 +48,10 @@ interface POSContextValue {
     resetCart: () => void;
     openCustomize: (item: MenuItem) => void;
     closeCustomize: () => void;
+    submitOrder: (
+        paymentMethod: "cash" | "qr",
+        amountReceived?: number,
+    ) => Promise<Order>;
 }
 
 const POSContext = createContext<POSContextValue | null>(null);
@@ -56,11 +66,17 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
     const [customizeInitial, setCustomizeInitial] = useState<
         CustomizeOptions | undefined
     >(undefined);
+    const [discountId, setDiscountId] = useState<string | null>(null);
+
+    const subtotal = useMemo(() => {
+        return cartItems.reduce((sum, item) => sum + item.price, 0);
+    }, [cartItems]);
 
     const total = useMemo(() => {
-        const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
-        return subtotal * 1.07;
-    }, [cartItems]);
+        // Tax is included in prices, so total = subtotal
+        // Discount will be applied by the backend
+        return subtotal;
+    }, [subtotal]);
 
     useEffect(() => {
         localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
@@ -187,6 +203,44 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
         setEditingItemId(null);
     }, []);
 
+    const submitOrder = useCallback(
+        async (
+            paymentMethod: "cash" | "qr",
+            amountReceived?: number,
+        ): Promise<Order> => {
+            // Build the order payload with payment
+            const payload: CreateOrderPayload = {
+                dining_option:
+                    orderType === "dine-in" ? "dine_in" : "take_away",
+                discount_id: discountId || undefined,
+                items: cartItems.map((item) => ({
+                    menu_item_id: item.menuId,
+                    quantity: item.quantity,
+                    unit_price: item.unitPrice,
+                    modifier_option_ids: item.toppings.map(
+                        (t) => t.modifierOptionId,
+                    ),
+                })),
+                payment_method: paymentMethod,
+                amount_received:
+                    paymentMethod === "cash" ? amountReceived : undefined,
+            };
+
+            // Create order and process payment in one call
+            const { data: order } = await api.post<Order>(
+                ENDPOINTS.ORDERS.BASE,
+                payload,
+            );
+
+            // Clear cart after successful order
+            resetCart();
+            setDiscountId(null);
+
+            return order;
+        },
+        [cartItems, orderType, discountId, resetCart],
+    );
+
     return (
         <POSContext.Provider
             value={{
@@ -195,8 +249,11 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
                 editingItemId,
                 customizeItem,
                 customizeInitial,
+                discountId,
+                subtotal,
                 total,
                 setOrderType,
+                setDiscountId,
                 addItem,
                 removeItem,
                 changeQuantity,
@@ -204,6 +261,7 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
                 resetCart,
                 openCustomize,
                 closeCustomize,
+                submitOrder,
             }}
         >
             {children}

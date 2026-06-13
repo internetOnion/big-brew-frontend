@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
     X,
     CheckCircle2,
@@ -6,13 +7,13 @@ import {
     ShoppingBag,
     Clock,
 } from "lucide-react";
-import { type QueueItem } from "./data";
+import type { Order, OrderItem } from "@/types/order";
 import { cn } from "@/lib/utils";
 
 interface OrderDetailModalProps {
-    order: QueueItem;
+    order: Order;
     onComplete: () => void;
-    onVoid: () => void;
+    onVoid: (reason: string) => void;
     onCancel: () => void;
 }
 
@@ -22,21 +23,46 @@ export const OrderDetailModal = ({
     onVoid,
     onCancel,
 }: OrderDetailModalProps) => {
-    const total = order.lineItems.reduce((sum, li) => sum + li.price, 0);
-    const urgent = parseInt(order.time.replace(/\D/g, ""), 10) >= 8;
-    const TypeIcon = order.type === "dine-in" ? UtensilsCrossed : ShoppingBag;
+    const [showVoidConfirm, setShowVoidConfirm] = useState(false);
+    const [voidReason, setVoidReason] = useState("");
+
+    const urgent = (() => {
+        const now = new Date();
+        const created = new Date(order.createdAt);
+        const diffMs = now.getTime() - created.getTime();
+        const diffMins = Math.floor(diffMs / 60000);
+        return diffMins >= 8;
+    })();
+
+    const timeSince = (() => {
+        const now = new Date();
+        const created = new Date(order.createdAt);
+        const diffMs = now.getTime() - created.getTime();
+        const diffMins = Math.floor(diffMs / 60000);
+
+        if (diffMins < 1) return "Just now";
+        if (diffMins === 1) return "1m";
+        return `${diffMins}m`;
+    })();
+
+    const TypeIcon =
+        order.diningOption === "dine_in" ? UtensilsCrossed : ShoppingBag;
+
+    const handleVoid = () => {
+        if (voidReason.trim()) {
+            onVoid(voidReason.trim());
+            setShowVoidConfirm(false);
+            setVoidReason("");
+        }
+    };
 
     return (
-        <div
-            className="fixed inset-0 z-50 flex items-center justify-center"
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
             <div
                 className="absolute inset-0 bg-black/40 backdrop-blur-sm"
                 onClick={onCancel}
             />
-            <div
-                className="relative z-10 w-full max-w-sm overflow-hidden rounded-2xl border border-border bg-card shadow-2xl"
-            >
+            <div className="relative z-10 w-full max-w-sm overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
                 <div
                     className={cn(
                         "flex items-center justify-between px-5 py-4",
@@ -48,14 +74,16 @@ export const OrderDetailModal = ({
                     <div className="flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
                             <span className="text-sm font-bold font-mono text-white tabular-nums">
-                                #{order.queueNumber}
+                                #{order.orderNumber}
                             </span>
                         </div>
                         <div>
                             <div className="flex items-center gap-1.5">
                                 <TypeIcon className="h-3.5 w-3.5 text-muted-foreground" />
                                 <span className="text-xs font-medium capitalize text-muted-foreground">
-                                    {order.type}
+                                    {order.diningOption === "dine_in"
+                                        ? "dine-in"
+                                        : "takeout"}
                                 </span>
                             </div>
                             <div className="flex items-center gap-1">
@@ -75,7 +103,7 @@ export const OrderDetailModal = ({
                                             : "text-muted-foreground",
                                     )}
                                 >
-                                    {order.time}
+                                    {timeSince}
                                 </span>
                             </div>
                         </div>
@@ -93,26 +121,64 @@ export const OrderDetailModal = ({
                         Items
                     </h4>
                     <div className="flex flex-col gap-2">
-                        {order.lineItems.map((li, idx) => (
+                        {order.items.map((item: OrderItem) => (
                             <div
-                                key={idx}
+                                key={item.id}
                                 className="flex items-center justify-between rounded-lg bg-background px-3 py-2"
                             >
                                 <div>
                                     <p className="text-sm font-medium text-foreground">
-                                        {li.name}
+                                        {item.quantity > 1 &&
+                                            `${item.quantity}× `}
+                                        {item.name}
                                     </p>
-                                    <p className="text-[11px] text-muted-foreground">
-                                        {li.size && `Size: ${li.size} `}
-                                        {li.sugarLevel &&
-                                            `Sugar: ${li.sugarLevel} `}
-                                        {li.toppings &&
-                                            li.toppings.length > 0 &&
-                                            `Toppings: ${li.toppings.join(", ")}`}
-                                    </p>
+                                    {item.modifiers.length > 0 && (
+                                        <div className="mt-0.5 flex flex-col gap-0.5">
+                                            {(() => {
+                                                const grouped: Record<
+                                                    string,
+                                                    typeof item.modifiers
+                                                > = {};
+                                                for (const m of item.modifiers) {
+                                                    const key =
+                                                        m.groupName ||
+                                                        "Modifiers";
+                                                    if (!grouped[key])
+                                                        grouped[key] = [];
+                                                    grouped[key].push(m);
+                                                }
+                                                return Object.entries(
+                                                    grouped,
+                                                ).map(([group, mods]) => (
+                                                    <div
+                                                        key={group}
+                                                        className="text-[10px] text-muted-foreground leading-tight"
+                                                    >
+                                                        <span className="font-semibold text-foreground">
+                                                            {group}:{" "}
+                                                        </span>
+                                                        {mods
+                                                            .map((m) =>
+                                                                m.price &&
+                                                                parseFloat(
+                                                                    m.price,
+                                                                ) > 0
+                                                                    ? `${m.name} (+$${parseFloat(m.price).toFixed(2)})`
+                                                                    : m.name,
+                                                            )
+                                                            .join(", ")}
+                                                    </div>
+                                                ));
+                                            })()}
+                                        </div>
+                                    )}
                                 </div>
                                 <span className="text-sm font-semibold font-mono tabular-nums text-primary">
-                                    ${li.price.toFixed(2)}
+                                    $
+                                    {(
+                                        parseFloat(item.unitPrice) *
+                                        item.quantity
+                                    ).toFixed(2)}
                                 </span>
                             </div>
                         ))}
@@ -122,27 +188,68 @@ export const OrderDetailModal = ({
                             Total
                         </span>
                         <span className="text-base font-bold font-mono tabular-nums text-primary">
-                            ${total.toFixed(2)}
+                            ${parseFloat(order.total).toFixed(2)}
                         </span>
                     </div>
                 </div>
 
-                <div className="flex gap-2 border-t border-border px-5 pb-5 pt-1">
-                    <button
-                        onClick={onVoid}
-                        className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-destructive py-2.5 text-sm font-bold text-destructive transition-all hover:bg-red-50"
-                    >
-                        <XCircle className="h-4 w-4" />
-                        Void
-                    </button>
-                    <button
-                        onClick={onComplete}
-                        className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#5C8A5C] py-2.5 text-sm font-bold text-white transition-all hover:brightness-110 active:scale-95"
-                    >
-                        <CheckCircle2 className="h-4 w-4" />
-                        Complete
-                    </button>
-                </div>
+                {showVoidConfirm ? (
+                    <div className="border-t border-border px-5 pb-5 pt-4">
+                        <h4 className="mb-2 text-sm font-bold text-foreground">
+                            Void Order
+                        </h4>
+                        <p className="mb-3 text-xs text-muted-foreground">
+                            Please provide a reason for voiding this order.
+                        </p>
+                        <textarea
+                            value={voidReason}
+                            onChange={(e) => setVoidReason(e.target.value)}
+                            placeholder="Enter reason..."
+                            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary mb-3"
+                            rows={2}
+                        />
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => {
+                                    setShowVoidConfirm(false);
+                                    setVoidReason("");
+                                }}
+                                className="flex-1 rounded-xl border border-border py-2.5 text-sm font-bold text-foreground transition-all hover:bg-secondary"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleVoid}
+                                disabled={!voidReason.trim()}
+                                className={cn(
+                                    "flex-1 rounded-xl py-2.5 text-sm font-bold text-white transition-all",
+                                    voidReason.trim()
+                                        ? "bg-destructive hover:brightness-110"
+                                        : "bg-destructive/50 cursor-not-allowed",
+                                )}
+                            >
+                                Confirm Void
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="flex gap-2 border-t border-border px-5 pb-5 pt-1">
+                        <button
+                            onClick={() => setShowVoidConfirm(true)}
+                            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-destructive py-2.5 text-sm font-bold text-destructive transition-all hover:bg-red-50"
+                        >
+                            <XCircle className="h-4 w-4" />
+                            Void
+                        </button>
+                        <button
+                            onClick={onComplete}
+                            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#5C8A5C] py-2.5 text-sm font-bold text-white transition-all hover:brightness-110 active:scale-95"
+                        >
+                            <CheckCircle2 className="h-4 w-4" />
+                            Complete
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
