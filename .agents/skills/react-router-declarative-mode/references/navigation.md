@@ -16,13 +16,13 @@ Basic navigation between routes:
 import { Link } from "react-router";
 
 function Nav() {
-  return (
-    <nav>
-      <Link to="/">Home</Link>
-      <Link to="/about">About</Link>
-      <Link to="/products/123">Product</Link>
-    </nav>
-  );
+    return (
+        <nav>
+            <Link to="/">Home</Link>
+            <Link to="/about">About</Link>
+            <Link to="/products/123">Product</Link>
+        </nav>
+    );
 }
 ```
 
@@ -36,7 +36,7 @@ function Nav() {
 
 ```tsx
 <Link to="/dashboard" replace state={{ from: "home" }}>
-  Dashboard
+    Dashboard
 </Link>
 ```
 
@@ -48,14 +48,14 @@ Link with active state awareness for styling navigation:
 import { NavLink } from "react-router";
 
 function Nav() {
-  return (
-    <nav>
-      <NavLink to="/" end>
-        Home
-      </NavLink>
-      <NavLink to="/products">Products</NavLink>
-    </nav>
-  );
+    return (
+        <nav>
+            <NavLink to="/" end>
+                Home
+            </NavLink>
+            <NavLink to="/products">Products</NavLink>
+        </nav>
+    );
 }
 ```
 
@@ -65,8 +65,8 @@ NavLink automatically adds an `.active` class when active, so you can style it w
 
 ```css
 a.active {
-  color: blue;
-  font-weight: bold;
+    color: blue;
+    font-weight: bold;
 }
 ```
 
@@ -74,10 +74,10 @@ For custom class names, use the `className` function:
 
 ```tsx
 <NavLink
-  to="/products"
-  className={({ isActive }) => (isActive ? "nav-active" : "nav-link")}
+    to="/products"
+    className={({ isActive }) => (isActive ? "nav-active" : "nav-link")}
 >
-  Products
+    Products
 </NavLink>
 ```
 
@@ -146,20 +146,20 @@ Programmatic navigation for situations where the user is _not_ directly clicking
 import { useNavigate } from "react-router";
 
 function LoginForm() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    await login();
-    navigate("/dashboard");
-  }
+    async function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        await login();
+        navigate("/dashboard");
+    }
 
-  return (
-    <form onSubmit={handleSubmit}>
-      {/* form fields */}
-      <button type="submit">Login</button>
-    </form>
-  );
+    return (
+        <form onSubmit={handleSubmit}>
+            {/* form fields */}
+            <button type="submit">Login</button>
+        </form>
+    );
 }
 ```
 
@@ -228,7 +228,7 @@ Pass data to the destination without putting it in the URL:
 ```tsx
 // Sending state
 <Link to="/checkout" state={{ cartId: "abc123", from: "/cart" }}>
-  Checkout
+    Checkout
 </Link>;
 
 // Or with useNavigate
@@ -250,12 +250,12 @@ Reading state at the destination - see [url-values.md](./url-values.md#uselocati
 ```tsx
 // ❌ DON'T: Use window.location for navigation
 function handleClick() {
-  window.location.href = "/dashboard"; // full page reload
+    window.location.href = "/dashboard"; // full page reload
 }
 
 // ✅ DO: Use useNavigate for programmatic navigation
 function handleClick() {
-  navigate("/dashboard"); // client-side navigation
+    navigate("/dashboard"); // client-side navigation
 }
 ```
 

@@ -39,19 +39,19 @@ Configure routes with JSX using `<Routes>` and `<Route>`:
 import { BrowserRouter, Routes, Route } from "react-router";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="about" element={<About />} />
-        <Route path="dashboard" element={<Dashboard />}>
-          <Route index element={<DashboardHome />} />
-          <Route path="settings" element={<Settings />} />
-        </Route>
-        <Route path="users/:userId" element={<User />} />
-      </Routes>
-    </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="about" element={<About />} />
+                <Route path="dashboard" element={<Dashboard />}>
+                    <Route index element={<DashboardHome />} />
+                    <Route path="settings" element={<Settings />} />
+                </Route>
+                <Route path="users/:userId" element={<User />} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 ```
 
@@ -63,23 +63,23 @@ Use `NavLink` for navigation with active styling:
 import { NavLink } from "react-router";
 
 function Nav() {
-  return (
-    <nav>
-      <NavLink
-        to="/"
-        end
-        className={({ isActive }) => (isActive ? "active" : "")}
-      >
-        Home
-      </NavLink>
-      <NavLink
-        to="/dashboard"
-        className={({ isActive }) => (isActive ? "active" : "")}
-      >
-        Dashboard
-      </NavLink>
-    </nav>
-  );
+    return (
+        <nav>
+            <NavLink
+                to="/"
+                end
+                className={({ isActive }) => (isActive ? "active" : "")}
+            >
+                Home
+            </NavLink>
+            <NavLink
+                to="/dashboard"
+                className={({ isActive }) => (isActive ? "active" : "")}
+            >
+                Dashboard
+            </NavLink>
+        </nav>
+    );
 }
 ```
 
@@ -91,8 +91,8 @@ Use `useParams` to read dynamic route segments:
 import { useParams } from "react-router";
 
 function User() {
-  const { userId } = useParams();
-  return <h1>User {userId}</h1>;
+    const { userId } = useParams();
+    return <h1>User {userId}</h1>;
 }
 ```
 
@@ -104,18 +104,18 @@ Use `useSearchParams` for query string values:
 import { useSearchParams } from "react-router";
 
 function SearchResults() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get("q");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const query = searchParams.get("q");
 
-  return (
-    <div>
-      <input
-        value={query || ""}
-        onChange={(e) => setSearchParams({ q: e.target.value })}
-      />
-      <p>Results for: {query}</p>
-    </div>
-  );
+    return (
+        <div>
+            <input
+                value={query || ""}
+                onChange={(e) => setSearchParams({ q: e.target.value })}
+            />
+            <p>Results for: {query}</p>
+        </div>
+    );
 }
 ```
 

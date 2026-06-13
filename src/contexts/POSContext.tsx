@@ -6,9 +6,13 @@ import {
     useEffect,
     type ReactNode,
 } from "react";
-import type { MenuItem, CartItem } from "@/components/pos/data";
-import { SIZE_PRICES, generateCartId } from "@/components/pos/data";
+import type { MenuItem } from "@/types/menu";
+import type { CartItem } from "@/types/cart";
+import { generateCartId } from "@/lib/utils";
 import type { CustomizeOptions } from "@/components/pos/CustomizeModal";
+import api from "@/api/api";
+import { ENDPOINTS } from "@/api/endpoints";
+import type { Order, CreateOrderPayload } from "@/types/order";
 
 const CART_STORAGE_KEY = "pos-cart";
 const ORDER_TYPE_STORAGE_KEY = "pos-order-type";
@@ -16,7 +20,16 @@ const ORDER_TYPE_STORAGE_KEY = "pos-order-type";
 const loadCart = (): CartItem[] => {
     try {
         const raw = localStorage.getItem(CART_STORAGE_KEY);
-        return raw ? JSON.parse(raw) : [];
+        if (!raw) return [];
+        const items: CartItem[] = JSON.parse(raw);
+        // Migrate old cart items that lack modifierGroups / selectedModifiers / option IDs
+        return items.map((item) => ({
+            ...item,
+            modifierGroups: item.modifierGroups ?? [],
+            selectedModifiers: item.selectedModifiers ?? {},
+            sizeOptionId: item.sizeOptionId ?? undefined,
+            sugarOptionId: item.sugarOptionId ?? undefined,
+        }));
     } catch {
         return [];
     }
@@ -33,8 +46,11 @@ interface POSContextValue {
     editingItemId: string | null;
     customizeItem: MenuItem | null;
     customizeInitial: CustomizeOptions | undefined;
+    discountId: string | null;
+    subtotal: number;
     total: number;
     setOrderType: (t: "dine-in" | "takeout") => void;
+    setDiscountId: (id: string | null) => void;
     addItem: (item: MenuItem, options: CustomizeOptions) => void;
     removeItem: (id: string) => void;
     changeQuantity: (id: string, delta: number) => void;
@@ -42,6 +58,10 @@ interface POSContextValue {
     resetCart: () => void;
     openCustomize: (item: MenuItem) => void;
     closeCustomize: () => void;
+    submitOrder: (
+        paymentMethod: "cash" | "qr",
+        amountReceived?: number,
+    ) => Promise<Order>;
 }
 
 const POSContext = createContext<POSContextValue | null>(null);
@@ -56,11 +76,17 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
     const [customizeInitial, setCustomizeInitial] = useState<
         CustomizeOptions | undefined
     >(undefined);
+    const [discountId, setDiscountId] = useState<string | null>(null);
+
+    const subtotal = useMemo(() => {
+        return cartItems.reduce((sum, item) => sum + item.price, 0);
+    }, [cartItems]);
 
     const total = useMemo(() => {
-        const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
-        return subtotal * 1.07;
-    }, [cartItems]);
+        // Tax is included in prices, so total = subtotal
+        // Discount will be applied by the backend
+        return subtotal;
+    }, [subtotal]);
 
     useEffect(() => {
         localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
@@ -72,6 +98,21 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
 
     const addItem = useCallback(
         (item: MenuItem, options: CustomizeOptions) => {
+            const modifierGroups = (item.modifierGroups ?? []).map((g) => ({
+                id: g.id,
+                name: g.name,
+                selectionType: g.selectionType,
+                isRequired: g.isRequired,
+                sortOrder: g.sortOrder,
+                options: g.options.map((o) => ({
+                    id: o.id,
+                    name: o.name,
+                    price: o.price,
+                    isAvailable: o.isAvailable,
+                    sortOrder: o.sortOrder,
+                })),
+            }));
+
             if (editingItemId) {
                 setCartItems((prev) =>
                     prev.map((ci) =>
@@ -79,13 +120,21 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
                             ? {
                                   ...ci,
                                   size: options.size || undefined,
+                                  sizeOptionId:
+                                      options.sizeOptionId || undefined,
                                   toppings: options.toppings,
                                   sugarLevel: options.sugarLevel || undefined,
+                                  sugarOptionId:
+                                      options.sugarOptionId || undefined,
                                   note: options.note || undefined,
                                   quantity: options.quantity,
                                   unitPrice:
                                       options.finalPrice / options.quantity,
                                   price: options.finalPrice,
+                                  modifierGroups,
+                                  selectedModifiers: {
+                                      ...options.modifiers,
+                                  },
                               }
                             : ci,
                     ),
@@ -100,12 +149,16 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
                 name: item.name,
                 category: item.category,
                 size: options.size || undefined,
+                sizeOptionId: options.sizeOptionId || undefined,
                 toppings: options.toppings,
                 sugarLevel: options.sugarLevel || undefined,
+                sugarOptionId: options.sugarOptionId || undefined,
                 note: options.note || undefined,
                 quantity: options.quantity,
                 unitPrice: options.finalPrice / options.quantity,
                 price: options.finalPrice,
+                modifierGroups,
+                selectedModifiers: { ...options.modifiers },
             };
             setCartItems((prev) => [...prev, cartItem]);
             setCustomizeItem(null);
@@ -144,28 +197,26 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
             const menuItem: MenuItem = {
                 id: item.menuId,
                 name: item.name,
-                category: item.category as MenuItem["category"],
+                category: item.category,
                 basePrice: item.unitPrice,
                 hasSizes: !!item.size,
                 hasToppings: item.toppings.length > 0,
                 hasSugar: !!item.sugarLevel,
                 image: "",
+                modifierGroups: item.modifierGroups,
             };
-            const sizePrice = item.size ? SIZE_PRICES[item.size] || 0 : 0;
-            const toppingsPrice = item.toppings.reduce(
-                (sum, t) => sum + t.price * t.qty,
-                0,
-            );
-            menuItem.basePrice = item.unitPrice - sizePrice - toppingsPrice;
 
             setEditingItemId(id);
             setCustomizeInitial({
-                size: item.size || "M",
+                size: item.size || "",
+                sizeOptionId: item.sizeOptionId || "",
                 toppings: item.toppings,
-                sugarLevel: item.sugarLevel || "50%",
+                sugarLevel: item.sugarLevel || "",
+                sugarOptionId: item.sugarOptionId || "",
                 quantity: item.quantity,
                 finalPrice: item.price,
                 note: item.note || "",
+                modifiers: { ...item.selectedModifiers },
             });
             setCustomizeItem(menuItem);
         },
@@ -187,6 +238,52 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
         setEditingItemId(null);
     }, []);
 
+    const submitOrder = useCallback(
+        async (
+            paymentMethod: "cash" | "qr",
+            amountReceived?: number,
+        ): Promise<Order> => {
+            // Build the order payload with payment
+            const payload: CreateOrderPayload = {
+                dining_option:
+                    orderType === "dine-in" ? "dine_in" : "take_away",
+                discount_id: discountId || undefined,
+                items: cartItems.map((item) => {
+                    // Collect all modifier option IDs: size, sugar, toppings + selected modifiers from other groups
+                    const allIds = [
+                        item.sizeOptionId,
+                        item.sugarOptionId,
+                        ...item.toppings.map((t) => t.modifierOptionId),
+                        ...Object.values(item.selectedModifiers).flat(),
+                    ].filter((id): id is string => Boolean(id));
+                    const modifier_option_ids = [...new Set(allIds)];
+                    return {
+                        menu_item_id: item.menuId,
+                        quantity: item.quantity,
+                        unit_price: item.unitPrice,
+                        modifier_option_ids,
+                    };
+                }),
+                payment_method: paymentMethod,
+                amount_received:
+                    paymentMethod === "cash" ? amountReceived : undefined,
+            };
+
+            // Create order and process payment in one call
+            const { data: order } = await api.post<Order>(
+                ENDPOINTS.ORDERS.BASE,
+                payload,
+            );
+
+            // Clear cart after successful order
+            resetCart();
+            setDiscountId(null);
+
+            return order;
+        },
+        [cartItems, orderType, discountId, resetCart],
+    );
+
     return (
         <POSContext.Provider
             value={{
@@ -195,8 +292,11 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
                 editingItemId,
                 customizeItem,
                 customizeInitial,
+                discountId,
+                subtotal,
                 total,
                 setOrderType,
+                setDiscountId,
                 addItem,
                 removeItem,
                 changeQuantity,
@@ -204,6 +304,7 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
                 resetCart,
                 openCustomize,
                 closeCustomize,
+                submitOrder,
             }}
         >
             {children}

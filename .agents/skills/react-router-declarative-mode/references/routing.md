@@ -2,16 +2,16 @@
 title: Routing
 description: JSX-based route configuration with Routes and Route components
 tags:
-  [
-    routing,
-    Routes,
-    Route,
-    nested-routes,
-    layout,
-    dynamic-segments,
-    params,
-    Outlet,
-  ]
+    [
+        routing,
+        Routes,
+        Route,
+        nested-routes,
+        layout,
+        dynamic-segments,
+        params,
+        Outlet,
+    ]
 ---
 
 # Routing
@@ -24,15 +24,15 @@ In declarative mode, routes are configured using JSX with `<Routes>` and `<Route
 import { BrowserRouter, Routes, Route } from "react-router";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="about" element={<About />} />
-        <Route path="contact" element={<Contact />} />
-      </Routes>
-    </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="about" element={<About />} />
+                <Route path="contact" element={<Contact />} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 ```
 
@@ -53,30 +53,30 @@ Child routes are nested inside parent routes. Use `<Outlet />` in the parent to 
 import { Routes, Route, Outlet } from "react-router";
 
 function Dashboard() {
-  return (
-    <div>
-      <h1>Dashboard</h1>
-      <nav>
-        <Link to="settings">Settings</Link>
-        <Link to="profile">Profile</Link>
-      </nav>
-      <Outlet />
-    </div>
-  );
+    return (
+        <div>
+            <h1>Dashboard</h1>
+            <nav>
+                <Link to="settings">Settings</Link>
+                <Link to="profile">Profile</Link>
+            </nav>
+            <Outlet />
+        </div>
+    );
 }
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="dashboard" element={<Dashboard />}>
-          <Route index element={<DashboardHome />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="profile" element={<Profile />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="dashboard" element={<Dashboard />}>
+                    <Route index element={<DashboardHome />} />
+                    <Route path="settings" element={<Settings />} />
+                    <Route path="profile" element={<Profile />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    );
 }
 ```
 
@@ -92,15 +92,15 @@ Routes without a `path` act as layout wrappers:
 
 ```tsx
 <Routes>
-  <Route element={<MarketingLayout />}>
-    <Route path="/" element={<Home />} />
-    <Route path="about" element={<About />} />
-    <Route path="contact" element={<Contact />} />
-  </Route>
-  <Route element={<AppLayout />}>
-    <Route path="dashboard" element={<Dashboard />} />
-    <Route path="settings" element={<Settings />} />
-  </Route>
+    <Route element={<MarketingLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="about" element={<About />} />
+        <Route path="contact" element={<Contact />} />
+    </Route>
+    <Route element={<AppLayout />}>
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="settings" element={<Settings />} />
+    </Route>
 </Routes>
 ```
 
@@ -112,11 +112,11 @@ Index routes render at the parent's URL (the "default" child):
 
 ```tsx
 <Routes>
-  <Route path="/" element={<Home />} />
-  <Route path="dashboard" element={<Dashboard />}>
-    <Route index element={<DashboardHome />} />
-    <Route path="settings" element={<Settings />} />
-  </Route>
+    <Route path="/" element={<Home />} />
+    <Route path="dashboard" element={<Dashboard />}>
+        <Route index element={<DashboardHome />} />
+        <Route path="settings" element={<Settings />} />
+    </Route>
 </Routes>
 ```
 
@@ -132,12 +132,12 @@ A Route with `path` but without `element` adds a path prefix to its children wit
 
 ```tsx
 <Routes>
-  {/* /projects/... without a shared layout */}
-  <Route path="projects">
-    <Route index element={<ProjectsHome />} />
-    <Route path=":projectId" element={<Project />} />
-    <Route path=":projectId/edit" element={<EditProject />} />
-  </Route>
+    {/* /projects/... without a shared layout */}
+    <Route path="projects">
+        <Route index element={<ProjectsHome />} />
+        <Route path=":projectId" element={<Project />} />
+        <Route path=":projectId/edit" element={<EditProject />} />
+    </Route>
 </Routes>
 ```
 
@@ -158,8 +158,8 @@ Access params with `useParams()`:
 import { useParams } from "react-router";
 
 function User() {
-  const { userId } = useParams();
-  return <h1>User {userId}</h1>;
+    const { userId } = useParams();
+    return <h1>User {userId}</h1>;
 }
 ```
 
@@ -187,9 +187,9 @@ Match any remaining path with `*`:
 import { useParams } from "react-router";
 
 function FileViewer() {
-  const { "*": filePath } = useParams();
-  // filePath = "docs/intro.md" for /files/docs/intro.md
-  return <div>Viewing: {filePath}</div>;
+    const { "*": filePath } = useParams();
+    // filePath = "docs/intro.md" for /files/docs/intro.md
+    return <div>Viewing: {filePath}</div>;
 }
 ```
 
@@ -197,9 +197,9 @@ function FileViewer() {
 
 ```tsx
 <Routes>
-  <Route path="/" element={<Home />} />
-  <Route path="about" element={<About />} />
-  <Route path="*" element={<NotFound />} />
+    <Route path="/" element={<Home />} />
+    <Route path="about" element={<About />} />
+    <Route path="*" element={<NotFound />} />
 </Routes>
 ```
 
@@ -208,26 +208,26 @@ function FileViewer() {
 ```tsx
 // ❌ DON'T: Flat structure when routes share layout
 function App() {
-  return (
-    <Routes>
-      <Route path="dashboard" element={<Dashboard />} />
-      <Route path="dashboard/settings" element={<DashboardSettings />} />
-      <Route path="dashboard/profile" element={<DashboardProfile />} />
-    </Routes>
-  );
+    return (
+        <Routes>
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="dashboard/settings" element={<DashboardSettings />} />
+            <Route path="dashboard/profile" element={<DashboardProfile />} />
+        </Routes>
+    );
 }
 
 // ✅ DO: Use nested routes with shared layout
 function App() {
-  return (
-    <Routes>
-      <Route path="dashboard" element={<DashboardLayout />}>
-        <Route index element={<Dashboard />} />
-        <Route path="settings" element={<DashboardSettings />} />
-        <Route path="profile" element={<DashboardProfile />} />
-      </Route>
-    </Routes>
-  );
+    return (
+        <Routes>
+            <Route path="dashboard" element={<DashboardLayout />}>
+                <Route index element={<Dashboard />} />
+                <Route path="settings" element={<DashboardSettings />} />
+                <Route path="profile" element={<DashboardProfile />} />
+            </Route>
+        </Routes>
+    );
 }
 ```
 
@@ -246,13 +246,13 @@ Use `<Link>` for navigation between routes:
 import { Link } from "react-router";
 
 function Nav() {
-  return (
-    <nav>
-      <Link to="/">Home</Link>
-      <Link to="/about">About</Link>
-      <Link to="/users/123">User 123</Link>
-    </nav>
-  );
+    return (
+        <nav>
+            <Link to="/">Home</Link>
+            <Link to="/about">About</Link>
+            <Link to="/users/123">User 123</Link>
+        </nav>
+    );
 }
 ```
 

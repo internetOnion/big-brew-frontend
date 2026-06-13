@@ -19,9 +19,9 @@ Read dynamic segments from the route path:
 import { useParams } from "react-router";
 
 function User() {
-  const { userId } = useParams();
-  // userId = "123"
-  return <h1>User {userId}</h1>;
+    const { userId } = useParams();
+    // userId = "123"
+    return <h1>User {userId}</h1>;
 }
 ```
 
@@ -32,13 +32,13 @@ function User() {
 // URL: /teams/abc/members/456
 
 function Member() {
-  const { teamId, memberId } = useParams();
-  // teamId = "abc", memberId = "456"
-  return (
-    <h1>
-      Member {memberId} of Team {teamId}
-    </h1>
-  );
+    const { teamId, memberId } = useParams();
+    // teamId = "abc", memberId = "456"
+    return (
+        <h1>
+            Member {memberId} of Team {teamId}
+        </h1>
+    );
 }
 ```
 
@@ -49,9 +49,9 @@ function Member() {
 // URL: /files/docs/intro.md
 
 function FileViewer() {
-  const { "*": filePath } = useParams();
-  // filePath = "docs/intro.md"
-  return <div>Viewing: {filePath}</div>;
+    const { "*": filePath } = useParams();
+    // filePath = "docs/intro.md"
+    return <div>Viewing: {filePath}</div>;
 }
 ```
 
@@ -61,21 +61,21 @@ Params are always `string | undefined`. Parse and validate as needed:
 
 ```tsx
 function User() {
-  const { userId } = useParams();
+    const { userId } = useParams();
 
-  // ❌ DON'T: Assume params exist or are numbers
-  const id = parseInt(userId); // userId could be undefined
+    // ❌ DON'T: Assume params exist or are numbers
+    const id = parseInt(userId); // userId could be undefined
 
-  // ✅ DO: Handle undefined and validate
-  if (!userId) {
-    return <div>User ID required</div>;
-  }
-  const id = parseInt(userId, 10);
-  if (isNaN(id)) {
-    return <div>Invalid user ID</div>;
-  }
+    // ✅ DO: Handle undefined and validate
+    if (!userId) {
+        return <div>User ID required</div>;
+    }
+    const id = parseInt(userId, 10);
+    if (isNaN(id)) {
+        return <div>Invalid user ID</div>;
+    }
 
-  return <h1>User {id}</h1>;
+    return <h1>User {id}</h1>;
 }
 ```
 
@@ -89,13 +89,13 @@ Read and update the query string (`?key=value`):
 import { useSearchParams } from "react-router";
 
 function SearchResults() {
-  const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
-  const query = searchParams.get("q"); // "react"
-  const page = searchParams.get("page"); // "2"
-  const missing = searchParams.get("foo"); // null
+    const query = searchParams.get("q"); // "react"
+    const page = searchParams.get("page"); // "2"
+    const missing = searchParams.get("foo"); // null
 
-  return <div>Searching for: {query}</div>;
+    return <div>Searching for: {query}</div>;
 }
 ```
 
@@ -105,31 +105,31 @@ function SearchResults() {
 
 ```tsx
 function SearchForm() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get("q") || "";
+    const [searchParams, setSearchParams] = useSearchParams();
+    const query = searchParams.get("q") || "";
 
-  function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value;
-    const isFirstSearch = !searchParams.has("q");
+    function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
+        const value = e.target.value;
+        const isFirstSearch = !searchParams.has("q");
 
-    if (value) {
-      setSearchParams(
-        { q: value },
-        { replace: !isFirstSearch }, // Replace while typing, push on first search
-      );
-    } else {
-      setSearchParams({}, { replace: true });
+        if (value) {
+            setSearchParams(
+                { q: value },
+                { replace: !isFirstSearch }, // Replace while typing, push on first search
+            );
+        } else {
+            setSearchParams({}, { replace: true });
+        }
     }
-  }
 
-  return (
-    <input
-      type="search"
-      value={query}
-      onChange={handleSearch}
-      placeholder="Search..."
-    />
-  );
+    return (
+        <input
+            type="search"
+            value={query}
+            onChange={handleSearch}
+            placeholder="Search..."
+        />
+    );
 }
 ```
 
@@ -141,21 +141,21 @@ function SearchForm() {
 
 ```tsx
 function Filters() {
-  const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
-  function applyFilter(category: string) {
-    setSearchParams(
-      { category },
-      {
-        replace: true, // Don't add to history (back button skips)
-        preventScrollReset: true, // Keep scroll position
-      },
+    function applyFilter(category: string) {
+        setSearchParams(
+            { category },
+            {
+                replace: true, // Don't add to history (back button skips)
+                preventScrollReset: true, // Keep scroll position
+            },
+        );
+    }
+
+    return (
+        <button onClick={() => applyFilter("electronics")}>Electronics</button>
     );
-  }
-
-  return (
-    <button onClick={() => applyFilter("electronics")}>Electronics</button>
-  );
 }
 ```
 
@@ -171,26 +171,26 @@ When updating search params programmatically, preserve existing params:
 
 ```tsx
 function SortDropdown() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const sort = searchParams.get("sort") || "name";
+    const [searchParams, setSearchParams] = useSearchParams();
+    const sort = searchParams.get("sort") || "name";
 
-  function handleSortChange(newSort: string) {
-    // ❌ DON'T: Overwrite all params
-    setSearchParams({ sort: newSort });
+    function handleSortChange(newSort: string) {
+        // ❌ DON'T: Overwrite all params
+        setSearchParams({ sort: newSort });
 
-    // ✅ DO: Preserve existing params (like page, filters)
-    setSearchParams((prev) => {
-      prev.set("sort", String(newSort));
-      return prev;
-    });
-  }
+        // ✅ DO: Preserve existing params (like page, filters)
+        setSearchParams((prev) => {
+            prev.set("sort", String(newSort));
+            return prev;
+        });
+    }
 
-  return (
-    <select value={sort} onChange={(e) => handleSortChange(e.target.value)}>
-      <option value="name">Name</option>
-      <option value="date">Date</option>
-    </select>
-  );
+    return (
+        <select value={sort} onChange={(e) => handleSortChange(e.target.value)}>
+            <option value="name">Name</option>
+            <option value="date">Date</option>
+        </select>
+    );
 }
 ```
 
@@ -204,34 +204,34 @@ For pagination and similar controls, prefer `<Link>` over buttons with `setSearc
 import { Link, useSearchParams } from "react-router";
 
 function Pagination({
-  currentPage,
-  totalPages,
+    currentPage,
+    totalPages,
 }: {
-  currentPage: number;
-  totalPages: number;
+    currentPage: number;
+    totalPages: number;
 }) {
-  const [searchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
 
-  // Build URL that preserves existing search params
-  function getPageUrl(page: number): string {
-    const params = new URLSearchParams(searchParams);
-    params.set("page", String(page));
-    return `?${params.toString()}`;
-  }
+    // Build URL that preserves existing search params
+    function getPageUrl(page: number): string {
+        const params = new URLSearchParams(searchParams);
+        params.set("page", String(page));
+        return `?${params.toString()}`;
+    }
 
-  return (
-    <nav aria-label="Pagination">
-      {currentPage > 1 && (
-        <Link to={getPageUrl(currentPage - 1)}>Previous</Link>
-      )}
-      <span>
-        Page {currentPage} of {totalPages}
-      </span>
-      {currentPage < totalPages && (
-        <Link to={getPageUrl(currentPage + 1)}>Next</Link>
-      )}
-    </nav>
-  );
+    return (
+        <nav aria-label="Pagination">
+            {currentPage > 1 && (
+                <Link to={getPageUrl(currentPage - 1)}>Previous</Link>
+            )}
+            <span>
+                Page {currentPage} of {totalPages}
+            </span>
+            {currentPage < totalPages && (
+                <Link to={getPageUrl(currentPage + 1)}>Next</Link>
+            )}
+        </nav>
+    );
 }
 ```
 
@@ -259,13 +259,13 @@ Why prefer Links over buttons:
 // URL: /products?tag=react&tag=typescript
 
 function Products() {
-  const [searchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
 
-  // Get all values for a key
-  const tags = searchParams.getAll("tag");
-  // tags = ["react", "typescript"]
+    // Get all values for a key
+    const tags = searchParams.getAll("tag");
+    // tags = ["react", "typescript"]
 
-  return <div>Tags: {tags.join(", ")}</div>;
+    return <div>Tags: {tags.join(", ")}</div>;
 }
 ```
 
@@ -273,19 +273,19 @@ function Products() {
 
 ```tsx
 function ProductList() {
-  const [searchParams] = useSearchParams({
-    page: "1",
-    sort: "name",
-  });
+    const [searchParams] = useSearchParams({
+        page: "1",
+        sort: "name",
+    });
 
-  const page = searchParams.get("page"); // "1" if not in URL
-  const sort = searchParams.get("sort"); // "name" if not in URL
+    const page = searchParams.get("page"); // "1" if not in URL
+    const sort = searchParams.get("sort"); // "name" if not in URL
 
-  return (
-    <div>
-      Page {page}, sorted by {sort}
-    </div>
-  );
+    return (
+        <div>
+            Page {page}, sorted by {sort}
+        </div>
+    );
 }
 ```
 
@@ -297,9 +297,9 @@ Access the full location object:
 import { useLocation } from "react-router";
 
 function CurrentPath() {
-  const location = useLocation();
+    const location = useLocation();
 
-  return <pre>{JSON.stringify(location, null, 2)}</pre>;
+    return <pre>{JSON.stringify(location, null, 2)}</pre>;
 }
 ```
 
@@ -318,13 +318,13 @@ function CurrentPath() {
 // Navigated with state: { from: "/home" }
 
 function SearchPage() {
-  const location = useLocation();
+    const location = useLocation();
 
-  console.log(location.pathname); // "/search"
-  console.log(location.search); // "?q=react"
-  console.log(location.hash); // "#results"
-  console.log(location.state); // { from: "/home" }
-  console.log(location.key); // "abc123" (unique key)
+    console.log(location.pathname); // "/search"
+    console.log(location.search); // "?q=react"
+    console.log(location.hash); // "#results"
+    console.log(location.state); // { from: "/home" }
+    console.log(location.key); // "abc123" (unique key)
 }
 ```
 
@@ -335,21 +335,21 @@ State passed via `<Link state={...}>` or `navigate(path, { state })`:
 ```tsx
 // Sender
 <Link to="/checkout" state={{ cartId: "abc", from: "/cart" }}>
-  Checkout
+    Checkout
 </Link>;
 
 // Receiver
 function Checkout() {
-  const location = useLocation();
-  const { cartId, from } = location.state || {};
+    const location = useLocation();
+    const { cartId, from } = location.state || {};
 
-  return (
-    <div>
-      <h1>Checkout</h1>
-      {from && <Link to={from}>← Back</Link>}
-      <p>Cart: {cartId}</p>
-    </div>
-  );
+    return (
+        <div>
+            <h1>Checkout</h1>
+            {from && <Link to={from}>← Back</Link>}
+            <p>Cart: {cartId}</p>
+        </div>
+    );
 }
 ```
 
@@ -360,14 +360,14 @@ import { useEffect } from "react";
 import { useLocation } from "react-router";
 
 function Analytics() {
-  const location = useLocation();
+    const location = useLocation();
 
-  useEffect(() => {
-    // Track page views on route change
-    trackPageView(location.pathname);
-  }, [location]);
+    useEffect(() => {
+        // Track page views on route change
+        trackPageView(location.pathname);
+    }, [location]);
 
-  return null;
+    return null;
 }
 ```
 
@@ -377,23 +377,23 @@ function Analytics() {
 // URL: /products/shoes?color=red&size=10#reviews
 
 function ProductPage() {
-  const { category } = useParams(); // "shoes"
-  const [searchParams] = useSearchParams();
-  const location = useLocation();
+    const { category } = useParams(); // "shoes"
+    const [searchParams] = useSearchParams();
+    const location = useLocation();
 
-  const color = searchParams.get("color"); // "red"
-  const size = searchParams.get("size"); // "10"
-  const hash = location.hash; // "#reviews"
+    const color = searchParams.get("color"); // "red"
+    const size = searchParams.get("size"); // "10"
+    const hash = location.hash; // "#reviews"
 
-  return (
-    <div>
-      <h1>{category}</h1>
-      <p>
-        Color: {color}, Size: {size}
-      </p>
-      {hash === "#reviews" && <Reviews />}
-    </div>
-  );
+    return (
+        <div>
+            <h1>{category}</h1>
+            <p>
+                Color: {color}, Size: {size}
+            </p>
+            {hash === "#reviews" && <Reviews />}
+        </div>
+    );
 }
 ```
 
