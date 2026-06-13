@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Coffee, Shield } from "lucide-react";
+import { Shield } from "lucide-react";
 import OrderQueue from "@/components/pos/OrderQueue";
 import CustomizeModal from "@/components/pos/CustomizeModal";
 import { usePOS } from "@/hooks/usePos";
@@ -23,11 +23,13 @@ const POSLayout = () => {
             <div className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-card px-4">
                 <div className="flex items-center gap-3">
                     <div className="flex items-center gap-2">
-                        <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
-                            <Coffee className="size-4 text-primary-foreground" />
-                        </div>
+                        <img
+                            src="/homebrew.svg"
+                            alt="Homebrew"
+                            className="size-8"
+                        />
                         <span className="font-sans text-base font-bold text-foreground">
-                            BrewPoint
+                            BigBrew
                         </span>
                     </div>
                     <Badge

@@ -1,7 +1,7 @@
 import { useState, useEffect, type SubmitEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
-import { Eye, EyeOff, Coffee } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { ROUTES } from "@/lib/constants";
 import { useAuth } from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
@@ -78,7 +78,11 @@ const LoginPage = () => {
                     transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
                 >
                     <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-primary-foreground/25 bg-primary-foreground/15">
-                        <Coffee size={40} className="text-primary-foreground" />
+                        <img
+                            src="/homebrew.svg"
+                            alt="Homebrew"
+                            className="size-12 brightness-0 invert"
+                        />
                     </div>
                     <div className="text-center">
                         <h1 className="font-sans text-5xl font-extrabold leading-none tracking-tight text-primary-foreground">

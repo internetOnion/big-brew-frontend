@@ -236,9 +236,17 @@ export const CustomizeModal = ({
             <DialogContent className="max-w-md" showCloseButton>
                 <DialogHeader>
                     <div className="flex items-center gap-3">
-                        <div className="flex size-10 items-center justify-center rounded-xl bg-primary">
-                            <CategoryIcon className="size-5 text-primary-foreground" />
-                        </div>
+                        {item.image ? (
+                            <img
+                                src={item.image}
+                                alt={item.name}
+                                className="size-12 rounded-xl object-cover"
+                            />
+                        ) : (
+                            <div className="flex size-12 items-center justify-center rounded-xl bg-secondary">
+                                <CategoryIcon className="size-5 text-muted-foreground" />
+                            </div>
+                        )}
                         <div>
                             <DialogTitle>{item.name}</DialogTitle>
                             <p className="text-sm text-muted-foreground">
