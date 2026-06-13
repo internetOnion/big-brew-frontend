@@ -452,8 +452,8 @@ export const CustomizeModal = ({
                         <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                             Note
                         </label>
-                        <div className="relative">
-                            <FileText className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
+                        <div className="relative p-0.5">
+                            <FileText className="pointer-events-none absolute left-3.5 top-3 size-4 text-muted-foreground" />
                             <Textarea
                                 value={note}
                                 onChange={(e) => setNote(e.target.value)}
