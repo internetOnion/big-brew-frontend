@@ -145,6 +145,33 @@ export const Cart = () => {
                                                         .join(", ")}
                                                 </span>
                                             )}
+                                            {item.modifierGroups
+                                                .flatMap((g) => {
+                                                    const selected =
+                                                        item.selectedModifiers[
+                                                            g.id
+                                                        ] ?? [];
+                                                    return selected.map(
+                                                        (optId) => {
+                                                            const opt =
+                                                                g.options.find(
+                                                                    (o) =>
+                                                                        o.id ===
+                                                                        optId,
+                                                                );
+                                                            return opt?.name;
+                                                        },
+                                                    );
+                                                })
+                                                .filter(Boolean)
+                                                .map((name) => (
+                                                    <span
+                                                        key={name}
+                                                        className="text-[10px] text-muted-foreground"
+                                                    >
+                                                        {name}
+                                                    </span>
+                                                ))}
                                         </div>
                                         {item.note && (
                                             <p className="mt-0.5 truncate text-[10px] italic text-muted-foreground">

@@ -3,8 +3,8 @@
 ## Stack
 
 - Vite 8 + React 19 + TypeScript 6 + Tailwind CSS v4
-- shadcn/ui (base-nova, @base-ui/react primitives, lucide icons)
-- axios API layer, react-router-dom (**BrowserRouter** — URL-based navigation), sonner toasts
+- shadcn/ui (base-nova style, @base-ui/react primitives, lucide icons)
+- axios API layer, react-router-dom (BrowserRouter — declarative mode), sonner toasts
 - motion (animations), recharts (charts)
 - Fonts: Bricolage Grotesque (sans/heading), DM Mono (mono) — loaded via `@fontsource`
 
@@ -32,8 +32,8 @@ No test runner, linter, or CI is configured. `tsc -b` in the build script is the
 
 Warm brown/amber palette applied from https://tweakcn.com/r/themes/caffeine.json.
 
-- Light: cream background (`oklch 0.98`), brown primary (`oklch 0.43`)
-- Dark: deep brown background (`oklch 0.18`), warm amber primary (`oklch 0.92`)
+- Light: cream background (`#f4efe8`), brown primary (`#4a2512`)
+- Dark: deep brown background (`#1a0f0a`), warm amber primary (`#c07830`)
 - Toggle dark mode by adding/removing the `.dark` class on `<html>`.
 - All design must follow this palette — do not introduce colors outside the theme variables.
 
@@ -41,7 +41,8 @@ Warm brown/amber palette applied from https://tweakcn.com/r/themes/caffeine.json
 
 - **Path alias**: `@/` → `src/` (configured in `vite.config.ts` and `tsconfig.app.json`)
 - **Prettier**: 4-space indent, semicolons ON, double quotes — non-standard; run `npm run format` before committing
-- **TS strictness**: `noUnusedLocals`, `noUnusedParameters`, `erasableSyntaxOnly` — no explicit `import type` needed
+- **TS strictness**: `noUnusedLocals`, `noUnusedParameters`, `erasableSyntaxOnly`
+- **Inline type imports**: Use `import { type Foo }` syntax, not `import type { Foo }` (enforced by `verbatimModuleSyntax`)
 - **No `baseUrl`** in tsconfig — deprecated in TS 6; paths resolve relative to tsconfig location
 - **Arrow functions only**: Always use arrow functions (`const fn = () => {}`), never `function` declarations
 - **No inline styles**: Use Tailwind classes instead of `style={{}}` objects. Map hardcoded colors to theme tokens (`bg-background`, `text-muted-foreground`, etc.).
@@ -50,8 +51,9 @@ Warm brown/amber palette applied from https://tweakcn.com/r/themes/caffeine.json
 ## Architecture
 
 - **Router**: `BrowserRouter` declarative mode — routes defined with JSX `<Routes>/<Route>` in `App.tsx`, not data routers (`createBrowserRouter`). No loaders, actions, or `useLoaderData`. Use `useNavigate`, `useParams`, `useSearchParams`. Initial entry is `/login`. Protected routes redirect to `/login`.
+- **Lazy loading**: POSPage, MenuView, and PaymentView are lazy-loaded via `React.lazy()` with a `Suspense` fallback to `LoadingScreen`.
 - **Auth**: Two auth flows — email/password login and PIN verification. Token refresh is automatic via axios interceptor with a queuing system.
-    - `AuthProvider` is wired into `main.tsx` — wraps the entire app tree.
+    - `AuthProvider` is wired into `main.tsx` — wraps the entire app tree (including `BrowserRouter`).
     - Access token is managed as module-level state in `api.ts` (not React state).
     - Pass `silent: true` in axios request config to suppress toast errors (used during silent token refresh).
 - **POS page**: Route-level page at `pages/POSPage.tsx` wraps `POSProvider` + `CategoryProvider` + `POSLayout`. The main views (`MenuView`, `PaymentView`) live in `components/pos/` as child routes under `/`.

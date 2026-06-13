@@ -129,7 +129,7 @@ export const OrderDetailModal = ({
                                 <div>
                                     <p className="text-sm font-medium text-foreground">
                                         {item.quantity > 1 &&
-                                            `${item.quantity}× `}
+                                            `${item.quantity}x `}
                                         {item.name}
                                     </p>
                                     {item.modifiers.length > 0 && (

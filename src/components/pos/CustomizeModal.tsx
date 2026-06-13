@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 
 export interface CustomizeOptions {
     size: string;
+    sizeOptionId: string;
     toppings: {
         name: string;
         qty: number;
@@ -27,6 +28,7 @@ export interface CustomizeOptions {
         modifierOptionId: string;
     }[];
     sugarLevel: string;
+    sugarOptionId: string;
     quantity: number;
     finalPrice: number;
     note: string;
@@ -81,10 +83,15 @@ export const CustomizeModal = ({
 
     // Default values from first option or initial options
     const defaultSize = sizeOptions[0]?.name ?? "";
+    const defaultSizeId = sizeOptions[0]?.id ?? "";
     const defaultSugar = sugarOptions[2]?.name ?? sugarOptions[0]?.name ?? "";
+    const defaultSugarId = sugarOptions[2]?.id ?? sugarOptions[0]?.id ?? "";
 
     const [size, setSize] = useState<string>(
         initialOptions?.size || defaultSize,
+    );
+    const [sizeOptionId, setSizeOptionId] = useState<string>(
+        initialOptions?.sizeOptionId || defaultSizeId,
     );
     const [toppings, setToppings] = useState<
         { name: string; qty: number; price: number; modifierOptionId: string }[]
@@ -96,6 +103,9 @@ export const CustomizeModal = ({
     );
     const [sugarLevel, setSugarLevel] = useState<string>(
         initialOptions?.sugarLevel || defaultSugar,
+    );
+    const [sugarOptionId, setSugarOptionId] = useState<string>(
+        initialOptions?.sugarOptionId || defaultSugarId,
     );
     const [quantity, setQuantity] = useState(initialOptions?.quantity || 1);
     const [note, setNote] = useState(initialOptions?.note || "");
@@ -199,8 +209,10 @@ export const CustomizeModal = ({
     const handleAdd = () => {
         const options: CustomizeOptions = {
             size: item.hasSizes ? size : "",
+            sizeOptionId: item.hasSizes ? sizeOptionId : "",
             toppings: [...toppings],
             sugarLevel: item.hasSugar ? sugarLevel : "",
+            sugarOptionId: item.hasSugar ? sugarOptionId : "",
             quantity,
             finalPrice,
             note,
@@ -252,7 +264,10 @@ export const CustomizeModal = ({
                                 {sizeOptions.map((s) => (
                                     <button
                                         key={s.id}
-                                        onClick={() => setSize(s.name)}
+                                        onClick={() => {
+                                            setSize(s.name);
+                                            setSizeOptionId(s.id);
+                                        }}
                                         className={cn(
                                             "flex flex-1 flex-col items-center gap-1 rounded-xl border-2 px-3 py-2.5 transition-all",
                                             size === s.name
@@ -288,7 +303,10 @@ export const CustomizeModal = ({
                                 {sugarOptions.map((sl) => (
                                     <button
                                         key={sl.id}
-                                        onClick={() => setSugarLevel(sl.name)}
+                                        onClick={() => {
+                                            setSugarLevel(sl.name);
+                                            setSugarOptionId(sl.id);
+                                        }}
                                         className={cn(
                                             "flex-1 rounded-lg border px-2 py-2 text-xs font-semibold transition-all",
                                             sugarLevel === sl.name

@@ -20,7 +20,16 @@ const ORDER_TYPE_STORAGE_KEY = "pos-order-type";
 const loadCart = (): CartItem[] => {
     try {
         const raw = localStorage.getItem(CART_STORAGE_KEY);
-        return raw ? JSON.parse(raw) : [];
+        if (!raw) return [];
+        const items: CartItem[] = JSON.parse(raw);
+        // Migrate old cart items that lack modifierGroups / selectedModifiers / option IDs
+        return items.map((item) => ({
+            ...item,
+            modifierGroups: item.modifierGroups ?? [],
+            selectedModifiers: item.selectedModifiers ?? {},
+            sizeOptionId: item.sizeOptionId ?? undefined,
+            sugarOptionId: item.sugarOptionId ?? undefined,
+        }));
     } catch {
         return [];
     }
@@ -89,6 +98,21 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
 
     const addItem = useCallback(
         (item: MenuItem, options: CustomizeOptions) => {
+            const modifierGroups = (item.modifierGroups ?? []).map((g) => ({
+                id: g.id,
+                name: g.name,
+                selectionType: g.selectionType,
+                isRequired: g.isRequired,
+                sortOrder: g.sortOrder,
+                options: g.options.map((o) => ({
+                    id: o.id,
+                    name: o.name,
+                    price: o.price,
+                    isAvailable: o.isAvailable,
+                    sortOrder: o.sortOrder,
+                })),
+            }));
+
             if (editingItemId) {
                 setCartItems((prev) =>
                     prev.map((ci) =>
@@ -96,13 +120,21 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
                             ? {
                                   ...ci,
                                   size: options.size || undefined,
+                                  sizeOptionId:
+                                      options.sizeOptionId || undefined,
                                   toppings: options.toppings,
                                   sugarLevel: options.sugarLevel || undefined,
+                                  sugarOptionId:
+                                      options.sugarOptionId || undefined,
                                   note: options.note || undefined,
                                   quantity: options.quantity,
                                   unitPrice:
                                       options.finalPrice / options.quantity,
                                   price: options.finalPrice,
+                                  modifierGroups,
+                                  selectedModifiers: {
+                                      ...options.modifiers,
+                                  },
                               }
                             : ci,
                     ),
@@ -117,12 +149,16 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
                 name: item.name,
                 category: item.category,
                 size: options.size || undefined,
+                sizeOptionId: options.sizeOptionId || undefined,
                 toppings: options.toppings,
                 sugarLevel: options.sugarLevel || undefined,
+                sugarOptionId: options.sugarOptionId || undefined,
                 note: options.note || undefined,
                 quantity: options.quantity,
                 unitPrice: options.finalPrice / options.quantity,
                 price: options.finalPrice,
+                modifierGroups,
+                selectedModifiers: { ...options.modifiers },
             };
             setCartItems((prev) => [...prev, cartItem]);
             setCustomizeItem(null);
@@ -158,9 +194,6 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
         (id: string) => {
             const item = cartItems.find((ci) => ci.id === id);
             if (!item) return;
-            // Reconstruct a minimal MenuItem for the modal.
-            // The modal will use the modifierGroups from the original item data
-            // if available, or display what it can from the cart item.
             const menuItem: MenuItem = {
                 id: item.menuId,
                 name: item.name,
@@ -170,17 +203,20 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
                 hasToppings: item.toppings.length > 0,
                 hasSugar: !!item.sugarLevel,
                 image: "",
+                modifierGroups: item.modifierGroups,
             };
 
             setEditingItemId(id);
             setCustomizeInitial({
-                size: item.size || "M",
+                size: item.size || "",
+                sizeOptionId: item.sizeOptionId || "",
                 toppings: item.toppings,
-                sugarLevel: item.sugarLevel || "50%",
+                sugarLevel: item.sugarLevel || "",
+                sugarOptionId: item.sugarOptionId || "",
                 quantity: item.quantity,
                 finalPrice: item.price,
                 note: item.note || "",
-                modifiers: {},
+                modifiers: { ...item.selectedModifiers },
             });
             setCustomizeItem(menuItem);
         },
@@ -212,14 +248,22 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
                 dining_option:
                     orderType === "dine-in" ? "dine_in" : "take_away",
                 discount_id: discountId || undefined,
-                items: cartItems.map((item) => ({
-                    menu_item_id: item.menuId,
-                    quantity: item.quantity,
-                    unit_price: item.unitPrice,
-                    modifier_option_ids: item.toppings.map(
-                        (t) => t.modifierOptionId,
-                    ),
-                })),
+                items: cartItems.map((item) => {
+                    // Collect all modifier option IDs: size, sugar, toppings + selected modifiers from other groups
+                    const allIds = [
+                        item.sizeOptionId,
+                        item.sugarOptionId,
+                        ...item.toppings.map((t) => t.modifierOptionId),
+                        ...Object.values(item.selectedModifiers).flat(),
+                    ].filter((id): id is string => Boolean(id));
+                    const modifier_option_ids = [...new Set(allIds)];
+                    return {
+                        menu_item_id: item.menuId,
+                        quantity: item.quantity,
+                        unit_price: item.unitPrice,
+                        modifier_option_ids,
+                    };
+                }),
                 payment_method: paymentMethod,
                 amount_received:
                     paymentMethod === "cash" ? amountReceived : undefined,
