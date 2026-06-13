@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-    X,
     CheckCircle2,
     XCircle,
     UtensilsCrossed,
@@ -9,6 +8,16 @@ import {
 } from "lucide-react";
 import type { Order, OrderItem } from "@/types/order";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
 
 interface OrderDetailModalProps {
     order: Order;
@@ -57,39 +66,38 @@ export const OrderDetailModal = ({
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div
-                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-                onClick={onCancel}
-            />
-            <div className="relative z-10 w-full max-w-sm overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
-                <div
-                    className={cn(
-                        "flex items-center justify-between px-5 py-4",
-                        urgent
-                            ? "border-b border-destructive/20 bg-destructive/8"
-                            : "border-b border-border bg-background",
-                    )}
-                >
+        <Dialog open onOpenChange={(open) => !open && onCancel()}>
+            <DialogContent className="max-w-sm">
+                <DialogHeader>
                     <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
-                            <span className="text-sm font-bold font-mono text-white tabular-nums">
+                        <div
+                            className={cn(
+                                "flex size-10 items-center justify-center rounded-xl",
+                                urgent ? "bg-destructive" : "bg-primary",
+                            )}
+                        >
+                            <span className="font-mono text-sm font-bold tabular-nums text-primary-foreground">
                                 #{order.orderNumber}
                             </span>
                         </div>
                         <div>
+                            <DialogTitle>
+                                Order #{order.orderNumber}
+                            </DialogTitle>
                             <div className="flex items-center gap-1.5">
-                                <TypeIcon className="h-3.5 w-3.5 text-muted-foreground" />
+                                <TypeIcon className="size-3.5 text-muted-foreground" />
                                 <span className="text-xs font-medium capitalize text-muted-foreground">
                                     {order.diningOption === "dine_in"
                                         ? "dine-in"
                                         : "takeout"}
                                 </span>
-                            </div>
-                            <div className="flex items-center gap-1">
+                                <Separator
+                                    orientation="vertical"
+                                    className="mx-1 h-3"
+                                />
                                 <Clock
                                     className={cn(
-                                        "h-3 w-3",
+                                        "size-3",
                                         urgent
                                             ? "text-destructive"
                                             : "text-muted-foreground",
@@ -97,7 +105,7 @@ export const OrderDetailModal = ({
                                 />
                                 <span
                                     className={cn(
-                                        "text-xs font-medium font-mono tabular-nums",
+                                        "font-mono text-xs font-medium tabular-nums",
                                         urgent
                                             ? "text-destructive"
                                             : "text-muted-foreground",
@@ -108,15 +116,9 @@ export const OrderDetailModal = ({
                             </div>
                         </div>
                     </div>
-                    <button
-                        onClick={onCancel}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-black/5"
-                    >
-                        <X className="h-5 w-5 text-muted-foreground" />
-                    </button>
-                </div>
+                </DialogHeader>
 
-                <div className="px-5 py-4">
+                <div>
                     <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
                         Items
                     </h4>
@@ -152,7 +154,7 @@ export const OrderDetailModal = ({
                                                 ).map(([group, mods]) => (
                                                     <div
                                                         key={group}
-                                                        className="text-[10px] text-muted-foreground leading-tight"
+                                                        className="text-[10px] leading-tight text-muted-foreground"
                                                     >
                                                         <span className="font-semibold text-foreground">
                                                             {group}:{" "}
@@ -173,7 +175,7 @@ export const OrderDetailModal = ({
                                         </div>
                                     )}
                                 </div>
-                                <span className="text-sm font-semibold font-mono tabular-nums text-primary">
+                                <span className="font-mono text-sm font-semibold tabular-nums text-primary">
                                     $
                                     {(
                                         parseFloat(item.unitPrice) *
@@ -183,75 +185,74 @@ export const OrderDetailModal = ({
                             </div>
                         ))}
                     </div>
-                    <div className="mt-3 flex items-center justify-between rounded-lg bg-secondary px-3 py-2">
+                    <Separator className="my-3" />
+                    <div className="flex items-center justify-between rounded-lg bg-secondary px-3 py-2">
                         <span className="text-sm font-bold text-foreground">
                             Total
                         </span>
-                        <span className="text-base font-bold font-mono tabular-nums text-primary">
+                        <span className="font-mono text-base font-bold tabular-nums text-primary">
                             ${parseFloat(order.total).toFixed(2)}
                         </span>
                     </div>
                 </div>
 
                 {showVoidConfirm ? (
-                    <div className="border-t border-border px-5 pb-5 pt-4">
+                    <div className="border-t border-border pt-4">
                         <h4 className="mb-2 text-sm font-bold text-foreground">
                             Void Order
                         </h4>
                         <p className="mb-3 text-xs text-muted-foreground">
                             Please provide a reason for voiding this order.
                         </p>
-                        <textarea
+                        <Textarea
                             value={voidReason}
                             onChange={(e) => setVoidReason(e.target.value)}
                             placeholder="Enter reason..."
-                            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary mb-3"
+                            className="mb-3 border-border bg-background"
                             rows={2}
                         />
                         <div className="flex gap-2">
-                            <button
+                            <Button
+                                variant="outline"
                                 onClick={() => {
                                     setShowVoidConfirm(false);
                                     setVoidReason("");
                                 }}
-                                className="flex-1 rounded-xl border border-border py-2.5 text-sm font-bold text-foreground transition-all hover:bg-secondary"
+                                className="h-auto flex-1 py-2.5 font-bold"
                             >
                                 Cancel
-                            </button>
-                            <button
+                            </Button>
+                            <Button
+                                variant="destructive"
                                 onClick={handleVoid}
                                 disabled={!voidReason.trim()}
-                                className={cn(
-                                    "flex-1 rounded-xl py-2.5 text-sm font-bold text-white transition-all",
-                                    voidReason.trim()
-                                        ? "bg-destructive hover:brightness-110"
-                                        : "bg-destructive/50 cursor-not-allowed",
-                                )}
+                                className="h-auto flex-1 py-2.5 font-bold"
                             >
                                 Confirm Void
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 ) : (
-                    <div className="flex gap-2 border-t border-border px-5 pb-5 pt-1">
-                        <button
+                    <DialogFooter>
+                        <Button
+                            variant="destructive"
                             onClick={() => setShowVoidConfirm(true)}
-                            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-destructive py-2.5 text-sm font-bold text-destructive transition-all hover:bg-red-50"
+                            className="h-auto flex-1 py-2.5"
                         >
-                            <XCircle className="h-4 w-4" />
+                            <XCircle />
                             Void
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                             onClick={onComplete}
-                            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#5C8A5C] py-2.5 text-sm font-bold text-white transition-all hover:brightness-110 active:scale-95"
+                            className="h-auto flex-1 rounded-xl bg-chart-4 py-2.5 font-bold hover:brightness-110"
                         >
-                            <CheckCircle2 className="h-4 w-4" />
+                            <CheckCircle2 />
                             Complete
-                        </button>
-                    </div>
+                        </Button>
+                    </DialogFooter>
                 )}
-            </div>
-        </div>
+            </DialogContent>
+        </Dialog>
     );
 };
 

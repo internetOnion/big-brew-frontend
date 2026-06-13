@@ -29,6 +29,8 @@ import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
 import type { Settings, Order } from "@/types/order";
 import { getCategoryIconName } from "@/types/menu";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const DEFAULT_KHR_RATE = 4100;
 
@@ -103,8 +105,7 @@ const PaymentScreen = () => {
             const order = await submitOrder(paymentMethod, amountReceived);
             setCompletedOrder(order);
             setSuccess(true);
-        } catch (error) {
-            // Error is handled by the API interceptor
+        } catch {
             setIsProcessing(false);
         }
     };
@@ -117,7 +118,7 @@ const PaymentScreen = () => {
             const order = await submitOrder("qr");
             setCompletedOrder(order);
             setSuccess(true);
-        } catch (error) {
+        } catch {
             setIsProcessing(false);
         }
     };
@@ -138,10 +139,10 @@ const PaymentScreen = () => {
         const changeAmount = cashPayment?.changeAmount;
 
         return (
-            <div className="flex-1 flex flex-col items-center justify-center gap-4 bg-background">
-                <div className="flex flex-col items-center gap-4 relative">
+            <div className="flex flex-1 flex-col items-center justify-center gap-4 bg-background">
+                <div className="relative flex flex-col items-center gap-4">
                     <motion.div
-                        className="absolute w-20 h-20 rounded-full bg-amber-800/20 top-0"
+                        className="absolute top-0 size-20 rounded-full bg-accent/20"
                         animate={{ scale: [1, 1.7], opacity: [0.4, 0] }}
                         transition={{
                             duration: 1.2,
@@ -152,9 +153,9 @@ const PaymentScreen = () => {
                     <CheckCircle2
                         size={80}
                         strokeWidth={1.5}
-                        className="text-accent relative z-10"
+                        className="relative z-10 text-accent"
                     />
-                    <p className="text-2xl text-foreground font-bold">
+                    <p className="text-2xl font-bold text-foreground">
                         Payment Complete
                     </p>
                     <p className="font-mono text-sm text-muted-foreground">
@@ -173,79 +174,76 @@ const PaymentScreen = () => {
     }
 
     return (
-        <div className="flex-1 flex flex-col bg-background">
-            <div className="px-8 pt-6 pb-4 flex items-center gap-4 border-b border-border">
-                <button
+        <div className="flex flex-1 flex-col bg-background">
+            <div className="flex items-center gap-4 border-b border-border px-8 pb-4 pt-6">
+                <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => navigate(ROUTES.POS)}
-                    className="hover:opacity-60 transition-opacity flex items-center gap-2 text-muted-foreground text-[13px]"
+                    className="gap-2 text-muted-foreground"
                 >
                     <ArrowLeft size={16} /> Back to Menu
-                </button>
+                </Button>
                 <div className="flex-1" />
-                <p className="font-mono text-[11px] text-muted-foreground tracking-[0.1em] uppercase">
+                <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground">
                     Payment
                 </p>
-                <span className="font-mono text-[11px] text-muted-foreground">
+                <Badge variant="secondary" className="font-mono">
                     {itemCount} item{itemCount !== 1 ? "s" : ""} · $
                     {subtotal.toFixed(2)}
-                </span>
+                </Badge>
             </div>
 
-            <div className="flex-1 flex items-stretch">
-                <div className="flex-1 flex flex-col px-8 py-6 gap-4 max-w-sm mx-auto">
+            <div className="flex flex-1 items-stretch">
+                <div className="mx-auto flex max-w-sm flex-1 flex-col gap-4 px-8 py-6">
                     {/* Payment Method Toggle */}
-                    <div className="flex rounded-lg overflow-hidden bg-secondary p-0.5 gap-0.5">
-                        <button
+                    <div className="flex overflow-hidden rounded-lg bg-secondary p-0.5 gap-0.5">
+                        <Button
+                            variant={
+                                paymentMethod === "cash" ? "default" : "ghost"
+                            }
+                            size="default"
                             onClick={() => setPaymentMethod("cash")}
-                            className={cn(
-                                "flex-1 py-2.5 rounded-md transition-all font-mono text-xs font-semibold border-none cursor-pointer flex items-center justify-center gap-2",
-                                paymentMethod === "cash"
-                                    ? "bg-primary text-primary-foreground"
-                                    : "bg-transparent text-muted-foreground",
-                            )}
+                            className="flex-1 text-xs"
                         >
-                            <Banknote size={14} />
+                            <Banknote />
                             Cash
-                        </button>
-                        <button
+                        </Button>
+                        <Button
+                            variant={
+                                paymentMethod === "qr" ? "default" : "ghost"
+                            }
+                            size="default"
                             onClick={() => setPaymentMethod("qr")}
-                            className={cn(
-                                "flex-1 py-2.5 rounded-md transition-all font-mono text-xs font-semibold border-none cursor-pointer flex items-center justify-center gap-2",
-                                paymentMethod === "qr"
-                                    ? "bg-primary text-primary-foreground"
-                                    : "bg-transparent text-muted-foreground",
-                            )}
+                            className="flex-1 text-xs"
                         >
-                            <QrCode size={14} />
+                            <QrCode />
                             QR Code
-                        </button>
+                        </Button>
                     </div>
 
                     {paymentMethod === "qr" ? (
-                        /* QR Code Display */
-                        <div className="flex-1 flex flex-col items-center justify-center gap-4">
+                        <div className="flex flex-1 flex-col items-center justify-center gap-4">
                             {settings?.qrCodeUrl ? (
-                                <div className="bg-white p-4 rounded-xl">
+                                <div className="rounded-xl bg-white p-4">
                                     <img
                                         src={settings.qrCodeUrl}
                                         alt="QR Code"
-                                        className="w-48 h-48 object-contain"
+                                        className="size-48 object-contain"
                                     />
                                 </div>
                             ) : (
-                                <div className="w-48 h-48 bg-secondary rounded-xl flex items-center justify-center">
+                                <div className="flex size-48 items-center justify-center rounded-xl bg-secondary">
                                     <QrCode
                                         size={64}
                                         className="text-muted-foreground"
                                     />
                                 </div>
                             )}
-                            <p className="text-sm text-muted-foreground text-center">
+                            <p className="text-center text-sm text-muted-foreground">
                                 Scan to pay ${total.toFixed(2)}
                             </p>
-                            <motion.button
-                                onClick={handleQrConfirm}
-                                disabled={isProcessing}
+                            <motion.div
                                 animate={
                                     !isProcessing
                                         ? { scale: [1, 1.01, 1] }
@@ -260,32 +258,36 @@ const PaymentScreen = () => {
                                           }
                                         : {}
                                 }
-                                className={cn(
-                                    "w-full rounded-xl flex flex-col items-center gap-1 bg-primary text-primary-foreground border-none py-4 transition-none",
-                                    isProcessing
-                                        ? "cursor-not-allowed opacity-50"
-                                        : "cursor-pointer opacity-100",
-                                )}
+                                className="w-full"
                             >
-                                <span className="font-bold text-[15px]">
-                                    {isProcessing
-                                        ? "Processing..."
-                                        : "Confirm Payment Received"}
-                                </span>
-                            </motion.button>
+                                <Button
+                                    onClick={handleQrConfirm}
+                                    disabled={isProcessing}
+                                    className={cn(
+                                        "h-auto w-full flex-col gap-1 py-4",
+                                        isProcessing &&
+                                            "cursor-not-allowed opacity-50",
+                                    )}
+                                >
+                                    <span className="text-[15px] font-bold">
+                                        {isProcessing
+                                            ? "Processing..."
+                                            : "Confirm Payment Received"}
+                                    </span>
+                                </Button>
+                            </motion.div>
                         </div>
                     ) : (
-                        /* Cash Payment */
                         <>
                             <div className="text-center">
-                                <p className="text-[10px] text-muted-foreground font-mono tracking-[0.12em] uppercase mb-1">
+                                <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
                                     Total Due
                                 </p>
-                                <p className="font-mono text-4xl text-primary font-bold leading-none">
+                                <p className="font-mono text-4xl font-bold leading-none text-primary">
                                     {formatDisplay(totalInCurrency)}
                                 </p>
                                 {currency === "KHR" && (
-                                    <p className="font-mono text-[13px] text-muted-foreground mt-1">
+                                    <p className="mt-1 font-mono text-[13px] text-muted-foreground">
                                         ≈ ${total.toFixed(2)}
                                     </p>
                                 )}
@@ -294,20 +296,20 @@ const PaymentScreen = () => {
                             <div className="flex gap-3">
                                 <div
                                     className={cn(
-                                        "flex-1 rounded-xl px-4 py-3 text-right bg-secondary transition-colors duration-150",
+                                        "flex-1 rounded-xl border-[1.5px] bg-secondary px-4 py-3 text-right transition-colors duration-150",
                                         entered
-                                            ? "border-[1.5px] border-accent"
-                                            : "border-[1.5px] border-border",
+                                            ? "border-accent"
+                                            : "border-border",
                                     )}
                                 >
-                                    <p className="text-[10px] text-muted-foreground font-mono tracking-[0.1em] mb-0.5">
+                                    <p className="mb-0.5 font-mono text-[10px] tracking-[0.1em] text-muted-foreground">
                                         Amount Given
                                     </p>
-                                    <p className="font-mono text-xl text-foreground font-semibold min-h-7">
+                                    <p className="min-h-7 font-mono text-xl font-semibold text-foreground">
                                         {entered ? (
                                             `${currencySymbol}${currency === "KHR" ? parseInt(entered || "0").toLocaleString() : entered}`
                                         ) : (
-                                            <span className="text-muted-foreground opacity-40">
+                                            <span className="opacity-40 text-muted-foreground">
                                                 {formatDisplay(0)}
                                             </span>
                                         )}
@@ -316,24 +318,24 @@ const PaymentScreen = () => {
 
                                 <div
                                     className={cn(
-                                        "flex-1 rounded-xl px-4 py-3 text-right transition-colors duration-150",
+                                        "flex-1 rounded-xl border-[1.5px] px-4 py-3 text-right transition-colors duration-150",
                                         change >= 0 && enteredAmount > 0
-                                            ? "bg-green-50 border-[1.5px] border-green-200"
+                                            ? "border-chart-4/30 bg-chart-4/8"
                                             : change < 0
-                                              ? "bg-red-50 border-[1.5px] border-red-200"
-                                              : "bg-secondary border-[1.5px] border-border",
+                                              ? "border-destructive/30 bg-destructive/8"
+                                              : "border-border bg-secondary",
                                     )}
                                 >
-                                    <p className="text-[10px] text-muted-foreground font-mono tracking-[0.1em] mb-0.5">
+                                    <p className="mb-0.5 font-mono text-[10px] tracking-[0.1em] text-muted-foreground">
                                         Change
                                     </p>
                                     <p
                                         className={cn(
-                                            "font-mono text-xl font-semibold min-h-7",
+                                            "min-h-7 font-mono text-xl font-semibold",
                                             change >= 0 && enteredAmount > 0
-                                                ? "text-green-700"
+                                                ? "text-chart-4"
                                                 : change < 0
-                                                  ? "text-red-600"
+                                                  ? "text-destructive"
                                                   : "text-muted-foreground",
                                         )}
                                     >
@@ -357,13 +359,13 @@ const PaymentScreen = () => {
                                                 : handleKey(k)
                                         }
                                         className={cn(
-                                            "py-3.5 rounded-lg flex items-center justify-center border border-border font-mono text-lg font-semibold cursor-pointer transition-none",
+                                            "flex items-center justify-center rounded-lg border border-border py-3.5 font-mono text-lg font-semibold",
                                             k === "⌫"
                                                 ? "bg-destructive/12 text-destructive"
                                                 : "bg-secondary text-foreground",
                                             k === "." &&
                                                 currency === "KHR" &&
-                                                "opacity-25 pointer-events-none",
+                                                "pointer-events-none opacity-25",
                                         )}
                                     >
                                         {k === "⌫" ? <Delete size={16} /> : k}
@@ -374,35 +376,34 @@ const PaymentScreen = () => {
                     )}
                 </div>
 
-                <div className="flex flex-col w-[280px] border-l border-border">
-                    <div className="pt-4 px-4">
-                        <p className="text-[11px] text-muted-foreground font-mono tracking-[0.1em] uppercase mb-2">
+                <div className="flex w-[280px] flex-col border-l border-border">
+                    <div className="px-4 pt-4">
+                        <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground">
                             Order Summary
                         </p>
                         {paymentMethod === "cash" && (
-                            <div className="flex rounded-lg overflow-hidden bg-secondary p-0.5 gap-0.5 mb-3">
+                            <div className="mb-3 flex overflow-hidden rounded-lg bg-secondary p-0.5 gap-0.5">
                                 {(["USD", "KHR"] as const).map((c) => (
-                                    <button
+                                    <Button
                                         key={c}
+                                        variant={
+                                            currency === c ? "default" : "ghost"
+                                        }
+                                        size="sm"
                                         onClick={() => {
                                             setCurrency(c);
                                             setEntered("");
                                         }}
-                                        className={cn(
-                                            "flex-1 py-1.5 rounded-md transition-all font-mono text-xs font-semibold border-none cursor-pointer",
-                                            currency === c
-                                                ? "bg-primary text-primary-foreground"
-                                                : "bg-transparent text-muted-foreground",
-                                        )}
+                                        className="flex-1 font-mono font-semibold"
                                     >
                                         {c === "USD" ? "$ USD" : "៛ KHR"}
-                                    </button>
+                                    </Button>
                                 ))}
                             </div>
                         )}
                     </div>
 
-                    <div className="flex-1 overflow-y-auto flex flex-col gap-2 px-4 pb-3 [scrollbar-width:none]">
+                    <div className="flex flex-1 flex-col gap-2 overflow-y-auto px-4 pb-3 scrollbar-hide">
                         {cartItems.map((item: CartItem) => {
                             const Icon =
                                 categoryIconMap[
@@ -411,52 +412,59 @@ const PaymentScreen = () => {
                             return (
                                 <div
                                     key={item.id}
-                                    className="flex items-start gap-2 py-2 border-b border-border pl-1"
+                                    className="flex items-start gap-2 border-b border-border py-2 pl-1"
                                 >
                                     <Icon
                                         size={14}
                                         strokeWidth={1.5}
-                                        className="text-primary mt-0.5 shrink-0"
+                                        className="mt-0.5 shrink-0 text-primary"
                                     />
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-[13px] text-foreground font-medium">
+                                    <div className="min-w-0 flex-1">
+                                        <p className="text-[13px] font-medium text-foreground">
                                             {item.quantity > 1 && (
-                                                <span className="text-accent font-bold">
+                                                <span className="font-bold text-accent">
                                                     {item.quantity}×{" "}
                                                 </span>
                                             )}
                                             {item.name}
                                         </p>
-                                        <div className="flex flex-wrap gap-[3px_4px] mt-[3px]">
+                                        <div className="mt-[3px] flex flex-wrap gap-[3px_4px]">
                                             {item.size && (
-                                                <span className="text-[10px] text-muted-foreground font-mono bg-secondary rounded px-[5px] py-px border border-border">
+                                                <Badge
+                                                    variant="secondary"
+                                                    className="px-1.5 py-px text-[10px]"
+                                                >
                                                     {item.size}
-                                                </span>
+                                                </Badge>
                                             )}
                                             {item.sugarLevel &&
                                                 item.sugarLevel !== "50%" && (
-                                                    <span className="text-[10px] text-muted-foreground bg-secondary rounded px-[5px] py-px border border-border">
+                                                    <Badge
+                                                        variant="secondary"
+                                                        className="px-1.5 py-px text-[10px]"
+                                                    >
                                                         Sugar {item.sugarLevel}
-                                                    </span>
+                                                    </Badge>
                                                 )}
                                             {item.toppings.map(
                                                 (
                                                     topping: (typeof item.toppings)[number],
                                                 ) => (
-                                                    <span
+                                                    <Badge
                                                         key={topping.name}
-                                                        className="text-[10px] text-muted-foreground bg-secondary rounded px-[5px] py-px border border-border"
+                                                        variant="secondary"
+                                                        className="px-1.5 py-px text-[10px]"
                                                     >
                                                         {topping.qty > 1
                                                             ? `${topping.qty}× `
                                                             : "+"}
                                                         {topping.name}
-                                                    </span>
+                                                    </Badge>
                                                 ),
                                             )}
                                         </div>
                                     </div>
-                                    <span className="font-mono text-xs text-foreground font-semibold shrink-0 text-right">
+                                    <span className="shrink-0 text-right font-mono text-xs font-semibold text-foreground">
                                         {currency === "KHR" &&
                                         paymentMethod === "cash"
                                             ? "៛" +
@@ -470,11 +478,9 @@ const PaymentScreen = () => {
                         })}
                     </div>
 
-                    <div className="p-4 pb-5 border-t border-border">
+                    <div className="border-t border-border p-4 pb-5">
                         {paymentMethod === "cash" && (
-                            <motion.button
-                                onClick={handleConfirmPayment}
-                                disabled={!isFullyPaid || isProcessing}
+                            <motion.div
                                 animate={
                                     isFullyPaid && !isProcessing
                                         ? { scale: [1, 1.01, 1] }
@@ -489,24 +495,29 @@ const PaymentScreen = () => {
                                           }
                                         : {}
                                 }
-                                className={cn(
-                                    "w-full rounded-xl flex flex-col items-center gap-1 bg-primary text-primary-foreground border-none py-4 transition-none",
-                                    isFullyPaid && !isProcessing
-                                        ? "cursor-pointer opacity-100"
-                                        : "cursor-not-allowed opacity-30",
-                                )}
                             >
-                                <span className="font-bold text-[15px]">
-                                    {isProcessing
-                                        ? "Processing..."
-                                        : "Confirm Payment"}
-                                </span>
-                                {!isFullyPaid && !isProcessing && (
-                                    <span className="text-[10px] opacity-70">
-                                        Enter full amount
+                                <Button
+                                    onClick={handleConfirmPayment}
+                                    disabled={!isFullyPaid || isProcessing}
+                                    className={cn(
+                                        "h-auto w-full flex-col gap-1 py-4",
+                                        isFullyPaid && !isProcessing
+                                            ? "cursor-pointer opacity-100"
+                                            : "cursor-not-allowed opacity-30",
+                                    )}
+                                >
+                                    <span className="text-[15px] font-bold">
+                                        {isProcessing
+                                            ? "Processing..."
+                                            : "Confirm Payment"}
                                     </span>
-                                )}
-                            </motion.button>
+                                    {!isFullyPaid && !isProcessing && (
+                                        <span className="text-[10px] opacity-70">
+                                            Enter full amount
+                                        </span>
+                                    )}
+                                </Button>
+                            </motion.div>
                         )}
                     </div>
                 </div>
