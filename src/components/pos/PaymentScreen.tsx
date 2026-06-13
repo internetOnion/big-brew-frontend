@@ -12,25 +12,25 @@ import {
     Croissant,
     QrCode,
     Banknote,
-    type LucideIcon,
 } from "lucide-react";
+
+const categoryIconMap: Record<string, React.ElementType> = {
+    Coffee,
+    Milk,
+    Leaf,
+    GlassWater,
+    Croissant,
+};
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/lib/constants";
 import { usePOS } from "@/hooks/usePos";
-import type { CartItem } from "@/components/pos/data";
+import type { CartItem } from "@/types/cart";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
 import type { Settings, Order } from "@/types/order";
+import { getCategoryIconName } from "@/types/menu";
 
-const CATEGORY_ICONS: Record<string, LucideIcon> = {
-    espresso: Coffee,
-    milk: Milk,
-    tea: Leaf,
-    cold: GlassWater,
-    food: Croissant,
-};
-
-const KHR_RATE = 4100;
+const DEFAULT_KHR_RATE = 4100;
 
 const KEYS = [
     ["1", "2", "3"],
@@ -49,6 +49,7 @@ const PaymentScreen = () => {
     const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [settings, setSettings] = useState<Settings | null>(null);
+    const [khrRate, setKhrRate] = useState(DEFAULT_KHR_RATE);
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -57,6 +58,7 @@ const PaymentScreen = () => {
                     ENDPOINTS.SETTINGS.BASE,
                 );
                 setSettings(data);
+                if (data.khrRate) setKhrRate(data.khrRate);
             } catch {
                 // Settings fetch failed, QR code won't be available
             }
@@ -64,7 +66,7 @@ const PaymentScreen = () => {
         fetchSettings();
     }, []);
 
-    const totalInCurrency = currency === "KHR" ? total * KHR_RATE : total;
+    const totalInCurrency = currency === "KHR" ? total * khrRate : total;
     const enteredAmount = parseFloat(entered) || 0;
     const change = enteredAmount - totalInCurrency;
     const isFullyPaid = enteredAmount >= totalInCurrency && enteredAmount > 0;
@@ -94,7 +96,7 @@ const PaymentScreen = () => {
             const amountReceived =
                 paymentMethod === "cash"
                     ? currency === "KHR"
-                        ? enteredAmount / KHR_RATE
+                        ? enteredAmount / khrRate
                         : enteredAmount
                     : undefined;
 
@@ -403,7 +405,9 @@ const PaymentScreen = () => {
                     <div className="flex-1 overflow-y-auto flex flex-col gap-2 px-4 pb-3 [scrollbar-width:none]">
                         {cartItems.map((item: CartItem) => {
                             const Icon =
-                                CATEGORY_ICONS[item.category] ?? Coffee;
+                                categoryIconMap[
+                                    getCategoryIconName(item.category)
+                                ] ?? Coffee;
                             return (
                                 <div
                                     key={item.id}
@@ -457,7 +461,7 @@ const PaymentScreen = () => {
                                         paymentMethod === "cash"
                                             ? "៛" +
                                               Math.round(
-                                                  item.price * KHR_RATE,
+                                                  item.price * khrRate,
                                               ).toLocaleString()
                                             : "$" + item.price.toFixed(2)}
                                     </span>

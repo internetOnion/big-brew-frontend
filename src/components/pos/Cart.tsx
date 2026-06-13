@@ -13,7 +13,7 @@ import {
     GlassWater,
     Croissant,
 } from "lucide-react";
-import { CATEGORY_ICONS } from "./data";
+import { getCategoryIconName } from "@/types/menu";
 import { usePOS } from "@/hooks/usePos";
 import { ROUTES } from "@/lib/constants";
 
@@ -113,8 +113,9 @@ export const Cart = () => {
                 ) : (
                     items.map((item) => {
                         const CategoryIcon =
-                            categoryIconMap[CATEGORY_ICONS[item.category]] ||
-                            Coffee;
+                            categoryIconMap[
+                                getCategoryIconName(item.category)
+                            ] || Coffee;
                         return (
                             <div
                                 key={item.id}

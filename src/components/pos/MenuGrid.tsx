@@ -1,28 +1,9 @@
 import { useState, useMemo } from "react";
-import {
-    Search,
-    Coffee,
-    Milk,
-    Leaf,
-    GlassWater,
-    Croissant,
-    Loader2,
-    AlertCircle,
-    RotateCw,
-} from "lucide-react";
-import { CATEGORY_ICONS } from "./data";
+import { Search, Loader2, AlertCircle, RotateCw } from "lucide-react";
 import { useCategories } from "./CategoryContext";
 import { usePOS } from "@/hooks/usePos";
 import { useMenuItems } from "@/hooks/useMenuItems";
 import { toMenuItem } from "@/types/menu";
-
-const categoryIconMap: Record<string, React.ElementType> = {
-    Coffee,
-    Milk,
-    Leaf,
-    GlassWater,
-    Croissant,
-};
 
 export const MenuGrid = () => {
     const [search, setSearch] = useState("");
@@ -131,10 +112,6 @@ export const MenuGrid = () => {
                 ) : (
                     <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3">
                         {filteredItems.map((item) => {
-                            const CategoryIcon =
-                                categoryIconMap[
-                                    CATEGORY_ICONS[item.category.id]
-                                ] || Coffee;
                             const isFetching = fetchingItemId === item.id;
                             return (
                                 <button
@@ -160,12 +137,9 @@ export const MenuGrid = () => {
                                         )}
                                     </div>
                                     <div className="flex flex-1 flex-col gap-1 p-3">
-                                        <div className="flex items-center gap-1.5">
-                                            <CategoryIcon className="h-3.5 w-3.5 text-muted-foreground" />
-                                            <p className="text-sm font-bold leading-tight font-sans text-foreground">
-                                                {item.name}
-                                            </p>
-                                        </div>
+                                        <p className="text-sm font-bold leading-tight font-sans text-foreground">
+                                            {item.name}
+                                        </p>
                                         <p className="text-sm font-semibold tabular-nums font-mono text-primary">
                                             $
                                             {parseFloat(item.basePrice).toFixed(

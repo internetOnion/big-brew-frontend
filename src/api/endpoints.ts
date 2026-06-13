@@ -21,6 +21,12 @@ export const ENDPOINTS = {
     DISCOUNTS: {
         BASE: "/discounts",
     },
+    CATEGORIES: {
+        BASE: "/categories",
+    },
+    MODIFIER_GROUPS: {
+        BASE: "/modifier-groups",
+    },
     SETTINGS: {
         BASE: "/settings",
     },

@@ -115,6 +115,7 @@ export interface Settings {
     taxLabel: string;
     logoUrl: string | null;
     qrCodeUrl: string | null;
+    khrRate: number | null;
     createdAt: string;
     updatedAt: string;
 }

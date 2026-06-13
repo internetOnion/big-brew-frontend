@@ -1,33 +1,59 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
+import useCategoriesApi from "@/hooks/useCategories";
+import { getCategoryIconName } from "@/types/menu";
+import type { Category as ApiCategory } from "@/hooks/useCategories";
 
 export interface Category {
     id: string;
     label: string;
     color: string;
+    iconName: string;
 }
 
 interface CategoryContextType {
     categories: Category[];
+    isLoading: boolean;
+    error: string | null;
 }
-
-const defaultCategories: Category[] = [
-    { id: "all", label: "All", color: "#4A2512" },
-    { id: "espresso", label: "Espresso", color: "#6B3A1F" },
-    { id: "milk", label: "Milk Drinks", color: "#8B5E3C" },
-    { id: "tea", label: "Tea", color: "#5C8A5C" },
-    { id: "cold", label: "Cold Drinks", color: "#3A7CA5" },
-    { id: "food", label: "Food", color: "#C07830" },
-];
 
 const CategoryContext = createContext<CategoryContextType | undefined>(
     undefined,
 );
 
+// Warm palette cycle for category pills
+const CATEGORY_COLORS = [
+    "#4A2512",
+    "#6B3A1F",
+    "#8B5E3C",
+    "#5C8A5C",
+    "#3A7CA5",
+    "#C07830",
+    "#7B4F8A",
+    "#A0522D",
+];
+
+const mapCategory = (cat: ApiCategory, index: number): Category => ({
+    id: cat.id,
+    label: cat.name,
+    color: CATEGORY_COLORS[index % CATEGORY_COLORS.length],
+    iconName: getCategoryIconName(cat.name),
+});
+
 export const CategoryProvider = ({ children }: { children: ReactNode }) => {
-    const [categories] = useState<Category[]>(defaultCategories);
+    const { categories: apiCategories, isLoading, error } = useCategoriesApi();
+
+    const categories: Category[] = [
+        {
+            id: "all",
+            label: "All",
+            color: "#4A2512",
+            iconName: "Coffee",
+        },
+        ...apiCategories.map((cat, i) => mapCategory(cat, i)),
+    ];
 
     return (
-        <CategoryContext.Provider value={{ categories }}>
+        <CategoryContext.Provider value={{ categories, isLoading, error }}>
             {children}
         </CategoryContext.Provider>
     );

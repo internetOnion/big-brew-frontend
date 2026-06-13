@@ -6,8 +6,9 @@ import {
     useEffect,
     type ReactNode,
 } from "react";
-import type { MenuItem, CartItem } from "@/components/pos/data";
-import { SIZE_PRICES, generateCartId } from "@/components/pos/data";
+import type { MenuItem } from "@/types/menu";
+import type { CartItem } from "@/types/cart";
+import { generateCartId } from "@/lib/utils";
 import type { CustomizeOptions } from "@/components/pos/CustomizeModal";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
@@ -157,22 +158,19 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
         (id: string) => {
             const item = cartItems.find((ci) => ci.id === id);
             if (!item) return;
+            // Reconstruct a minimal MenuItem for the modal.
+            // The modal will use the modifierGroups from the original item data
+            // if available, or display what it can from the cart item.
             const menuItem: MenuItem = {
                 id: item.menuId,
                 name: item.name,
-                category: item.category as MenuItem["category"],
+                category: item.category,
                 basePrice: item.unitPrice,
                 hasSizes: !!item.size,
                 hasToppings: item.toppings.length > 0,
                 hasSugar: !!item.sugarLevel,
                 image: "",
             };
-            const sizePrice = item.size ? SIZE_PRICES[item.size] || 0 : 0;
-            const toppingsPrice = item.toppings.reduce(
-                (sum, t) => sum + t.price * t.qty,
-                0,
-            );
-            menuItem.basePrice = item.unitPrice - sizePrice - toppingsPrice;
 
             setEditingItemId(id);
             setCustomizeInitial({
@@ -182,6 +180,7 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
                 quantity: item.quantity,
                 finalPrice: item.price,
                 note: item.note || "",
+                modifiers: {},
             });
             setCustomizeItem(menuItem);
         },

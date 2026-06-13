@@ -7,31 +7,11 @@ import {
     XCircle,
     Clock,
     Coffee,
-    Milk,
-    Leaf,
-    GlassWater,
-    Croissant,
 } from "lucide-react";
 import type { Order, OrderItem } from "@/types/order";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
 import OrderDetailModal from "./OrderDetailModal";
-
-const categoryIconMap: Record<string, React.ElementType> = {
-    Coffee,
-    Milk,
-    Leaf,
-    GlassWater,
-    Croissant,
-};
-
-const CATEGORY_ICONS: Record<string, string> = {
-    espresso: "Coffee",
-    milk: "Milk",
-    tea: "Leaf",
-    cold: "GlassWater",
-    food: "Croissant",
-};
 
 const POLL_INTERVAL = 10000; // 10 seconds
 
@@ -178,11 +158,7 @@ export const OrderQueue = () => {
                                 </div>
                                 <div className="mb-2 flex flex-col gap-0.5">
                                     {order.items.map((item: OrderItem) => {
-                                        const cat = "espresso"; // Default category
-                                        const CategoryIcon =
-                                            categoryIconMap[
-                                                CATEGORY_ICONS[cat]
-                                            ] || Coffee;
+                                        const CategoryIcon = Coffee;
                                         return (
                                             <div
                                                 key={item.id}
