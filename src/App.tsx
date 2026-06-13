@@ -1,43 +1,25 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
-import AuthLayout from "./layouts/AuthLayout";
-import DashboardLayout from "./layouts/DashboardLayout";
-import ProtectedRoute from "./components/common/ProtectedRoute";
-import { ROUTES } from "./lib/constants";
-import { Skeleton } from "./components/ui/skeleton";
+import ProtectedRoute from "@/components/common/ProtectedRoute";
+import LoadingScreen from "@/components/common/LoadingScreen";
+import LoginPage from "./pages/LoginPage";
 
-const LoginPage = lazy(() => import("./pages/LoginPage"));
-const PinPage = lazy(() => import("./pages/PinPage"));
-const DashboardPage = lazy(() => import("./pages/DashboardPage"));
-const MenuPage = lazy(() => import("./pages/MenuPage"));
-
-const SuspenseFallback = (
-    <div className="flex min-h-screen items-center justify-center bg-background p-6">
-        <Skeleton className="h-96 w-full max-w-md rounded-[2rem]" />
-    </div>
-);
+const POSPage = lazy(() => import("./pages/POSPage"));
+const MenuView = lazy(() => import("./components/pos/MenuView"));
+const PaymentView = lazy(() => import("./components/pos/PaymentView"));
 
 const App = () => {
     return (
-        <Suspense fallback={SuspenseFallback}>
+        <Suspense fallback={<LoadingScreen />}>
             <Routes>
-                <Route element={<AuthLayout />}>
-                    <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-                    <Route path={ROUTES.PIN} element={<PinPage />} />
-                </Route>
+                <Route path="/login" element={<LoginPage />} />
                 <Route element={<ProtectedRoute />}>
-                    <Route element={<DashboardLayout />}>
-                        <Route
-                            path={ROUTES.DASHBOARD}
-                            element={<DashboardPage />}
-                        />
-                        <Route path={ROUTES.MENU} element={<MenuPage />} />
+                    <Route path="/" element={<POSPage />}>
+                        <Route index element={<MenuView />} />
+                        <Route path="payment" element={<PaymentView />} />
                     </Route>
                 </Route>
-                <Route
-                    path="/"
-                    element={<Navigate to={ROUTES.LOGIN} replace />}
-                />
+                <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
         </Suspense>
     );

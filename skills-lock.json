@@ -7,6 +7,12 @@
       "skillPath": "plugins/frontend-design/skills/frontend-design/SKILL.md",
       "computedHash": "e8118284a6365753790d44bb2758a6032b3af27fa84696428d9233f2be0f4e78"
     },
+    "react-router-declarative-mode": {
+      "source": "remix-run/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/react-router-declarative-mode/SKILL.md",
+      "computedHash": "d7ebbf1ede90809618f02cb3b3d37b9871cdd6c88a81cf338e63de50a0df6a42"
+    },
     "shadcn": {
       "source": "shadcn/ui",
       "sourceType": "github",

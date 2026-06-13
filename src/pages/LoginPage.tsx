@@ -1,79 +1,122 @@
-import { useState, type SubmitEvent } from "react";
+import { useState, useEffect, type SubmitEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useAuth } from "@/hooks/useAuth";
+import { Eye, EyeOff, Coffee } from "lucide-react";
 import { ROUTES } from "@/lib/constants";
+import { useAuth } from "@/hooks/useAuth";
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    const { login, error, isLoading } = useAuth();
+    const { login, isLoading, isAuthenticated, isInitialized } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        if (isInitialized && isAuthenticated) {
+            navigate(ROUTES.POS, { replace: true });
+        }
+    }, [isInitialized, isAuthenticated, navigate]);
+
+    if (!isInitialized || isAuthenticated) return null;
 
     const handleLogin = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setError("");
 
         if (!email.trim() || !password.trim()) {
+            setError("Email and password are required.");
             return;
         }
 
-        await login(email.trim(), password.trim());
-        navigate(ROUTES.DASHBOARD);
+        try {
+            await login(email, password);
+            navigate(ROUTES.POS, { replace: true });
+        } catch {
+            setError("Invalid email or password. Please try again.");
+        }
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-background p-6">
-            <Card className="w-full max-w-md rounded-[2rem] shadow-xl">
-                <CardContent className="p-8">
-                    {/* Header */}
-                    <div className="mb-8 text-center">
-                        <h1 className="text-3xl font-bold tracking-tight text-primary">
-                            Welcome Back
+        <div className="flex min-h-screen bg-background">
+            {/* Left Branding Panel */}
+            <div className="flex w-[42%] flex-col items-center justify-center overflow-hidden bg-[#2C1810] relative">
+                {/* Decorative Rings */}
+                <div className="absolute top-1/2 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/8" />
+                <div className="absolute top-1/2 left-1/2 h-[480px] w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/12" />
+                <div className="absolute top-1/2 left-1/2 h-[360px] w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/16" />
+                <div className="absolute top-1/2 left-1/2 h-[240px] w-[240px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/20" />
+
+                {/* Brand Content */}
+                <div className="relative z-10 flex flex-col items-center gap-6">
+                    <div className="flex h-20 w-20 items-center justify-center rounded-[24px] border border-accent/25 bg-accent/15">
+                        <Coffee size={40} className="text-accent" />
+                    </div>
+                    <div className="text-center">
+                        <h1 className="font-sans text-[48px] font-extrabold leading-none tracking-tight text-background">
+                            Big Brew
                         </h1>
-                        <p className="mt-2 text-sm text-muted-foreground">
-                            Sign in to continue to the dashboard
+                        <p className="mt-3 font-mono text-[13px] uppercase tracking-[0.15em] text-accent/70">
+                            Point of Sale
                         </p>
                     </div>
-                    {error ? (
-                        <p className="mb-4 text-sm text-destructive">{error}</p>
-                    ) : null}
-                    {/* Form */}
+                </div>
+
+                {/* Bottom tagline */}
+                <p className="absolute bottom-10 font-mono text-[11px] tracking-[0.1em] text-muted-foreground/50">
+                    crafted with care since 2024
+                </p>
+            </div>
+
+            {/* Right Login Form Panel */}
+            <div className="flex flex-1 items-center justify-center p-12">
+                <div className="w-full max-w-[400px]">
+                    <div className="mb-12">
+                        <h2 className="font-sans text-[28px] font-bold text-foreground">
+                            Welcome back
+                        </h2>
+                        <p className="mt-2 font-mono text-[13px] text-muted-foreground">
+                            Sign in to open the register
+                        </p>
+                    </div>
+
+                    {error && (
+                        <div className="mb-6 rounded-[10px] border border-destructive/15 bg-destructive/6 px-[18px] py-3.5 font-mono text-[13px] text-destructive">
+                            {error}
+                        </div>
+                    )}
+
                     <form
                         onSubmit={handleLogin}
-                        className="flex flex-col gap-5"
+                        className="flex flex-col gap-6"
                     >
-                        {/* Email */}
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
+                            <label className="font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-muted-foreground">
+                                Email
+                            </label>
+                            <input
                                 type="email"
-                                placeholder="example@email.com"
+                                placeholder="admin@brewpoint.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="h-12 rounded-xl"
+                                className="h-[52px] rounded-[10px] border border-border bg-secondary px-[18px] font-mono text-sm text-foreground outline-none transition-colors focus:border-accent"
                                 required
                             />
                         </div>
-                        {/* Password */}
+
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="password">Password</Label>
+                            <label className="font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-muted-foreground">
+                                Password
+                            </label>
                             <div className="relative">
-                                <Input
-                                    id="password"
+                                <input
                                     type={showPassword ? "text" : "password"}
                                     placeholder="Enter password"
                                     value={password}
                                     onChange={(e) =>
                                         setPassword(e.target.value)
                                     }
-                                    className="h-12 rounded-xl pr-12"
+                                    className="h-[52px] w-full rounded-[10px] border border-border bg-secondary pr-12 pl-[18px] font-mono text-sm text-foreground outline-none transition-colors focus:border-accent"
                                     required
                                 />
                                 <button
@@ -81,27 +124,34 @@ const LoginPage = () => {
                                     onClick={() =>
                                         setShowPassword(!showPassword)
                                     }
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                    className="absolute top-1/2 right-4 flex -translate-y-1/2 items-center text-muted-foreground"
                                 >
                                     {showPassword ? (
-                                        <EyeOff size={20} />
+                                        <EyeOff size={18} />
                                     ) : (
-                                        <Eye size={20} />
+                                        <Eye size={18} />
                                     )}
                                 </button>
                             </div>
                         </div>
-                        {/* Login Button */}
-                        <Button
+
+                        <button
                             type="submit"
-                            className="h-12 w-full rounded-xl text-base font-medium"
                             disabled={isLoading}
+                            className="mt-2 flex h-[52px] items-center justify-center gap-2 rounded-[10px] bg-[#2C1810] font-sans text-sm font-bold text-background transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
                         >
-                            {isLoading ? "Signing in..." : "Continue"}
-                        </Button>
+                            {isLoading ? (
+                                <>
+                                    <div className="h-[18px] w-[18px] animate-spin rounded-full border-2 border-background/30 border-t-background" />
+                                    Signing in...
+                                </>
+                            ) : (
+                                "Sign In"
+                            )}
+                        </button>
                     </form>
-                </CardContent>
-            </Card>
+                </div>
+            </div>
         </div>
     );
 };
