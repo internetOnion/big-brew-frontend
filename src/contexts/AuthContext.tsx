@@ -6,7 +6,7 @@ import {
     useRef,
     type ReactNode,
 } from "react";
-import type { UserProfile, AuthContextValue } from "@/types/auth";
+import type { UserProfile, AuthContextValue, EmployeeRole } from "@/types/auth";
 import api, { setAccessToken, setOnTokenRefreshed } from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
 
@@ -18,6 +18,7 @@ const mapUser = (data: Record<string, unknown>): UserProfile => ({
     id: data.id as string,
     email: data.email as string,
     name: data.name as string,
+    role: data.role as EmployeeRole,
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {

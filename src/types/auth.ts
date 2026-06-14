@@ -1,7 +1,10 @@
+export type EmployeeRole = "barista" | "manager" | "owner";
+
 export interface UserProfile {
     id: string;
     email: string;
     name: string;
+    role: EmployeeRole;
 }
 
 export interface AuthContextValue {

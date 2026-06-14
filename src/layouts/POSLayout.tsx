@@ -1,8 +1,9 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Shield } from "lucide-react";
 import OrderQueue from "@/components/pos/order-queue";
 import CustomizeModal from "@/components/pos/customize";
 import { usePOS } from "@/hooks/usePos";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -10,6 +11,8 @@ import { Separator } from "@/components/ui/separator";
 const POSLayout = () => {
     const { customizeItem, customizeInitial, closeCustomize, addItem } =
         usePOS();
+    const { user } = useAuth();
+    const navigate = useNavigate();
 
     const now = new Date();
     const timeStr = now.toLocaleTimeString("en-US", {
@@ -45,10 +48,16 @@ const POSLayout = () => {
                         {timeStr}
                     </span>
                     <Separator orientation="vertical" className="h-4" />
-                    <Button variant="outline" size="default">
-                        <Shield className="text-muted-foreground" />
-                        Admin
-                    </Button>
+                    {user?.role !== "barista" && (
+                        <Button
+                            variant="outline"
+                            size="default"
+                            onClick={() => navigate("/admin")}
+                        >
+                            <Shield className="text-muted-foreground" />
+                            Admin
+                        </Button>
+                    )}
                 </div>
             </div>
 

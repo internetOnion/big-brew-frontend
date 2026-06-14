@@ -5,9 +5,18 @@ export const ENDPOINTS = {
         REFRESH: "/auth/refresh",
         PIN: "/auth/pin",
         ME: "/auth/me",
+        SIGNUP: "/auth/signup",
     },
     MENU: {
         ITEMS: "/menu-items",
+        BY_ID: (id: string) => `/menu-items/${id}`,
+        IMAGE: (id: string) => `/menu-items/${id}/image`,
+        RECIPES: (id: string) => `/menu-items/${id}/recipes`,
+        RECIPE: (menuItemId: string, ingredientId: string) =>
+            `/menu-items/${menuItemId}/recipes/${ingredientId}`,
+        MODIFIER_GROUPS: (id: string) => `/menu-items/${id}/modifier-groups`,
+        MODIFIER_GROUP: (menuItemId: string, groupId: string) =>
+            `/menu-items/${menuItemId}/modifier-groups/${groupId}`,
     },
     ORDERS: {
         BASE: "/orders",
@@ -18,8 +27,31 @@ export const ENDPOINTS = {
         VOID_APPROVE: (id: string) => `/orders/${id}/void-approve`,
         VOID_REJECT: (id: string) => `/orders/${id}/void-reject`,
     },
+    EMPLOYEES: {
+        BASE: "/employees",
+        BY_ID: (id: string) => `/employees/${id}`,
+    },
+    EXPENSES: {
+        BASE: "/expenses",
+        BY_ID: (id: string) => `/expenses/${id}`,
+        SUMMARY: "/expenses/summary",
+    },
+    STOCK_MOVEMENTS: {
+        BASE: "/stock-movements",
+    },
+    ANALYTICS: {
+        REVENUE: "/analytics/revenue",
+        TOP_ITEMS: "/analytics/top-items",
+        EXPENSES: "/analytics/expenses",
+        SUMMARY: "/analytics/summary",
+    },
+    INGREDIENTS: {
+        BASE: "/ingredients",
+        ADJUST: (id: string) => `/ingredients/${id}/adjust`,
+    },
     DISCOUNTS: {
         BASE: "/discounts",
+        BY_ID: (id: string) => `/discounts/${id}`,
     },
     CATEGORIES: {
         BASE: "/categories",
@@ -29,5 +61,6 @@ export const ENDPOINTS = {
     },
     SETTINGS: {
         BASE: "/settings",
+        LOGO: "/settings/logo",
     },
 } as const;
