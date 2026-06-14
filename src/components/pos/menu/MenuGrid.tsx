@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Search, Loader2, AlertCircle, RotateCw } from "lucide-react";
-import { useCategories } from "./CategoryContext";
+import { useCategories } from "@/contexts/CategoryContext";
 import { usePOS } from "@/hooks/usePos";
 import { useMenuItems } from "@/hooks/useMenuItems";
 import { toMenuItem } from "@/types/menu";
@@ -14,10 +14,16 @@ export const MenuGrid = () => {
     const [fetchingItemId, setFetchingItemId] = useState<string | null>(null);
     const { categories } = useCategories();
     const { openCustomize } = usePOS();
-    const { items, isLoading, error, refetch, fetchItemById } = useMenuItems();
+    const {
+        data: items,
+        isLoading,
+        error,
+        refetch,
+        fetchItemById,
+    } = useMenuItems();
 
     const filteredItems = useMemo(() => {
-        return items.filter((item) => {
+        return (items ?? []).filter((item) => {
             const matchesSearch = item.name
                 .toLowerCase()
                 .includes(search.toLowerCase());
@@ -87,12 +93,12 @@ export const MenuGrid = () => {
                     <div className="flex flex-col items-center justify-center gap-3 py-16">
                         <AlertCircle className="size-10 text-destructive" />
                         <p className="text-sm font-medium text-muted-foreground">
-                            {error}
+                            {error.message}
                         </p>
                         <Button
                             variant="outline"
                             size="default"
-                            onClick={refetch}
+                            onClick={() => refetch()}
                         >
                             <RotateCw />
                             Retry

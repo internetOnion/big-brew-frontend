@@ -1,5 +1,5 @@
 import MenuGrid from "./MenuGrid";
-import Cart from "./Cart";
+import Cart from "@/components/pos/cart";
 
 const MenuView = () => {
     return (

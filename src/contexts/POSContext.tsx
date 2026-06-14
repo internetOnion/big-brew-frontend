@@ -6,39 +6,26 @@ import {
     useEffect,
     type ReactNode,
 } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { MenuItem } from "@/types/menu";
 import type { CartItem } from "@/types/cart";
 import { generateCartId } from "@/lib/utils";
-import type { CustomizeOptions } from "@/components/pos/CustomizeModal";
+import type { CustomizeOptions } from "@/types/cart";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
+import { orderKeys } from "@/lib/query-keys";
 import type { Order, CreateOrderPayload } from "@/types/order";
-
-const CART_STORAGE_KEY = "pos-cart";
-const ORDER_TYPE_STORAGE_KEY = "pos-order-type";
-
-const loadCart = (): CartItem[] => {
-    try {
-        const raw = localStorage.getItem(CART_STORAGE_KEY);
-        if (!raw) return [];
-        const items: CartItem[] = JSON.parse(raw);
-        // Migrate old cart items that lack modifierGroups / selectedModifiers / option IDs
-        return items.map((item) => ({
-            ...item,
-            modifierGroups: item.modifierGroups ?? [],
-            selectedModifiers: item.selectedModifiers ?? {},
-            sizeOptionId: item.sizeOptionId ?? undefined,
-            sugarOptionId: item.sugarOptionId ?? undefined,
-        }));
-    } catch {
-        return [];
-    }
-};
-
-const loadOrderType = (): "dine-in" | "takeout" => {
-    const raw = localStorage.getItem(ORDER_TYPE_STORAGE_KEY);
-    return raw === "takeout" ? "takeout" : "dine-in";
-};
+import {
+    loadCart,
+    saveCart,
+    loadOrderType,
+    saveOrderType,
+    clearCart,
+} from "@/lib/cart-storage";
+import {
+    buildOrderPayload,
+    buildCartItemModifierGroups,
+} from "@/lib/order-payload";
 
 interface POSContextValue {
     cartItems: CartItem[];
@@ -83,35 +70,22 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
     }, [cartItems]);
 
     const total = useMemo(() => {
-        // Tax is included in prices, so total = subtotal
-        // Discount will be applied by the backend
         return subtotal;
     }, [subtotal]);
 
     useEffect(() => {
-        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+        saveCart(cartItems);
     }, [cartItems]);
 
     useEffect(() => {
-        localStorage.setItem(ORDER_TYPE_STORAGE_KEY, orderType);
+        saveOrderType(orderType);
     }, [orderType]);
 
     const addItem = useCallback(
         (item: MenuItem, options: CustomizeOptions) => {
-            const modifierGroups = (item.modifierGroups ?? []).map((g) => ({
-                id: g.id,
-                name: g.name,
-                selectionType: g.selectionType,
-                isRequired: g.isRequired,
-                sortOrder: g.sortOrder,
-                options: g.options.map((o) => ({
-                    id: o.id,
-                    name: o.name,
-                    price: o.price,
-                    isAvailable: o.isAvailable,
-                    sortOrder: o.sortOrder,
-                })),
-            }));
+            const modifierGroups = buildCartItemModifierGroups(
+                item.modifierGroups ?? [],
+            );
 
             if (editingItemId) {
                 setCartItems((prev) =>
@@ -225,7 +199,7 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
 
     const resetCart = useCallback(() => {
         setCartItems([]);
-        localStorage.removeItem(CART_STORAGE_KEY);
+        clearCart();
     }, []);
 
     const openCustomize = useCallback((item: MenuItem) => {
@@ -238,50 +212,39 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
         setEditingItemId(null);
     }, []);
 
+    const queryClient = useQueryClient();
+
+    const submitOrderMutation = useMutation({
+        mutationFn: async (payload: CreateOrderPayload) => {
+            const { data: order } = await api.post<Order>(
+                ENDPOINTS.ORDERS.BASE,
+                payload,
+            );
+            return order;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: orderKeys.pending });
+            resetCart();
+            setDiscountId(null);
+        },
+    });
+
     const submitOrder = useCallback(
         async (
             paymentMethod: "cash" | "qr",
             amountReceived?: number,
         ): Promise<Order> => {
-            // Build the order payload with payment
-            const payload: CreateOrderPayload = {
-                dining_option:
-                    orderType === "dine-in" ? "dine_in" : "take_away",
-                discount_id: discountId || undefined,
-                items: cartItems.map((item) => {
-                    // Collect all modifier option IDs: size, sugar, toppings + selected modifiers from other groups
-                    const allIds = [
-                        item.sizeOptionId,
-                        item.sugarOptionId,
-                        ...item.toppings.map((t) => t.modifierOptionId),
-                        ...Object.values(item.selectedModifiers).flat(),
-                    ].filter((id): id is string => Boolean(id));
-                    const modifier_option_ids = [...new Set(allIds)];
-                    return {
-                        menu_item_id: item.menuId,
-                        quantity: item.quantity,
-                        unit_price: item.unitPrice,
-                        modifier_option_ids,
-                    };
-                }),
-                payment_method: paymentMethod,
-                amount_received:
-                    paymentMethod === "cash" ? amountReceived : undefined,
-            };
-
-            // Create order and process payment in one call
-            const { data: order } = await api.post<Order>(
-                ENDPOINTS.ORDERS.BASE,
-                payload,
+            const payload = buildOrderPayload(
+                cartItems,
+                orderType,
+                discountId,
+                paymentMethod,
+                amountReceived,
             );
 
-            // Clear cart after successful order
-            resetCart();
-            setDiscountId(null);
-
-            return order;
+            return submitOrderMutation.mutateAsync(payload);
         },
-        [cartItems, orderType, discountId, resetCart],
+        [cartItems, orderType, discountId, submitOrderMutation],
     );
 
     return (

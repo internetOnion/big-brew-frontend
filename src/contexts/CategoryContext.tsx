@@ -1,44 +1,42 @@
 import { createContext, useContext, type ReactNode } from "react";
-import useCategoriesApi from "@/hooks/useCategories";
+import { useCategories as useCategoriesApi } from "@/hooks/useCategories";
 import { getCategoryIconName } from "@/types/menu";
-import type { Category as ApiCategory } from "@/hooks/useCategories";
-
-export interface Category {
-    id: string;
-    label: string;
-    iconName: string;
-}
-
-interface CategoryContextType {
-    categories: Category[];
-    isLoading: boolean;
-    error: string | null;
-}
+import type {
+    Category as ApiCategory,
+    UICategory,
+    CategoryContextType,
+} from "@/types/category";
 
 const CategoryContext = createContext<CategoryContextType | undefined>(
     undefined,
 );
 
-const mapCategory = (cat: ApiCategory): Category => ({
+const mapCategory = (cat: ApiCategory): UICategory => ({
     id: cat.id,
     label: cat.name,
     iconName: getCategoryIconName(cat.name),
 });
 
 export const CategoryProvider = ({ children }: { children: ReactNode }) => {
-    const { categories: apiCategories, isLoading, error } = useCategoriesApi();
+    const { data, isLoading, error } = useCategoriesApi();
 
-    const categories: Category[] = [
+    const categories: UICategory[] = [
         {
             id: "all",
             label: "All",
             iconName: "Coffee",
         },
-        ...apiCategories.map((cat) => mapCategory(cat)),
+        ...(data ?? []).map((cat) => mapCategory(cat)),
     ];
 
     return (
-        <CategoryContext.Provider value={{ categories, isLoading, error }}>
+        <CategoryContext.Provider
+            value={{
+                categories,
+                isLoading,
+                error: error?.message ?? null,
+            }}
+        >
             {children}
         </CategoryContext.Provider>
     );

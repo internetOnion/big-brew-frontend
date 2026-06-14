@@ -1,40 +1,17 @@
-import { useState, useEffect, useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
+import { categoryKeys } from "@/lib/query-keys";
+import type { Category } from "@/types/category";
 
-export interface Category {
-    id: string;
-    name: string;
-    sortOrder: number;
-}
-
-const useCategories = () => {
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    const fetchCategories = useCallback(async () => {
-        setIsLoading(true);
-        setError(null);
-        try {
-            const { data } = await api.get<Category[]>(
-                ENDPOINTS.CATEGORIES.BASE,
-            );
-            // Sort by sortOrder
-            const sorted = [...data].sort((a, b) => a.sortOrder - b.sortOrder);
-            setCategories(sorted);
-        } catch {
-            setError("Failed to load categories");
-        } finally {
-            setIsLoading(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        fetchCategories();
-    }, [fetchCategories]);
-
-    return { categories, isLoading, error, refetch: fetchCategories };
+const fetchCategories = async (): Promise<Category[]> => {
+    const { data } = await api.get<Category[]>(ENDPOINTS.CATEGORIES.BASE);
+    return [...data].sort((a, b) => a.sortOrder - b.sortOrder);
 };
 
-export default useCategories;
+export const useCategories = () => {
+    return useQuery({
+        queryKey: categoryKeys.all,
+        queryFn: fetchCategories,
+    });
+};

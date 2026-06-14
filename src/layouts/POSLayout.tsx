@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { Shield } from "lucide-react";
-import OrderQueue from "@/components/pos/OrderQueue";
-import CustomizeModal from "@/components/pos/CustomizeModal";
+import OrderQueue from "@/components/pos/order-queue";
+import CustomizeModal from "@/components/pos/customize";
 import { usePOS } from "@/hooks/usePos";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
