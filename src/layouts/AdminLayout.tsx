@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
     Sheet,
@@ -45,21 +44,25 @@ const AdminLayout = () => {
 
     const SidebarContent = () => (
         <div className="flex h-full flex-col">
-            <div className="flex items-center gap-2 px-4 py-4">
-                <img src="/homebrew.svg" alt="Homebrew" className="size-8" />
-                <span className="font-sans text-base font-bold text-foreground">
+            {/* Brand */}
+            <div className="flex h-11 shrink-0 items-center gap-2.5 px-3.5">
+                <img
+                    src="/homebrew.svg"
+                    alt="Homebrew"
+                    className="size-6"
+                />
+                <span className="font-sans text-[13px] font-bold text-[var(--admin-primary)]">
                     BigBrew
                 </span>
-                <Badge
-                    variant="default"
-                    className="ml-1 uppercase tracking-wider"
-                >
-                    Admin
-                </Badge>
+                <span className="ml-auto rounded-full bg-[var(--admin-hover)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--admin-text-muted)]">
+                    admin
+                </span>
             </div>
-            <Separator />
 
-            <nav className="flex-1 space-y-1 px-2 py-4">
+            <Separator className="bg-[var(--admin-sidebar-border)]" />
+
+            {/* Navigation */}
+            <nav className="flex-1 space-y-0.5 px-2 py-2.5">
                 {navItems.map((item) => (
                     <NavLink
                         key={item.to}
@@ -67,44 +70,45 @@ const AdminLayout = () => {
                         end={item.end}
                         onClick={() => setSidebarOpen(false)}
                         className={({ isActive }) =>
-                            `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                                isActive
-                                    ? "bg-primary/10 text-primary"
-                                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                            `admin-nav-item flex items-center gap-2.5 rounded-md px-2.5 py-[7px] text-[13px] ${
+                                isActive ? "data-[active=true]" : ""
                             }`
                         }
                     >
-                        <item.icon className="size-4" />
+                        <item.icon className="size-[15px] shrink-0" />
                         {item.label}
                     </NavLink>
                 ))}
             </nav>
 
-            <Separator />
-            <div className="space-y-1 px-2 py-4">
+            <Separator className="bg-[var(--admin-sidebar-border)]" />
+
+            {/* Bottom actions */}
+            <div className="space-y-0.5 px-2 py-2.5">
                 <NavLink
                     to="/"
                     onClick={() => setSidebarOpen(false)}
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    className="admin-nav-item flex items-center gap-2.5 rounded-md px-2.5 py-[7px] text-[13px]"
                 >
-                    <ArrowLeft className="size-4" />
+                    <ArrowLeft className="size-[15px] shrink-0" />
                     Back to POS
                 </NavLink>
                 <button
                     onClick={handleLogout}
-                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    className="admin-nav-item flex w-full items-center gap-2.5 rounded-md px-2.5 py-[7px] text-[13px]"
                 >
-                    <LogOut className="size-4" />
+                    <LogOut className="size-[15px] shrink-0" />
                     Logout
                 </button>
             </div>
 
+            {/* User info */}
             {user && (
-                <div className="border-t border-border px-4 py-3">
-                    <p className="text-sm font-medium text-foreground">
+                <div className="border-t border-[var(--admin-sidebar-border)] px-3.5 py-2">
+                    <p className="truncate text-[12px] font-medium text-[var(--admin-text)]">
                         {user.name}
                     </p>
-                    <p className="text-xs capitalize text-muted-foreground">
+                    <p className="font-mono text-[10px] capitalize text-[var(--admin-text-muted)]">
                         {user.role}
                     </p>
                 </div>
@@ -113,37 +117,50 @@ const AdminLayout = () => {
     );
 
     return (
-        <div className="flex h-screen w-screen overflow-hidden bg-background">
+        <div className="admin-theme flex h-screen w-screen overflow-hidden">
             {/* Desktop sidebar */}
-            <aside className="hidden w-60 shrink-0 border-r border-border bg-card md:block">
+            <aside className="admin-sidebar hidden w-56 shrink-0 bg-[var(--admin-sidebar)] md:block">
                 <SidebarContent />
             </aside>
 
             {/* Mobile sidebar */}
             <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
                 <div className="flex flex-1 flex-col overflow-hidden">
-                    <div className="flex h-14 shrink-0 items-center gap-3 border-b border-border bg-card px-4 md:hidden">
+                    {/* Mobile header */}
+                    <div className="flex h-11 shrink-0 items-center gap-3 border-b border-[var(--admin-border)] bg-[var(--admin-card)] px-4 md:hidden">
                         <SheetTrigger
-                            render={<Button variant="ghost" size="icon" />}
+                            render={
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="size-8 text-[var(--admin-text-secondary)]"
+                                />
+                            }
                         >
-                            <Menu className="size-5" />
+                            <Menu className="size-4" />
                         </SheetTrigger>
-                        <img
-                            src="/homebrew.svg"
-                            alt="Homebrew"
-                            className="size-7"
-                        />
-                        <span className="font-sans text-sm font-bold text-foreground">
-                            BigBrew Admin
-                        </span>
+                        <div className="flex items-center gap-2">
+                            <img
+                                src="/homebrew.svg"
+                                alt="Homebrew"
+                                className="size-6"
+                            />
+                            <span className="font-sans text-[13px] font-bold text-[var(--admin-primary)]">
+                                BigBrew
+                            </span>
+                        </div>
                     </div>
 
-                    <main className="flex-1 overflow-auto">
+                    {/* Page content */}
+                    <main className="flex-1 overflow-auto bg-[var(--admin-bg)]">
                         <Outlet />
                     </main>
                 </div>
 
-                <SheetContent side="left" className="w-60 p-0">
+                <SheetContent
+                    side="left"
+                    className="w-56 border-r border-[var(--admin-sidebar-border)] bg-[var(--admin-sidebar)] p-0"
+                >
                     <SheetTitle className="sr-only">Navigation</SheetTitle>
                     <SidebarContent />
                 </SheetContent>
