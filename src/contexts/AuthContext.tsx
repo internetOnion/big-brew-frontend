@@ -6,20 +6,11 @@ import {
     useRef,
     type ReactNode,
 } from "react";
-import type { UserProfile } from "@/types/auth";
+import type { UserProfile, AuthContextValue } from "@/types/auth";
 import api, { setAccessToken, setOnTokenRefreshed } from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
 
-export interface AuthContextValue {
-    user: UserProfile | null;
-    isAuthenticated: boolean;
-    isLoading: boolean;
-    isInitialized: boolean;
-    error: string | null;
-    login: (email: string, password: string) => Promise<void>;
-    logout: () => Promise<void>;
-    verifyPin: (pin: string) => Promise<void>;
-}
+export type { AuthContextValue };
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
 

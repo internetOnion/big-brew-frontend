@@ -8,8 +8,8 @@ import {
 } from "lucide-react";
 import type { Order, OrderItem } from "@/types/order";
 import { cn } from "@/lib/utils";
+import { getTimeSince, isUrgent } from "@/lib/order-utils";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import {
     Dialog,
     DialogContent,
@@ -18,6 +18,7 @@ import {
     DialogFooter,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { VoidConfirmForm } from "./VoidConfirmForm";
 
 interface OrderDetailModalProps {
     order: Order;
@@ -26,6 +27,18 @@ interface OrderDetailModalProps {
     onCancel: () => void;
 }
 
+const groupModifiers = (
+    modifiers: { groupName?: string; name: string; price?: string }[],
+): Record<string, typeof modifiers> => {
+    const grouped: Record<string, typeof modifiers> = {};
+    for (const m of modifiers) {
+        const key = m.groupName || "Modifiers";
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push(m);
+    }
+    return grouped;
+};
+
 export const OrderDetailModal = ({
     order,
     onComplete,
@@ -33,37 +46,12 @@ export const OrderDetailModal = ({
     onCancel,
 }: OrderDetailModalProps) => {
     const [showVoidConfirm, setShowVoidConfirm] = useState(false);
-    const [voidReason, setVoidReason] = useState("");
 
-    const urgent = (() => {
-        const now = new Date();
-        const created = new Date(order.createdAt);
-        const diffMs = now.getTime() - created.getTime();
-        const diffMins = Math.floor(diffMs / 60000);
-        return diffMins >= 8;
-    })();
-
-    const timeSince = (() => {
-        const now = new Date();
-        const created = new Date(order.createdAt);
-        const diffMs = now.getTime() - created.getTime();
-        const diffMins = Math.floor(diffMs / 60000);
-
-        if (diffMins < 1) return "Just now";
-        if (diffMins === 1) return "1m";
-        return `${diffMins}m`;
-    })();
+    const urgent = isUrgent(order.createdAt);
+    const timeSince = getTimeSince(order.createdAt);
 
     const TypeIcon =
         order.diningOption === "dine_in" ? UtensilsCrossed : ShoppingBag;
-
-    const handleVoid = () => {
-        if (voidReason.trim()) {
-            onVoid(voidReason.trim());
-            setShowVoidConfirm(false);
-            setVoidReason("");
-        }
-    };
 
     return (
         <Dialog open onOpenChange={(open) => !open && onCancel()}>
@@ -136,42 +124,28 @@ export const OrderDetailModal = ({
                                     </p>
                                     {item.modifiers.length > 0 && (
                                         <div className="mt-0.5 flex flex-col gap-0.5">
-                                            {(() => {
-                                                const grouped: Record<
-                                                    string,
-                                                    typeof item.modifiers
-                                                > = {};
-                                                for (const m of item.modifiers) {
-                                                    const key =
-                                                        m.groupName ||
-                                                        "Modifiers";
-                                                    if (!grouped[key])
-                                                        grouped[key] = [];
-                                                    grouped[key].push(m);
-                                                }
-                                                return Object.entries(
-                                                    grouped,
-                                                ).map(([group, mods]) => (
-                                                    <div
-                                                        key={group}
-                                                        className="text-[10px] leading-tight text-muted-foreground"
-                                                    >
-                                                        <span className="font-semibold text-foreground">
-                                                            {group}:{" "}
-                                                        </span>
-                                                        {mods
-                                                            .map((m) =>
-                                                                m.price &&
-                                                                parseFloat(
-                                                                    m.price,
-                                                                ) > 0
-                                                                    ? `${m.name} (+$${parseFloat(m.price).toFixed(2)})`
-                                                                    : m.name,
-                                                            )
-                                                            .join(", ")}
-                                                    </div>
-                                                ));
-                                            })()}
+                                            {Object.entries(
+                                                groupModifiers(item.modifiers),
+                                            ).map(([group, mods]) => (
+                                                <div
+                                                    key={group}
+                                                    className="text-[10px] leading-tight text-muted-foreground"
+                                                >
+                                                    <span className="font-semibold text-foreground">
+                                                        {group}:{" "}
+                                                    </span>
+                                                    {mods
+                                                        .map((m) =>
+                                                            m.price &&
+                                                            parseFloat(
+                                                                m.price,
+                                                            ) > 0
+                                                                ? `${m.name} (+$${parseFloat(m.price).toFixed(2)})`
+                                                                : m.name,
+                                                        )
+                                                        .join(", ")}
+                                                </div>
+                                            ))}
                                         </div>
                                     )}
                                 </div>
@@ -197,41 +171,13 @@ export const OrderDetailModal = ({
                 </div>
 
                 {showVoidConfirm ? (
-                    <div className="border-t border-border pt-4">
-                        <h4 className="mb-2 text-sm font-bold text-foreground">
-                            Void Order
-                        </h4>
-                        <p className="mb-3 text-xs text-muted-foreground">
-                            Please provide a reason for voiding this order.
-                        </p>
-                        <Textarea
-                            value={voidReason}
-                            onChange={(e) => setVoidReason(e.target.value)}
-                            placeholder="Enter reason..."
-                            className="mb-3 border-border bg-background"
-                            rows={2}
-                        />
-                        <div className="flex gap-2">
-                            <Button
-                                variant="outline"
-                                onClick={() => {
-                                    setShowVoidConfirm(false);
-                                    setVoidReason("");
-                                }}
-                                className="h-auto flex-1 py-2.5 font-bold"
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                variant="destructive"
-                                onClick={handleVoid}
-                                disabled={!voidReason.trim()}
-                                className="h-auto flex-1 py-2.5 font-bold"
-                            >
-                                Confirm Void
-                            </Button>
-                        </div>
-                    </div>
+                    <VoidConfirmForm
+                        onConfirm={(reason) => {
+                            onVoid(reason);
+                            setShowVoidConfirm(false);
+                        }}
+                        onCancel={() => setShowVoidConfirm(false)}
+                    />
                 ) : (
                     <DialogFooter>
                         <Button

@@ -1,6 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { useAuth } from "@/hooks/useAuth";
 import LoadingScreen from "@/components/common/LoadingScreen";
@@ -10,6 +12,16 @@ import App from "./App.tsx";
 import "@fontsource-variable/bricolage-grotesque/wght.css";
 import "@fontsource/dm-mono/400.css";
 import "@fontsource/dm-mono/500.css";
+
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 5 * 60 * 1000,
+            retry: 1,
+            refetchOnWindowFocus: false,
+        },
+    },
+});
 
 const Root = () => {
     const { isInitialized } = useAuth();
@@ -23,8 +35,11 @@ const Root = () => {
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <AuthProvider>
-            <Root />
-        </AuthProvider>
+        <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+                <Root />
+            </AuthProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
     </StrictMode>,
 );

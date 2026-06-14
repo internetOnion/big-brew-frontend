@@ -1,0 +1,105 @@
+import { useState } from "react";
+import { ListOrdered, Coffee } from "lucide-react";
+import type { Order } from "@/types/order";
+import { usePendingOrders } from "@/hooks/usePendingOrders";
+import { useCompleteOrder, useVoidOrder } from "@/hooks/useOrderMutations";
+import { getTimeSince, isUrgent } from "@/lib/order-utils";
+import OrderDetailModal from "./OrderDetailModal";
+import { OrderQueueCard } from "./OrderQueueCard";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+
+export const OrderQueue = () => {
+    const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+    const { data: orders, isLoading } = usePendingOrders();
+    const completeMutation = useCompleteOrder();
+    const voidMutation = useVoidOrder();
+
+    const handleComplete = (orderId: string) => {
+        completeMutation.mutate(orderId, {
+            onSuccess: () => setSelectedOrder(null),
+        });
+    };
+
+    const handleVoid = (orderId: string, reason: string) => {
+        voidMutation.mutate(
+            { orderId, reason },
+            {
+                onSuccess: () => setSelectedOrder(null),
+            },
+        );
+    };
+
+    if (isLoading) {
+        return (
+            <div className="flex h-full w-[220px] shrink-0 flex-col overflow-hidden border-r border-border bg-background">
+                <div className="flex items-center justify-between border-b border-border px-3 py-3">
+                    <div className="flex items-center gap-2">
+                        <ListOrdered className="size-4 text-primary" />
+                        <span className="font-sans text-sm font-bold text-foreground">
+                            Queue
+                        </span>
+                    </div>
+                </div>
+                <div className="flex flex-1 items-center justify-center gap-2">
+                    <Skeleton className="size-4 rounded-full" />
+                    <Skeleton className="h-4 w-20" />
+                </div>
+            </div>
+        );
+    }
+
+    const pendingOrders = orders ?? [];
+
+    return (
+        <div className="flex h-full w-[220px] shrink-0 flex-col overflow-hidden border-r border-border bg-background">
+            <div className="flex items-center justify-between border-b border-border px-3 py-3">
+                <div className="flex items-center gap-2">
+                    <ListOrdered className="size-4 text-primary" />
+                    <span className="font-sans text-sm font-bold text-foreground">
+                        Queue
+                    </span>
+                </div>
+                <Badge variant="default">{pendingOrders.length}</Badge>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-2 py-2 pos-scroll">
+                {pendingOrders.length === 0 ? (
+                    <div className="flex h-full flex-col items-center justify-center text-muted-foreground">
+                        <Coffee className="mb-2 size-8 opacity-50" />
+                        <p className="text-xs">No orders in queue</p>
+                    </div>
+                ) : (
+                    pendingOrders.map((order) => (
+                        <OrderQueueCard
+                            key={order.id}
+                            order={order}
+                            urgent={isUrgent(order.createdAt)}
+                            timeSince={getTimeSince(order.createdAt)}
+                            onClick={() => setSelectedOrder(order)}
+                            onComplete={(e) => {
+                                e.stopPropagation();
+                                handleComplete(order.id);
+                            }}
+                            onVoid={(e) => {
+                                e.stopPropagation();
+                                handleVoid(order.id, "Voided from queue");
+                            }}
+                        />
+                    ))
+                )}
+            </div>
+
+            {selectedOrder && (
+                <OrderDetailModal
+                    order={selectedOrder}
+                    onComplete={() => handleComplete(selectedOrder.id)}
+                    onVoid={(reason) => handleVoid(selectedOrder.id, reason)}
+                    onCancel={() => setSelectedOrder(null)}
+                />
+            )}
+        </div>
+    );
+};
+
+export default OrderQueue;

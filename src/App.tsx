@@ -5,8 +5,8 @@ import LoadingScreen from "@/components/common/LoadingScreen";
 import LoginPage from "./pages/LoginPage";
 
 const POSPage = lazy(() => import("./pages/POSPage"));
-const MenuView = lazy(() => import("./components/pos/MenuView"));
-const PaymentView = lazy(() => import("./components/pos/PaymentView"));
+const MenuView = lazy(() => import("./components/pos/menu"));
+const PaymentView = lazy(() => import("./components/pos/payment"));
 
 const App = () => {
     return (

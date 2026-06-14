@@ -2,7 +2,11 @@ export type OrderStatus = "pending" | "completed" | "void_requested" | "voided";
 
 export type DiningOption = "dine_in" | "take_away";
 
+export type OrderType = "dine-in" | "takeout";
+
 export type PaymentMethod = "cash" | "qr";
+
+export type Currency = "USD" | "KHR";
 
 export type PaymentStatus = "pending" | "paid" | "refunded";
 

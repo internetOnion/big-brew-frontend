@@ -37,3 +37,20 @@ export interface CartItem {
     modifierGroups: CartModifierGroup[];
     selectedModifiers: Record<string, string[]>;
 }
+
+export interface CustomizeOptions {
+    size: string;
+    sizeOptionId: string;
+    toppings: {
+        name: string;
+        qty: number;
+        price: number;
+        modifierOptionId: string;
+    }[];
+    sugarLevel: string;
+    sugarOptionId: string;
+    quantity: number;
+    finalPrice: number;
+    note: string;
+    modifiers: Record<string, string[]>;
+}
