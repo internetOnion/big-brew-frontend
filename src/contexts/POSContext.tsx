@@ -14,7 +14,12 @@ import type { CustomizeOptions } from "@/types/cart";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
 import { orderKeys } from "@/lib/query-keys";
-import type { Order, CreateOrderPayload } from "@/types/order";
+import type {
+    Order,
+    CreateOrderPayload,
+    OrderType,
+    PaymentMethod,
+} from "@/types/order";
 import {
     loadCart,
     saveCart,
@@ -29,14 +34,14 @@ import {
 
 interface POSContextValue {
     cartItems: CartItem[];
-    orderType: "dine-in" | "takeout";
+    orderType: OrderType;
     editingItemId: string | null;
     customizeItem: MenuItem | null;
     customizeInitial: CustomizeOptions | undefined;
     discountId: string | null;
     subtotal: number;
     total: number;
-    setOrderType: (t: "dine-in" | "takeout") => void;
+    setOrderType: (t: OrderType) => void;
     setDiscountId: (id: string | null) => void;
     addItem: (item: MenuItem, options: CustomizeOptions) => void;
     removeItem: (id: string) => void;
@@ -46,7 +51,7 @@ interface POSContextValue {
     openCustomize: (item: MenuItem) => void;
     closeCustomize: () => void;
     submitOrder: (
-        paymentMethod: "cash" | "qr",
+        paymentMethod: PaymentMethod,
         amountReceived?: number,
     ) => Promise<Order>;
 }
@@ -55,9 +60,7 @@ const POSContext = createContext<POSContextValue | null>(null);
 
 const POSProvider = ({ children }: { children: ReactNode }) => {
     const [cartItems, setCartItems] = useState<CartItem[]>(loadCart);
-    const [orderType, setOrderType] = useState<"dine-in" | "takeout">(
-        loadOrderType,
-    );
+    const [orderType, setOrderType] = useState<OrderType>(loadOrderType);
     const [editingItemId, setEditingItemId] = useState<string | null>(null);
     const [customizeItem, setCustomizeItem] = useState<MenuItem | null>(null);
     const [customizeInitial, setCustomizeInitial] = useState<

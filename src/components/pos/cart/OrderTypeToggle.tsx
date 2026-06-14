@@ -1,9 +1,10 @@
 import { UtensilsCrossed, ShoppingBag } from "lucide-react";
+import type { OrderType } from "@/types/order";
 import { Button } from "@/components/ui/button";
 
 interface OrderTypeToggleProps {
-    value: "dine-in" | "takeout";
-    onChange: (type: "dine-in" | "takeout") => void;
+    value: OrderType;
+    onChange: (type: OrderType) => void;
 }
 
 export const OrderTypeToggle = ({ value, onChange }: OrderTypeToggleProps) => (

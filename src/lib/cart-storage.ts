@@ -1,4 +1,5 @@
 import type { CartItem } from "@/types/cart";
+import type { OrderType } from "@/types/order";
 
 const CART_STORAGE_KEY = "pos-cart";
 const ORDER_TYPE_STORAGE_KEY = "pos-order-type";
@@ -25,12 +26,12 @@ export const saveCart = (cartItems: CartItem[]): void => {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
 };
 
-export const loadOrderType = (): "dine-in" | "takeout" => {
+export const loadOrderType = (): OrderType => {
     const raw = localStorage.getItem(ORDER_TYPE_STORAGE_KEY);
     return raw === "takeout" ? "takeout" : "dine-in";
 };
 
-export const saveOrderType = (orderType: "dine-in" | "takeout"): void => {
+export const saveOrderType = (orderType: OrderType): void => {
     localStorage.setItem(ORDER_TYPE_STORAGE_KEY, orderType);
 };
 

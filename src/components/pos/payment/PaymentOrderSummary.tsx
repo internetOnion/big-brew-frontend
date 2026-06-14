@@ -5,11 +5,12 @@ import { getCategoryIconName } from "@/types/menu";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { CartItem } from "@/types/cart";
+import type { Currency } from "@/types/order";
 
 interface PaymentOrderSummaryProps {
     cartItems: CartItem[];
-    currency: "USD" | "KHR";
-    onCurrencyChange: (c: "USD" | "KHR") => void;
+    currency: Currency;
+    onCurrencyChange: (c: Currency) => void;
     khrRate: number;
     isFullyPaid: boolean;
     isProcessing: boolean;

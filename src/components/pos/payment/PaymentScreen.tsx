@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { ROUTES } from "@/lib/constants";
 import { usePOS } from "@/hooks/usePos";
 import { useSettings } from "@/hooks/useSettings";
-import type { Order } from "@/types/order";
+import type { Order, PaymentMethod, Currency } from "@/types/order";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -28,8 +28,8 @@ const PaymentScreen = () => {
     const { total, subtotal, cartItems, submitOrder } = usePOS();
     const navigate = useNavigate();
     const [entered, setEntered] = useState("");
-    const [currency, setCurrency] = useState<"USD" | "KHR">("USD");
-    const [paymentMethod, setPaymentMethod] = useState<"cash" | "qr">("cash");
+    const [currency, setCurrency] = useState<Currency>("USD");
+    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cash");
     const [qrDialogOpen, setQrDialogOpen] = useState(false);
     const [success, setSuccess] = useState(false);
     const [completedOrder, setCompletedOrder] = useState<Order | null>(null);

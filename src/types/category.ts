@@ -9,9 +9,3 @@ export interface UICategory {
     label: string;
     iconName: string;
 }
-
-export interface CategoryContextType {
-    categories: UICategory[];
-    isLoading: boolean;
-    error: string | null;
-}

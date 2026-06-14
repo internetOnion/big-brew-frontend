@@ -1,10 +1,11 @@
 import { motion } from "motion/react";
 import { CheckCircle2 } from "lucide-react";
+import type { PaymentMethod } from "@/types/order";
 
 interface PaymentSuccessScreenProps {
     orderNumber: number;
     changeAmount?: string | null;
-    paymentMethod: "cash" | "qr";
+    paymentMethod: PaymentMethod;
 }
 
 export const PaymentSuccessScreen = ({

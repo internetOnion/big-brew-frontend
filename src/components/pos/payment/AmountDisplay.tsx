@@ -1,8 +1,9 @@
+import type { Currency } from "@/types/order";
 import { cn } from "@/lib/utils";
 
 interface AmountDisplayProps {
     totalDisplay: string;
-    currency: "USD" | "KHR";
+    currency: Currency;
     totalUsd?: string;
     entered: string;
     enteredDisplay: string;

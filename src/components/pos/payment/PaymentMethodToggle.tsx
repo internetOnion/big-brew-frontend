@@ -1,9 +1,10 @@
 import { Banknote, QrCode } from "lucide-react";
+import type { PaymentMethod } from "@/types/order";
 import { Button } from "@/components/ui/button";
 
 interface PaymentMethodToggleProps {
-    value: "cash" | "qr";
-    onChange: (method: "cash" | "qr") => void;
+    value: PaymentMethod;
+    onChange: (method: PaymentMethod) => void;
     onQrSelect: () => void;
 }
 

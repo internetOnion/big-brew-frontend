@@ -1,11 +1,13 @@
 import { createContext, useContext, type ReactNode } from "react";
 import { useCategories as useCategoriesApi } from "@/hooks/useCategories";
 import { getCategoryIconName } from "@/types/menu";
-import type {
-    Category as ApiCategory,
-    UICategory,
-    CategoryContextType,
-} from "@/types/category";
+import type { Category as ApiCategory, UICategory } from "@/types/category";
+
+interface CategoryContextType {
+    categories: UICategory[];
+    isLoading: boolean;
+    error: string | null;
+}
 
 const CategoryContext = createContext<CategoryContextType | undefined>(
     undefined,

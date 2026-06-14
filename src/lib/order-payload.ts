@@ -1,11 +1,15 @@
 import type { CartItem } from "@/types/cart";
-import type { CreateOrderPayload } from "@/types/order";
+import type {
+    CreateOrderPayload,
+    OrderType,
+    PaymentMethod,
+} from "@/types/order";
 
 export const buildOrderPayload = (
     cartItems: CartItem[],
-    orderType: "dine-in" | "takeout",
+    orderType: OrderType,
     discountId: string | null,
-    paymentMethod: "cash" | "qr",
+    paymentMethod: PaymentMethod,
     amountReceived?: number,
 ): CreateOrderPayload => ({
     dining_option: orderType === "dine-in" ? "dine_in" : "take_away",
