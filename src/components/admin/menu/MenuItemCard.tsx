@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UtensilsCrossed, Trash2 } from "lucide-react";
+import { ForkKnife, Trash } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import type { MenuItemListResponse } from "@/types/menu";
 
@@ -32,13 +32,11 @@ const MenuItemCard = ({
                     />
                 ) : (
                     <div className="flex size-full items-center justify-center">
-                        <UtensilsCrossed className="size-8 text-[var(--admin-text-muted)]" />
+                        <ForkKnife className="size-8 text-[var(--admin-text-muted)]" />
                     </div>
                 )}
                 {/* Category badge */}
-                <span
-                    className="absolute left-2 top-2 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary backdrop-blur-sm"
-                >
+                <span className="absolute left-2 top-2 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary backdrop-blur-sm">
                     {item.category.name}
                 </span>
                 {/* Availability badge */}
@@ -75,7 +73,7 @@ const MenuItemCard = ({
                         disabled={isDeleting}
                         className="border-[var(--admin-border)] text-red-500 hover:border-red-300 hover:bg-red-50 hover:text-red-600"
                     >
-                        <Trash2 className="size-3" />
+                        <Trash className="size-3" />
                     </Button>
                 </div>
             </div>

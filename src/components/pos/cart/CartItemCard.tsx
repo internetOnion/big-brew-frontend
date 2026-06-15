@@ -1,4 +1,4 @@
-import { Trash2, Pencil } from "lucide-react";
+import { Trash, PencilSimple } from "@phosphor-icons/react";
 import { getCategoryIconName } from "@/types/menu";
 import { getCategoryIcon } from "@/lib/category-icons";
 import type { CartItem } from "@/types/cart";
@@ -81,14 +81,14 @@ export const CartItemCard = ({
                             size="icon-xs"
                             onClick={() => onEdit(item.id)}
                         >
-                            <Pencil className="text-[var(--pos-text-muted)]" />
+                            <PencilSimple className="text-[var(--pos-text-muted)]" />
                         </Button>
                         <Button
                             variant="destructive"
                             size="icon-xs"
                             onClick={() => onRemove(item.id)}
                         >
-                            <Trash2 />
+                            <Trash />
                         </Button>
                     </div>
                 </div>

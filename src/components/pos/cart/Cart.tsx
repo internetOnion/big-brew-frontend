@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag } from "@phosphor-icons/react";
 import { usePOS } from "@/hooks/usePos";
 import { ROUTES } from "@/lib/constants";
 import { OrderTypeToggle } from "./OrderTypeToggle";

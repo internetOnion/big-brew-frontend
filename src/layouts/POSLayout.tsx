@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { Shield } from "lucide-react";
+import { Shield } from "@phosphor-icons/react";
 import OrderQueue from "@/components/pos/order-queue";
 import CustomizeModal from "@/components/pos/customize";
 import { usePOS } from "@/hooks/usePos";

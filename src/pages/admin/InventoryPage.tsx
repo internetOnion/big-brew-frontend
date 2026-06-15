@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, Plus, ChevronRight, Package } from "lucide-react";
+import {
+    MagnifyingGlass,
+    Plus,
+    CaretRight,
+    Package,
+} from "@phosphor-icons/react";
 import { useIngredients } from "@/hooks/useInventory";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -43,7 +48,7 @@ const InventoryPage = () => {
             {/* Filters */}
             <div className="flex flex-wrap items-center gap-2">
                 <div className="relative">
-                    <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-[var(--admin-text-muted)]" />
+                    <MagnifyingGlass className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-[var(--admin-text-muted)]" />
                     <Input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -160,7 +165,7 @@ const InventoryPage = () => {
                                                 </span>
                                             </td>
                                             <td className="px-2 py-2.5 text-right">
-                                                <ChevronRight className="ml-auto size-3.5 text-[var(--admin-text-muted)]" />
+                                                <CaretRight className="ml-auto size-3.5 text-[var(--admin-text-muted)]" />
                                             </td>
                                         </tr>
                                     );

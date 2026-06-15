@@ -1,4 +1,4 @@
-import { UtensilsCrossed, ShoppingBag } from "lucide-react";
+import { ForkKnife, ShoppingBag } from "@phosphor-icons/react";
 import type { OrderType } from "@/types/order";
 import { Button } from "@/components/ui/button";
 
@@ -15,7 +15,7 @@ export const OrderTypeToggle = ({ value, onChange }: OrderTypeToggleProps) => (
             onClick={() => onChange("dine-in")}
             className="flex-1 text-[11px]"
         >
-            <UtensilsCrossed className="size-3.5" />
+            <ForkKnife className="size-3.5" />
             Dine In
         </Button>
         <Button

@@ -1,9 +1,9 @@
 import {
-    DollarSign,
-    TrendingDown,
-    TrendingUp,
+    CurrencyDollar,
+    TrendDown,
+    TrendUp,
     ShoppingCart,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { AnalyticsSummary } from "@/types/admin";
 
@@ -22,19 +22,19 @@ const kpis = [
     {
         key: "totalRevenue" as const,
         label: "Total Revenue",
-        icon: DollarSign,
+        icon: CurrencyDollar,
         color: "text-emerald-600",
     },
     {
         key: "totalExpenses" as const,
         label: "Total Expenses",
-        icon: TrendingDown,
+        icon: TrendDown,
         color: "text-red-500",
     },
     {
         key: "netIncome" as const,
         label: "Net Income",
-        icon: TrendingUp,
+        icon: TrendUp,
         color: "text-blue-600",
     },
     {

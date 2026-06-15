@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, Plus, UtensilsCrossed } from "lucide-react";
+import { MagnifyingGlass, Plus, ForkKnife } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/api/api";
@@ -110,7 +110,7 @@ const MenuPage = () => {
             {/* Filters */}
             <div className="flex flex-wrap items-center gap-2">
                 <div className="relative">
-                    <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-[var(--admin-text-muted)]" />
+                    <MagnifyingGlass className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-[var(--admin-text-muted)]" />
                     <Input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -176,7 +176,7 @@ const MenuPage = () => {
                 </div>
             ) : !filteredItems || filteredItems.length === 0 ? (
                 <div className="flex h-40 flex-col items-center justify-center gap-1.5">
-                    <UtensilsCrossed className="size-5 text-[var(--admin-text-muted)]" />
+                    <ForkKnife className="size-5 text-[var(--admin-text-muted)]" />
                     <p className="text-xs text-[var(--admin-text-muted)]">
                         No menu items found
                     </p>

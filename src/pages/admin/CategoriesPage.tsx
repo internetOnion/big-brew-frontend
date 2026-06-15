@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, PencilSimple, Trash } from "@phosphor-icons/react";
 import {
     useCategories,
     useCreateCategory,
@@ -217,7 +217,7 @@ const CategoriesPage = () => {
                                                 }
                                                 className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                                             >
-                                                <Pencil className="size-3.5" />
+                                                <PencilSimple className="size-3.5" />
                                             </Button>
                                             <Button
                                                 variant="ghost"
@@ -237,7 +237,7 @@ const CategoriesPage = () => {
                                                         : "text-[var(--admin-text-muted)]/30"
                                                 }
                                             >
-                                                <Trash2 className="size-3.5" />
+                                                <Trash className="size-3.5" />
                                             </Button>
                                         </>
                                     )}

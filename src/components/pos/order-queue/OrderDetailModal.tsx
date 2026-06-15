@@ -1,11 +1,11 @@
 import { useState } from "react";
 import {
-    CheckCircle2,
+    CheckCircle,
     XCircle,
-    UtensilsCrossed,
+    ForkKnife,
     ShoppingBag,
     Clock,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import type { Order, OrderItem } from "@/types/order";
 import { cn } from "@/lib/utils";
 import { getTimeSince, isUrgent } from "@/lib/order-utils";
@@ -50,8 +50,7 @@ export const OrderDetailModal = ({
     const urgent = isUrgent(order.createdAt);
     const timeSince = getTimeSince(order.createdAt);
 
-    const TypeIcon =
-        order.diningOption === "dine_in" ? UtensilsCrossed : ShoppingBag;
+    const TypeIcon = order.diningOption === "dine_in" ? ForkKnife : ShoppingBag;
 
     return (
         <Dialog open onOpenChange={(open) => !open && onCancel()}>
@@ -192,7 +191,7 @@ export const OrderDetailModal = ({
                             onClick={onComplete}
                             className="h-auto flex-1 rounded-xl bg-chart-4 py-2.5 font-bold hover:brightness-110"
                         >
-                            <CheckCircle2 />
+                            <CheckCircle />
                             Complete
                         </Button>
                     </DialogFooter>

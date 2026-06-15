@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ListOrdered, Coffee } from "lucide-react";
+import { ListNumbers, Coffee } from "@phosphor-icons/react";
 import type { Order } from "@/types/order";
 import { usePendingOrders } from "@/hooks/usePendingOrders";
 import { useCompleteOrder, useVoidOrder } from "@/hooks/useOrderMutations";
@@ -34,7 +34,7 @@ export const OrderQueue = () => {
             <div className="flex h-full w-[220px] shrink-0 flex-col overflow-hidden border-r border-[var(--pos-border)] bg-[var(--pos-card)]">
                 <div className="flex items-center justify-between border-b border-[var(--pos-border)] px-4 py-2.5">
                     <div className="flex items-center gap-2">
-                        <ListOrdered className="size-4 text-[var(--pos-primary)]" />
+                        <ListNumbers className="size-4 text-[var(--pos-primary)]" />
                         <span className="font-sans text-[13px] font-medium text-[var(--pos-text)]">
                             Queue
                         </span>
@@ -54,7 +54,7 @@ export const OrderQueue = () => {
         <div className="flex h-full w-[220px] shrink-0 flex-col overflow-hidden border-r border-[var(--pos-border)] bg-[var(--pos-card)]">
             <div className="flex items-center justify-between border-b border-[var(--pos-border)] px-4 py-2.5">
                 <div className="flex items-center gap-2">
-                    <ListOrdered className="size-4 text-[var(--pos-primary)]" />
+                    <ListNumbers className="size-4 text-[var(--pos-primary)]" />
                     <span className="font-sans text-[13px] font-medium text-[var(--pos-text)]">
                         Queue
                     </span>

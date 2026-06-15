@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import {
-    LayoutDashboard,
-    UtensilsCrossed,
+    SquaresFour,
+    ForkKnife,
     Package,
     Users,
-    ClipboardList,
+    ClipboardText,
     Receipt,
-    Settings,
+    GearSix,
     ArrowLeft,
-    Menu,
-    LogOut,
-} from "lucide-react";
+    List,
+    SignOut,
+} from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -24,13 +24,13 @@ import {
 } from "@/components/ui/sheet";
 
 const navItems = [
-    { to: "/admin", icon: LayoutDashboard, label: "Dashboard", end: true },
-    { to: "/admin/menu", icon: UtensilsCrossed, label: "Menu" },
+    { to: "/admin", icon: SquaresFour, label: "Dashboard", end: true },
+    { to: "/admin/menu", icon: ForkKnife, label: "Menu" },
     { to: "/admin/inventory", icon: Package, label: "Inventory" },
     { to: "/admin/employees", icon: Users, label: "Employees" },
-    { to: "/admin/orders", icon: ClipboardList, label: "Orders" },
+    { to: "/admin/orders", icon: ClipboardText, label: "Orders" },
     { to: "/admin/expenses", icon: Receipt, label: "Expenses" },
-    { to: "/admin/settings", icon: Settings, label: "Settings" },
+    { to: "/admin/settings", icon: GearSix, label: "Settings" },
 ];
 
 const AdminLayout = () => {
@@ -115,7 +115,7 @@ const AdminLayout = () => {
                     onClick={handleLogout}
                     className="admin-nav-item flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px]"
                 >
-                    <LogOut className="size-[15px] shrink-0" />
+                    <SignOut className="size-[15px] shrink-0" />
                     Logout
                 </button>
             </div>
@@ -162,7 +162,7 @@ const AdminLayout = () => {
                                 />
                             }
                         >
-                            <Menu className="size-4" />
+                            <List className="size-4" />
                         </SheetTrigger>
                         <div className="flex items-center gap-2">
                             <img

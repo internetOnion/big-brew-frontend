@@ -1,11 +1,11 @@
 import {
-    UtensilsCrossed,
+    ForkKnife,
     ShoppingBag,
-    CheckCircle2,
+    CheckCircle,
     XCircle,
     Clock,
     Coffee,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import type { Order, OrderItem } from "@/types/order";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -27,8 +27,7 @@ export const OrderQueueCard = ({
     onComplete,
     onVoid,
 }: OrderQueueCardProps) => {
-    const TypeIcon =
-        order.diningOption === "dine_in" ? UtensilsCrossed : ShoppingBag;
+    const TypeIcon = order.diningOption === "dine_in" ? ForkKnife : ShoppingBag;
 
     return (
         <div
@@ -92,7 +91,7 @@ export const OrderQueueCard = ({
                         onClick={onComplete}
                         title="Done"
                     >
-                        <CheckCircle2 className="text-chart-4" />
+                        <CheckCircle className="text-chart-4" />
                     </Button>
                     <Button
                         variant="destructive"

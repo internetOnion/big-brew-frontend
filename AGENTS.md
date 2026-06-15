@@ -3,7 +3,7 @@
 ## Stack
 
 - Vite 8 + React 19 + TypeScript 6 + Tailwind CSS v4
-- shadcn/ui (base-nova style, @base-ui/react primitives, lucide icons)
+- shadcn/ui (base-nova style, @base-ui/react primitives, Phosphor icons)
 - axios API layer, react-router-dom (BrowserRouter — declarative mode), sonner toasts
 - motion (animations), recharts (charts)
 - Fonts: Bricolage Grotesque (sans/heading), DM Mono (mono) — loaded via `@fontsource`
@@ -23,7 +23,7 @@ No test runner, linter, or CI is configured. `tsc -b` in the build script is the
 
 - Every UI element must use shadcn components (Button, Card, Input, Dialog, etc.). Never raw Tailwind for interactive UI.
 - Components: `src/components/ui/`. Utility: `@/lib/utils` (`cn()` for conditional classes).
-- Icons from `lucide-react`; use `data-icon="inline-start"` / `data-icon="inline-end"` inside buttons.
+- Icons from `@phosphor-icons/react`; default weight is `duotone` (set via `IconContext.Provider` in `src/components/providers/IconProvider.tsx`). Use `data-icon="inline-start"` / `data-icon="inline-end"` inside buttons.
 - No `space-y-*` — use `flex flex-col gap-*`.
 - No raw color classes (`bg-blue-500`) — use semantic tokens only (`bg-primary`, `text-muted-foreground`).
 - `size-*` for equal dimensions, `truncate` shorthand.

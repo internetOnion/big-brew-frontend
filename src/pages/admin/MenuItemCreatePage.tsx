@@ -4,13 +4,13 @@ import { toast } from "sonner";
 import {
     ArrowLeft,
     Plus,
-    Trash2,
-    ChevronDown,
-    ChevronRight,
-    Pencil,
+    Trash,
+    CaretDown,
+    CaretRight,
+    PencilSimple,
     X,
     Check,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
 import { useIngredients } from "@/hooks/useInventory";
@@ -531,7 +531,7 @@ const MenuItemCreatePage = () => {
                                         onClick={() => handleRemoveRecipe(r.id)}
                                         className="text-red-500 hover:text-red-700"
                                     >
-                                        <Trash2 className="size-3.5" />
+                                        <Trash className="size-3.5" />
                                     </Button>
                                 </div>
                             </div>
@@ -684,9 +684,9 @@ const MenuItemCreatePage = () => {
                                         className="flex flex-1 items-center gap-2 text-left"
                                     >
                                         {expandedGroups.has(group.id) ? (
-                                            <ChevronDown className="size-3.5 text-[var(--admin-text-muted)]" />
+                                            <CaretDown className="size-3.5 text-[var(--admin-text-muted)]" />
                                         ) : (
-                                            <ChevronRight className="size-3.5 text-[var(--admin-text-muted)]" />
+                                            <CaretRight className="size-3.5 text-[var(--admin-text-muted)]" />
                                         )}
                                         <span className="text-[12px] font-medium text-[var(--admin-text)]">
                                             {group.name}
@@ -704,7 +704,7 @@ const MenuItemCreatePage = () => {
                                         onClick={() => startEditGroup(group)}
                                         className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                                     >
-                                        <Pencil className="size-3" />
+                                        <PencilSimple className="size-3" />
                                     </Button>
                                     <Button
                                         variant="ghost"
@@ -714,7 +714,7 @@ const MenuItemCreatePage = () => {
                                         }
                                         className="text-red-500 hover:text-red-700"
                                     >
-                                        <Trash2 className="size-3" />
+                                        <Trash className="size-3" />
                                     </Button>
                                 </div>
                             )}
@@ -784,9 +784,9 @@ const MenuItemCreatePage = () => {
                                                         {expandedOptions.has(
                                                             option.id,
                                                         ) ? (
-                                                            <ChevronDown className="size-3 text-[var(--admin-text-muted)]" />
+                                                            <CaretDown className="size-3 text-[var(--admin-text-muted)]" />
                                                         ) : (
-                                                            <ChevronRight className="size-3 text-[var(--admin-text-muted)]" />
+                                                            <CaretRight className="size-3 text-[var(--admin-text-muted)]" />
                                                         )}
                                                         <span className="text-[12px] text-[var(--admin-text)]">
                                                             {option.name}
@@ -808,7 +808,7 @@ const MenuItemCreatePage = () => {
                                                         }
                                                         className="mr-1 text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                                                     >
-                                                        <Pencil className="size-3" />
+                                                        <PencilSimple className="size-3" />
                                                     </Button>
                                                     <Button
                                                         variant="ghost"
@@ -821,7 +821,7 @@ const MenuItemCreatePage = () => {
                                                         }
                                                         className="mr-2 text-red-500 hover:text-red-700"
                                                     >
-                                                        <Trash2 className="size-3" />
+                                                        <Trash className="size-3" />
                                                     </Button>
                                                 </div>
                                             )}
@@ -859,7 +859,7 @@ const MenuItemCreatePage = () => {
                                                                         }
                                                                         className="text-red-500 hover:text-red-700"
                                                                     >
-                                                                        <Trash2 className="size-2.5" />
+                                                                        <Trash className="size-2.5" />
                                                                     </Button>
                                                                 </div>
                                                             </div>

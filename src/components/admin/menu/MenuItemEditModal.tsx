@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import {
     Plus,
-    Trash2,
-    ChevronDown,
-    ChevronRight,
-    Pencil,
+    Trash,
+    CaretDown,
+    CaretRight,
+    PencilSimple,
     X,
     Check,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
 import { useIngredients } from "@/hooks/useInventory";
@@ -649,7 +649,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                         }
                                                         className="text-red-500 hover:text-red-700"
                                                     >
-                                                        <Trash2 className="size-3.5" />
+                                                        <Trash className="size-3.5" />
                                                     </Button>
                                                 </div>
                                             </div>
@@ -804,9 +804,9 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     {expandedGroups.has(
                                                         group.id,
                                                     ) ? (
-                                                        <ChevronDown className="size-3.5 text-[var(--admin-text-muted)]" />
+                                                        <CaretDown className="size-3.5 text-[var(--admin-text-muted)]" />
                                                     ) : (
-                                                        <ChevronRight className="size-3.5 text-[var(--admin-text-muted)]" />
+                                                        <CaretRight className="size-3.5 text-[var(--admin-text-muted)]" />
                                                     )}
                                                     <span className="text-[12px] font-medium text-[var(--admin-text)]">
                                                         {group.name}
@@ -826,7 +826,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     }
                                                     className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                                                 >
-                                                    <Pencil className="size-3" />
+                                                    <PencilSimple className="size-3" />
                                                 </Button>
                                                 <Button
                                                     variant="ghost"
@@ -838,7 +838,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     }
                                                     className="text-red-500 hover:text-red-700"
                                                 >
-                                                    <Trash2 className="size-3" />
+                                                    <Trash className="size-3" />
                                                 </Button>
                                             </div>
                                         )}
@@ -922,9 +922,9 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                     {expandedOptions.has(
                                                                         option.id,
                                                                     ) ? (
-                                                                        <ChevronDown className="size-3 text-[var(--admin-text-muted)]" />
+                                                                        <CaretDown className="size-3 text-[var(--admin-text-muted)]" />
                                                                     ) : (
-                                                                        <ChevronRight className="size-3 text-[var(--admin-text-muted)]" />
+                                                                        <CaretRight className="size-3 text-[var(--admin-text-muted)]" />
                                                                     )}
                                                                     <span className="text-[12px] text-[var(--admin-text)]">
                                                                         {
@@ -950,7 +950,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                     }
                                                                     className="mr-1 text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                                                                 >
-                                                                    <Pencil className="size-3" />
+                                                                    <PencilSimple className="size-3" />
                                                                 </Button>
                                                                 <Button
                                                                     variant="ghost"
@@ -963,7 +963,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                     }
                                                                     className="mr-2 text-red-500 hover:text-red-700"
                                                                 >
-                                                                    <Trash2 className="size-3" />
+                                                                    <Trash className="size-3" />
                                                                 </Button>
                                                             </div>
                                                         )}
@@ -1093,7 +1093,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                             }
                                                                                             className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                                                                                         >
-                                                                                            <Pencil className="size-2.5" />
+                                                                                            <PencilSimple className="size-2.5" />
                                                                                         </Button>
                                                                                         <Button
                                                                                             variant="ghost"
@@ -1109,7 +1109,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                             }
                                                                                             className="text-red-500 hover:text-red-700"
                                                                                         >
-                                                                                            <Trash2 className="size-2.5" />
+                                                                                            <Trash className="size-2.5" />
                                                                                         </Button>
                                                                                     </div>
                                                                                 </div>

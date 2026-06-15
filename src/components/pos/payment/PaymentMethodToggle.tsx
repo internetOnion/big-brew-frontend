@@ -1,4 +1,4 @@
-import { Banknote, QrCode } from "lucide-react";
+import { Money, QrCode } from "@phosphor-icons/react";
 import type { PaymentMethod } from "@/types/order";
 import { Button } from "@/components/ui/button";
 
@@ -20,7 +20,7 @@ export const PaymentMethodToggle = ({
             onClick={() => onChange("cash")}
             className="flex-1 text-xs"
         >
-            <Banknote />
+            <Money />
             Cash
         </Button>
         <Button

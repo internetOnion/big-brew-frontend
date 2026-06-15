@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Delete } from "lucide-react";
+import { Trash } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
 const KEYS = [
@@ -36,7 +36,7 @@ export const NumericKeypad = ({
                         "pointer-events-none opacity-25",
                 )}
             >
-                {k === "\u232B" ? <Delete size={16} /> : k}
+                {k === "\u232B" ? <Trash size={16} /> : k}
             </motion.button>
         ))}
     </div>

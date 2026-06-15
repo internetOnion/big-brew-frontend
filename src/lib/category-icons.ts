@@ -1,19 +1,13 @@
-import {
-    Coffee,
-    Milk,
-    Leaf,
-    GlassWater,
-    Croissant,
-    type LucideIcon,
-} from "lucide-react";
+import { Coffee, Leaf, Wine, Bread } from "@phosphor-icons/react";
+import type { ElementType } from "react";
 
-export const categoryIconMap: Record<string, LucideIcon> = {
+export const categoryIconMap: Record<string, ElementType> = {
     Coffee,
-    Milk,
+    Milk: Coffee,
     Leaf,
-    GlassWater,
-    Croissant,
+    Wine,
+    Bread,
 };
 
-export const getCategoryIcon = (category: string): LucideIcon =>
+export const getCategoryIcon = (category: string): ElementType =>
     categoryIconMap[category] ?? Coffee;
