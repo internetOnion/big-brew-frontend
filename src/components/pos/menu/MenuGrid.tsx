@@ -87,7 +87,7 @@ export const MenuGrid = () => {
                         {Array.from({ length: 8 }).map((_, i) => (
                             <Card key={i} className="overflow-hidden">
                                 <Skeleton className="aspect-4/3 rounded-none" />
-                                    <div className="flex flex-col gap-2 p-3 md:gap-1.5 md:p-2 lg:gap-1 lg:p-1.5">
+                                <div className="flex flex-col gap-2 p-3 md:gap-1.5 md:p-2 lg:gap-1 lg:p-1.5">
                                     <Skeleton className="h-4 w-3/4" />
                                     <Skeleton className="h-4 w-1/3" />
                                 </div>

@@ -1,21 +1,25 @@
 import { useState } from "react";
-import { ForkKnifeIcon, TrashIcon } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
+import {
+    ForkKnifeIcon,
+    DotsThreeVerticalIcon,
+    PencilSimpleIcon,
+    TrashIcon,
+} from "@phosphor-icons/react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import type { MenuItemListResponse } from "@/types/menu";
 
 interface MenuItemCardProps {
     item: MenuItemListResponse;
     onEdit: (item: MenuItemListResponse) => void;
     onDelete: (item: MenuItemListResponse) => void;
-    isDeleting?: boolean;
 }
 
-const MenuItemCard = ({
-    item,
-    onEdit,
-    onDelete,
-    isDeleting,
-}: MenuItemCardProps) => {
+const MenuItemCard = ({ item, onEdit, onDelete }: MenuItemCardProps) => {
     const [imgError, setImgError] = useState(false);
     const price = parseFloat(item.basePrice);
 
@@ -57,25 +61,28 @@ const MenuItemCard = ({
                         ${price.toFixed(2)}
                     </p>
                 </div>
-                <div className="flex shrink-0 gap-1">
-                    <Button
-                        variant="outline"
-                        size="xs"
-                        onClick={() => onEdit(item)}
-                        className="border-[var(--admin-border)] text-[11px] text-[var(--admin-text-secondary)] hover:text-[var(--admin-text)]"
+                <DropdownMenu>
+                    <DropdownMenuTrigger className="flex size-7 shrink-0 items-center justify-center rounded-md border border-[var(--admin-border)] text-[var(--admin-text-secondary)] transition-colors hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]">
+                        <DotsThreeVerticalIcon className="size-4" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                        align="end"
+                        sideOffset={4}
+                        className="border-[var(--admin-border)] bg-[var(--admin-card)]"
                     >
-                        Edit
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="xs"
-                        onClick={() => onDelete(item)}
-                        disabled={isDeleting}
-                        className="border-[var(--admin-border)] text-red-500 hover:border-red-300 hover:bg-red-50 hover:text-red-600"
-                    >
-                        <TrashIcon className="size-3" />
-                    </Button>
-                </div>
+                        <DropdownMenuItem onClick={() => onEdit(item)}>
+                            <PencilSimpleIcon className="size-4" />
+                            Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            variant="destructive"
+                            onClick={() => onDelete(item)}
+                        >
+                            <TrashIcon className="size-4" />
+                            Delete
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
         </div>
     );

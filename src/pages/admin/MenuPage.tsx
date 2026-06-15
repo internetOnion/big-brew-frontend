@@ -198,10 +198,6 @@ const MenuPage = () => {
                                 navigate(`/admin/menu/${item.id}`)
                             }
                             onDelete={setDeletingItem}
-                            isDeleting={
-                                deleteMutation.isPending &&
-                                deletingItem?.id === item.id
-                            }
                         />
                     ))}
                 </div>

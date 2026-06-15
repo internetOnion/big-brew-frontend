@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import {
     MagnifyingGlassIcon,
     PlusIcon,
-    CaretRightIcon,
     PackageIcon,
 } from "@phosphor-icons/react";
 import { useIngredients } from "@/hooks/useInventory";
@@ -92,7 +91,7 @@ const InventoryPage = () => {
                                 <th className="px-4 py-2.5 text-center text-[10px] font-medium uppercase tracking-wide text-[var(--admin-text-muted)]">
                                     Status
                                 </th>
-                                <th className="w-8 px-2 py-2.5" />
+                                <th className="w-16 px-2 py-2.5" />
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[var(--admin-border)]">
@@ -165,7 +164,13 @@ const InventoryPage = () => {
                                                 </span>
                                             </td>
                                             <td className="px-2 py-2.5 text-right">
-                                                <CaretRightIcon className="ml-auto size-3.5 text-[var(--admin-text-muted)]" />
+                                                <Button
+                                                    variant="outline"
+                                                    size="xs"
+                                                    className="border-[var(--admin-border)] text-[11px] text-[var(--admin-text-secondary)] hover:text-[var(--admin-text)]"
+                                                >
+                                                    Edit
+                                                </Button>
                                             </td>
                                         </tr>
                                     );
