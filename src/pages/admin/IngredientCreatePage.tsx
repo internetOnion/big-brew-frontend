@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { ArrowLeft } from "@phosphor-icons/react";
+import { ArrowLeftIcon } from "@phosphor-icons/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
@@ -54,7 +54,7 @@ const IngredientCreatePage = () => {
                     onClick={() => navigate("/admin/inventory")}
                     className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                 >
-                    <ArrowLeft className="size-4" />
+                    <ArrowLeftIcon className="size-4" />
                 </Button>
                 <h1 className="text-[13px] font-medium text-[var(--admin-primary)]">
                     Add Ingredient

@@ -1,10 +1,10 @@
 import {
-    ForkKnife,
-    ShoppingBag,
-    CheckCircle,
-    XCircle,
-    Clock,
-    Coffee,
+    ForkKnifeIcon,
+    ShoppingBagIcon,
+    CheckCircleIcon,
+    XCircleIcon,
+    ClockIcon,
+    CoffeeIcon,
 } from "@phosphor-icons/react";
 import type { Order, OrderItem } from "@/types/order";
 import { cn } from "@/lib/utils";
@@ -27,7 +27,8 @@ export const OrderQueueCard = ({
     onComplete,
     onVoid,
 }: OrderQueueCardProps) => {
-    const TypeIcon = order.diningOption === "dine_in" ? ForkKnife : ShoppingBag;
+    const TypeIcon =
+        order.diningOption === "dine_in" ? ForkKnifeIcon : ShoppingBagIcon;
 
     return (
         <div
@@ -55,7 +56,7 @@ export const OrderQueueCard = ({
             <div className="mb-2 flex flex-col gap-0.5">
                 {order.items.map((item: OrderItem) => (
                     <div key={item.id} className="flex items-center gap-1">
-                        <Coffee className="size-3 shrink-0 text-[var(--pos-text-muted)]" />
+                        <CoffeeIcon className="size-3 shrink-0 text-[var(--pos-text-muted)]" />
                         <span className="truncate text-[11px] font-medium text-[var(--pos-text)]">
                             {item.quantity > 1 && `${item.quantity}× `}
                             {item.name}
@@ -65,7 +66,7 @@ export const OrderQueueCard = ({
             </div>
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1">
-                    <Clock
+                    <ClockIcon
                         className={cn(
                             "size-3",
                             urgent
@@ -91,7 +92,7 @@ export const OrderQueueCard = ({
                         onClick={onComplete}
                         title="Done"
                     >
-                        <CheckCircle className="text-chart-4" />
+                        <CheckCircleIcon className="text-chart-4" />
                     </Button>
                     <Button
                         variant="destructive"
@@ -99,7 +100,7 @@ export const OrderQueueCard = ({
                         onClick={onVoid}
                         title="Void"
                     >
-                        <XCircle />
+                        <XCircleIcon />
                     </Button>
                 </div>
             </div>

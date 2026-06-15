@@ -1,4 +1,4 @@
-import { Money, QrCode } from "@phosphor-icons/react";
+import { MoneyIcon, QrCodeIcon } from "@phosphor-icons/react";
 import type { PaymentMethod } from "@/types/order";
 import { Button } from "@/components/ui/button";
 
@@ -20,7 +20,7 @@ export const PaymentMethodToggle = ({
             onClick={() => onChange("cash")}
             className="flex-1 text-xs"
         >
-            <Money />
+            <MoneyIcon />
             Cash
         </Button>
         <Button
@@ -32,7 +32,7 @@ export const PaymentMethodToggle = ({
             }}
             className="flex-1 text-xs"
         >
-            <QrCode />
+            <QrCodeIcon />
             QR Code
         </Button>
     </div>

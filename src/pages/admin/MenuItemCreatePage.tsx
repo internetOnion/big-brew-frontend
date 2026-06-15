@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
-    ArrowLeft,
-    Plus,
-    Trash,
-    CaretDown,
-    CaretRight,
-    PencilSimple,
-    X,
-    Check,
+    ArrowLeftIcon,
+    PlusIcon,
+    TrashIcon,
+    CaretDownIcon,
+    CaretRightIcon,
+    PencilSimpleIcon,
+    XIcon,
+    CheckIcon,
 } from "@phosphor-icons/react";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
@@ -420,7 +420,7 @@ const MenuItemCreatePage = () => {
                     onClick={() => navigate("/admin/menu")}
                     className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                 >
-                    <ArrowLeft className="size-4" />
+                    <ArrowLeftIcon className="size-4" />
                 </Button>
                 <h1 className="text-[13px] font-medium text-[var(--admin-primary)]">
                     New Menu Item
@@ -531,7 +531,7 @@ const MenuItemCreatePage = () => {
                                         onClick={() => handleRemoveRecipe(r.id)}
                                         className="text-red-500 hover:text-red-700"
                                     >
-                                        <Trash className="size-3.5" />
+                                        <TrashIcon className="size-3.5" />
                                     </Button>
                                 </div>
                             </div>
@@ -600,7 +600,7 @@ const MenuItemCreatePage = () => {
                         onClick={handleAddRecipe}
                         className="h-8 border-[var(--admin-border)] text-[var(--admin-text-secondary)]"
                     >
-                        <Plus className="size-3.5" />
+                        <PlusIcon className="size-3.5" />
                     </Button>
                 </div>
             </div>
@@ -666,7 +666,7 @@ const MenuItemCreatePage = () => {
                                         }
                                         className="text-green-600 hover:text-green-700"
                                     >
-                                        <Check className="size-3.5" />
+                                        <CheckIcon className="size-3.5" />
                                     </Button>
                                     <Button
                                         variant="ghost"
@@ -674,7 +674,7 @@ const MenuItemCreatePage = () => {
                                         onClick={() => setEditingGroupId(null)}
                                         className="text-[var(--admin-text-muted)]"
                                     >
-                                        <X className="size-3.5" />
+                                        <XIcon className="size-3.5" />
                                     </Button>
                                 </div>
                             ) : (
@@ -684,9 +684,9 @@ const MenuItemCreatePage = () => {
                                         className="flex flex-1 items-center gap-2 text-left"
                                     >
                                         {expandedGroups.has(group.id) ? (
-                                            <CaretDown className="size-3.5 text-[var(--admin-text-muted)]" />
+                                            <CaretDownIcon className="size-3.5 text-[var(--admin-text-muted)]" />
                                         ) : (
-                                            <CaretRight className="size-3.5 text-[var(--admin-text-muted)]" />
+                                            <CaretRightIcon className="size-3.5 text-[var(--admin-text-muted)]" />
                                         )}
                                         <span className="text-[12px] font-medium text-[var(--admin-text)]">
                                             {group.name}
@@ -704,7 +704,7 @@ const MenuItemCreatePage = () => {
                                         onClick={() => startEditGroup(group)}
                                         className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                                     >
-                                        <PencilSimple className="size-3" />
+                                        <PencilSimpleIcon className="size-3" />
                                     </Button>
                                     <Button
                                         variant="ghost"
@@ -714,7 +714,7 @@ const MenuItemCreatePage = () => {
                                         }
                                         className="text-red-500 hover:text-red-700"
                                     >
-                                        <Trash className="size-3" />
+                                        <TrashIcon className="size-3" />
                                     </Button>
                                 </div>
                             )}
@@ -756,7 +756,7 @@ const MenuItemCreatePage = () => {
                                                         }
                                                         className="text-green-600 hover:text-green-700"
                                                     >
-                                                        <Check className="size-3.5" />
+                                                        <CheckIcon className="size-3.5" />
                                                     </Button>
                                                     <Button
                                                         variant="ghost"
@@ -768,7 +768,7 @@ const MenuItemCreatePage = () => {
                                                         }
                                                         className="text-[var(--admin-text-muted)]"
                                                     >
-                                                        <X className="size-3.5" />
+                                                        <XIcon className="size-3.5" />
                                                     </Button>
                                                 </div>
                                             ) : (
@@ -784,9 +784,9 @@ const MenuItemCreatePage = () => {
                                                         {expandedOptions.has(
                                                             option.id,
                                                         ) ? (
-                                                            <CaretDown className="size-3 text-[var(--admin-text-muted)]" />
+                                                            <CaretDownIcon className="size-3 text-[var(--admin-text-muted)]" />
                                                         ) : (
-                                                            <CaretRight className="size-3 text-[var(--admin-text-muted)]" />
+                                                            <CaretRightIcon className="size-3 text-[var(--admin-text-muted)]" />
                                                         )}
                                                         <span className="text-[12px] text-[var(--admin-text)]">
                                                             {option.name}
@@ -808,7 +808,7 @@ const MenuItemCreatePage = () => {
                                                         }
                                                         className="mr-1 text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                                                     >
-                                                        <PencilSimple className="size-3" />
+                                                        <PencilSimpleIcon className="size-3" />
                                                     </Button>
                                                     <Button
                                                         variant="ghost"
@@ -821,7 +821,7 @@ const MenuItemCreatePage = () => {
                                                         }
                                                         className="mr-2 text-red-500 hover:text-red-700"
                                                     >
-                                                        <Trash className="size-3" />
+                                                        <TrashIcon className="size-3" />
                                                     </Button>
                                                 </div>
                                             )}
@@ -859,7 +859,7 @@ const MenuItemCreatePage = () => {
                                                                         }
                                                                         className="text-red-500 hover:text-red-700"
                                                                     >
-                                                                        <Trash className="size-2.5" />
+                                                                        <TrashIcon className="size-2.5" />
                                                                     </Button>
                                                                 </div>
                                                             </div>
@@ -982,7 +982,7 @@ const MenuItemCreatePage = () => {
                                                                 }
                                                                 className="text-green-600 hover:text-green-700"
                                                             >
-                                                                <Check className="size-3" />
+                                                                <CheckIcon className="size-3" />
                                                             </Button>
                                                             <Button
                                                                 variant="ghost"
@@ -1000,7 +1000,7 @@ const MenuItemCreatePage = () => {
                                                                 }}
                                                                 className="text-[var(--admin-text-muted)]"
                                                             >
-                                                                <X className="size-3" />
+                                                                <XIcon className="size-3" />
                                                             </Button>
                                                         </div>
                                                     ) : (
@@ -1012,7 +1012,7 @@ const MenuItemCreatePage = () => {
                                                             }
                                                             className="mt-1 flex items-center gap-1 text-[10px] text-[var(--admin-text-muted)] hover:text-[var(--admin-text-secondary)]"
                                                         >
-                                                            <Plus className="size-2.5" />
+                                                            <PlusIcon className="size-2.5" />
                                                             Add ingredient
                                                         </button>
                                                     )}
@@ -1052,7 +1052,7 @@ const MenuItemCreatePage = () => {
                                                 }
                                                 className="text-green-600 hover:text-green-700"
                                             >
-                                                <Check className="size-3.5" />
+                                                <CheckIcon className="size-3.5" />
                                             </Button>
                                             <Button
                                                 variant="ghost"
@@ -1066,7 +1066,7 @@ const MenuItemCreatePage = () => {
                                                 }}
                                                 className="text-[var(--admin-text-muted)]"
                                             >
-                                                <X className="size-3.5" />
+                                                <XIcon className="size-3.5" />
                                             </Button>
                                         </div>
                                     ) : (
@@ -1076,7 +1076,7 @@ const MenuItemCreatePage = () => {
                                             }
                                             className="flex w-full items-center gap-1.5 px-5 py-2 text-left text-[11px] text-[var(--admin-text-muted)] hover:bg-[var(--admin-hover)]/30 hover:text-[var(--admin-text-secondary)]"
                                         >
-                                            <Plus className="size-3" />
+                                            <PlusIcon className="size-3" />
                                             Add option
                                         </button>
                                     )}
@@ -1158,7 +1158,7 @@ const MenuItemCreatePage = () => {
                             onClick={() => setShowAddGroup(true)}
                             className="w-full border-dashed border-[var(--admin-border)] text-[11px] text-[var(--admin-text-secondary)]"
                         >
-                            <Plus className="size-3.5" />
+                            <PlusIcon className="size-3.5" />
                             Add Modifier Group
                         </Button>
                     )}

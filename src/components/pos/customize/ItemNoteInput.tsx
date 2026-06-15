@@ -1,4 +1,4 @@
-import { FileText } from "@phosphor-icons/react";
+import { FileTextIcon } from "@phosphor-icons/react";
 import { Textarea } from "@/components/ui/textarea";
 
 interface ItemNoteInputProps {
@@ -12,7 +12,7 @@ export const ItemNoteInput = ({ value, onChange }: ItemNoteInputProps) => (
             Note
         </label>
         <div className="relative p-0.5">
-            <FileText className="pointer-events-none absolute left-3.5 top-3 size-4 text-muted-foreground" />
+            <FileTextIcon className="pointer-events-none absolute left-3.5 top-3 size-4 text-muted-foreground" />
             <Textarea
                 value={value}
                 onChange={(e) => onChange(e.target.value)}

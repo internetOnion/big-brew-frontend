@@ -13,7 +13,6 @@ export interface AuthContextValue {
     isLoading: boolean;
     isInitialized: boolean;
     error: string | null;
-    login: (email: string, password: string) => Promise<void>;
+    login: (email: string, password: string) => Promise<UserProfile>;
     logout: () => Promise<void>;
-    verifyPin: (pin: string) => Promise<void>;
 }

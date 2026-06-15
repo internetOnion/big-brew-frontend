@@ -1,8 +1,8 @@
 import {
-    CurrencyDollar,
-    TrendDown,
-    TrendUp,
-    ShoppingCart,
+    CurrencyDollarIcon,
+    TrendDownIcon,
+    TrendUpIcon,
+    ShoppingCartIcon,
 } from "@phosphor-icons/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { AnalyticsSummary } from "@/types/admin";
@@ -22,25 +22,25 @@ const kpis = [
     {
         key: "totalRevenue" as const,
         label: "Total Revenue",
-        icon: CurrencyDollar,
+        icon: CurrencyDollarIcon,
         color: "text-emerald-600",
     },
     {
         key: "totalExpenses" as const,
         label: "Total Expenses",
-        icon: TrendDown,
+        icon: TrendDownIcon,
         color: "text-red-500",
     },
     {
         key: "netIncome" as const,
         label: "Net Income",
-        icon: TrendUp,
+        icon: TrendUpIcon,
         color: "text-blue-600",
     },
     {
         key: "averageOrderValue" as const,
         label: "Avg Order Value",
-        icon: ShoppingCart,
+        icon: ShoppingCartIcon,
         color: "text-[var(--admin-accent)]",
     },
 ];

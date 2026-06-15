@@ -1,6 +1,10 @@
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { UploadSimple, Trash, ForkKnife } from "@phosphor-icons/react";
+import {
+    UploadSimpleIcon,
+    TrashIcon,
+    ForkKnifeIcon,
+} from "@phosphor-icons/react";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
 import { useQueryClient } from "@tanstack/react-query";
@@ -90,7 +94,7 @@ const MenuItemImageUpload = ({
                     />
                 ) : (
                     <div className="flex size-full items-center justify-center">
-                        <ForkKnife className="size-8 text-[var(--admin-text-muted)]" />
+                        <ForkKnifeIcon className="size-8 text-[var(--admin-text-muted)]" />
                     </div>
                 )}
 
@@ -105,7 +109,7 @@ const MenuItemImageUpload = ({
                     disabled={uploading}
                     className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-opacity hover:bg-black/40 hover:opacity-100"
                 >
-                    <UploadSimple className="size-5 text-white" />
+                    <UploadSimpleIcon className="size-5 text-white" />
                 </button>
             </div>
 
@@ -121,7 +125,7 @@ const MenuItemImageUpload = ({
                         disabled={uploading}
                         className="border-[var(--admin-border)] text-[11px] text-[var(--admin-text-secondary)]"
                     >
-                        <UploadSimple className="size-3" />
+                        <UploadSimpleIcon className="size-3" />
                         {imageUrl ? "Replace" : "Upload"}
                     </Button>
                     {imageUrl && (
@@ -132,7 +136,7 @@ const MenuItemImageUpload = ({
                             disabled={uploading}
                             className="border-red-200 text-[11px] text-red-500 hover:border-red-300 hover:bg-red-50 hover:text-red-600"
                         >
-                            <Trash className="size-3" />
+                            <TrashIcon className="size-3" />
                             Remove
                         </Button>
                     )}

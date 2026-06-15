@@ -60,6 +60,7 @@ export interface Order {
     total: string;
     paymentStatus: PaymentStatus;
     createdBy: OrderEmployee;
+    confirmedBy: OrderEmployee;
     voidRequestedBy: OrderEmployee | null;
     voidRequestedAt: string | null;
     voidApprovedBy: OrderEmployee | null;
@@ -83,6 +84,7 @@ export interface CreateOrderPayload {
     }[];
     payment_method?: PaymentMethod;
     amount_received?: number;
+    confirmed_by?: string;
 }
 
 export interface ProcessPaymentPayload {
@@ -93,6 +95,7 @@ export interface ProcessPaymentPayload {
 
 export interface RequestVoidPayload {
     reason: string;
+    verified_employee_id?: string;
 }
 
 export interface Discount {

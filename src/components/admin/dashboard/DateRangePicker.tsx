@@ -7,7 +7,7 @@ import {
     startOfWeek,
     startOfYear,
 } from "date-fns";
-import { Calendar as CalendarIcon } from "@phosphor-icons/react";
+import { CalendarIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {

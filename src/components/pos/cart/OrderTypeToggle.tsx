@@ -1,4 +1,4 @@
-import { ForkKnife, ShoppingBag } from "@phosphor-icons/react";
+import { ForkKnifeIcon, ShoppingBagIcon } from "@phosphor-icons/react";
 import type { OrderType } from "@/types/order";
 import { Button } from "@/components/ui/button";
 
@@ -15,7 +15,7 @@ export const OrderTypeToggle = ({ value, onChange }: OrderTypeToggleProps) => (
             onClick={() => onChange("dine-in")}
             className="flex-1 text-[11px]"
         >
-            <ForkKnife className="size-3.5" />
+            <ForkKnifeIcon className="size-3.5" />
             Dine In
         </Button>
         <Button
@@ -24,7 +24,7 @@ export const OrderTypeToggle = ({ value, onChange }: OrderTypeToggleProps) => (
             onClick={() => onChange("takeout")}
             className="flex-1 text-[11px]"
         >
-            <ShoppingBag className="size-3.5" />
+            <ShoppingBagIcon className="size-3.5" />
             Takeout
         </Button>
     </div>

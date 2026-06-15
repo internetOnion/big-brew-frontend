@@ -6,16 +6,22 @@ import { LoginBrandingPanel } from "@/components/common/LoginBrandingPanel";
 import { LoginForm } from "@/components/common/LoginForm";
 import { motion } from "motion/react";
 
+const getRedirectPath = (role: string): string => {
+    if (role === "barista") return ROUTES.POS;
+    return ROUTES.ADMIN;
+};
+
 const LoginPage = () => {
     const navigate = useNavigate();
-    const { login, isLoading, isAuthenticated, isInitialized } = useAuth();
+    const { login, isLoading, isAuthenticated, isInitialized, user } =
+        useAuth();
     const [error, setError] = useState("");
 
     useEffect(() => {
-        if (isInitialized && isAuthenticated) {
-            navigate(ROUTES.POS, { replace: true });
+        if (isInitialized && isAuthenticated && user) {
+            navigate(getRedirectPath(user.role), { replace: true });
         }
-    }, [isInitialized, isAuthenticated, navigate]);
+    }, [isInitialized, isAuthenticated, user, navigate]);
 
     if (!isInitialized || isAuthenticated) return null;
 
@@ -28,8 +34,8 @@ const LoginPage = () => {
         }
 
         try {
-            await login(email, password);
-            navigate(ROUTES.POS, { replace: true });
+            const loggedInUser = await login(email, password);
+            navigate(getRedirectPath(loggedInUser.role), { replace: true });
         } catch {
             setError("Invalid email or password. Please try again.");
         }

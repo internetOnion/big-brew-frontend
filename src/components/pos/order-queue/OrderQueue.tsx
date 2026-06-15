@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ListNumbers, Coffee } from "@phosphor-icons/react";
+import { ListNumbersIcon, CoffeeIcon } from "@phosphor-icons/react";
 import type { Order } from "@/types/order";
 import { usePendingOrders } from "@/hooks/usePendingOrders";
 import { useCompleteOrder, useVoidOrder } from "@/hooks/useOrderMutations";
@@ -34,7 +34,7 @@ export const OrderQueue = () => {
             <div className="flex h-full w-[220px] shrink-0 flex-col overflow-hidden border-r border-[var(--pos-border)] bg-[var(--pos-card)]">
                 <div className="flex items-center justify-between border-b border-[var(--pos-border)] px-4 py-2.5">
                     <div className="flex items-center gap-2">
-                        <ListNumbers className="size-4 text-[var(--pos-primary)]" />
+                        <ListNumbersIcon className="size-4 text-[var(--pos-primary)]" />
                         <span className="font-sans text-[13px] font-medium text-[var(--pos-text)]">
                             Queue
                         </span>
@@ -54,7 +54,7 @@ export const OrderQueue = () => {
         <div className="flex h-full w-[220px] shrink-0 flex-col overflow-hidden border-r border-[var(--pos-border)] bg-[var(--pos-card)]">
             <div className="flex items-center justify-between border-b border-[var(--pos-border)] px-4 py-2.5">
                 <div className="flex items-center gap-2">
-                    <ListNumbers className="size-4 text-[var(--pos-primary)]" />
+                    <ListNumbersIcon className="size-4 text-[var(--pos-primary)]" />
                     <span className="font-sans text-[13px] font-medium text-[var(--pos-text)]">
                         Queue
                     </span>
@@ -67,7 +67,7 @@ export const OrderQueue = () => {
             <div className="flex-1 overflow-y-auto px-2 py-2 pos-scroll">
                 {pendingOrders.length === 0 ? (
                     <div className="flex h-full flex-col items-center justify-center gap-2">
-                        <Coffee className="size-7 text-[var(--pos-text-muted)]/40" />
+                        <CoffeeIcon className="size-7 text-[var(--pos-text-muted)]/40" />
                         <p className="text-[11px] text-[var(--pos-text-muted)]">
                             No orders
                         </p>

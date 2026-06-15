@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
 import {
-    MagnifyingGlass,
-    Spinner,
-    WarningCircle,
-    ArrowClockwise,
+    MagnifyingGlassIcon,
+    SpinnerIcon,
+    WarningCircleIcon,
+    ArrowClockwiseIcon,
 } from "@phosphor-icons/react";
 import { useCategories } from "@/contexts/CategoryContext";
 import { usePOS } from "@/hooks/usePos";
@@ -54,7 +54,7 @@ export const MenuGrid = () => {
         <div className="flex h-full flex-col overflow-hidden">
             <div className="px-4 pt-4">
                 <div className="flex items-center gap-2 rounded-lg border border-[var(--pos-border)] bg-[var(--pos-card)] px-3 py-2">
-                    <MagnifyingGlass className="size-4 shrink-0 text-[var(--pos-text-muted)]" />
+                    <MagnifyingGlassIcon className="size-4 shrink-0 text-[var(--pos-text-muted)]" />
                     <input
                         type="text"
                         value={search}
@@ -96,7 +96,7 @@ export const MenuGrid = () => {
                     </div>
                 ) : error ? (
                     <div className="flex flex-col items-center justify-center gap-3 py-16">
-                        <WarningCircle className="size-10 text-destructive" />
+                        <WarningCircleIcon className="size-10 text-destructive" />
                         <p className="text-sm font-medium text-muted-foreground">
                             {error.message}
                         </p>
@@ -105,7 +105,7 @@ export const MenuGrid = () => {
                             size="default"
                             onClick={() => refetch()}
                         >
-                            <ArrowClockwise />
+                            <ArrowClockwiseIcon />
                             Retry
                         </Button>
                     </div>
@@ -228,7 +228,7 @@ export const MenuGrid = () => {
                                         )}
                                         {isFetching && (
                                             <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-                                                <Spinner className="size-6 animate-spin text-white" />
+                                                <SpinnerIcon className="size-6 animate-spin text-white" />
                                             </div>
                                         )}
                                     </div>

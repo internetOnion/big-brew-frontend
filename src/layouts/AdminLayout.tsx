@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import {
-    SquaresFour,
-    ForkKnife,
-    Package,
-    Users,
-    ClipboardText,
-    Receipt,
-    GearSix,
-    ArrowLeft,
-    List,
-    SignOut,
+    SquaresFourIcon,
+    ForkKnifeIcon,
+    PackageIcon,
+    UsersIcon,
+    ClipboardTextIcon,
+    ReceiptIcon,
+    GearSixIcon,
+    ListIcon,
+    SignOutIcon,
+    MonitorIcon,
 } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useAuth } from "@/hooks/useAuth";
@@ -24,13 +24,13 @@ import {
 } from "@/components/ui/sheet";
 
 const navItems = [
-    { to: "/admin", icon: SquaresFour, label: "Dashboard", end: true },
-    { to: "/admin/menu", icon: ForkKnife, label: "Menu" },
-    { to: "/admin/inventory", icon: Package, label: "Inventory" },
-    { to: "/admin/employees", icon: Users, label: "Employees" },
-    { to: "/admin/orders", icon: ClipboardText, label: "Orders" },
-    { to: "/admin/expenses", icon: Receipt, label: "Expenses" },
-    { to: "/admin/settings", icon: GearSix, label: "Settings" },
+    { to: "/admin", icon: SquaresFourIcon, label: "Dashboard", end: true },
+    { to: "/admin/menu", icon: ForkKnifeIcon, label: "Menu" },
+    { to: "/admin/inventory", icon: PackageIcon, label: "Inventory" },
+    { to: "/admin/employees", icon: UsersIcon, label: "Employees" },
+    { to: "/admin/orders", icon: ClipboardTextIcon, label: "Orders" },
+    { to: "/admin/expenses", icon: ReceiptIcon, label: "Expenses" },
+    { to: "/admin/settings", icon: GearSixIcon, label: "Settings" },
 ];
 
 const AdminLayout = () => {
@@ -106,16 +106,16 @@ const AdminLayout = () => {
                 <NavLink
                     to="/"
                     onClick={() => setSidebarOpen(false)}
-                    className="admin-nav-item flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px]"
+                    className="flex w-full items-center gap-2.5 rounded-lg bg-[var(--admin-accent)] px-2.5 py-1.5 text-[13px] text-white transition-opacity duration-150 hover:opacity-85"
                 >
-                    <ArrowLeft className="size-[15px] shrink-0" />
-                    Back to POS
+                    <MonitorIcon className="size-[15px] shrink-0" />
+                    Switch to POS
                 </NavLink>
                 <button
                     onClick={handleLogout}
                     className="admin-nav-item flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px]"
                 >
-                    <SignOut className="size-[15px] shrink-0" />
+                    <SignOutIcon className="size-[15px] shrink-0" />
                     Logout
                 </button>
             </div>
@@ -162,7 +162,7 @@ const AdminLayout = () => {
                                 />
                             }
                         >
-                            <List className="size-4" />
+                            <ListIcon className="size-4" />
                         </SheetTrigger>
                         <div className="flex items-center gap-2">
                             <img

@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { CheckCircle } from "@phosphor-icons/react";
+import { CheckCircleIcon } from "@phosphor-icons/react";
 import type { PaymentMethod } from "@/types/order";
 
 interface PaymentSuccessScreenProps {
@@ -24,7 +24,7 @@ export const PaymentSuccessScreen = ({
                     ease: "easeOut",
                 }}
             />
-            <CheckCircle size={80} className="relative z-10 text-accent" />
+            <CheckCircleIcon size={80} className="relative z-10 text-accent" />
             <p className="text-2xl font-bold text-foreground">
                 Payment Complete
             </p>

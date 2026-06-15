@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-    MagnifyingGlass,
-    Plus,
-    CaretRight,
-    Package,
+    MagnifyingGlassIcon,
+    PlusIcon,
+    CaretRightIcon,
+    PackageIcon,
 } from "@phosphor-icons/react";
 import { useIngredients } from "@/hooks/useInventory";
 import { Input } from "@/components/ui/input";
@@ -40,7 +40,7 @@ const InventoryPage = () => {
                     onClick={() => navigate("/admin/inventory/new")}
                     className="h-7 gap-1.5 bg-[var(--admin-primary)] text-[11px] text-white hover:bg-[#3a1d0e]"
                 >
-                    <Plus className="size-3" />
+                    <PlusIcon className="size-3" />
                     Add
                 </Button>
             </div>
@@ -48,7 +48,7 @@ const InventoryPage = () => {
             {/* Filters */}
             <div className="flex flex-wrap items-center gap-2">
                 <div className="relative">
-                    <MagnifyingGlass className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-[var(--admin-text-muted)]" />
+                    <MagnifyingGlassIcon className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-[var(--admin-text-muted)]" />
                     <Input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -112,7 +112,7 @@ const InventoryPage = () => {
                                         className="px-4 py-10 text-center"
                                     >
                                         <div className="flex flex-col items-center gap-1.5">
-                                            <Package className="size-5 text-[var(--admin-text-muted)]" />
+                                            <PackageIcon className="size-5 text-[var(--admin-text-muted)]" />
                                             <p className="text-xs text-[var(--admin-text-muted)]">
                                                 No ingredients found
                                             </p>
@@ -165,7 +165,7 @@ const InventoryPage = () => {
                                                 </span>
                                             </td>
                                             <td className="px-2 py-2.5 text-right">
-                                                <CaretRight className="ml-auto size-3.5 text-[var(--admin-text-muted)]" />
+                                                <CaretRightIcon className="ml-auto size-3.5 text-[var(--admin-text-muted)]" />
                                             </td>
                                         </tr>
                                     );

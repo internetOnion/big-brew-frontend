@@ -1,6 +1,6 @@
 import { useState, type SubmitEvent } from "react";
 import { motion } from "motion/react";
-import { Eye, EyeSlash } from "@phosphor-icons/react";
+import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -82,9 +82,9 @@ export const LoginForm = ({ onSubmit, isLoading, error }: LoginFormProps) => {
                             className="absolute top-1/2 right-4 flex -translate-y-1/2 items-center text-muted-foreground transition-colors hover:text-foreground"
                         >
                             {showPassword ? (
-                                <EyeSlash size={18} />
+                                <EyeSlashIcon size={18} />
                             ) : (
-                                <Eye size={18} />
+                                <EyeIcon size={18} />
                             )}
                         </button>
                     </div>

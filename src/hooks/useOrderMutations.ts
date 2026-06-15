@@ -25,11 +25,16 @@ export const useVoidOrder = () => {
         mutationFn: async ({
             orderId,
             reason,
+            verifiedEmployeeId,
         }: {
             orderId: string;
             reason: string;
+            verifiedEmployeeId?: string;
         }) => {
-            await api.post(ENDPOINTS.ORDERS.VOID_REQUEST(orderId), { reason });
+            await api.post(ENDPOINTS.ORDERS.VOID_REQUEST(orderId), {
+                reason,
+                verified_employee_id: verifiedEmployeeId,
+            });
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: orderKeys.pending });

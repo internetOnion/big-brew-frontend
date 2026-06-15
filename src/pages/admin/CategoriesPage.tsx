@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus, PencilSimple, Trash } from "@phosphor-icons/react";
+import {
+    ArrowLeftIcon,
+    PlusIcon,
+    PencilSimpleIcon,
+    TrashIcon,
+} from "@phosphor-icons/react";
 import {
     useCategories,
     useCreateCategory,
@@ -77,7 +82,7 @@ const CategoriesPage = () => {
                     onClick={() => navigate("/admin/menu")}
                     className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                 >
-                    <ArrowLeft className="size-4" />
+                    <ArrowLeftIcon className="size-4" />
                 </Button>
                 <h1 className="text-[13px] font-medium text-[var(--admin-primary)]">
                     Categories
@@ -92,7 +97,7 @@ const CategoriesPage = () => {
                         disabled={isAdding}
                         className="h-7 gap-1.5 bg-[var(--admin-primary)] text-[11px] text-white hover:bg-[#3a1d0e]"
                     >
-                        <Plus className="size-3" />
+                        <PlusIcon className="size-3" />
                         Add Category
                     </Button>
                 </div>
@@ -217,7 +222,7 @@ const CategoriesPage = () => {
                                                 }
                                                 className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                                             >
-                                                <PencilSimple className="size-3.5" />
+                                                <PencilSimpleIcon className="size-3.5" />
                                             </Button>
                                             <Button
                                                 variant="ghost"
@@ -237,7 +242,7 @@ const CategoriesPage = () => {
                                                         : "text-[var(--admin-text-muted)]/30"
                                                 }
                                             >
-                                                <Trash className="size-3.5" />
+                                                <TrashIcon className="size-3.5" />
                                             </Button>
                                         </>
                                     )}

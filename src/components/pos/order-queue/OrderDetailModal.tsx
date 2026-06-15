@@ -1,10 +1,10 @@
 import { useState } from "react";
 import {
-    CheckCircle,
-    XCircle,
-    ForkKnife,
-    ShoppingBag,
-    Clock,
+    CheckCircleIcon,
+    XCircleIcon,
+    ForkKnifeIcon,
+    ShoppingBagIcon,
+    ClockIcon,
 } from "@phosphor-icons/react";
 import type { Order, OrderItem } from "@/types/order";
 import { cn } from "@/lib/utils";
@@ -50,7 +50,8 @@ export const OrderDetailModal = ({
     const urgent = isUrgent(order.createdAt);
     const timeSince = getTimeSince(order.createdAt);
 
-    const TypeIcon = order.diningOption === "dine_in" ? ForkKnife : ShoppingBag;
+    const TypeIcon =
+        order.diningOption === "dine_in" ? ForkKnifeIcon : ShoppingBagIcon;
 
     return (
         <Dialog open onOpenChange={(open) => !open && onCancel()}>
@@ -82,7 +83,7 @@ export const OrderDetailModal = ({
                                     orientation="vertical"
                                     className="mx-1 h-3"
                                 />
-                                <Clock
+                                <ClockIcon
                                     className={cn(
                                         "size-3",
                                         urgent
@@ -184,14 +185,14 @@ export const OrderDetailModal = ({
                             onClick={() => setShowVoidConfirm(true)}
                             className="h-auto flex-1 py-2.5"
                         >
-                            <XCircle />
+                            <XCircleIcon />
                             Void
                         </Button>
                         <Button
                             onClick={onComplete}
                             className="h-auto flex-1 rounded-xl bg-chart-4 py-2.5 font-bold hover:brightness-110"
                         >
-                            <CheckCircle />
+                            <CheckCircleIcon />
                             Complete
                         </Button>
                     </DialogFooter>

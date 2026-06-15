@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ForkKnife, Trash } from "@phosphor-icons/react";
+import { ForkKnifeIcon, TrashIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import type { MenuItemListResponse } from "@/types/menu";
 
@@ -32,7 +32,7 @@ const MenuItemCard = ({
                     />
                 ) : (
                     <div className="flex size-full items-center justify-center">
-                        <ForkKnife className="size-8 text-[var(--admin-text-muted)]" />
+                        <ForkKnifeIcon className="size-8 text-[var(--admin-text-muted)]" />
                     </div>
                 )}
                 {/* Category badge */}
@@ -73,7 +73,7 @@ const MenuItemCard = ({
                         disabled={isDeleting}
                         className="border-[var(--admin-border)] text-red-500 hover:border-red-300 hover:bg-red-50 hover:text-red-600"
                     >
-                        <Trash className="size-3" />
+                        <TrashIcon className="size-3" />
                     </Button>
                 </div>
             </div>

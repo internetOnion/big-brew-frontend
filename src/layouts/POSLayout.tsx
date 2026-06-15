@@ -1,11 +1,10 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { Shield } from "@phosphor-icons/react";
 import OrderQueue from "@/components/pos/order-queue";
 import CustomizeModal from "@/components/pos/customize";
 import { usePOS } from "@/hooks/usePos";
 import { useAuth } from "@/hooks/useAuth";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { MonitorIcon } from "@phosphor-icons/react";
 
 const POSLayout = () => {
     const { customizeItem, customizeInitial, closeCustomize, addItem } =
@@ -43,28 +42,26 @@ const POSLayout = () => {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <div className="text-right">
-                        <span className="block font-mono text-[11px] tabular-nums text-[var(--pos-text)]">
+                    <div className="flex flex-col items-end">
+                        <span className="font-mono text-[11px] tabular-nums whitespace-nowrap text-[var(--pos-text)]">
                             {timeStr}
                         </span>
-                        <span className="block font-sans text-[10px] text-[var(--pos-text-muted)]">
+                        <span className="font-sans text-[10px] whitespace-nowrap text-[var(--pos-text-muted)]">
                             {dateStr}
                         </span>
                     </div>
                     <Separator
                         orientation="vertical"
-                        className="h-5 bg-[var(--pos-border)]"
+                        className="h-6 bg-[var(--pos-border)]"
                     />
                     {user?.role !== "barista" && (
-                        <Button
-                            variant="outline"
-                            size="sm"
+                        <button
                             onClick={() => navigate("/admin")}
-                            className="h-8 gap-1.5 text-xs"
+                            className="flex w-full items-center gap-2.5 rounded-lg bg-[var(--pos-accent)] px-2.5 py-1.5 text-[13px] text-white transition-opacity duration-150 hover:opacity-85 cursor-pointer"
                         >
-                            <Shield className="size-3.5 text-[var(--pos-text-muted)]" />
+                            <MonitorIcon className="size-[15px] shrink-0" />
                             Admin
-                        </Button>
+                        </button>
                     )}
                 </div>
             </div>

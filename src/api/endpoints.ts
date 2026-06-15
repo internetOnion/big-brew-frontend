@@ -3,7 +3,7 @@ export const ENDPOINTS = {
         LOGIN: "/auth/login",
         LOGOUT: "/auth/logout",
         REFRESH: "/auth/refresh",
-        PIN: "/auth/pin",
+        VERIFY_PIN: "/auth/verify-pin",
         ME: "/auth/me",
         SIGNUP: "/auth/signup",
     },

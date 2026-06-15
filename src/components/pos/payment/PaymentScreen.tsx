@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
-import { ArrowLeft } from "@phosphor-icons/react";
+import { ArrowLeftIcon } from "@phosphor-icons/react";
 import { ROUTES } from "@/lib/constants";
 import { usePOS } from "@/hooks/usePos";
 import { useSettings } from "@/hooks/useSettings";
@@ -122,7 +122,7 @@ const PaymentScreen = () => {
                     onClick={() => navigate(ROUTES.POS)}
                     className="gap-2 text-[var(--pos-text-muted)]"
                 >
-                    <ArrowLeft size={16} /> Back to Menu
+                    <ArrowLeftIcon size={16} /> Back to Menu
                 </Button>
                 <div className="flex-1" />
                 <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-[var(--pos-text-muted)]">

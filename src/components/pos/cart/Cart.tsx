@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { ShoppingBag } from "@phosphor-icons/react";
+import { ShoppingBagIcon } from "@phosphor-icons/react";
 import { usePOS } from "@/hooks/usePos";
 import { ROUTES } from "@/lib/constants";
 import { OrderTypeToggle } from "./OrderTypeToggle";
@@ -31,7 +31,7 @@ export const Cart = () => {
         <div className="flex h-full w-[270px] shrink-0 flex-col overflow-hidden border-l border-[var(--pos-border)] bg-[var(--pos-card)]">
             <div className="flex items-center justify-between border-b border-[var(--pos-border)] px-4 py-2.5">
                 <div className="flex items-center gap-2">
-                    <ShoppingBag className="size-4 text-[var(--pos-primary)]" />
+                    <ShoppingBagIcon className="size-4 text-[var(--pos-primary)]" />
                     <span className="font-sans text-[13px] font-medium text-[var(--pos-text)]">
                         Order
                     </span>

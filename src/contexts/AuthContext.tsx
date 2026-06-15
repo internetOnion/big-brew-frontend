@@ -66,7 +66,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return () => setOnTokenRefreshed(null);
     }, [fetchUser]);
 
-    const login = async (email: string, password: string) => {
+    const login = async (
+        email: string,
+        password: string,
+    ): Promise<UserProfile> => {
         setIsLoading(true);
         setError(null);
 
@@ -77,6 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             });
             setAccessToken(data.data?.access_token);
             await fetchUser();
+            return mapUser(data.data?.user as Record<string, unknown>);
         } catch {
             setError("Invalid email or password");
             throw new Error("Login failed");
@@ -99,21 +103,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const verifyPin = async (pin: string) => {
-        setIsLoading(true);
-        setError(null);
-        try {
-            const { data } = await api.post(ENDPOINTS.AUTH.PIN, { pin });
-            setAccessToken(data.data?.access_token);
-            await fetchUser();
-        } catch {
-            setError("Invalid PIN.");
-            throw new Error("PIN verification failed");
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     return (
         <AuthContext.Provider
             value={{
@@ -124,7 +113,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 error,
                 login,
                 logout,
-                verifyPin,
             }}
         >
             {children}

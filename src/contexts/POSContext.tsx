@@ -53,6 +53,7 @@ interface POSContextValue {
     submitOrder: (
         paymentMethod: PaymentMethod,
         amountReceived?: number,
+        confirmedBy?: string,
     ) => Promise<Order>;
 }
 
@@ -236,6 +237,7 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
         async (
             paymentMethod: "cash" | "qr",
             amountReceived?: number,
+            confirmedBy?: string,
         ): Promise<Order> => {
             const payload = buildOrderPayload(
                 cartItems,
@@ -243,6 +245,7 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
                 discountId,
                 paymentMethod,
                 amountReceived,
+                confirmedBy,
             );
 
             return submitOrderMutation.mutateAsync(payload);

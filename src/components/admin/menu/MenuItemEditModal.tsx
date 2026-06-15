@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import {
-    Plus,
-    Trash,
-    CaretDown,
-    CaretRight,
-    PencilSimple,
-    X,
-    Check,
+    PlusIcon,
+    TrashIcon,
+    CaretDownIcon,
+    CaretRightIcon,
+    PencilSimpleIcon,
+    XIcon,
+    CheckIcon,
 } from "@phosphor-icons/react";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
@@ -504,7 +504,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                         onClick={onClose}
                         className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                     >
-                        <X className="size-4" />
+                        <XIcon className="size-4" />
                     </Button>
                 </div>
 
@@ -649,7 +649,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                         }
                                                         className="text-red-500 hover:text-red-700"
                                                     >
-                                                        <Trash className="size-3.5" />
+                                                        <TrashIcon className="size-3.5" />
                                                     </Button>
                                                 </div>
                                             </div>
@@ -705,7 +705,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                         onClick={handleAddRecipe}
                                         className="h-8 border-[var(--admin-border)] text-[var(--admin-text-secondary)]"
                                     >
-                                        <Plus className="size-3.5" />
+                                        <PlusIcon className="size-3.5" />
                                     </Button>
                                 </div>
                             </TabsContent>
@@ -780,7 +780,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     }
                                                     className="text-green-600 hover:text-green-700"
                                                 >
-                                                    <Check className="size-3.5" />
+                                                    <CheckIcon className="size-3.5" />
                                                 </Button>
                                                 <Button
                                                     variant="ghost"
@@ -790,7 +790,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     }
                                                     className="text-[var(--admin-text-muted)]"
                                                 >
-                                                    <X className="size-3.5" />
+                                                    <XIcon className="size-3.5" />
                                                 </Button>
                                             </div>
                                         ) : (
@@ -804,9 +804,9 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     {expandedGroups.has(
                                                         group.id,
                                                     ) ? (
-                                                        <CaretDown className="size-3.5 text-[var(--admin-text-muted)]" />
+                                                        <CaretDownIcon className="size-3.5 text-[var(--admin-text-muted)]" />
                                                     ) : (
-                                                        <CaretRight className="size-3.5 text-[var(--admin-text-muted)]" />
+                                                        <CaretRightIcon className="size-3.5 text-[var(--admin-text-muted)]" />
                                                     )}
                                                     <span className="text-[12px] font-medium text-[var(--admin-text)]">
                                                         {group.name}
@@ -826,7 +826,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     }
                                                     className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                                                 >
-                                                    <PencilSimple className="size-3" />
+                                                    <PencilSimpleIcon className="size-3" />
                                                 </Button>
                                                 <Button
                                                     variant="ghost"
@@ -838,7 +838,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     }
                                                     className="text-red-500 hover:text-red-700"
                                                 >
-                                                    <Trash className="size-3" />
+                                                    <TrashIcon className="size-3" />
                                                 </Button>
                                             </div>
                                         )}
@@ -894,7 +894,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                     }
                                                                     className="text-green-600 hover:text-green-700"
                                                                 >
-                                                                    <Check className="size-3.5" />
+                                                                    <CheckIcon className="size-3.5" />
                                                                 </Button>
                                                                 <Button
                                                                     variant="ghost"
@@ -906,7 +906,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                     }
                                                                     className="text-[var(--admin-text-muted)]"
                                                                 >
-                                                                    <X className="size-3.5" />
+                                                                    <XIcon className="size-3.5" />
                                                                 </Button>
                                                             </div>
                                                         ) : (
@@ -922,9 +922,9 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                     {expandedOptions.has(
                                                                         option.id,
                                                                     ) ? (
-                                                                        <CaretDown className="size-3 text-[var(--admin-text-muted)]" />
+                                                                        <CaretDownIcon className="size-3 text-[var(--admin-text-muted)]" />
                                                                     ) : (
-                                                                        <CaretRight className="size-3 text-[var(--admin-text-muted)]" />
+                                                                        <CaretRightIcon className="size-3 text-[var(--admin-text-muted)]" />
                                                                     )}
                                                                     <span className="text-[12px] text-[var(--admin-text)]">
                                                                         {
@@ -950,7 +950,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                     }
                                                                     className="mr-1 text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                                                                 >
-                                                                    <PencilSimple className="size-3" />
+                                                                    <PencilSimpleIcon className="size-3" />
                                                                 </Button>
                                                                 <Button
                                                                     variant="ghost"
@@ -963,7 +963,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                     }
                                                                     className="mr-2 text-red-500 hover:text-red-700"
                                                                 >
-                                                                    <Trash className="size-3" />
+                                                                    <TrashIcon className="size-3" />
                                                                 </Button>
                                                             </div>
                                                         )}
@@ -1042,7 +1042,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                             }
                                                                                             className="text-green-600 hover:text-green-700"
                                                                                         >
-                                                                                            <Check className="size-3" />
+                                                                                            <CheckIcon className="size-3" />
                                                                                         </Button>
                                                                                         <Button
                                                                                             variant="ghost"
@@ -1054,7 +1054,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                             }
                                                                                             className="text-[var(--admin-text-muted)]"
                                                                                         >
-                                                                                            <X className="size-3" />
+                                                                                            <XIcon className="size-3" />
                                                                                         </Button>
                                                                                     </div>
                                                                                 </div>
@@ -1093,7 +1093,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                             }
                                                                                             className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                                                                                         >
-                                                                                            <PencilSimple className="size-2.5" />
+                                                                                            <PencilSimpleIcon className="size-2.5" />
                                                                                         </Button>
                                                                                         <Button
                                                                                             variant="ghost"
@@ -1109,7 +1109,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                             }
                                                                                             className="text-red-500 hover:text-red-700"
                                                                                         >
-                                                                                            <Trash className="size-2.5" />
+                                                                                            <TrashIcon className="size-2.5" />
                                                                                         </Button>
                                                                                     </div>
                                                                                 </div>
@@ -1191,7 +1191,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                             }
                                                                             className="text-green-600 hover:text-green-700"
                                                                         >
-                                                                            <Check className="size-3" />
+                                                                            <CheckIcon className="size-3" />
                                                                         </Button>
                                                                         <Button
                                                                             variant="ghost"
@@ -1209,7 +1209,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                             }}
                                                                             className="text-[var(--admin-text-muted)]"
                                                                         >
-                                                                            <X className="size-3" />
+                                                                            <XIcon className="size-3" />
                                                                         </Button>
                                                                     </div>
                                                                 ) : (
@@ -1223,7 +1223,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                         }
                                                                         className="mt-1 h-6 gap-1 text-[10px] text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                                                                     >
-                                                                        <Plus className="size-2.5" />
+                                                                        <PlusIcon className="size-2.5" />
                                                                         Add
                                                                         ingredient
                                                                     </Button>
@@ -1274,7 +1274,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                             }
                                                             className="text-green-600 hover:text-green-700"
                                                         >
-                                                            <Check className="size-3.5" />
+                                                            <CheckIcon className="size-3.5" />
                                                         </Button>
                                                         <Button
                                                             variant="ghost"
@@ -1292,7 +1292,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                             }}
                                                             className="text-[var(--admin-text-muted)]"
                                                         >
-                                                            <X className="size-3.5" />
+                                                            <XIcon className="size-3.5" />
                                                         </Button>
                                                     </div>
                                                 ) : (
@@ -1304,7 +1304,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                         }
                                                         className="flex w-full items-center gap-1.5 px-5 py-2 text-left text-[11px] text-[var(--admin-text-muted)] hover:bg-[var(--admin-hover)]/30 hover:text-[var(--admin-text-secondary)]"
                                                     >
-                                                        <Plus className="size-3" />
+                                                        <PlusIcon className="size-3" />
                                                         Add option
                                                     </button>
                                                 )}
@@ -1391,7 +1391,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                         onClick={() => setShowAddGroup(true)}
                                         className="w-full border-dashed border-[var(--admin-border)] text-[11px] text-[var(--admin-text-secondary)]"
                                     >
-                                        <Plus className="size-3.5" />
+                                        <PlusIcon className="size-3.5" />
                                         Add Modifier Group
                                     </Button>
                                 )}

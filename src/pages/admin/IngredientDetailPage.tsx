@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { ArrowLeft, Trash } from "@phosphor-icons/react";
+import { ArrowLeftIcon, TrashIcon } from "@phosphor-icons/react";
 import { format } from "date-fns";
 import { useIngredients, useAdjustStock } from "@/hooks/useInventory";
 import { useUpdateIngredient } from "@/hooks/useUpdateIngredient";
@@ -154,7 +154,7 @@ const IngredientDetailPage = () => {
                     onClick={() => navigate("/admin/inventory")}
                     className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
                 >
-                    <ArrowLeft className="size-4" />
+                    <ArrowLeftIcon className="size-4" />
                 </Button>
                 <h1 className="text-[13px] font-medium text-[var(--admin-primary)]">
                     {ingredient.name}
@@ -170,7 +170,7 @@ const IngredientDetailPage = () => {
                             onClick={() => setShowDelete(true)}
                             className="border-red-200 text-[11px] text-red-500 hover:border-red-300 hover:bg-red-50 hover:text-red-600"
                         >
-                            <Trash className="size-3" />
+                            <TrashIcon className="size-3" />
                             Delete
                         </Button>
                     ) : (

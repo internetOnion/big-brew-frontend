@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MagnifyingGlass, Plus, ForkKnife } from "@phosphor-icons/react";
+import {
+    MagnifyingGlassIcon,
+    PlusIcon,
+    ForkKnifeIcon,
+} from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/api/api";
@@ -101,7 +105,7 @@ const MenuPage = () => {
                         onClick={() => navigate("/admin/menu/new")}
                         className="h-7 gap-1.5 bg-[var(--admin-primary)] text-[11px] text-white hover:bg-[#3a1d0e]"
                     >
-                        <Plus className="size-3" />
+                        <PlusIcon className="size-3" />
                         Add Item
                     </Button>
                 </div>
@@ -110,7 +114,7 @@ const MenuPage = () => {
             {/* Filters */}
             <div className="flex flex-wrap items-center gap-2">
                 <div className="relative">
-                    <MagnifyingGlass className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-[var(--admin-text-muted)]" />
+                    <MagnifyingGlassIcon className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-[var(--admin-text-muted)]" />
                     <Input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -176,7 +180,7 @@ const MenuPage = () => {
                 </div>
             ) : !filteredItems || filteredItems.length === 0 ? (
                 <div className="flex h-40 flex-col items-center justify-center gap-1.5">
-                    <ForkKnife className="size-5 text-[var(--admin-text-muted)]" />
+                    <ForkKnifeIcon className="size-5 text-[var(--admin-text-muted)]" />
                     <p className="text-xs text-[var(--admin-text-muted)]">
                         No menu items found
                     </p>
