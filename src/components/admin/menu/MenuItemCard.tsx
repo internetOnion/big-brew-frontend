@@ -36,7 +36,9 @@ const MenuItemCard = ({
                     </div>
                 )}
                 {/* Category badge */}
-                <span className="absolute left-2 top-2 rounded-full bg-[var(--admin-card)]/90 px-2 py-0.5 text-[10px] font-medium text-[var(--admin-text-secondary)] backdrop-blur-sm">
+                <span
+                    className="absolute left-2 top-2 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary backdrop-blur-sm"
+                >
                     {item.category.name}
                 </span>
                 {/* Availability badge */}

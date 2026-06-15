@@ -134,6 +134,7 @@
         0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
     --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
     --tracking-normal: 0em;
+    --font-weight-normal: 400;
 }
 
 .dark {
@@ -255,6 +256,28 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* Steam animation for coffee-placeholder SVGs */
+@keyframes steam {
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: translateY(0) scaleX(1);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-6px) scaleX(1.15);
+    }
+}
+.steam-wisp {
+    animation: steam 2s ease-in-out infinite;
+}
+.steam-wisp:nth-child(2) {
+    animation-delay: 0.6s;
+}
+.steam-wisp:nth-child(3) {
+    animation-delay: 1.2s;
+}
+
 :root {
     --admin-bg: #faf8f5;
     --admin-card: #ffffff;
@@ -310,4 +333,27 @@
         "DM Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
         "Liberation Mono", "Courier New", monospace;
     font-variant-numeric: tabular-nums;
+}
+
+/* POS theme — matches admin dashboard aesthetic */
+.pos-theme {
+    --pos-bg: #faf8f5;
+    --pos-card: #ffffff;
+    --pos-border: #e8e2da;
+    --pos-text: #1a0f0a;
+    --pos-text-secondary: #6b5b4e;
+    --pos-text-muted: #a89888;
+    --pos-hover: #f4efe8;
+    --pos-accent: #c07830;
+    --pos-primary: #4a2512;
+}
+
+.pos-theme .pos-card {
+    background: var(--pos-card);
+    border: 1px solid var(--pos-border);
+    border-radius: 0.5rem;
+}
+
+.pos-theme .pos-card-hover:hover {
+    background: var(--pos-hover);
 }

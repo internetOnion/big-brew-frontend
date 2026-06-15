@@ -7,7 +7,6 @@ import { usePOS } from "@/hooks/usePos";
 import { useSettings } from "@/hooks/useSettings";
 import type { Order, PaymentMethod, Currency } from "@/types/order";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
     Dialog,
     DialogContent,
@@ -115,24 +114,24 @@ const PaymentScreen = () => {
     }
 
     return (
-        <div className="flex flex-1 flex-col bg-background">
-            <div className="flex items-center gap-4 border-b border-border px-8 pb-4 pt-6">
+        <div className="flex flex-1 flex-col bg-[var(--pos-bg)]">
+            <div className="flex items-center gap-4 border-b border-[var(--pos-border)] bg-[var(--pos-card)] px-8 pb-4 pt-6">
                 <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => navigate(ROUTES.POS)}
-                    className="gap-2 text-muted-foreground"
+                    className="gap-2 text-[var(--pos-text-muted)]"
                 >
                     <ArrowLeft size={16} /> Back to Menu
                 </Button>
                 <div className="flex-1" />
-                <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground">
+                <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-[var(--pos-text-muted)]">
                     Payment
                 </p>
-                <Badge variant="secondary" className="font-mono">
+                <span className="rounded-md border border-[var(--pos-border)] bg-[var(--pos-hover)] px-1.5 py-0.5 font-sans text-[10px] font-medium text-[var(--pos-text-muted)]">
                     {itemCount} item{itemCount !== 1 ? "s" : ""} · $
                     {subtotal.toFixed(2)}
-                </Badge>
+                </span>
             </div>
 
             <div className="flex flex-1 items-stretch">

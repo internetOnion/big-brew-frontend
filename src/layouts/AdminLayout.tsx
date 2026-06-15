@@ -12,6 +12,7 @@ import {
     Menu,
     LogOut,
 } from "lucide-react";
+import { motion } from "motion/react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -47,10 +48,10 @@ const AdminLayout = () => {
             {/* Brand */}
             <div className="flex h-11 shrink-0 items-center gap-2.5 px-3.5">
                 <img src="/homebrew.svg" alt="Homebrew" className="size-6" />
-                <span className="font-sans text-[13px] font-bold text-var(--admin-primary)">
-                    BigBrew
+                <span className="font-sans text-[13px] font-bold tracking-tight text-[var(--admin-primary)]">
+                    Big Brew
                 </span>
-                <span className="ml-auto rounded-full bg-var(--admin-hover) px-1.5 py-0.5 font-mono text-[10px] text-(--admin-text-muted)">
+                <span className="ml-auto rounded border border-[var(--admin-sidebar-border)] bg-[var(--admin-hover)] px-1.5 py-0.5 font-sans text-[10px] font-medium text-[var(--admin-text-muted)]">
                     admin
                 </span>
             </div>
@@ -58,7 +59,7 @@ const AdminLayout = () => {
             <Separator className="bg-[var(--admin-sidebar-border)]" />
 
             {/* Navigation */}
-            <nav className="flex-1 space-y-0.5 px-2 py-2.5">
+            <nav className="flex-1 space-y-0.5 px-2.5 py-3">
                 {navItems.map((item) => (
                     <NavLink
                         key={item.to}
@@ -66,13 +67,34 @@ const AdminLayout = () => {
                         end={item.end}
                         onClick={() => setSidebarOpen(false)}
                         className={({ isActive }) =>
-                            `admin-nav-item flex items-center gap-2.5 rounded-md px-2.5 py-[7px] text-[13px] ${
-                                isActive ? "data-[active=true]" : ""
+                            `admin-nav-item relative flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] ${
+                                isActive ? "data-[active=true] font-medium" : ""
                             }`
                         }
                     >
-                        <item.icon className="size-[15px] shrink-0" />
-                        {item.label}
+                        {({ isActive }) => (
+                            <>
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="active-nav"
+                                        className="absolute inset-y-1 -left-px w-0.5 rounded-full bg-[var(--admin-primary)]"
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 380,
+                                            damping: 30,
+                                        }}
+                                    />
+                                )}
+                                <item.icon
+                                    className={`size-[15px] shrink-0 ${
+                                        isActive
+                                            ? "text-[var(--admin-primary)]"
+                                            : ""
+                                    }`}
+                                />
+                                {item.label}
+                            </>
+                        )}
                     </NavLink>
                 ))}
             </nav>
@@ -80,18 +102,18 @@ const AdminLayout = () => {
             <Separator className="bg-[var(--admin-sidebar-border)]" />
 
             {/* Bottom actions */}
-            <div className="space-y-0.5 px-2 py-2.5">
+            <div className="space-y-0.5 px-2.5 py-3">
                 <NavLink
                     to="/"
                     onClick={() => setSidebarOpen(false)}
-                    className="admin-nav-item flex items-center gap-2.5 rounded-md px-2.5 py-[7px] text-[13px]"
+                    className="admin-nav-item flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px]"
                 >
                     <ArrowLeft className="size-[15px] shrink-0" />
                     Back to POS
                 </NavLink>
                 <button
                     onClick={handleLogout}
-                    className="admin-nav-item flex w-full items-center gap-2.5 rounded-md px-2.5 py-[7px] text-[13px]"
+                    className="admin-nav-item flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px]"
                 >
                     <LogOut className="size-[15px] shrink-0" />
                     Logout
@@ -100,13 +122,20 @@ const AdminLayout = () => {
 
             {/* User info */}
             {user && (
-                <div className="border-t border-[var(--admin-sidebar-border)] px-3.5 py-2">
-                    <p className="truncate text-[12px] font-medium text-[var(--admin-text)]">
-                        {user.name}
-                    </p>
-                    <p className="font-mono text-[10px] capitalize text-[var(--admin-text-muted)]">
-                        {user.role}
-                    </p>
+                <div className="border-t border-[var(--admin-sidebar-border)] px-3.5 py-2.5">
+                    <div className="flex items-center gap-2.5">
+                        <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[var(--admin-primary)] font-sans text-[11px] font-semibold text-white">
+                            {user.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="min-w-0">
+                            <p className="truncate text-[12px] font-medium text-[var(--admin-text)]">
+                                {user.name}
+                            </p>
+                            <p className="font-sans text-[10px] capitalize text-[var(--admin-text-muted)]">
+                                {user.role}
+                            </p>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

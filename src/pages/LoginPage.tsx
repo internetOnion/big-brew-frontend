@@ -4,6 +4,7 @@ import { ROUTES } from "@/lib/constants";
 import { useAuth } from "@/hooks/useAuth";
 import { LoginBrandingPanel } from "@/components/common/LoginBrandingPanel";
 import { LoginForm } from "@/components/common/LoginForm";
+import { motion } from "motion/react";
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -35,13 +36,20 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="flex min-h-screen bg-background">
+        <div className="flex flex-col min-h-screen bg-background lg:flex-row">
             <LoginBrandingPanel />
-            <LoginForm
-                onSubmit={handleLogin}
-                isLoading={isLoading}
-                error={error}
-            />
+            <motion.div
+                className="flex flex-1 items-center justify-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.15 }}
+            >
+                <LoginForm
+                    onSubmit={handleLogin}
+                    isLoading={isLoading}
+                    error={error}
+                />
+            </motion.div>
         </div>
     );
 };

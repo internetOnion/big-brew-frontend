@@ -69,6 +69,7 @@ export const ENDPOINTS = {
     },
     CATEGORIES: {
         BASE: "/categories",
+        BY_ID: (id: string) => `/categories/${id}`,
     },
     MODIFIER_GROUPS: {
         BASE: "/modifier-groups",

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, Plus } from "lucide-react";
+import { Search, Plus, UtensilsCrossed } from "lucide-react";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/api/api";
@@ -87,14 +87,24 @@ const MenuPage = () => {
                 <h1 className="text-[13px] font-medium text-[var(--admin-primary)]">
                     Menu Management
                 </h1>
-                <Button
-                    size="sm"
-                    onClick={() => navigate("/admin/menu/new")}
-                    className="h-7 gap-1.5 bg-[var(--admin-primary)] text-[11px] text-white hover:bg-[#3a1d0e]"
-                >
-                    <Plus className="size-3" />
-                    Add Item
-                </Button>
+                <div className="flex items-center gap-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => navigate("/admin/menu/categories")}
+                        className="h-7 border-[var(--admin-border)] text-[11px] text-[var(--admin-text-secondary)] hover:text-[var(--admin-text)]"
+                    >
+                        Manage Categories
+                    </Button>
+                    <Button
+                        size="sm"
+                        onClick={() => navigate("/admin/menu/new")}
+                        className="h-7 gap-1.5 bg-[var(--admin-primary)] text-[11px] text-white hover:bg-[#3a1d0e]"
+                    >
+                        <Plus className="size-3" />
+                        Add Item
+                    </Button>
+                </div>
             </div>
 
             {/* Filters */}
@@ -165,8 +175,14 @@ const MenuPage = () => {
                     ))}
                 </div>
             ) : !filteredItems || filteredItems.length === 0 ? (
-                <div className="flex h-40 items-center justify-center text-xs text-[var(--admin-text-muted)]">
-                    No menu items found.
+                <div className="flex h-40 flex-col items-center justify-center gap-1.5">
+                    <UtensilsCrossed className="size-5 text-[var(--admin-text-muted)]" />
+                    <p className="text-xs text-[var(--admin-text-muted)]">
+                        No menu items found
+                    </p>
+                    <p className="text-[10px] text-[var(--admin-text-muted)]/70">
+                        Try adjusting your filters or add a new item
+                    </p>
                 </div>
             ) : (
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

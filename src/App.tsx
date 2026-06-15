@@ -12,6 +12,12 @@ const AdminLayout = lazy(() => import("./layouts/AdminLayout"));
 const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 const MenuPage = lazy(() => import("./pages/admin/MenuPage"));
 const InventoryPage = lazy(() => import("./pages/admin/InventoryPage"));
+const IngredientDetailPage = lazy(
+    () => import("./pages/admin/IngredientDetailPage"),
+);
+const IngredientCreatePage = lazy(
+    () => import("./pages/admin/IngredientCreatePage"),
+);
 const EmployeesPage = lazy(() => import("./pages/admin/EmployeesPage"));
 const OrdersPage = lazy(() => import("./pages/admin/OrdersPage"));
 const ExpensesPage = lazy(() => import("./pages/admin/ExpensesPage"));
@@ -20,6 +26,7 @@ const MenuItemEditPage = lazy(() => import("./pages/admin/MenuItemEditPage"));
 const MenuItemCreatePage = lazy(
     () => import("./pages/admin/MenuItemCreatePage"),
 );
+const CategoriesPage = lazy(() => import("./pages/admin/CategoriesPage"));
 
 const App = () => {
     return (
@@ -40,12 +47,24 @@ const App = () => {
                                 element={<MenuItemCreatePage />}
                             />
                             <Route
+                                path="menu/categories"
+                                element={<CategoriesPage />}
+                            />
+                            <Route
                                 path="menu/:id"
                                 element={<MenuItemEditPage />}
                             />
                             <Route
                                 path="inventory"
                                 element={<InventoryPage />}
+                            />
+                            <Route
+                                path="inventory/new"
+                                element={<IngredientCreatePage />}
+                            />
+                            <Route
+                                path="inventory/:id"
+                                element={<IngredientDetailPage />}
                             />
                             <Route
                                 path="employees"

@@ -34,19 +34,19 @@ export const OrderQueueCard = ({
         <div
             onClick={onClick}
             className={cn(
-                "mb-2 flex w-full cursor-pointer flex-col rounded-xl border p-2.5 text-left transition-transform hover:scale-[1.01] active:scale-[0.99]",
+                "mb-2 flex w-full cursor-pointer flex-col rounded-lg border p-2.5 text-left transition-colors",
                 urgent
-                    ? "border-destructive/30 bg-destructive/8"
-                    : "border-border bg-card",
+                    ? "border-destructive/30 bg-destructive/8 hover:bg-destructive/12"
+                    : "border-[var(--pos-border)] bg-[var(--pos-card)] hover:bg-[var(--pos-hover)]",
             )}
         >
             <div className="mb-1.5 flex items-center justify-between">
-                <span className="font-mono text-xs font-bold tabular-nums text-primary">
+                <span className="font-mono text-[12px] font-bold tabular-nums text-[var(--pos-primary)]">
                     #{order.orderNumber}
                 </span>
                 <div className="flex items-center gap-1.5">
-                    <TypeIcon className="size-3 text-muted-foreground" />
-                    <span className="text-[10px] capitalize text-muted-foreground">
+                    <TypeIcon className="size-3 text-[var(--pos-text-muted)]" />
+                    <span className="text-[10px] capitalize text-[var(--pos-text-muted)]">
                         {order.diningOption === "dine_in"
                             ? "dine-in"
                             : "takeout"}
@@ -56,8 +56,8 @@ export const OrderQueueCard = ({
             <div className="mb-2 flex flex-col gap-0.5">
                 {order.items.map((item: OrderItem) => (
                     <div key={item.id} className="flex items-center gap-1">
-                        <Coffee className="size-3 shrink-0 text-muted-foreground" />
-                        <span className="truncate text-[11px] font-medium text-foreground">
+                        <Coffee className="size-3 shrink-0 text-[var(--pos-text-muted)]" />
+                        <span className="truncate text-[11px] font-medium text-[var(--pos-text)]">
                             {item.quantity > 1 && `${item.quantity}× `}
                             {item.name}
                         </span>
@@ -71,7 +71,7 @@ export const OrderQueueCard = ({
                             "size-3",
                             urgent
                                 ? "text-destructive"
-                                : "text-muted-foreground",
+                                : "text-[var(--pos-text-muted)]",
                         )}
                     />
                     <span
@@ -79,7 +79,7 @@ export const OrderQueueCard = ({
                             "font-mono text-[10px] font-medium tabular-nums",
                             urgent
                                 ? "text-destructive"
-                                : "text-muted-foreground",
+                                : "text-[var(--pos-text-muted)]",
                         )}
                     >
                         {timeSince}
