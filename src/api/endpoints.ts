@@ -17,6 +17,19 @@ export const ENDPOINTS = {
         MODIFIER_GROUPS: (id: string) => `/menu-items/${id}/modifier-groups`,
         MODIFIER_GROUP: (menuItemId: string, groupId: string) =>
             `/menu-items/${menuItemId}/modifier-groups/${groupId}`,
+        OPTION_INGREDIENTS: (
+            menuItemId: string,
+            groupId: string,
+            optionId: string,
+        ) =>
+            `/menu-items/${menuItemId}/modifier-groups/${groupId}/options/${optionId}/ingredients`,
+        OPTION_INGREDIENT: (
+            menuItemId: string,
+            groupId: string,
+            optionId: string,
+            ingredientId: string,
+        ) =>
+            `/menu-items/${menuItemId}/modifier-groups/${groupId}/options/${optionId}/ingredients/${ingredientId}`,
     },
     ORDERS: {
         BASE: "/orders",
@@ -47,6 +60,7 @@ export const ENDPOINTS = {
     },
     INGREDIENTS: {
         BASE: "/ingredients",
+        BY_ID: (id: string) => `/ingredients/${id}`,
         ADJUST: (id: string) => `/ingredients/${id}/adjust`,
     },
     DISCOUNTS: {

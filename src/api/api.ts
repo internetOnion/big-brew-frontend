@@ -18,6 +18,7 @@ const api = axios.create({
         "Content-Type": "application/json",
     },
     withCredentials: true,
+    timeout: 15000,
 });
 
 api.interceptors.request.use((config) => {
@@ -48,7 +49,11 @@ api.interceptors.response.use(
     (response) => response,
     async (error) => {
         if (!error.response) {
-            toast.error("Network error. Check your connection");
+            if (error.code === "ECONNABORTED") {
+                toast.error("Request timed out. Please try again");
+            } else {
+                toast.error("Network error. Check your connection");
+            }
             return Promise.reject(error);
         }
 

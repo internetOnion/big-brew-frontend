@@ -16,6 +16,10 @@ const EmployeesPage = lazy(() => import("./pages/admin/EmployeesPage"));
 const OrdersPage = lazy(() => import("./pages/admin/OrdersPage"));
 const ExpensesPage = lazy(() => import("./pages/admin/ExpensesPage"));
 const AdminSettingsPage = lazy(() => import("./pages/admin/SettingsPage"));
+const MenuItemEditPage = lazy(() => import("./pages/admin/MenuItemEditPage"));
+const MenuItemCreatePage = lazy(
+    () => import("./pages/admin/MenuItemCreatePage"),
+);
 
 const App = () => {
     return (
@@ -31,6 +35,14 @@ const App = () => {
                         <Route path="/admin" element={<AdminLayout />}>
                             <Route index element={<DashboardPage />} />
                             <Route path="menu" element={<MenuPage />} />
+                            <Route
+                                path="menu/new"
+                                element={<MenuItemCreatePage />}
+                            />
+                            <Route
+                                path="menu/:id"
+                                element={<MenuItemEditPage />}
+                            />
                             <Route
                                 path="inventory"
                                 element={<InventoryPage />}

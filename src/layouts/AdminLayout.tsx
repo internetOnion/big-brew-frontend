@@ -46,15 +46,11 @@ const AdminLayout = () => {
         <div className="flex h-full flex-col">
             {/* Brand */}
             <div className="flex h-11 shrink-0 items-center gap-2.5 px-3.5">
-                <img
-                    src="/homebrew.svg"
-                    alt="Homebrew"
-                    className="size-6"
-                />
-                <span className="font-sans text-[13px] font-bold text-[var(--admin-primary)]">
+                <img src="/homebrew.svg" alt="Homebrew" className="size-6" />
+                <span className="font-sans text-[13px] font-bold text-var(--admin-primary)">
                     BigBrew
                 </span>
-                <span className="ml-auto rounded-full bg-[var(--admin-hover)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--admin-text-muted)]">
+                <span className="ml-auto rounded-full bg-var(--admin-hover) px-1.5 py-0.5 font-mono text-[10px] text-(--admin-text-muted)">
                     admin
                 </span>
             </div>
