@@ -83,11 +83,11 @@ export const MenuGrid = () => {
 
             <div className="flex-1 overflow-y-auto px-4 pb-4 pos-scroll">
                 {isLoading ? (
-                    <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-2">
                         {Array.from({ length: 8 }).map((_, i) => (
                             <Card key={i} className="overflow-hidden">
                                 <Skeleton className="aspect-4/3 rounded-none" />
-                                <div className="flex flex-col gap-2 p-3">
+                                    <div className="flex flex-col gap-2 p-3 md:gap-1.5 md:p-2 lg:gap-1 lg:p-1.5">
                                     <Skeleton className="h-4 w-3/4" />
                                     <Skeleton className="h-4 w-1/3" />
                                 </div>
@@ -147,7 +147,7 @@ export const MenuGrid = () => {
                         </p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-2">
                         {filteredItems.map((item) => {
                             const isFetching = fetchingItemId === item.id;
                             return (
@@ -232,11 +232,11 @@ export const MenuGrid = () => {
                                             </div>
                                         )}
                                     </div>
-                                    <div className="flex flex-1 flex-col gap-1 p-3">
-                                        <p className="font-sans text-[13px] font-medium leading-tight text-[var(--pos-text)]">
+                                    <div className="flex flex-1 flex-col gap-1 p-3 md:gap-0.5 md:p-2 lg:gap-0.5 lg:p-1.5">
+                                        <p className="font-sans text-[13px] font-medium leading-tight text-[var(--pos-text)] md:text-[12px] lg:text-[11px]">
                                             {item.name}
                                         </p>
-                                        <p className="font-mono text-[12px] font-bold tabular-nums text-[var(--pos-primary)]">
+                                        <p className="font-mono text-[12px] font-bold tabular-nums text-[var(--pos-primary)] md:text-[11px] lg:text-[10px]">
                                             $
                                             {parseFloat(item.basePrice).toFixed(
                                                 2,

@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { TrashIcon } from "@phosphor-icons/react";
+import { BackspaceIcon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
 const KEYS = [
@@ -36,7 +36,7 @@ export const NumericKeypad = ({
                         "pointer-events-none opacity-25",
                 )}
             >
-                {k === "\u232B" ? <TrashIcon size={16} /> : k}
+                {k === "\u232B" ? <BackspaceIcon size={16} /> : k}
             </motion.button>
         ))}
     </div>
