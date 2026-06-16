@@ -1,4 +1,4 @@
-import { Minus, Plus } from "lucide-react";
+import { MinusIcon, PlusIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 
 interface ToppingOption {
@@ -62,7 +62,7 @@ export const ToppingsPicker = ({
                                 }
                                 disabled={qty === 0}
                             >
-                                <Minus />
+                                <MinusIcon />
                             </Button>
                             <span className="w-4 text-center font-mono text-sm font-semibold tabular-nums text-foreground">
                                 {qty}
@@ -74,7 +74,7 @@ export const ToppingsPicker = ({
                                     onUpdate(t.name, t.price, 1, t.id)
                                 }
                             >
-                                <Plus />
+                                <PlusIcon />
                             </Button>
                         </div>
                     </div>

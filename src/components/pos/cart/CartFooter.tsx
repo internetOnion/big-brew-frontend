@@ -18,35 +18,35 @@ export const CartFooter = ({
     onConfirm,
     onReset,
 }: CartFooterProps) => (
-    <div className="border-t border-border bg-background px-4 py-3">
-        <div className="mb-1 flex justify-between text-xs text-muted-foreground">
+    <div className="border-t border-(--pos-border) bg-(--pos-card) px-4 py-3">
+        <div className="mb-1 flex justify-between text-[11px] text-(--pos-text-muted)">
             <span>Subtotal</span>
             <span className="font-mono tabular-nums">
                 ${subtotal.toFixed(2)}
             </span>
         </div>
-        <div className="mb-2 flex justify-between text-xs text-muted-foreground">
+        <div className="mb-2 flex justify-between text-[11px] text-(--pos-text-muted)">
             <span>Tax (7%)</span>
             <span className="font-mono tabular-nums">${tax.toFixed(2)}</span>
         </div>
         <Separator className="mb-3" />
-        <div className="mb-3 flex justify-between text-base font-bold text-foreground">
+        <div className="mb-3 flex justify-between text-[13px] font-bold text-(--pos-text)">
             <span>Total</span>
-            <span className="font-mono tabular-nums text-primary">
+            <span className="font-mono tabular-nums text-(--pos-primary)">
                 ${total.toFixed(2)}
             </span>
         </div>
         <Button
             onClick={onConfirm}
             disabled={isEmpty}
-            className="h-11 w-full rounded-xl font-bold"
+            className="h-10 w-full rounded-lg bg-(--pos-primary) font-sans text-xs font-bold text-white hover:bg-[#3a1d0e] cursor-pointer"
         >
             Confirm
         </Button>
         <Button
             variant="outline"
             onClick={onReset}
-            className="mt-2 w-full rounded-xl text-xs font-semibold"
+            className="mt-2 h-8 w-full rounded-lg text-[11px] font-medium"
         >
             Reset
         </Button>

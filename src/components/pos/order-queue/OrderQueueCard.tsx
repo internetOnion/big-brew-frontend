@@ -1,11 +1,11 @@
 import {
-    UtensilsCrossed,
-    ShoppingBag,
-    CheckCircle2,
-    XCircle,
-    Clock,
-    Coffee,
-} from "lucide-react";
+    ForkKnifeIcon,
+    ShoppingBagIcon,
+    CheckCircleIcon,
+    XCircleIcon,
+    ClockIcon,
+    CoffeeIcon,
+} from "@phosphor-icons/react";
 import type { Order, OrderItem } from "@/types/order";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -28,25 +28,25 @@ export const OrderQueueCard = ({
     onVoid,
 }: OrderQueueCardProps) => {
     const TypeIcon =
-        order.diningOption === "dine_in" ? UtensilsCrossed : ShoppingBag;
+        order.diningOption === "dine_in" ? ForkKnifeIcon : ShoppingBagIcon;
 
     return (
         <div
             onClick={onClick}
             className={cn(
-                "mb-2 flex w-full cursor-pointer flex-col rounded-xl border p-2.5 text-left transition-transform hover:scale-[1.01] active:scale-[0.99]",
+                "mb-2 flex w-full cursor-pointer flex-col rounded-lg border p-2.5 text-left transition-colors",
                 urgent
-                    ? "border-destructive/30 bg-destructive/8"
-                    : "border-border bg-card",
+                    ? "border-destructive/30 bg-destructive/8 hover:bg-destructive/12"
+                    : "border-(--pos-border) bg-(--pos-card) hover:bg-(--pos-hover)",
             )}
         >
             <div className="mb-1.5 flex items-center justify-between">
-                <span className="font-mono text-xs font-bold tabular-nums text-primary">
+                <span className="font-mono text-[12px] font-bold tabular-nums text-(--pos-primary)">
                     #{order.orderNumber}
                 </span>
                 <div className="flex items-center gap-1.5">
-                    <TypeIcon className="size-3 text-muted-foreground" />
-                    <span className="text-[10px] capitalize text-muted-foreground">
+                    <TypeIcon className="size-3 text-(--pos-text-muted)" />
+                    <span className="text-[10px] capitalize text-(--pos-text-muted)">
                         {order.diningOption === "dine_in"
                             ? "dine-in"
                             : "takeout"}
@@ -56,8 +56,8 @@ export const OrderQueueCard = ({
             <div className="mb-2 flex flex-col gap-0.5">
                 {order.items.map((item: OrderItem) => (
                     <div key={item.id} className="flex items-center gap-1">
-                        <Coffee className="size-3 shrink-0 text-muted-foreground" />
-                        <span className="truncate text-[11px] font-medium text-foreground">
+                        <CoffeeIcon className="size-3 shrink-0 text-(--pos-text-muted)" />
+                        <span className="truncate text-[11px] font-medium text-(--pos-text)">
                             {item.quantity > 1 && `${item.quantity}× `}
                             {item.name}
                         </span>
@@ -66,12 +66,12 @@ export const OrderQueueCard = ({
             </div>
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1">
-                    <Clock
+                    <ClockIcon
                         className={cn(
                             "size-3",
                             urgent
                                 ? "text-destructive"
-                                : "text-muted-foreground",
+                                : "text-(--pos-text-muted)",
                         )}
                     />
                     <span
@@ -79,7 +79,7 @@ export const OrderQueueCard = ({
                             "font-mono text-[10px] font-medium tabular-nums",
                             urgent
                                 ? "text-destructive"
-                                : "text-muted-foreground",
+                                : "text-(--pos-text-muted)",
                         )}
                     >
                         {timeSince}
@@ -92,7 +92,7 @@ export const OrderQueueCard = ({
                         onClick={onComplete}
                         title="Done"
                     >
-                        <CheckCircle2 className="text-chart-4" />
+                        <CheckCircleIcon className="text-chart-4" />
                     </Button>
                     <Button
                         variant="destructive"
@@ -100,7 +100,7 @@ export const OrderQueueCard = ({
                         onClick={onVoid}
                         title="Void"
                     >
-                        <XCircle />
+                        <XCircleIcon />
                     </Button>
                 </div>
             </div>

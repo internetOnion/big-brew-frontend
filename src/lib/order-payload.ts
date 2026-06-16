@@ -11,6 +11,7 @@ export const buildOrderPayload = (
     discountId: string | null,
     paymentMethod: PaymentMethod,
     amountReceived?: number,
+    confirmedBy?: string,
 ): CreateOrderPayload => ({
     dining_option: orderType === "dine-in" ? "dine_in" : "take_away",
     discount_id: discountId || undefined,
@@ -31,6 +32,7 @@ export const buildOrderPayload = (
     }),
     payment_method: paymentMethod,
     amount_received: paymentMethod === "cash" ? amountReceived : undefined,
+    confirmed_by: confirmedBy,
 });
 
 export const buildCartItemModifierGroups = (

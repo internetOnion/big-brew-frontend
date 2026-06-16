@@ -115,13 +115,13 @@ export const toMenuItem = (item: MenuItemResponse): MenuItem => {
     };
 };
 
-/** Find a modifier group by matching its name against common patterns */
+// Find a modifier group by matching its name against common patterns
 export const findModifierGroup = (
     groups: ModifierGroup[] | undefined,
     pattern: RegExp,
 ): ModifierGroup | undefined => groups?.find((g) => pattern.test(g.name));
 
-/** Get the icon name for a category based on its name */
+// Get the icon name for a category based on its name
 export const getCategoryIconName = (categoryName: string): string => {
     const name = categoryName.toLowerCase();
     if (/coffee|espresso|latte|cappuccino|mocha|americano/.test(name))

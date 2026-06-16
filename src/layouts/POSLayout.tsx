@@ -1,17 +1,23 @@
-import { Outlet } from "react-router-dom";
-import { Shield } from "lucide-react";
+import { Outlet, useNavigate } from "react-router-dom";
 import OrderQueue from "@/components/pos/order-queue";
 import CustomizeModal from "@/components/pos/customize";
 import { usePOS } from "@/hooks/usePos";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/hooks/useAuth";
 import { Separator } from "@/components/ui/separator";
+import { MonitorIcon } from "@phosphor-icons/react";
 
 const POSLayout = () => {
     const { customizeItem, customizeInitial, closeCustomize, addItem } =
         usePOS();
+    const { user } = useAuth();
+    const navigate = useNavigate();
 
     const now = new Date();
+    const dateStr = now.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+    });
     const timeStr = now.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
@@ -19,36 +25,44 @@ const POSLayout = () => {
     });
 
     return (
-        <div className="flex h-screen w-screen flex-col overflow-hidden bg-background">
-            <div className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-card px-4">
+        <div className="pos-theme flex h-screen w-screen flex-col overflow-hidden bg-(--pos-bg)">
+            <div className="flex h-14 shrink-0 items-center justify-between border-b border-(--pos-border) bg-(--pos-card) px-5 shadow-sm">
                 <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2">
-                        <img
-                            src="/homebrew.svg"
-                            alt="Homebrew"
-                            className="size-8"
-                        />
-                        <span className="font-sans text-base font-bold text-foreground">
-                            BigBrew
-                        </span>
-                    </div>
-                    <Badge
-                        variant="default"
-                        className="uppercase tracking-wider"
-                    >
+                    <img
+                        src="/homebrew.svg"
+                        alt="Homebrew"
+                        className="size-7"
+                    />
+                    <span className="font-sans text-[13px] font-bold tracking-tight text-(--pos-primary)">
+                        Big Brew
+                    </span>
+                    <span className="rounded-md border border-(--pos-border) bg-(--pos-hover) px-1.5 py-0.5 font-sans text-[10px] font-medium text-(--pos-text-muted)">
                         POS
-                    </Badge>
+                    </span>
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <span className="font-mono text-xs tabular-nums text-foreground">
-                        {timeStr}
-                    </span>
-                    <Separator orientation="vertical" className="h-4" />
-                    <Button variant="outline" size="default">
-                        <Shield className="text-muted-foreground" />
-                        Admin
-                    </Button>
+                    <div className="flex flex-col items-end">
+                        <span className="font-mono text-[11px] tabular-nums whitespace-nowrap text-(--pos-text)">
+                            {timeStr}
+                        </span>
+                        <span className="font-sans text-[10px] whitespace-nowrap text-(--pos-text-muted)">
+                            {dateStr}
+                        </span>
+                    </div>
+                    <Separator
+                        orientation="vertical"
+                        className="h-6 bg-(--pos-border)"
+                    />
+                    {user?.role !== "barista" && (
+                        <button
+                            onClick={() => navigate("/admin")}
+                            className="flex w-full items-center gap-2.5 rounded-lg bg-(--pos-accent) px-2.5 py-1.5 text-[13px] text-white transition-opacity duration-150 hover:opacity-85 cursor-pointer"
+                        >
+                            <MonitorIcon className="size-[15px] shrink-0" />
+                            Admin
+                        </button>
+                    )}
                 </div>
             </div>
 

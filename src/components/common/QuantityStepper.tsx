@@ -1,4 +1,4 @@
-import { Minus, Plus } from "lucide-react";
+import { MinusIcon, PlusIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 
 interface QuantityStepperProps {
@@ -27,7 +27,7 @@ export const QuantityStepper = ({
                 onClick={() => onChange(-1)}
                 disabled={!canDecrease}
             >
-                <Minus />
+                <MinusIcon />
             </Button>
             <span className="w-4 text-center font-mono text-sm font-bold tabular-nums text-foreground">
                 {value}
@@ -38,7 +38,7 @@ export const QuantityStepper = ({
                 onClick={() => onChange(1)}
                 disabled={!canIncrease}
             >
-                <Plus />
+                <PlusIcon />
             </Button>
         </div>
     );

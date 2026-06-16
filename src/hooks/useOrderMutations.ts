@@ -25,11 +25,40 @@ export const useVoidOrder = () => {
         mutationFn: async ({
             orderId,
             reason,
+            verifiedEmployeeId,
         }: {
             orderId: string;
             reason: string;
+            verifiedEmployeeId?: string;
         }) => {
-            await api.post(ENDPOINTS.ORDERS.VOID_REQUEST(orderId), { reason });
+            await api.post(ENDPOINTS.ORDERS.VOID_REQUEST(orderId), {
+                reason,
+                verified_employee_id: verifiedEmployeeId,
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: orderKeys.pending });
+        },
+    });
+};
+
+export const useVoidWithPin = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async ({
+            orderId,
+            pin,
+            reason,
+        }: {
+            orderId: string;
+            pin: string;
+            reason: string;
+        }) => {
+            await api.post(ENDPOINTS.ORDERS.VOID_WITH_PIN(orderId), {
+                pin,
+                reason,
+            });
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: orderKeys.pending });

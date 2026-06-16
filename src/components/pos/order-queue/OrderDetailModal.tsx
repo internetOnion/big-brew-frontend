@@ -1,11 +1,11 @@
 import { useState } from "react";
 import {
-    CheckCircle2,
-    XCircle,
-    UtensilsCrossed,
-    ShoppingBag,
-    Clock,
-} from "lucide-react";
+    CheckCircleIcon,
+    XCircleIcon,
+    ForkKnifeIcon,
+    ShoppingBagIcon,
+    ClockIcon,
+} from "@phosphor-icons/react";
 import type { Order, OrderItem } from "@/types/order";
 import { cn } from "@/lib/utils";
 import { getTimeSince, isUrgent } from "@/lib/order-utils";
@@ -51,7 +51,7 @@ export const OrderDetailModal = ({
     const timeSince = getTimeSince(order.createdAt);
 
     const TypeIcon =
-        order.diningOption === "dine_in" ? UtensilsCrossed : ShoppingBag;
+        order.diningOption === "dine_in" ? ForkKnifeIcon : ShoppingBagIcon;
 
     return (
         <Dialog open onOpenChange={(open) => !open && onCancel()}>
@@ -83,7 +83,7 @@ export const OrderDetailModal = ({
                                     orientation="vertical"
                                     className="mx-1 h-3"
                                 />
-                                <Clock
+                                <ClockIcon
                                     className={cn(
                                         "size-3",
                                         urgent
@@ -185,14 +185,14 @@ export const OrderDetailModal = ({
                             onClick={() => setShowVoidConfirm(true)}
                             className="h-auto flex-1 py-2.5"
                         >
-                            <XCircle />
+                            <XCircleIcon />
                             Void
                         </Button>
                         <Button
                             onClick={onComplete}
                             className="h-auto flex-1 rounded-xl bg-chart-4 py-2.5 font-bold hover:brightness-110"
                         >
-                            <CheckCircle2 />
+                            <CheckCircleIcon />
                             Complete
                         </Button>
                     </DialogFooter>

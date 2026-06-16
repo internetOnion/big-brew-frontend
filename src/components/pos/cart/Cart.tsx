@@ -1,9 +1,8 @@
 import { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBagIcon } from "@phosphor-icons/react";
 import { usePOS } from "@/hooks/usePos";
 import { ROUTES } from "@/lib/constants";
-import { Badge } from "@/components/ui/badge";
 import { OrderTypeToggle } from "./OrderTypeToggle";
 import { CartItemCard } from "./CartItemCard";
 import { CartFooter } from "./CartFooter";
@@ -29,16 +28,16 @@ export const Cart = () => {
     const total = useMemo(() => subtotal + tax, [subtotal, tax]);
 
     return (
-        <div className="flex h-full w-[260px] shrink-0 flex-col overflow-hidden border-l border-border bg-card">
-            <div className="flex items-center justify-between border-b border-border px-4 py-3">
+        <div className="flex h-full w-[270px] shrink-0 flex-col overflow-hidden border-l border-(--pos-border) bg-(--pos-card)">
+            <div className="flex items-center justify-between border-b border-(--pos-border) px-4 py-2.5">
                 <div className="flex items-center gap-2">
-                    <ShoppingBag className="size-4 text-primary" />
-                    <span className="font-sans text-sm font-bold text-foreground">
+                    <ShoppingBagIcon className="size-4 text-(--pos-primary)" />
+                    <span className="font-sans text-[13px] font-medium text-(--pos-text)">
                         Order
                     </span>
-                    <Badge variant="default" className="min-w-5">
+                    <span className="rounded-md border border-(--pos-border) bg-(--pos-hover) px-1.5 py-0.5 font-sans text-[10px] font-medium text-(--pos-text-muted)">
                         {cartItems.reduce((sum, i) => sum + i.quantity, 0)}
-                    </Badge>
+                    </span>
                 </div>
             </div>
 
@@ -46,10 +45,37 @@ export const Cart = () => {
 
             <div className="flex-1 overflow-y-auto px-3 py-2 pos-scroll">
                 {cartItems.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-12">
-                        <ShoppingBag className="mb-2 size-10 text-border" />
-                        <p className="text-xs text-muted-foreground">
-                            Cart is empty
+                    <div className="flex flex-col items-center justify-center gap-3 py-12">
+                        <svg
+                            viewBox="0 0 48 52"
+                            className="size-12"
+                            fill="none"
+                        >
+                            <path
+                                d="M8 12h32l-3 28c-0.5 4-3.5 7-7.5 7h-11c-4 0-7-3-7.5-7L8 12Z"
+                                className="fill-border"
+                            />
+                            <rect
+                                x="10"
+                                y="2"
+                                width="28"
+                                height="4"
+                                rx="1"
+                                className="fill-muted-foreground/20"
+                            />
+                            <path
+                                d="M34 12c0 0 4 4 4 10s-4 10-4 10"
+                                className="fill-none stroke-border"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                            />
+                        </svg>
+                        <p className="text-center text-xs text-muted-foreground">
+                            No items yet
+                            <br />
+                            <span className="text-[11px] opacity-70">
+                                Tap a drink to start
+                            </span>
                         </p>
                     </div>
                 ) : (

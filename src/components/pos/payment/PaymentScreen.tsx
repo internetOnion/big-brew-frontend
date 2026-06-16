@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeftIcon } from "@phosphor-icons/react";
 import { ROUTES } from "@/lib/constants";
 import { usePOS } from "@/hooks/usePos";
 import { useSettings } from "@/hooks/useSettings";
 import type { Order, PaymentMethod, Currency } from "@/types/order";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
     Dialog,
     DialogContent,
@@ -19,6 +18,8 @@ import { PaymentMethodToggle } from "./PaymentMethodToggle";
 import { NumericKeypad } from "./NumericKeypad";
 import { AmountDisplay } from "./AmountDisplay";
 import { PaymentOrderSummary } from "./PaymentOrderSummary";
+import { PinDialog } from "@/components/common/PinDialog";
+import type { VerifiedEmployee } from "@/components/common/PinDialog";
 
 const DEFAULT_KHR_RATE = 4100;
 const STATIC_QR_CODE_URL =
@@ -34,6 +35,11 @@ const PaymentScreen = () => {
     const [success, setSuccess] = useState(false);
     const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [pinDialogOpen, setPinDialogOpen] = useState(false);
+    const [pendingConfirm, setPendingConfirm] = useState<{
+        method: PaymentMethod;
+        amountReceived?: number;
+    } | null>(null);
     const { data: settings } = useSettings();
     const khrRate = settings?.khrRate ?? DEFAULT_KHR_RATE;
 
@@ -59,19 +65,34 @@ const PaymentScreen = () => {
 
     const handleDelete = () => setEntered((prev) => prev.slice(0, -1));
 
-    const handleConfirmPayment = async () => {
+    const handleConfirmPayment = () => {
         if (isProcessing) return;
 
-        setIsProcessing(true);
-        try {
-            const amountReceived =
-                paymentMethod === "cash"
-                    ? currency === "KHR"
-                        ? enteredAmount / khrRate
-                        : enteredAmount
-                    : undefined;
+        const amountReceived =
+            paymentMethod === "cash"
+                ? currency === "KHR"
+                    ? enteredAmount / khrRate
+                    : enteredAmount
+                : undefined;
 
-            const order = await submitOrder(paymentMethod, amountReceived);
+        setPendingConfirm({ method: paymentMethod, amountReceived });
+        setPinDialogOpen(true);
+    };
+
+    const handlePinVerified = async (employee: VerifiedEmployee) => {
+        setPinDialogOpen(false);
+        if (!pendingConfirm) return;
+
+        const { method, amountReceived } = pendingConfirm;
+        setPendingConfirm(null);
+        setIsProcessing(true);
+
+        try {
+            const order = await submitOrder(
+                method,
+                amountReceived,
+                employee.id,
+            );
             setCompletedOrder(order);
             setSuccess(true);
         } catch {
@@ -79,17 +100,11 @@ const PaymentScreen = () => {
         }
     };
 
-    const handleQrConfirm = async () => {
+    const handleQrConfirm = () => {
         if (isProcessing) return;
 
-        setIsProcessing(true);
-        try {
-            const order = await submitOrder("qr");
-            setCompletedOrder(order);
-            setSuccess(true);
-        } catch {
-            setIsProcessing(false);
-        }
+        setPendingConfirm({ method: "qr" });
+        setPinDialogOpen(true);
     };
 
     const currencySymbol = currency === "USD" ? "$" : "៛";
@@ -115,24 +130,24 @@ const PaymentScreen = () => {
     }
 
     return (
-        <div className="flex flex-1 flex-col bg-background">
-            <div className="flex items-center gap-4 border-b border-border px-8 pb-4 pt-6">
+        <div className="flex flex-1 flex-col bg-(--pos-bg)">
+            <div className="flex items-center gap-4 border-b border-(--pos-border) bg-(--pos-card) px-8 pb-4 pt-6">
                 <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => navigate(ROUTES.POS)}
-                    className="gap-2 text-muted-foreground"
+                    className="gap-2 text-(--pos-text-muted)"
                 >
-                    <ArrowLeft size={16} /> Back to Menu
+                    <ArrowLeftIcon size={16} /> Back to Menu
                 </Button>
                 <div className="flex-1" />
-                <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground">
+                <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-(--pos-text-muted)">
                     Payment
                 </p>
-                <Badge variant="secondary" className="font-mono">
+                <span className="rounded-md border border-(--pos-border) bg-(--pos-hover) px-1.5 py-0.5 font-sans text-[10px] font-medium text-(--pos-text-muted)">
                     {itemCount} item{itemCount !== 1 ? "s" : ""} · $
                     {subtotal.toFixed(2)}
-                </Badge>
+                </span>
             </div>
 
             <div className="flex flex-1 items-stretch">
@@ -183,6 +198,13 @@ const PaymentScreen = () => {
                     resetInput={() => setEntered("")}
                 />
             </div>
+
+            <PinDialog
+                open={pinDialogOpen}
+                onOpenChange={setPinDialogOpen}
+                onVerified={handlePinVerified}
+                title="Enter Pin"
+            />
 
             <Dialog
                 open={qrDialogOpen}

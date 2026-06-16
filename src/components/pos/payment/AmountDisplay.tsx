@@ -38,10 +38,10 @@ export const AmountDisplay = ({
             )}
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex flex-col gap-3">
             <div
                 className={cn(
-                    "flex-1 rounded-xl border-[1.5px] bg-secondary px-4 py-3 text-right transition-colors duration-150",
+                    "flex-1 rounded-xl border-[1.5px] bg-secondary px-4 py-3 transition-colors duration-150",
                     entered ? "border-accent" : "border-border",
                 )}
             >
@@ -61,7 +61,7 @@ export const AmountDisplay = ({
 
             <div
                 className={cn(
-                    "flex-1 rounded-xl border-[1.5px] px-4 py-3 text-right transition-colors duration-150",
+                    "flex-1 rounded-xl border-[1.5px] px-4 py-2 transition-colors duration-150",
                     change >= 0 && enteredAmount > 0
                         ? "border-chart-4/30 bg-chart-4/8"
                         : change < 0

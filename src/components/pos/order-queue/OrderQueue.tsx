@@ -1,19 +1,24 @@
 import { useState } from "react";
-import { ListOrdered, Coffee } from "lucide-react";
+import { ListNumbersIcon, CoffeeIcon } from "@phosphor-icons/react";
 import type { Order } from "@/types/order";
 import { usePendingOrders } from "@/hooks/usePendingOrders";
-import { useCompleteOrder, useVoidOrder } from "@/hooks/useOrderMutations";
+import { useCompleteOrder, useVoidWithPin } from "@/hooks/useOrderMutations";
 import { getTimeSince, isUrgent } from "@/lib/order-utils";
 import OrderDetailModal from "./OrderDetailModal";
 import { OrderQueueCard } from "./OrderQueueCard";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PinDialog } from "@/components/common/PinDialog";
 
 export const OrderQueue = () => {
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+    const [pinDialogOpen, setPinDialogOpen] = useState(false);
+    const [pendingVoid, setPendingVoid] = useState<{
+        orderId: string;
+        reason: string;
+    } | null>(null);
     const { data: orders, isLoading } = usePendingOrders();
     const completeMutation = useCompleteOrder();
-    const voidMutation = useVoidOrder();
+    const voidWithPinMutation = useVoidWithPin();
 
     const handleComplete = (orderId: string) => {
         completeMutation.mutate(orderId, {
@@ -22,8 +27,26 @@ export const OrderQueue = () => {
     };
 
     const handleVoid = (orderId: string, reason: string) => {
-        voidMutation.mutate(
-            { orderId, reason },
+        setPendingVoid({ orderId, reason });
+        setPinDialogOpen(true);
+    };
+
+    const handlePinVerified = ({
+        pin,
+    }: {
+        id: string;
+        name: string;
+        role: string;
+        pin: string;
+    }) => {
+        setPinDialogOpen(false);
+        if (!pendingVoid) return;
+
+        const { orderId, reason } = pendingVoid;
+        setPendingVoid(null);
+
+        voidWithPinMutation.mutate(
+            { orderId, pin, reason },
             {
                 onSuccess: () => setSelectedOrder(null),
             },
@@ -32,11 +55,11 @@ export const OrderQueue = () => {
 
     if (isLoading) {
         return (
-            <div className="flex h-full w-[220px] shrink-0 flex-col overflow-hidden border-r border-border bg-background">
-                <div className="flex items-center justify-between border-b border-border px-3 py-3">
+            <div className="flex h-full w-[220px] shrink-0 flex-col overflow-hidden border-r border-(--pos-border) bg-(--pos-card)">
+                <div className="flex items-center justify-between border-b border-(--pos-border) px-4 py-2.5">
                     <div className="flex items-center gap-2">
-                        <ListOrdered className="size-4 text-primary" />
-                        <span className="font-sans text-sm font-bold text-foreground">
+                        <ListNumbersIcon className="size-4 text-(--pos-primary)" />
+                        <span className="font-sans text-[13px] font-medium text-(--pos-text)">
                             Queue
                         </span>
                     </div>
@@ -52,22 +75,26 @@ export const OrderQueue = () => {
     const pendingOrders = orders ?? [];
 
     return (
-        <div className="flex h-full w-[220px] shrink-0 flex-col overflow-hidden border-r border-border bg-background">
-            <div className="flex items-center justify-between border-b border-border px-3 py-3">
+        <div className="flex h-full w-[220px] shrink-0 flex-col overflow-hidden border-r border-(--pos-border) bg-(--pos-card)">
+            <div className="flex items-center justify-between border-b border-(--pos-border) px-4 py-2.5">
                 <div className="flex items-center gap-2">
-                    <ListOrdered className="size-4 text-primary" />
-                    <span className="font-sans text-sm font-bold text-foreground">
+                    <ListNumbersIcon className="size-4 text-(--pos-primary)" />
+                    <span className="font-sans text-[13px] font-medium text-(--pos-text)">
                         Queue
                     </span>
                 </div>
-                <Badge variant="default">{pendingOrders.length}</Badge>
+                <span className="rounded-md border border-(--pos-border) bg-(--pos-hover) px-1.5 py-0.5 font-sans text-[10px] font-medium text-(--pos-text-muted)">
+                    {pendingOrders.length}
+                </span>
             </div>
 
             <div className="flex-1 overflow-y-auto px-2 py-2 pos-scroll">
                 {pendingOrders.length === 0 ? (
-                    <div className="flex h-full flex-col items-center justify-center text-muted-foreground">
-                        <Coffee className="mb-2 size-8 opacity-50" />
-                        <p className="text-xs">No orders in queue</p>
+                    <div className="flex h-full flex-col items-center justify-center gap-2">
+                        <CoffeeIcon className="size-7 text-(--pos-text-muted)/40" />
+                        <p className="text-[11px] text-(--pos-text-muted)">
+                            No orders
+                        </p>
                     </div>
                 ) : (
                     pendingOrders.map((order) => (
@@ -98,6 +125,13 @@ export const OrderQueue = () => {
                     onCancel={() => setSelectedOrder(null)}
                 />
             )}
+
+            <PinDialog
+                open={pinDialogOpen}
+                onOpenChange={setPinDialogOpen}
+                onVerified={handlePinVerified}
+                title="Enter Pin"
+            />
         </div>
     );
 };
