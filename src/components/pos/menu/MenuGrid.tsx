@@ -53,14 +53,14 @@ export const MenuGrid = () => {
     return (
         <div className="flex h-full flex-col overflow-hidden">
             <div className="px-4 pt-4">
-                <div className="flex items-center gap-2 rounded-lg border border-[var(--pos-border)] bg-[var(--pos-card)] px-3 py-2">
-                    <MagnifyingGlassIcon className="size-4 shrink-0 text-[var(--pos-text-muted)]" />
+                <div className="flex items-center gap-2 rounded-lg border border-(--pos-border) bg-(--pos-card) px-3 py-2">
+                    <MagnifyingGlassIcon className="size-4 shrink-0 text-(--pos-text-muted)" />
                     <input
                         type="text"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Search menu..."
-                        className="w-full bg-transparent text-[13px] text-[var(--pos-text)] outline-none placeholder:text-[var(--pos-text-muted)]"
+                        className="w-full bg-transparent text-[13px] text-(--pos-text) outline-none placeholder:text-(--pos-text-muted)"
                     />
                 </div>
             </div>
@@ -155,7 +155,7 @@ export const MenuGrid = () => {
                                     key={item.id}
                                     onClick={() => handleItemClick(item.id)}
                                     disabled={isFetching}
-                                    className="group flex flex-col overflow-hidden rounded-lg border border-[var(--pos-border)] bg-[var(--pos-card)] text-left transition-colors hover:bg-[var(--pos-hover)] active:bg-[var(--pos-hover)] disabled:pointer-events-none disabled:opacity-60"
+                                    className="group flex cursor-pointer flex-col overflow-hidden rounded-lg border border-(--pos-border) bg-(--pos-card) text-left transition-colors hover:bg-(--pos-hover) active:bg-(--pos-hover) disabled:pointer-events-none disabled:opacity-60"
                                 >
                                     <div className="relative aspect-4/3 overflow-hidden">
                                         {item.imageUrl ? (
@@ -174,7 +174,7 @@ export const MenuGrid = () => {
                                                 >
                                                     <path
                                                         d="M8 12h32l-3 28c-0.5 4-3.5 7-7.5 7h-11c-4 0-7-3-7.5-7L8 12Z"
-                                                        className="fill-[var(--admin-accent)]/30"
+                                                        className="fill-(--admin-accent)/30"
                                                     />
                                                     <rect
                                                         x="10"
@@ -182,7 +182,7 @@ export const MenuGrid = () => {
                                                         width="28"
                                                         height="4"
                                                         rx="1"
-                                                        className="fill-[var(--admin-accent)]/40"
+                                                        className="fill-(--admin-accent)/40"
                                                     />
                                                 </svg>
                                                 <svg
@@ -233,10 +233,10 @@ export const MenuGrid = () => {
                                         )}
                                     </div>
                                     <div className="flex flex-1 flex-col gap-1 p-3 md:gap-0.5 md:p-2 lg:gap-0.5 lg:p-1.5">
-                                        <p className="font-sans text-[13px] font-medium leading-tight text-[var(--pos-text)] md:text-[12px] lg:text-[11px]">
+                                        <p className="font-sans text-[13px] font-medium leading-tight text-(--pos-text) md:text-[12px] lg:text-[11px]">
                                             {item.name}
                                         </p>
-                                        <p className="font-mono text-[12px] font-bold tabular-nums text-[var(--pos-primary)] md:text-[11px] lg:text-[10px]">
+                                        <p className="font-mono text-[12px] font-bold tabular-nums text-(--pos-primary) md:text-[11px] lg:text-[10px]">
                                             $
                                             {parseFloat(item.basePrice).toFixed(
                                                 2,

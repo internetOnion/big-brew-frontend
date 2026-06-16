@@ -64,10 +64,10 @@ const SettingsPage = () => {
     if (isLoading) {
         return (
             <div className="flex flex-col gap-4 p-5">
-                <Skeleton className="h-5 w-32 bg-[var(--admin-hover)]" />
+                <Skeleton className="h-5 w-32 bg-(--admin-hover)" />
                 <div className="grid gap-4 lg:grid-cols-[1fr_340px]">
-                    <Skeleton className="h-[500px] bg-[var(--admin-hover)]" />
-                    <Skeleton className="h-[500px] bg-[var(--admin-hover)]" />
+                    <Skeleton className="h-[500px] bg-(--admin-hover)" />
+                    <Skeleton className="h-[500px] bg-(--admin-hover)" />
                 </div>
             </div>
         );
@@ -75,20 +75,20 @@ const SettingsPage = () => {
 
     return (
         <div className="flex flex-col gap-4 p-5">
-            <h1 className="text-[13px] font-medium text-[var(--admin-primary)]">
+            <h1 className="text-[13px] font-medium text-(--admin-primary)">
                 Settings
             </h1>
 
             <div className="grid gap-4 lg:grid-cols-[1fr_340px]">
                 {/* Form */}
                 <div className="admin-card p-5">
-                    <h2 className="mb-4 text-[11px] font-medium uppercase tracking-wide text-[var(--admin-text-muted)]">
+                    <h2 className="mb-4 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
                         Store Configuration
                     </h2>
 
                     <div className="space-y-4">
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                            <Label className="text-[11px] text-(--admin-text-secondary)">
                                 Store Name
                             </Label>
                             <Input
@@ -96,12 +96,12 @@ const SettingsPage = () => {
                                 onChange={(e) =>
                                     handleChange("storeName", e.target.value)
                                 }
-                                className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs text-[var(--admin-text)] focus-visible:ring-[var(--admin-accent)]"
+                                className="h-8 border-(--admin-border) bg-(--admin-card) text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
                             />
                         </div>
 
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                            <Label className="text-[11px] text-(--admin-text-secondary)">
                                 Store Address
                             </Label>
                             <Input
@@ -112,13 +112,13 @@ const SettingsPage = () => {
                                         e.target.value || null,
                                     )
                                 }
-                                className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs text-[var(--admin-text)] focus-visible:ring-[var(--admin-accent)]"
+                                className="h-8 border-(--admin-border) bg-(--admin-card) text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
                             />
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                                <Label className="text-[11px] text-(--admin-text-secondary)">
                                     Currency Symbol
                                 </Label>
                                 <Input
@@ -129,11 +129,11 @@ const SettingsPage = () => {
                                             e.target.value,
                                         )
                                     }
-                                    className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-xs text-[var(--admin-text)] focus-visible:ring-[var(--admin-accent)]"
+                                    className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
                                 />
                             </div>
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                                <Label className="text-[11px] text-(--admin-text-secondary)">
                                     Tax Label
                                 </Label>
                                 <Input
@@ -141,13 +141,13 @@ const SettingsPage = () => {
                                     onChange={(e) =>
                                         handleChange("taxLabel", e.target.value)
                                     }
-                                    className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs text-[var(--admin-text)] focus-visible:ring-[var(--admin-accent)]"
+                                    className="h-8 border-(--admin-border) bg-(--admin-card) text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
                                 />
                             </div>
                         </div>
 
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                            <Label className="text-[11px] text-(--admin-text-secondary)">
                                 KHR Exchange Rate
                             </Label>
                             <Input
@@ -161,12 +161,12 @@ const SettingsPage = () => {
                                             : null,
                                     )
                                 }
-                                className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-xs text-[var(--admin-text)] focus-visible:ring-[var(--admin-accent)]"
+                                className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
                             />
                         </div>
 
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                            <Label className="text-[11px] text-(--admin-text-secondary)">
                                 Receipt Header
                             </Label>
                             <Textarea
@@ -178,12 +178,12 @@ const SettingsPage = () => {
                                     )
                                 }
                                 rows={2}
-                                className="border-[var(--admin-border)] bg-[var(--admin-card)] text-xs text-[var(--admin-text)] focus-visible:ring-[var(--admin-accent)]"
+                                className="border-(--admin-border) bg-(--admin-card) text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
                             />
                         </div>
 
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                            <Label className="text-[11px] text-(--admin-text-secondary)">
                                 Receipt Footer
                             </Label>
                             <Textarea
@@ -195,12 +195,12 @@ const SettingsPage = () => {
                                     )
                                 }
                                 rows={2}
-                                className="border-[var(--admin-border)] bg-[var(--admin-card)] text-xs text-[var(--admin-text)] focus-visible:ring-[var(--admin-accent)]"
+                                className="border-(--admin-border) bg-(--admin-card) text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
                             />
                         </div>
 
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                            <Label className="text-[11px] text-(--admin-text-secondary)">
                                 Logo URL
                             </Label>
                             <Input
@@ -212,12 +212,12 @@ const SettingsPage = () => {
                                     )
                                 }
                                 placeholder="https://..."
-                                className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-xs text-[var(--admin-text)] placeholder:text-[var(--admin-text-muted)] focus-visible:ring-[var(--admin-accent)]"
+                                className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs text-(--admin-text) placeholder:text-(--admin-text-muted) focus-visible:ring-(--admin-accent)"
                             />
                         </div>
 
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                            <Label className="text-[11px] text-(--admin-text-secondary)">
                                 QR Code URL
                             </Label>
                             <Input
@@ -229,14 +229,14 @@ const SettingsPage = () => {
                                     )
                                 }
                                 placeholder="https://..."
-                                className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-xs text-[var(--admin-text)] placeholder:text-[var(--admin-text-muted)] focus-visible:ring-[var(--admin-accent)]"
+                                className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs text-(--admin-text) placeholder:text-(--admin-text-muted) focus-visible:ring-(--admin-accent)"
                             />
                         </div>
 
                         <Button
                             onClick={handleSave}
                             disabled={updateMutation.isPending}
-                            className="h-8 bg-[var(--admin-primary)] text-xs font-medium text-white hover:bg-[#3a1d0e]"
+                            className="h-8 bg-(--admin-primary) text-xs font-medium text-white hover:bg-[#3a1d0e]"
                         >
                             {updateMutation.isPending
                                 ? "Saving..."
@@ -247,7 +247,7 @@ const SettingsPage = () => {
 
                 {/* Receipt Preview */}
                 <div className="admin-card p-5">
-                    <h2 className="mb-4 text-[11px] font-medium uppercase tracking-wide text-[var(--admin-text-muted)]">
+                    <h2 className="mb-4 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
                         Receipt Preview
                     </h2>
                     <ReceiptPreview settings={previewSettings} />

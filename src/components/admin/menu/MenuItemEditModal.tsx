@@ -490,11 +490,11 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
         <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
             <DialogContent
                 showCloseButton={false}
-                className="flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden border-[var(--admin-border)] bg-[var(--admin-card)] p-0 shadow-xl"
+                className="flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden border-(--admin-border) bg-(--admin-card) p-0 shadow-xl"
             >
-                <div className="flex shrink-0 items-center justify-between border-b border-[var(--admin-border)] bg-[var(--admin-card)] px-6 py-4">
+                <div className="flex shrink-0 items-center justify-between border-b border-(--admin-border) bg-(--admin-card) px-6 py-4">
                     <DialogHeader>
-                        <DialogTitle className="text-[14px] font-medium text-[var(--admin-text)]">
+                        <DialogTitle className="text-[14px] font-medium text-(--admin-text)">
                             {loading ? "Loading..." : item.name}
                         </DialogTitle>
                     </DialogHeader>
@@ -502,7 +502,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                         variant="ghost"
                         size="icon-xs"
                         onClick={onClose}
-                        className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
+                        className="text-(--admin-text-muted) hover:text-(--admin-text)"
                     >
                         <XIcon className="size-4" />
                     </Button>
@@ -510,12 +510,12 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
 
                 <div className="flex-1 overflow-y-auto px-6 pb-6">
                     {loading ? (
-                        <div className="flex h-64 items-center justify-center text-sm text-[var(--admin-text-muted)]">
+                        <div className="flex h-64 items-center justify-center text-sm text-(--admin-text-muted)">
                             Loading...
                         </div>
                     ) : (
                         <Tabs defaultValue="basic" className="w-full">
-                            <TabsList className="bg-[var(--admin-hover)]">
+                            <TabsList className="bg-(--admin-hover)">
                                 <TabsTrigger value="basic">
                                     Basic Info
                                 </TabsTrigger>
@@ -531,7 +531,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                 className="space-y-4 pt-4"
                             >
                                 <div className="grid gap-1.5">
-                                    <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                                    <Label className="text-[11px] text-(--admin-text-secondary)">
                                         Name
                                     </Label>
                                     <Input
@@ -539,12 +539,12 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                         onChange={(e) =>
                                             setName(e.target.value)
                                         }
-                                        className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs"
+                                        className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
                                     />
                                 </div>
                                 <div className="grid grid-cols-2 gap-3">
                                     <div className="grid gap-1.5">
-                                        <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                                        <Label className="text-[11px] text-(--admin-text-secondary)">
                                             Base Price
                                         </Label>
                                         <Input
@@ -554,11 +554,11 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                             onChange={(e) =>
                                                 setBasePrice(e.target.value)
                                             }
-                                            className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-xs"
+                                            className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                                         />
                                     </div>
                                     <div className="grid gap-1.5">
-                                        <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                                        <Label className="text-[11px] text-(--admin-text-secondary)">
                                             Category
                                         </Label>
                                         <Select
@@ -568,7 +568,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                 setCategoryId(v ?? "")
                                             }
                                         >
-                                            <SelectTrigger className="h-8 w-full border-[var(--admin-border)] bg-[var(--admin-card)] text-xs">
+                                            <SelectTrigger className="h-8 w-full border-(--admin-border) bg-(--admin-card) text-xs">
                                                 <SelectValue>
                                                     {(val) =>
                                                         categories?.find(
@@ -599,18 +599,18 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                         onChange={(e) =>
                                             setIsAvailable(e.target.checked)
                                         }
-                                        className="size-3.5 accent-[var(--admin-accent)]"
+                                        className="size-3.5 accent-(--admin-accent)"
                                     />
                                     <Label
                                         htmlFor="available"
-                                        className="text-[12px] text-[var(--admin-text-secondary)]"
+                                        className="text-[12px] text-(--admin-text-secondary)"
                                     >
                                         Available for order
                                     </Label>
                                 </div>
                                 <Button
                                     onClick={handleSaveBasic}
-                                    className="h-8 bg-[var(--admin-primary)] text-xs text-white hover:bg-[#3a1d0e]"
+                                    className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-[#3a1d0e]"
                                 >
                                     Save Changes
                                 </Button>
@@ -623,20 +623,20 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                             >
                                 <div className="space-y-1">
                                     {recipes.length === 0 ? (
-                                        <p className="text-xs text-[var(--admin-text-muted)]">
+                                        <p className="text-xs text-(--admin-text-muted)">
                                             No recipe ingredients configured.
                                         </p>
                                     ) : (
                                         recipes.map((r) => (
                                             <div
                                                 key={r.ingredientId}
-                                                className="flex items-center justify-between rounded border border-[var(--admin-border)] bg-[var(--admin-card)] px-3 py-2"
+                                                className="flex items-center justify-between rounded border border-(--admin-border) bg-(--admin-card) px-3 py-2"
                                             >
-                                                <span className="text-[12px] text-[var(--admin-text)]">
+                                                <span className="text-[12px] text-(--admin-text)">
                                                     {r.name}
                                                 </span>
                                                 <div className="flex items-center gap-3">
-                                                    <span className="font-mono text-[11px] text-[var(--admin-text-secondary)]">
+                                                    <span className="font-mono text-[11px] text-(--admin-text-secondary)">
                                                         {r.quantity} {r.unit}
                                                     </span>
                                                     <Button
@@ -659,7 +659,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
 
                                 <div className="flex items-end gap-2">
                                     <div className="grid flex-1 gap-1.5">
-                                        <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                                        <Label className="text-[11px] text-(--admin-text-secondary)">
                                             Ingredient
                                         </Label>
                                         <Select
@@ -668,7 +668,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                 setNewRecipeIngredient(v ?? "")
                                             }
                                         >
-                                            <SelectTrigger className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs">
+                                            <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
                                                 <SelectValue placeholder="Select..." />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -684,7 +684,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                         </Select>
                                     </div>
                                     <div className="grid w-24 gap-1.5">
-                                        <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                                        <Label className="text-[11px] text-(--admin-text-secondary)">
                                             Qty
                                         </Label>
                                         <Input
@@ -696,14 +696,14 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     e.target.value,
                                                 )
                                             }
-                                            className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-xs"
+                                            className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                                         />
                                     </div>
                                     <Button
                                         variant="outline"
                                         size="sm"
                                         onClick={handleAddRecipe}
-                                        className="h-8 border-[var(--admin-border)] text-[var(--admin-text-secondary)]"
+                                        className="h-8 border-(--admin-border) text-(--admin-text-secondary)"
                                     >
                                         <PlusIcon className="size-3.5" />
                                     </Button>
@@ -718,11 +718,11 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                 {groups.map((group) => (
                                     <div
                                         key={group.id}
-                                        className="overflow-hidden rounded border border-[var(--admin-border)]"
+                                        className="overflow-hidden rounded border border-(--admin-border)"
                                     >
                                         {/* Group header */}
                                         {editingGroupId === group.id ? (
-                                            <div className="flex items-center gap-2 bg-[var(--admin-hover)] px-3 py-2">
+                                            <div className="flex items-center gap-2 bg-(--admin-hover) px-3 py-2">
                                                 <Input
                                                     value={editGroupName}
                                                     onChange={(e) =>
@@ -730,7 +730,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                             e.target.value,
                                                         )
                                                     }
-                                                    className="h-7 flex-1 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs"
+                                                    className="h-7 flex-1 border-(--admin-border) bg-(--admin-card) text-xs"
                                                 />
                                                 <Select
                                                     value={editGroupType}
@@ -742,7 +742,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                         )
                                                     }
                                                 >
-                                                    <SelectTrigger className="h-7 w-24 border-[var(--admin-border)] bg-[var(--admin-card)] text-[11px]">
+                                                    <SelectTrigger className="h-7 w-24 border-(--admin-border) bg-(--admin-card) text-[11px]">
                                                         <SelectValue />
                                                     </SelectTrigger>
                                                     <SelectContent>
@@ -754,7 +754,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                         </SelectItem>
                                                     </SelectContent>
                                                 </Select>
-                                                <label className="flex items-center gap-1 text-[11px] text-[var(--admin-text-secondary)]">
+                                                <label className="flex items-center gap-1 text-[11px] text-(--admin-text-secondary)">
                                                     <input
                                                         type="checkbox"
                                                         checked={
@@ -766,7 +766,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                     .checked,
                                                             )
                                                         }
-                                                        className="size-3 accent-[var(--admin-accent)]"
+                                                        className="size-3 accent-(--admin-accent)"
                                                     />
                                                     Req
                                                 </label>
@@ -788,13 +788,13 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     onClick={() =>
                                                         setEditingGroupId(null)
                                                     }
-                                                    className="text-[var(--admin-text-muted)]"
+                                                    className="text-(--admin-text-muted)"
                                                 >
                                                     <XIcon className="size-3.5" />
                                                 </Button>
                                             </div>
                                         ) : (
-                                            <div className="flex items-center gap-2 bg-[var(--admin-hover)] px-3 py-2">
+                                            <div className="flex items-center gap-2 bg-(--admin-hover) px-3 py-2">
                                                 <button
                                                     onClick={() =>
                                                         toggleGroup(group.id)
@@ -804,14 +804,14 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     {expandedGroups.has(
                                                         group.id,
                                                     ) ? (
-                                                        <CaretDownIcon className="size-3.5 text-[var(--admin-text-muted)]" />
+                                                        <CaretDownIcon className="size-3.5 text-(--admin-text-muted)" />
                                                     ) : (
-                                                        <CaretRightIcon className="size-3.5 text-[var(--admin-text-muted)]" />
+                                                        <CaretRightIcon className="size-3.5 text-(--admin-text-muted)" />
                                                     )}
-                                                    <span className="text-[12px] font-medium text-[var(--admin-text)]">
+                                                    <span className="text-[12px] font-medium text-(--admin-text)">
                                                         {group.name}
                                                     </span>
-                                                    <span className="text-[10px] capitalize text-[var(--admin-text-muted)]">
+                                                    <span className="text-[10px] capitalize text-(--admin-text-muted)">
                                                         {group.selectionType}
                                                         {group.isRequired
                                                             ? " · required"
@@ -824,7 +824,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     onClick={() =>
                                                         startEditGroup(group)
                                                     }
-                                                    className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
+                                                    className="text-(--admin-text-muted) hover:text-(--admin-text)"
                                                 >
                                                     <PencilSimpleIcon className="size-3" />
                                                 </Button>
@@ -845,7 +845,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
 
                                         {/* Options list */}
                                         {expandedGroups.has(group.id) && (
-                                            <div className="divide-y divide-[var(--admin-border)]">
+                                            <div className="divide-y divide-(--admin-border)">
                                                 {group.options.map((option) => (
                                                     <div key={option.id}>
                                                         {editingOptionId ===
@@ -864,7 +864,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                 .value,
                                                                         )
                                                                     }
-                                                                    className="h-7 flex-1 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs"
+                                                                    className="h-7 flex-1 border-(--admin-border) bg-(--admin-card) text-xs"
                                                                 />
                                                                 <Input
                                                                     type="number"
@@ -881,7 +881,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                 .value,
                                                                         )
                                                                     }
-                                                                    className="h-7 w-20 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-xs"
+                                                                    className="h-7 w-20 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                                                                 />
                                                                 <Button
                                                                     variant="ghost"
@@ -904,7 +904,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                             null,
                                                                         )
                                                                     }
-                                                                    className="text-[var(--admin-text-muted)]"
+                                                                    className="text-(--admin-text-muted)"
                                                                 >
                                                                     <XIcon className="size-3.5" />
                                                                 </Button>
@@ -922,16 +922,16 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                     {expandedOptions.has(
                                                                         option.id,
                                                                     ) ? (
-                                                                        <CaretDownIcon className="size-3 text-[var(--admin-text-muted)]" />
+                                                                        <CaretDownIcon className="size-3 text-(--admin-text-muted)" />
                                                                     ) : (
-                                                                        <CaretRightIcon className="size-3 text-[var(--admin-text-muted)]" />
+                                                                        <CaretRightIcon className="size-3 text-(--admin-text-muted)" />
                                                                     )}
-                                                                    <span className="text-[12px] text-[var(--admin-text)]">
+                                                                    <span className="text-[12px] text-(--admin-text)">
                                                                         {
                                                                             option.name
                                                                         }
                                                                     </span>
-                                                                    <span className="ml-auto font-mono text-[11px] text-[var(--admin-text-secondary)]">
+                                                                    <span className="ml-auto font-mono text-[11px] text-(--admin-text-secondary)">
                                                                         +$
                                                                         {parseFloat(
                                                                             option.price,
@@ -948,7 +948,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                             option,
                                                                         )
                                                                     }
-                                                                    className="mr-1 text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
+                                                                    className="mr-1 text-(--admin-text-muted) hover:text-(--admin-text)"
                                                                 >
                                                                     <PencilSimpleIcon className="size-3" />
                                                                 </Button>
@@ -972,14 +972,14 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                         {expandedOptions.has(
                                                             option.id,
                                                         ) && (
-                                                            <div className="border-t border-[var(--admin-border)] bg-[var(--admin-hover)]/50 px-8 py-2">
+                                                            <div className="border-t border-(--admin-border) bg-(--admin-hover)/50 px-8 py-2">
                                                                 {option
                                                                     .ingredients
                                                                     .length ===
                                                                     0 &&
                                                                 addingIngredientToOption !==
                                                                     option.id ? (
-                                                                    <p className="text-[11px] text-[var(--admin-text-muted)]">
+                                                                    <p className="text-[11px] text-(--admin-text-muted)">
                                                                         No
                                                                         ingredients
                                                                     </p>
@@ -996,7 +996,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                     }
                                                                                     className="flex items-center justify-between py-0.5"
                                                                                 >
-                                                                                    <span className="text-[11px] text-[var(--admin-text)]">
+                                                                                    <span className="text-[11px] text-(--admin-text)">
                                                                                         {
                                                                                             ing
                                                                                                 .ingredient
@@ -1019,9 +1019,9 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                                         .value,
                                                                                                 )
                                                                                             }
-                                                                                            className="h-6 w-16 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-[10px]"
+                                                                                            className="h-6 w-16 border-(--admin-border) bg-(--admin-card) font-mono text-[10px]"
                                                                                         />
-                                                                                        <span className="text-[10px] text-[var(--admin-text-muted)]">
+                                                                                        <span className="text-[10px] text-(--admin-text-muted)">
                                                                                             {
                                                                                                 ing
                                                                                                     .ingredient
@@ -1052,7 +1052,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                                     null,
                                                                                                 )
                                                                                             }
-                                                                                            className="text-[var(--admin-text-muted)]"
+                                                                                            className="text-(--admin-text-muted)"
                                                                                         >
                                                                                             <XIcon className="size-3" />
                                                                                         </Button>
@@ -1065,7 +1065,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                     }
                                                                                     className="flex items-center justify-between py-0.5"
                                                                                 >
-                                                                                    <span className="text-[11px] text-[var(--admin-text)]">
+                                                                                    <span className="text-[11px] text-(--admin-text)">
                                                                                         {
                                                                                             ing
                                                                                                 .ingredient
@@ -1073,7 +1073,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                         }
                                                                                     </span>
                                                                                     <div className="flex items-center gap-2">
-                                                                                        <span className="font-mono text-[10px] text-[var(--admin-text-muted)]">
+                                                                                        <span className="font-mono text-[10px] text-(--admin-text-muted)">
                                                                                             {
                                                                                                 ing.quantity
                                                                                             }{" "}
@@ -1091,7 +1091,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                                     ing,
                                                                                                 )
                                                                                             }
-                                                                                            className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
+                                                                                            className="text-(--admin-text-muted) hover:text-(--admin-text)"
                                                                                         >
                                                                                             <PencilSimpleIcon className="size-2.5" />
                                                                                         </Button>
@@ -1132,7 +1132,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                 )
                                                                             }
                                                                         >
-                                                                            <SelectTrigger className="h-6 flex-1 border-[var(--admin-border)] bg-[var(--admin-card)] text-[10px]">
+                                                                            <SelectTrigger className="h-6 flex-1 border-(--admin-border) bg-(--admin-card) text-[10px]">
                                                                                 <SelectValue placeholder="Select..." />
                                                                             </SelectTrigger>
                                                                             <SelectContent>
@@ -1178,7 +1178,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                 )
                                                                             }
                                                                             placeholder="Qty"
-                                                                            className="h-6 w-16 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-[10px]"
+                                                                            className="h-6 w-16 border-(--admin-border) bg-(--admin-card) font-mono text-[10px]"
                                                                         />
                                                                         <Button
                                                                             variant="ghost"
@@ -1207,7 +1207,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                     "",
                                                                                 );
                                                                             }}
-                                                                            className="text-[var(--admin-text-muted)]"
+                                                                            className="text-(--admin-text-muted)"
                                                                         >
                                                                             <XIcon className="size-3" />
                                                                         </Button>
@@ -1221,7 +1221,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                                 option.id,
                                                                             )
                                                                         }
-                                                                        className="mt-1 h-6 gap-1 text-[10px] text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
+                                                                        className="mt-1 h-6 gap-1 text-[10px] text-(--admin-text-muted) hover:text-(--admin-text)"
                                                                     >
                                                                         <PlusIcon className="size-2.5" />
                                                                         Add
@@ -1236,7 +1236,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                 {/* Add option form */}
                                                 {addingOptionToGroup ===
                                                 group.id ? (
-                                                    <div className="flex items-center gap-2 bg-[var(--admin-hover)]/30 px-5 py-2">
+                                                    <div className="flex items-center gap-2 bg-(--admin-hover)/30 px-5 py-2">
                                                         <Input
                                                             value={
                                                                 newOptionName
@@ -1248,7 +1248,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                 )
                                                             }
                                                             placeholder="Option name"
-                                                            className="h-7 flex-1 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs"
+                                                            className="h-7 flex-1 border-(--admin-border) bg-(--admin-card) text-xs"
                                                         />
                                                         <Input
                                                             type="number"
@@ -1262,7 +1262,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                         .value,
                                                                 )
                                                             }
-                                                            className="h-7 w-20 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-xs"
+                                                            className="h-7 w-20 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                                                         />
                                                         <Button
                                                             variant="ghost"
@@ -1290,7 +1290,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                     "0",
                                                                 );
                                                             }}
-                                                            className="text-[var(--admin-text-muted)]"
+                                                            className="text-(--admin-text-muted)"
                                                         >
                                                             <XIcon className="size-3.5" />
                                                         </Button>
@@ -1302,7 +1302,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                                 group.id,
                                                             )
                                                         }
-                                                        className="flex w-full items-center gap-1.5 px-5 py-2 text-left text-[11px] text-[var(--admin-text-muted)] hover:bg-[var(--admin-hover)]/30 hover:text-[var(--admin-text-secondary)]"
+                                                        className="flex w-full items-center gap-1.5 px-5 py-2 text-left text-[11px] text-(--admin-text-muted) hover:bg-(--admin-hover)/30 hover:text-(--admin-text-secondary)"
                                                     >
                                                         <PlusIcon className="size-3" />
                                                         Add option
@@ -1315,7 +1315,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
 
                                 {/* Add group form */}
                                 {showAddGroup ? (
-                                    <div className="rounded border border-[var(--admin-border)] bg-[var(--admin-hover)]/30 p-3">
+                                    <div className="rounded border border-(--admin-border) bg-(--admin-hover)/30 p-3">
                                         <div className="flex items-center gap-2">
                                             <Input
                                                 value={newGroupName}
@@ -1325,7 +1325,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     )
                                                 }
                                                 placeholder="Group name"
-                                                className="h-7 flex-1 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs"
+                                                className="h-7 flex-1 border-(--admin-border) bg-(--admin-card) text-xs"
                                             />
                                             <Select
                                                 value={newGroupType}
@@ -1337,7 +1337,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     )
                                                 }
                                             >
-                                                <SelectTrigger className="h-7 w-24 border-[var(--admin-border)] bg-[var(--admin-card)] text-[11px]">
+                                                <SelectTrigger className="h-7 w-24 border-(--admin-border) bg-(--admin-card) text-[11px]">
                                                     <SelectValue />
                                                 </SelectTrigger>
                                                 <SelectContent>
@@ -1349,7 +1349,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     </SelectItem>
                                                 </SelectContent>
                                             </Select>
-                                            <label className="flex items-center gap-1 text-[11px] text-[var(--admin-text-secondary)]">
+                                            <label className="flex items-center gap-1 text-[11px] text-(--admin-text-secondary)">
                                                 <input
                                                     type="checkbox"
                                                     checked={newGroupRequired}
@@ -1358,7 +1358,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                             e.target.checked,
                                                         )
                                                     }
-                                                    className="size-3 accent-[var(--admin-accent)]"
+                                                    className="size-3 accent-(--admin-accent)"
                                                 />
                                                 Req
                                             </label>
@@ -1371,14 +1371,14 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                                     setShowAddGroup(false);
                                                     setNewGroupName("");
                                                 }}
-                                                className="text-[11px] text-[var(--admin-text-muted)]"
+                                                className="text-[11px] text-(--admin-text-muted)"
                                             >
                                                 Cancel
                                             </Button>
                                             <Button
                                                 size="xs"
                                                 onClick={handleAddGroup}
-                                                className="bg-[var(--admin-primary)] text-[11px] text-white hover:bg-[#3a1d0e]"
+                                                className="bg-(--admin-primary) text-[11px] text-white hover:bg-[#3a1d0e]"
                                             >
                                                 Add Group
                                             </Button>
@@ -1389,7 +1389,7 @@ const MenuItemEditModal = ({ item, open, onClose }: MenuItemEditModalProps) => {
                                         variant="outline"
                                         size="sm"
                                         onClick={() => setShowAddGroup(true)}
-                                        className="w-full border-dashed border-[var(--admin-border)] text-[11px] text-[var(--admin-text-secondary)]"
+                                        className="w-full border-dashed border-(--admin-border) text-[11px] text-(--admin-text-secondary)"
                                     >
                                         <PlusIcon className="size-3.5" />
                                         Add Modifier Group

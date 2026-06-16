@@ -27,7 +27,7 @@ export const NumericKeypad = ({
                 whileTap={{ scale: 0.93 }}
                 onClick={() => (k === "\u232B" ? onDelete() : onKeyPress(k))}
                 className={cn(
-                    "flex items-center justify-center rounded-lg border border-border py-3.5 font-mono text-lg font-semibold",
+                    "flex cursor-pointer items-center justify-center rounded-lg border border-border py-3.5 font-mono text-lg font-semibold",
                     k === "\u232B"
                         ? "bg-destructive/12 text-destructive"
                         : "bg-secondary text-foreground",

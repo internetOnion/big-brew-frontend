@@ -36,24 +36,24 @@ const StockHistoryDialog = ({
 
     return (
         <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-            <DialogContent className="max-w-lg border-[var(--admin-border)] bg-[var(--admin-card)]">
+            <DialogContent className="max-w-lg border-(--admin-border) bg-(--admin-card)">
                 <DialogHeader>
-                    <DialogTitle className="text-[var(--admin-text)]">
+                    <DialogTitle className="text-(--admin-text)">
                         Stock History: {ingredientName}
                     </DialogTitle>
                 </DialogHeader>
 
                 <div className="max-h-[400px] overflow-y-auto">
                     {isLoading ? (
-                        <div className="flex h-32 items-center justify-center text-xs text-[var(--admin-text-muted)]">
+                        <div className="flex h-32 items-center justify-center text-xs text-(--admin-text-muted)">
                             Loading...
                         </div>
                     ) : !movements || movements.length === 0 ? (
-                        <div className="flex h-32 items-center justify-center text-xs text-[var(--admin-text-muted)]">
+                        <div className="flex h-32 items-center justify-center text-xs text-(--admin-text-muted)">
                             No stock movements recorded.
                         </div>
                     ) : (
-                        <div className="divide-y divide-[var(--admin-border)]">
+                        <div className="divide-y divide-(--admin-border)">
                             {movements.map((m) => {
                                 const qty = parseFloat(m.quantityChange);
                                 const isPositive = qty > 0;
@@ -64,12 +64,12 @@ const StockHistoryDialog = ({
                                         className="flex items-center justify-between px-1 py-2"
                                     >
                                         <div className="min-w-0 flex-1">
-                                            <p className="text-[12px] text-[var(--admin-text)]">
+                                            <p className="text-[12px] text-(--admin-text)">
                                                 {reasonLabels[m.reason] ??
                                                     m.reason}
                                             </p>
                                             {m.notes && (
-                                                <p className="truncate text-[10px] text-[var(--admin-text-muted)]">
+                                                <p className="truncate text-[10px] text-(--admin-text-muted)">
                                                     {m.notes}
                                                 </p>
                                             )}
@@ -81,7 +81,7 @@ const StockHistoryDialog = ({
                                                 {isPositive ? "+" : ""}
                                                 {qty.toFixed(2)}
                                             </span>
-                                            <span className="text-[10px] text-[var(--admin-text-muted)]">
+                                            <span className="text-[10px] text-(--admin-text-muted)">
                                                 {format(
                                                     new Date(m.createdAt),
                                                     "MMM d, HH:mm",
@@ -99,7 +99,7 @@ const StockHistoryDialog = ({
                     <Button
                         variant="ghost"
                         onClick={onClose}
-                        className="text-[var(--admin-text-secondary)]"
+                        className="text-(--admin-text-secondary)"
                     >
                         Close
                     </Button>

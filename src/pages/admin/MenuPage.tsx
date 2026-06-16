@@ -88,7 +88,7 @@ const MenuPage = () => {
     return (
         <div className="flex flex-col gap-4 p-5">
             <div className="flex items-center justify-between">
-                <h1 className="text-[13px] font-medium text-[var(--admin-primary)]">
+                <h1 className="text-[13px] font-medium text-(--admin-primary)">
                     Menu Management
                 </h1>
                 <div className="flex items-center gap-2">
@@ -96,14 +96,14 @@ const MenuPage = () => {
                         variant="outline"
                         size="sm"
                         onClick={() => navigate("/admin/menu/categories")}
-                        className="h-7 border-[var(--admin-border)] text-[11px] text-[var(--admin-text-secondary)] hover:text-[var(--admin-text)]"
+                        className="h-7 border-(--admin-border) text-[11px] text-(--admin-text-secondary) hover:text-(--admin-text)"
                     >
                         Manage Categories
                     </Button>
                     <Button
                         size="sm"
                         onClick={() => navigate("/admin/menu/new")}
-                        className="h-7 gap-1.5 bg-[var(--admin-primary)] text-[11px] text-white hover:bg-[#3a1d0e]"
+                        className="h-7 gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-[#3a1d0e] cursor-pointer"
                     >
                         <PlusIcon className="size-3" />
                         Add Item
@@ -114,12 +114,12 @@ const MenuPage = () => {
             {/* Filters */}
             <div className="flex flex-wrap items-center gap-2">
                 <div className="relative">
-                    <MagnifyingGlassIcon className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-[var(--admin-text-muted)]" />
+                    <MagnifyingGlassIcon className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-(--admin-text-muted)" />
                     <Input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Search items..."
-                        className="h-8 w-48 border-[var(--admin-border)] bg-[var(--admin-card)] pl-8 text-xs placeholder:text-[var(--admin-text-muted)]"
+                        className="h-8 w-48 border-(--admin-border) bg-(--admin-card) pl-8 text-xs placeholder:text-(--admin-text-muted)"
                     />
                 </div>
 
@@ -127,7 +127,7 @@ const MenuPage = () => {
                     value={categoryFilter}
                     onValueChange={(v) => setCategoryFilter(v ?? "all")}
                 >
-                    <SelectTrigger className="h-8 w-36 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs">
+                    <SelectTrigger className="h-8 w-36 border-(--admin-border) bg-(--admin-card) text-xs">
                         <SelectValue placeholder="Category">
                             {(val) =>
                                 val === "all"
@@ -147,7 +147,7 @@ const MenuPage = () => {
                     </SelectContent>
                 </Select>
 
-                <div className="flex gap-0.5 rounded-md bg-[var(--admin-hover)] p-0.5">
+                <div className="flex gap-0.5 rounded-md bg-(--admin-hover) p-0.5">
                     {(["all", "available", "unavailable"] as const).map(
                         (opt) => (
                             <Button
@@ -157,8 +157,8 @@ const MenuPage = () => {
                                 onClick={() => setAvailabilityFilter(opt)}
                                 className={`h-6 px-2 text-[11px] capitalize ${
                                     availabilityFilter === opt
-                                        ? "bg-[var(--admin-card)] font-medium text-[var(--admin-primary)] shadow-sm"
-                                        : "text-[var(--admin-text-muted)] hover:text-[var(--admin-text-secondary)]"
+                                        ? "bg-(--admin-card) font-medium text-(--admin-primary) shadow-sm"
+                                        : "text-(--admin-text-muted) hover:text-(--admin-text-secondary)"
                                 }`}
                             >
                                 {opt}
@@ -174,17 +174,17 @@ const MenuPage = () => {
                     {Array.from({ length: 8 }).map((_, i) => (
                         <div
                             key={i}
-                            className="h-48 animate-pulse rounded-lg border border-[var(--admin-border)] bg-[var(--admin-hover)]"
+                            className="h-48 animate-pulse rounded-lg border border-(--admin-border) bg-(--admin-hover)"
                         />
                     ))}
                 </div>
             ) : !filteredItems || filteredItems.length === 0 ? (
                 <div className="flex h-40 flex-col items-center justify-center gap-1.5">
-                    <ForkKnifeIcon className="size-5 text-[var(--admin-text-muted)]" />
-                    <p className="text-xs text-[var(--admin-text-muted)]">
+                    <ForkKnifeIcon className="size-5 text-(--admin-text-muted)" />
+                    <p className="text-xs text-(--admin-text-muted)">
                         No menu items found
                     </p>
-                    <p className="text-[10px] text-[var(--admin-text-muted)]/70">
+                    <p className="text-[10px] text-(--admin-text-muted)/70">
                         Try adjusting your filters or add a new item
                     </p>
                 </div>
@@ -210,25 +210,25 @@ const MenuPage = () => {
                     !v && !deleteMutation.isPending && setDeletingItem(null)
                 }
             >
-                <DialogContent className="max-w-sm border-[var(--admin-border)] bg-[var(--admin-card)] shadow-xl">
+                <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card) shadow-xl">
                     <DialogHeader>
-                        <DialogTitle className="text-[14px] font-medium text-[var(--admin-text)]">
+                        <DialogTitle className="text-[14px] font-medium text-(--admin-text)">
                             Delete Item
                         </DialogTitle>
                     </DialogHeader>
-                    <p className="text-[13px] text-[var(--admin-text-secondary)]">
+                    <p className="text-[13px] text-(--admin-text-secondary)">
                         Are you sure you want to delete{" "}
-                        <span className="font-medium text-[var(--admin-text)]">
+                        <span className="font-medium text-(--admin-text)">
                             {deletingItem?.name}
                         </span>
                         ? This action cannot be undone.
                     </p>
-                    <div className="flex justify-end gap-2 border-t border-[var(--admin-border)] pt-3">
+                    <div className="flex justify-end gap-2 border-t border-(--admin-border) pt-3">
                         <Button
                             variant="ghost"
                             onClick={() => setDeletingItem(null)}
                             disabled={deleteMutation.isPending}
-                            className="text-[var(--admin-text-secondary)]"
+                            className="text-(--admin-text-secondary)"
                         >
                             Cancel
                         </Button>

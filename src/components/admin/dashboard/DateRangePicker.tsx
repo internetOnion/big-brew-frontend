@@ -107,15 +107,15 @@ const DateRangePicker = ({ value, onChange }: DateRangePickerProps) => {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="h-7 gap-1.5 border-[var(--admin-border)] bg-[var(--admin-card)] px-2.5 font-mono text-[11px] text-[var(--admin-text-secondary)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]"
+                                className="h-7 gap-1.5 border-(--admin-border) bg-(--admin-card) px-2.5 font-mono text-[11px] text-(--admin-text-secondary) hover:bg-(--admin-hover) hover:text-(--admin-text)"
                             />
                         }
                     >
-                        <CalendarIcon className="size-3 text-[var(--admin-text-muted)]" />
+                        <CalendarIcon className="size-3 text-(--admin-text-muted)" />
                         {format(value.from, "MMM d, yyyy")}
                     </PopoverTrigger>
                     <PopoverContent
-                        className="w-auto border-[var(--admin-border)] bg-[var(--admin-card)] p-0"
+                        className="w-auto border-(--admin-border) bg-(--admin-card) p-0"
                         align="start"
                     >
                         <Calendar
@@ -127,7 +127,7 @@ const DateRangePicker = ({ value, onChange }: DateRangePickerProps) => {
                     </PopoverContent>
                 </Popover>
 
-                <span className="text-[10px] text-[var(--admin-text-muted)]">
+                <span className="text-[10px] text-(--admin-text-muted)">
                     &rarr;
                 </span>
 
@@ -137,15 +137,15 @@ const DateRangePicker = ({ value, onChange }: DateRangePickerProps) => {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="h-7 gap-1.5 border-[var(--admin-border)] bg-[var(--admin-card)] px-2.5 font-mono text-[11px] text-[var(--admin-text-secondary)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]"
+                                className="h-7 gap-1.5 border-(--admin-border) bg-(--admin-card) px-2.5 font-mono text-[11px] text-(--admin-text-secondary) hover:bg-(--admin-hover) hover:text-(--admin-text)"
                             />
                         }
                     >
-                        <CalendarIcon className="size-3 text-[var(--admin-text-muted)]" />
+                        <CalendarIcon className="size-3 text-(--admin-text-muted)" />
                         {format(value.to, "MMM d, yyyy")}
                     </PopoverTrigger>
                     <PopoverContent
-                        className="w-auto border-[var(--admin-border)] bg-[var(--admin-card)] p-0"
+                        className="w-auto border-(--admin-border) bg-(--admin-card) p-0"
                         align="start"
                     >
                         <Calendar
@@ -159,15 +159,15 @@ const DateRangePicker = ({ value, onChange }: DateRangePickerProps) => {
             </div>
 
             {/* Preset chips */}
-            <div className="flex gap-0.5 rounded-md bg-[var(--admin-hover)] p-0.5">
+            <div className="flex gap-0.5 rounded-md bg-(--admin-hover) p-0.5">
                 {presets.map((preset) => (
                     <button
                         key={preset.label}
                         onClick={() => handlePresetClick(preset.label)}
-                        className={`rounded px-2 py-1 text-[11px] transition-colors ${
+                        className={`cursor-pointer rounded px-2 py-1 text-[11px] transition-colors ${
                             activePreset === preset.label
-                                ? "bg-[var(--admin-card)] font-medium text-[var(--admin-primary)] shadow-sm"
-                                : "text-[var(--admin-text-muted)] hover:text-[var(--admin-text-secondary)]"
+                                ? "bg-(--admin-card) font-medium text-(--admin-primary) shadow-sm"
+                                : "text-(--admin-text-muted) hover:text-(--admin-text-secondary)"
                         }`}
                     >
                         {preset.label}

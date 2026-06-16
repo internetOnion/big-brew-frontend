@@ -41,7 +41,7 @@ const kpis = [
         key: "averageOrderValue" as const,
         label: "Avg Order Value",
         icon: ShoppingCartIcon,
-        color: "text-[var(--admin-accent)]",
+        color: "text-(--admin-accent)",
     },
 ];
 
@@ -52,11 +52,11 @@ const KPICards = ({
 }: KPICardsProps) => {
     if (isLoading) {
         return (
-            <div className="grid gap-px grid-cols-2 overflow-hidden rounded-lg border border-[var(--admin-border)] bg-[var(--admin-border)] lg:grid-cols-4">
+            <div className="grid gap-px grid-cols-2 overflow-hidden rounded-lg border border-(--admin-border) bg-(--admin-border) lg:grid-cols-4">
                 {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="bg-[var(--admin-card)] p-4">
-                        <Skeleton className="mb-3 h-3 w-20 bg-[var(--admin-hover)]" />
-                        <Skeleton className="h-6 w-28 bg-[var(--admin-hover)]" />
+                    <div key={i} className="bg-(--admin-card) p-4">
+                        <Skeleton className="mb-3 h-3 w-20 bg-(--admin-hover)" />
+                        <Skeleton className="h-6 w-28 bg-(--admin-hover)" />
                     </div>
                 ))}
             </div>
@@ -64,19 +64,19 @@ const KPICards = ({
     }
 
     return (
-        <div className="grid gap-px grid-cols-2 overflow-hidden rounded-lg border border-[var(--admin-border)] bg-[var(--admin-border)] lg:grid-cols-4">
+        <div className="grid gap-px grid-cols-2 overflow-hidden rounded-lg border border-(--admin-border) bg-(--admin-border) lg:grid-cols-4">
             {kpis.map((kpi) => {
                 const value = summary?.[kpi.key] ?? "0";
                 const isNegative =
                     kpi.key === "netIncome" && parseFloat(value) < 0;
 
                 return (
-                    <div key={kpi.key} className="bg-[var(--admin-card)] p-4">
+                    <div key={kpi.key} className="bg-(--admin-card) p-4">
                         <div className="mb-2 flex items-center gap-2">
                             <kpi.icon
                                 className={`size-3.5 ${isNegative ? "text-red-500" : kpi.color}`}
                             />
-                            <span className="text-[11px] text-[var(--admin-text-muted)]">
+                            <span className="text-[11px] text-(--admin-text-muted)">
                                 {kpi.label}
                             </span>
                         </div>
@@ -84,7 +84,7 @@ const KPICards = ({
                             className={`font-mono text-lg font-medium tracking-tight ${
                                 isNegative
                                     ? "text-red-500"
-                                    : "text-[var(--admin-text)]"
+                                    : "text-(--admin-text)"
                             }`}
                         >
                             {fmt(value, currencySymbol)}
@@ -94,11 +94,11 @@ const KPICards = ({
             })}
 
             {summary && (
-                <div className="col-span-2 flex items-center justify-between bg-[var(--admin-card)] px-4 py-3 lg:col-span-4">
-                    <span className="text-[11px] text-[var(--admin-text-muted)]">
+                <div className="col-span-2 flex items-center justify-between bg-(--admin-card) px-4 py-3 lg:col-span-4">
+                    <span className="text-[11px] text-(--admin-text-muted)">
                         Total Orders
                     </span>
-                    <span className="font-mono text-sm font-medium text-[var(--admin-text)]">
+                    <span className="font-mono text-sm font-medium text-(--admin-text)">
                         {summary.orderCount.toLocaleString()}
                     </span>
                 </div>

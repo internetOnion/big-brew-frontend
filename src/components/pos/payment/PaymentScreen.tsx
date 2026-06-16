@@ -114,21 +114,21 @@ const PaymentScreen = () => {
     }
 
     return (
-        <div className="flex flex-1 flex-col bg-[var(--pos-bg)]">
-            <div className="flex items-center gap-4 border-b border-[var(--pos-border)] bg-[var(--pos-card)] px-8 pb-4 pt-6">
+        <div className="flex flex-1 flex-col bg-(--pos-bg)">
+            <div className="flex items-center gap-4 border-b border-(--pos-border) bg-(--pos-card) px-8 pb-4 pt-6">
                 <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => navigate(ROUTES.POS)}
-                    className="gap-2 text-[var(--pos-text-muted)]"
+                    className="gap-2 text-(--pos-text-muted)"
                 >
                     <ArrowLeftIcon size={16} /> Back to Menu
                 </Button>
                 <div className="flex-1" />
-                <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-[var(--pos-text-muted)]">
+                <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-(--pos-text-muted)">
                     Payment
                 </p>
-                <span className="rounded-md border border-[var(--pos-border)] bg-[var(--pos-hover)] px-1.5 py-0.5 font-sans text-[10px] font-medium text-[var(--pos-text-muted)]">
+                <span className="rounded-md border border-(--pos-border) bg-(--pos-hover) px-1.5 py-0.5 font-sans text-[10px] font-medium text-(--pos-text-muted)">
                     {itemCount} item{itemCount !== 1 ? "s" : ""} · $
                     {subtotal.toFixed(2)}
                 </span>

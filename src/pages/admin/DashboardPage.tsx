@@ -54,7 +54,7 @@ const DashboardPage = () => {
         <div className="flex flex-col gap-4 p-5">
             {/* Header row */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <h1 className="text-[13px] font-medium text-[var(--admin-primary)]">
+                <h1 className="text-[13px] font-medium text-(--admin-primary)">
                     Dashboard
                 </h1>
                 <DateRangePicker value={dateRange} onChange={setDateRange} />

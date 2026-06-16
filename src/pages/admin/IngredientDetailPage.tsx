@@ -63,7 +63,7 @@ const IngredientDetailPage = () => {
 
     if (isLoading) {
         return (
-            <div className="flex h-64 items-center justify-center text-sm text-[var(--admin-text-muted)]">
+            <div className="flex h-64 items-center justify-center text-sm text-(--admin-text-muted)">
                 Loading...
             </div>
         );
@@ -72,13 +72,13 @@ const IngredientDetailPage = () => {
     if (!ingredient) {
         return (
             <div className="flex flex-col items-center justify-center gap-2 py-20">
-                <p className="text-sm text-[var(--admin-text-muted)]">
+                <p className="text-sm text-(--admin-text-muted)">
                     Ingredient not found
                 </p>
                 <Button
                     variant="ghost"
                     onClick={() => navigate("/admin/inventory")}
-                    className="text-xs text-[var(--admin-text-secondary)]"
+                    className="text-xs text-(--admin-text-secondary)"
                 >
                     Back to Inventory
                 </Button>
@@ -152,14 +152,14 @@ const IngredientDetailPage = () => {
                     variant="ghost"
                     size="icon-xs"
                     onClick={() => navigate("/admin/inventory")}
-                    className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
+                    className="text-(--admin-text-muted) hover:text-(--admin-text)"
                 >
                     <ArrowLeftIcon className="size-4" />
                 </Button>
-                <h1 className="text-[13px] font-medium text-[var(--admin-primary)]">
+                <h1 className="text-[13px] font-medium text-(--admin-primary)">
                     {ingredient.name}
                 </h1>
-                <span className="rounded-full border border-[var(--admin-border)] bg-[var(--admin-hover)] px-2 py-0.5 font-mono text-[10px] text-[var(--admin-text-secondary)]">
+                <span className="rounded-full border border-(--admin-border) bg-(--admin-hover) px-2 py-0.5 font-mono text-[10px] text-(--admin-text-secondary)">
                     {ingredient.unit}
                 </span>
                 <div className="ml-auto">
@@ -183,7 +183,7 @@ const IngredientDetailPage = () => {
                                 size="xs"
                                 onClick={() => setShowDelete(false)}
                                 disabled={deleteMutation.isPending}
-                                className="text-[11px] text-[var(--admin-text-secondary)]"
+                                className="text-[11px] text-(--admin-text-secondary)"
                             >
                                 Cancel
                             </Button>
@@ -206,30 +206,30 @@ const IngredientDetailPage = () => {
                 {/* Left column: Basic info + Adjust stock */}
                 <div className="flex flex-col gap-5">
                     {/* Basic Info */}
-                    <div className="rounded-lg border border-[var(--admin-border)] bg-[var(--admin-card)] p-4">
-                        <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-[var(--admin-text-secondary)]">
+                    <div className="rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
+                        <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
                             Basic Info
                         </h2>
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                            <Label className="text-[11px] text-(--admin-text-secondary)">
                                 Name
                             </Label>
                             <Input
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs"
+                                className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
                             />
                         </div>
                         <div className="mt-3 grid grid-cols-2 gap-3">
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                                <Label className="text-[11px] text-(--admin-text-secondary)">
                                     Unit
                                 </Label>
                                 <Select
                                     value={unit}
                                     onValueChange={(v) => setUnit(v ?? "g")}
                                 >
-                                    <SelectTrigger className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs">
+                                    <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -243,7 +243,7 @@ const IngredientDetailPage = () => {
                                 </Select>
                             </div>
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                                <Label className="text-[11px] text-(--admin-text-secondary)">
                                     Low Stock Alert
                                 </Label>
                                 <Input
@@ -254,23 +254,23 @@ const IngredientDetailPage = () => {
                                     onChange={(e) =>
                                         setLowStockThreshold(e.target.value)
                                     }
-                                    className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-xs"
+                                    className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                                 />
                             </div>
                         </div>
                         <div className="mt-4 flex items-center justify-between">
-                            <div className="rounded border border-[var(--admin-border)] bg-[var(--admin-hover)] px-3 py-1.5">
-                                <span className="text-[10px] text-[var(--admin-text-muted)]">
+                            <div className="rounded border border-(--admin-border) bg-(--admin-hover) px-3 py-1.5">
+                                <span className="text-[10px] text-(--admin-text-muted)">
                                     Current Stock:{" "}
                                 </span>
-                                <span className="font-mono text-[13px] font-medium text-[var(--admin-text)]">
+                                <span className="font-mono text-[13px] font-medium text-(--admin-text)">
                                     {currentStock.toFixed(2)} {ingredient.unit}
                                 </span>
                             </div>
                             <Button
                                 onClick={handleSave}
                                 disabled={updateMutation.isPending}
-                                className="h-8 bg-[var(--admin-primary)] text-xs text-white hover:bg-[#3a1d0e]"
+                                className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-[#3a1d0e]"
                             >
                                 {updateMutation.isPending
                                     ? "Saving..."
@@ -280,22 +280,22 @@ const IngredientDetailPage = () => {
                     </div>
 
                     {/* Adjust Stock */}
-                    <div className="rounded-lg border border-[var(--admin-border)] bg-[var(--admin-card)] p-4">
-                        <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-[var(--admin-text-secondary)]">
+                    <div className="rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
+                        <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
                             Adjust Stock
                         </h2>
                         <div className="space-y-4">
-                            <div className="rounded border border-[var(--admin-border)] bg-[var(--admin-hover)] p-3">
-                                <span className="text-[11px] text-[var(--admin-text-muted)]">
+                            <div className="rounded border border-(--admin-border) bg-(--admin-hover) p-3">
+                                <span className="text-[11px] text-(--admin-text-muted)">
                                     Current Stock
                                 </span>
-                                <p className="font-mono text-lg text-[var(--admin-text)]">
+                                <p className="font-mono text-lg text-(--admin-text)">
                                     {currentStock} {ingredient.unit}
                                 </p>
                             </div>
 
                             <div>
-                                <div className="flex overflow-hidden rounded border border-[var(--admin-border)]">
+                                <div className="flex overflow-hidden rounded border border-(--admin-border)">
                                     {(
                                         [
                                             {
@@ -319,10 +319,10 @@ const IngredientDetailPage = () => {
                                                 setMode(opt.key);
                                                 setQuantity("");
                                             }}
-                                            className={`flex-1 px-3 py-1.5 text-center text-[11px] font-medium transition-colors ${
+                                            className={`flex-1 cursor-pointer px-3 py-1.5 text-center text-[11px] font-medium transition-colors ${
                                                 mode === opt.key
-                                                    ? "bg-[var(--admin-primary)] text-white"
-                                                    : "bg-[var(--admin-card)] text-[var(--admin-text-secondary)] hover:bg-[var(--admin-hover)]"
+                                                    ? "bg-(--admin-primary) text-white"
+                                                    : "bg-(--admin-card) text-(--admin-text-secondary) hover:bg-(--admin-hover)"
                                             }`}
                                         >
                                             {opt.label}
@@ -332,7 +332,7 @@ const IngredientDetailPage = () => {
                             </div>
 
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                                <Label className="text-[11px] text-(--admin-text-secondary)">
                                     {mode === "set"
                                         ? "New Stock Value"
                                         : "Amount to " +
@@ -350,12 +350,12 @@ const IngredientDetailPage = () => {
                                         );
                                         setQuantity(v);
                                     }}
-                                    className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-xs"
+                                    className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                                 />
                             </div>
 
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                                <Label className="text-[11px] text-(--admin-text-secondary)">
                                     Notes
                                 </Label>
                                 <Textarea
@@ -365,43 +365,43 @@ const IngredientDetailPage = () => {
                                     }
                                     rows={2}
                                     placeholder="Optional notes..."
-                                    className="border-[var(--admin-border)] bg-[var(--admin-card)] text-xs placeholder:text-[var(--admin-text-muted)]"
+                                    className="border-(--admin-border) bg-(--admin-card) text-xs placeholder:text-(--admin-text-muted)"
                                 />
                             </div>
 
                             {quantity && qtyNum > 0 && (
-                                <div className="rounded border border-[var(--admin-border)] bg-[var(--admin-hover)] p-3">
+                                <div className="rounded border border-(--admin-border) bg-(--admin-hover) p-3">
                                     {mode === "set" ? (
                                         <div className="flex items-center justify-center gap-6 text-center">
                                             <div className="flex flex-col items-center gap-0.5">
-                                                <span className="text-[10px] text-[var(--admin-text-muted)]">
+                                                <span className="text-[10px] text-(--admin-text-muted)">
                                                     Current
                                                 </span>
-                                                <span className="font-mono text-[13px] font-medium text-[var(--admin-text)]">
+                                                <span className="font-mono text-[13px] font-medium text-(--admin-text)">
                                                     {currentStock.toFixed(2)}{" "}
                                                     {ingredient.unit}
                                                 </span>
                                             </div>
-                                            <span className="text-sm text-[var(--admin-text-muted)]">
+                                            <span className="text-sm text-(--admin-text-muted)">
                                                 →
                                             </span>
                                             <div className="flex flex-col items-center gap-0.5">
-                                                <span className="text-[10px] text-[var(--admin-text-muted)]">
+                                                <span className="text-[10px] text-(--admin-text-muted)">
                                                     New
                                                 </span>
                                                 <span
-                                                    className={`font-mono text-[13px] font-medium ${newStock < 0 ? "text-red-500" : "text-[var(--admin-text)]"}`}
+                                                    className={`font-mono text-[13px] font-medium ${newStock < 0 ? "text-red-500" : "text-(--admin-text)"}`}
                                                 >
                                                     {newStock.toFixed(2)}{" "}
                                                     {ingredient.unit}
                                                 </span>
                                             </div>
                                             <div className="flex flex-col items-center gap-0.5">
-                                                <span className="text-[10px] text-[var(--admin-text-muted)]">
+                                                <span className="text-[10px] text-(--admin-text-muted)">
                                                     Change
                                                 </span>
                                                 <span
-                                                    className={`font-mono text-[13px] font-medium ${delta > 0 ? "text-emerald-600" : delta < 0 ? "text-red-500" : "text-[var(--admin-text)]"}`}
+                                                    className={`font-mono text-[13px] font-medium ${delta > 0 ? "text-emerald-600" : delta < 0 ? "text-red-500" : "text-(--admin-text)"}`}
                                                 >
                                                     {delta > 0 ? "+" : ""}
                                                     {delta.toFixed(2)}
@@ -411,19 +411,19 @@ const IngredientDetailPage = () => {
                                     ) : (
                                         <div className="flex items-center justify-between text-center">
                                             <div className="flex flex-col items-center gap-0.5">
-                                                <span className="text-[10px] text-[var(--admin-text-muted)]">
+                                                <span className="text-[10px] text-(--admin-text-muted)">
                                                     Current
                                                 </span>
-                                                <span className="font-mono text-[13px] font-medium text-[var(--admin-text)]">
+                                                <span className="font-mono text-[13px] font-medium text-(--admin-text)">
                                                     {currentStock.toFixed(2)}{" "}
                                                     {ingredient.unit}
                                                 </span>
                                             </div>
-                                            <span className="text-[var(--admin-text-muted)]">
+                                            <span className="text-(--admin-text-muted)">
                                                 {mode === "add" ? "+" : "−"}
                                             </span>
                                             <div className="flex flex-col items-center gap-0.5">
-                                                <span className="text-[10px] text-[var(--admin-text-muted)]">
+                                                <span className="text-[10px] text-(--admin-text-muted)">
                                                     Change
                                                 </span>
                                                 <span
@@ -433,15 +433,15 @@ const IngredientDetailPage = () => {
                                                     {delta.toFixed(2)}
                                                 </span>
                                             </div>
-                                            <span className="text-[var(--admin-text-muted)]">
+                                            <span className="text-(--admin-text-muted)">
                                                 =
                                             </span>
                                             <div className="flex flex-col items-center gap-0.5">
-                                                <span className="text-[10px] text-[var(--admin-text-muted)]">
+                                                <span className="text-[10px] text-(--admin-text-muted)">
                                                     New
                                                 </span>
                                                 <span
-                                                    className={`font-mono text-[13px] font-medium ${newStock < 0 ? "text-red-500" : "text-[var(--admin-text)]"}`}
+                                                    className={`font-mono text-[13px] font-medium ${newStock < 0 ? "text-red-500" : "text-(--admin-text)"}`}
                                                 >
                                                     {newStock.toFixed(2)}{" "}
                                                     {ingredient.unit}
@@ -461,7 +461,7 @@ const IngredientDetailPage = () => {
                                     qtyNum <= 0 ||
                                     adjustMutation.isPending
                                 }
-                                className="h-8 bg-[var(--admin-primary)] text-xs text-white hover:bg-[#3a1d0e]"
+                                className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-[#3a1d0e]"
                             >
                                 {adjustMutation.isPending
                                     ? "Adjusting..."
@@ -473,21 +473,21 @@ const IngredientDetailPage = () => {
 
                 {/* Right column: Stock History */}
                 <div>
-                    <div className="rounded-lg border border-[var(--admin-border)] bg-[var(--admin-card)] p-4">
-                        <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-[var(--admin-text-secondary)]">
+                    <div className="rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
+                        <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
                             Stock History
                         </h2>
                         <div className="max-h-[500px] overflow-y-auto">
                             {historyLoading ? (
-                                <div className="flex h-32 items-center justify-center text-xs text-[var(--admin-text-muted)]">
+                                <div className="flex h-32 items-center justify-center text-xs text-(--admin-text-muted)">
                                     Loading...
                                 </div>
                             ) : !movements || movements.length === 0 ? (
-                                <div className="flex h-32 items-center justify-center text-xs text-[var(--admin-text-muted)]">
+                                <div className="flex h-32 items-center justify-center text-xs text-(--admin-text-muted)">
                                     No stock movements recorded.
                                 </div>
                             ) : (
-                                <div className="divide-y divide-[var(--admin-border)]">
+                                <div className="divide-y divide-(--admin-border)">
                                     {movements.map((m) => {
                                         const qty = parseFloat(
                                             m.quantityChange,
@@ -500,13 +500,13 @@ const IngredientDetailPage = () => {
                                                 className="flex items-center justify-between px-1 py-2"
                                             >
                                                 <div className="min-w-0 flex-1">
-                                                    <p className="text-[12px] text-[var(--admin-text)]">
+                                                    <p className="text-[12px] text-(--admin-text)">
                                                         {reasonLabels[
                                                             m.reason
                                                         ] ?? m.reason}
                                                     </p>
                                                     {m.notes && (
-                                                        <p className="truncate text-[10px] text-[var(--admin-text-muted)]">
+                                                        <p className="truncate text-[10px] text-(--admin-text-muted)">
                                                             {m.notes}
                                                         </p>
                                                     )}
@@ -518,7 +518,7 @@ const IngredientDetailPage = () => {
                                                         {isPositive ? "+" : ""}
                                                         {qty.toFixed(2)}
                                                     </span>
-                                                    <span className="text-[10px] text-[var(--admin-text-muted)]">
+                                                    <span className="text-[10px] text-(--admin-text-muted)">
                                                         {format(
                                                             new Date(
                                                                 m.createdAt,

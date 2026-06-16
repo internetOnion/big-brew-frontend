@@ -81,25 +81,25 @@ const StockAdjustDialog = ({
 
     return (
         <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-            <DialogContent className="max-w-sm border-[var(--admin-border)] bg-[var(--admin-card)]">
+            <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card)">
                 <DialogHeader>
-                    <DialogTitle className="text-[var(--admin-text)]">
+                    <DialogTitle className="text-(--admin-text)">
                         Adjust Stock: {ingredient.name}
                     </DialogTitle>
                 </DialogHeader>
 
                 <div className="space-y-4">
-                    <div className="rounded border border-[var(--admin-border)] bg-[var(--admin-hover)] p-3">
-                        <span className="text-[11px] text-[var(--admin-text-muted)]">
+                    <div className="rounded border border-(--admin-border) bg-(--admin-hover) p-3">
+                        <span className="text-[11px] text-(--admin-text-muted)">
                             Current Stock
                         </span>
-                        <p className="font-mono text-lg text-[var(--admin-text)]">
+                        <p className="font-mono text-lg text-(--admin-text)">
                             {currentStock} {ingredient.unit}
                         </p>
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                        <Label className="text-[11px] text-(--admin-text-secondary)">
                             Reason
                         </Label>
                         <Select
@@ -108,7 +108,7 @@ const StockAdjustDialog = ({
                                 setReason(v ?? "manual_restock")
                             }
                         >
-                            <SelectTrigger className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs">
+                            <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -125,7 +125,7 @@ const StockAdjustDialog = ({
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                        <Label className="text-[11px] text-(--admin-text-secondary)">
                             Quantity
                         </Label>
                         <Input
@@ -136,12 +136,12 @@ const StockAdjustDialog = ({
                             }
                             value={quantity}
                             onChange={(e) => setQuantity(e.target.value)}
-                            className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-xs"
+                            className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                         />
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                        <Label className="text-[11px] text-(--admin-text-secondary)">
                             Notes
                         </Label>
                         <Textarea
@@ -149,17 +149,17 @@ const StockAdjustDialog = ({
                             onChange={(e) => setNotes(e.target.value)}
                             rows={2}
                             placeholder="Optional notes..."
-                            className="border-[var(--admin-border)] bg-[var(--admin-card)] text-xs placeholder:text-[var(--admin-text-muted)]"
+                            className="border-(--admin-border) bg-(--admin-card) text-xs placeholder:text-(--admin-text-muted)"
                         />
                     </div>
 
                     {quantity && qtyNum > 0 && (
-                        <div className="rounded border border-[var(--admin-border)] p-2 text-center">
-                            <span className="text-[11px] text-[var(--admin-text-muted)]">
+                        <div className="rounded border border-(--admin-border) p-2 text-center">
+                            <span className="text-[11px] text-(--admin-text-muted)">
                                 New stock:{" "}
                             </span>
                             <span
-                                className={`font-mono text-sm font-medium ${newStock < 0 ? "text-red-500" : "text-[var(--admin-text)]"}`}
+                                className={`font-mono text-sm font-medium ${newStock < 0 ? "text-red-500" : "text-(--admin-text)"}`}
                             >
                                 {newStock.toFixed(2)} {ingredient.unit}
                             </span>
@@ -171,7 +171,7 @@ const StockAdjustDialog = ({
                     <Button
                         variant="ghost"
                         onClick={onClose}
-                        className="text-[var(--admin-text-secondary)]"
+                        className="text-(--admin-text-secondary)"
                     >
                         Cancel
                     </Button>
@@ -180,7 +180,7 @@ const StockAdjustDialog = ({
                         disabled={
                             !quantity || qtyNum <= 0 || adjustMutation.isPending
                         }
-                        className="bg-[var(--admin-primary)] text-white hover:bg-[#3a1d0e]"
+                        className="bg-(--admin-primary) text-white hover:bg-[#3a1d0e]"
                     >
                         {adjustMutation.isPending
                             ? "Adjusting..."

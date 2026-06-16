@@ -37,16 +37,16 @@ export const OrderQueueCard = ({
                 "mb-2 flex w-full cursor-pointer flex-col rounded-lg border p-2.5 text-left transition-colors",
                 urgent
                     ? "border-destructive/30 bg-destructive/8 hover:bg-destructive/12"
-                    : "border-[var(--pos-border)] bg-[var(--pos-card)] hover:bg-[var(--pos-hover)]",
+                    : "border-(--pos-border) bg-(--pos-card) hover:bg-(--pos-hover)",
             )}
         >
             <div className="mb-1.5 flex items-center justify-between">
-                <span className="font-mono text-[12px] font-bold tabular-nums text-[var(--pos-primary)]">
+                <span className="font-mono text-[12px] font-bold tabular-nums text-(--pos-primary)">
                     #{order.orderNumber}
                 </span>
                 <div className="flex items-center gap-1.5">
-                    <TypeIcon className="size-3 text-[var(--pos-text-muted)]" />
-                    <span className="text-[10px] capitalize text-[var(--pos-text-muted)]">
+                    <TypeIcon className="size-3 text-(--pos-text-muted)" />
+                    <span className="text-[10px] capitalize text-(--pos-text-muted)">
                         {order.diningOption === "dine_in"
                             ? "dine-in"
                             : "takeout"}
@@ -56,8 +56,8 @@ export const OrderQueueCard = ({
             <div className="mb-2 flex flex-col gap-0.5">
                 {order.items.map((item: OrderItem) => (
                     <div key={item.id} className="flex items-center gap-1">
-                        <CoffeeIcon className="size-3 shrink-0 text-[var(--pos-text-muted)]" />
-                        <span className="truncate text-[11px] font-medium text-[var(--pos-text)]">
+                        <CoffeeIcon className="size-3 shrink-0 text-(--pos-text-muted)" />
+                        <span className="truncate text-[11px] font-medium text-(--pos-text)">
                             {item.quantity > 1 && `${item.quantity}× `}
                             {item.name}
                         </span>
@@ -71,7 +71,7 @@ export const OrderQueueCard = ({
                             "size-3",
                             urgent
                                 ? "text-destructive"
-                                : "text-[var(--pos-text-muted)]",
+                                : "text-(--pos-text-muted)",
                         )}
                     />
                     <span
@@ -79,7 +79,7 @@ export const OrderQueueCard = ({
                             "font-mono text-[10px] font-medium tabular-nums",
                             urgent
                                 ? "text-destructive"
-                                : "text-[var(--pos-text-muted)]",
+                                : "text-(--pos-text-muted)",
                         )}
                     >
                         {timeSince}

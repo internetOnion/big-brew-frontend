@@ -25,39 +25,39 @@ const POSLayout = () => {
     });
 
     return (
-        <div className="pos-theme flex h-screen w-screen flex-col overflow-hidden bg-[var(--pos-bg)]">
-            <div className="flex h-14 shrink-0 items-center justify-between border-b border-[var(--pos-border)] bg-[var(--pos-card)] px-5 shadow-sm">
+        <div className="pos-theme flex h-screen w-screen flex-col overflow-hidden bg-(--pos-bg)">
+            <div className="flex h-14 shrink-0 items-center justify-between border-b border-(--pos-border) bg-(--pos-card) px-5 shadow-sm">
                 <div className="flex items-center gap-3">
                     <img
                         src="/homebrew.svg"
                         alt="Homebrew"
                         className="size-7"
                     />
-                    <span className="font-sans text-[13px] font-bold tracking-tight text-[var(--pos-primary)]">
+                    <span className="font-sans text-[13px] font-bold tracking-tight text-(--pos-primary)">
                         Big Brew
                     </span>
-                    <span className="rounded-md border border-[var(--pos-border)] bg-[var(--pos-hover)] px-1.5 py-0.5 font-sans text-[10px] font-medium text-[var(--pos-text-muted)]">
+                    <span className="rounded-md border border-(--pos-border) bg-(--pos-hover) px-1.5 py-0.5 font-sans text-[10px] font-medium text-(--pos-text-muted)">
                         POS
                     </span>
                 </div>
 
                 <div className="flex items-center gap-4">
                     <div className="flex flex-col items-end">
-                        <span className="font-mono text-[11px] tabular-nums whitespace-nowrap text-[var(--pos-text)]">
+                        <span className="font-mono text-[11px] tabular-nums whitespace-nowrap text-(--pos-text)">
                             {timeStr}
                         </span>
-                        <span className="font-sans text-[10px] whitespace-nowrap text-[var(--pos-text-muted)]">
+                        <span className="font-sans text-[10px] whitespace-nowrap text-(--pos-text-muted)">
                             {dateStr}
                         </span>
                     </div>
                     <Separator
                         orientation="vertical"
-                        className="h-6 bg-[var(--pos-border)]"
+                        className="h-6 bg-(--pos-border)"
                     />
                     {user?.role !== "barista" && (
                         <button
                             onClick={() => navigate("/admin")}
-                            className="flex w-full items-center gap-2.5 rounded-lg bg-[var(--pos-accent)] px-2.5 py-1.5 text-[13px] text-white transition-opacity duration-150 hover:opacity-85 cursor-pointer"
+                            className="flex w-full items-center gap-2.5 rounded-lg bg-(--pos-accent) px-2.5 py-1.5 text-[13px] text-white transition-opacity duration-150 hover:opacity-85 cursor-pointer"
                         >
                             <MonitorIcon className="size-[15px] shrink-0" />
                             Admin

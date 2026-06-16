@@ -52,41 +52,41 @@ const IngredientCreatePage = () => {
                     variant="ghost"
                     size="icon-xs"
                     onClick={() => navigate("/admin/inventory")}
-                    className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
+                    className="text-(--admin-text-muted) hover:text-(--admin-text)"
                 >
                     <ArrowLeftIcon className="size-4" />
                 </Button>
-                <h1 className="text-[13px] font-medium text-[var(--admin-primary)]">
+                <h1 className="text-[13px] font-medium text-(--admin-primary)">
                     Add Ingredient
                 </h1>
             </div>
 
-            <div className="max-w-md rounded-lg border border-[var(--admin-border)] bg-[var(--admin-card)] p-4">
-                <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-[var(--admin-text-secondary)]">
+            <div className="max-w-md rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
+                <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
                     Ingredient Info
                 </h2>
 
                 <div className="space-y-4">
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                        <Label className="text-[11px] text-(--admin-text-secondary)">
                             Name
                         </Label>
                         <Input
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs"
+                            className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
                         />
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                        <Label className="text-[11px] text-(--admin-text-secondary)">
                             Unit
                         </Label>
                         <Select
                             value={unit}
                             onValueChange={(v) => setUnit(v ?? "g")}
                         >
-                            <SelectTrigger className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs">
+                            <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -100,7 +100,7 @@ const IngredientCreatePage = () => {
 
                     <div className="grid grid-cols-2 gap-3">
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                            <Label className="text-[11px] text-(--admin-text-secondary)">
                                 Initial Stock
                             </Label>
                             <Input
@@ -111,11 +111,11 @@ const IngredientCreatePage = () => {
                                 onChange={(e) =>
                                     setStockQuantity(e.target.value)
                                 }
-                                className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-xs"
+                                className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                             />
                         </div>
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                            <Label className="text-[11px] text-(--admin-text-secondary)">
                                 Low Stock Alert
                             </Label>
                             <Input
@@ -126,24 +126,24 @@ const IngredientCreatePage = () => {
                                 onChange={(e) =>
                                     setLowStockThreshold(e.target.value)
                                 }
-                                className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-xs"
+                                className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                             />
                         </div>
                     </div>
                 </div>
 
-                <div className="mt-5 flex justify-end gap-2 border-t border-[var(--admin-border)] pt-3">
+                <div className="mt-5 flex justify-end gap-2 border-t border-(--admin-border) pt-3">
                     <Button
                         variant="ghost"
                         onClick={() => navigate("/admin/inventory")}
-                        className="text-[var(--admin-text-secondary)]"
+                        className="text-(--admin-text-secondary)"
                     >
                         Cancel
                     </Button>
                     <Button
                         onClick={() => createMutation.mutate()}
                         disabled={!name.trim() || createMutation.isPending}
-                        className="bg-[var(--admin-primary)] text-white hover:bg-[#3a1d0e]"
+                        className="bg-(--admin-primary) text-white hover:bg-[#3a1d0e]"
                     >
                         {createMutation.isPending
                             ? "Creating..."

@@ -79,7 +79,7 @@ export const LoginForm = ({ onSubmit, isLoading, error }: LoginFormProps) => {
                         <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute top-1/2 right-4 flex -translate-y-1/2 items-center text-muted-foreground transition-colors hover:text-foreground"
+                            className="absolute top-1/2 right-4 flex cursor-pointer -translate-y-1/2 items-center text-muted-foreground transition-colors hover:text-foreground"
                         >
                             {showPassword ? (
                                 <EyeSlashIcon size={18} />

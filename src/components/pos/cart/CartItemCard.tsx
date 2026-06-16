@@ -21,26 +21,26 @@ export const CartItemCard = ({
     const CategoryIcon = getCategoryIcon(getCategoryIconName(item.category));
 
     return (
-        <div className="mb-2 rounded-lg border border-[var(--pos-border)] bg-[var(--pos-card)] p-2.5">
+        <div className="mb-2 rounded-lg border border-(--pos-border) bg-(--pos-card) p-2.5">
             <div className="flex items-start gap-2">
-                <CategoryIcon className="mt-0.5 size-3.5 shrink-0 text-[var(--pos-text-muted)]" />
+                <CategoryIcon className="mt-0.5 size-3.5 shrink-0 text-(--pos-text-muted)" />
                 <div className="min-w-0 flex-1">
-                    <p className="truncate font-sans text-[12px] font-medium text-[var(--pos-text)]">
+                    <p className="truncate font-sans text-[12px] font-medium text-(--pos-text)">
                         {item.name}
                     </p>
                     <div className="mt-0.5 flex flex-wrap gap-x-2 gap-y-0.5">
                         {item.size && (
-                            <span className="text-[10px] text-[var(--pos-text-muted)]">
+                            <span className="text-[10px] text-(--pos-text-muted)">
                                 Size {item.size}
                             </span>
                         )}
                         {item.sugarLevel && (
-                            <span className="text-[10px] text-[var(--pos-text-muted)]">
+                            <span className="text-[10px] text-(--pos-text-muted)">
                                 Sugar {item.sugarLevel}
                             </span>
                         )}
                         {item.toppings.length > 0 && (
-                            <span className="truncate text-[10px] text-[var(--pos-text-muted)]">
+                            <span className="truncate text-[10px] text-(--pos-text-muted)">
                                 {item.toppings.map((t) => t.name).join(", ")}
                             </span>
                         )}
@@ -59,20 +59,20 @@ export const CartItemCard = ({
                             .map((name) => (
                                 <span
                                     key={name}
-                                    className="text-[10px] text-[var(--pos-text-muted)]"
+                                    className="text-[10px] text-(--pos-text-muted)"
                                 >
                                     {name}
                                 </span>
                             ))}
                     </div>
                     {item.note && (
-                        <p className="mt-0.5 truncate text-[10px] italic text-[var(--pos-text-muted)]">
+                        <p className="mt-0.5 truncate text-[10px] italic text-(--pos-text-muted)">
                             &ldquo;{item.note}&rdquo;
                         </p>
                     )}
                 </div>
                 <div className="flex flex-col items-end gap-1">
-                    <p className="font-mono text-[12px] font-bold tabular-nums text-[var(--pos-primary)]">
+                    <p className="font-mono text-[12px] font-bold tabular-nums text-(--pos-primary)">
                         ${item.price.toFixed(2)}
                     </p>
                     <div className="flex items-center gap-1">
@@ -81,7 +81,7 @@ export const CartItemCard = ({
                             size="icon-xs"
                             onClick={() => onEdit(item.id)}
                         >
-                            <PencilSimpleIcon className="text-[var(--pos-text-muted)]" />
+                            <PencilSimpleIcon className="text-(--pos-text-muted)" />
                         </Button>
                         <Button
                             variant="destructive"

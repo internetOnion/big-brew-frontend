@@ -84,7 +84,7 @@ const MenuItemImageUpload = ({
 
     return (
         <div className="flex items-start gap-4">
-            <div className="relative h-32 w-40 shrink-0 overflow-hidden rounded-lg border border-[var(--admin-border)] bg-[var(--admin-hover)]">
+            <div className="relative h-32 w-40 shrink-0 overflow-hidden rounded-lg border border-(--admin-border) bg-(--admin-hover)">
                 {imageUrl && !imgError ? (
                     <img
                         src={imageUrl}
@@ -94,7 +94,7 @@ const MenuItemImageUpload = ({
                     />
                 ) : (
                     <div className="flex size-full items-center justify-center">
-                        <ForkKnifeIcon className="size-8 text-[var(--admin-text-muted)]" />
+                        <ForkKnifeIcon className="size-8 text-(--admin-text-muted)" />
                     </div>
                 )}
 
@@ -107,14 +107,14 @@ const MenuItemImageUpload = ({
                 <button
                     onClick={() => fileInputRef.current?.click()}
                     disabled={uploading}
-                    className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-opacity hover:bg-black/40 hover:opacity-100"
+                    className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/0 opacity-0 transition-opacity hover:bg-black/40 hover:opacity-100"
                 >
                     <UploadSimpleIcon className="size-5 text-white" />
                 </button>
             </div>
 
             <div className="flex flex-col gap-2">
-                <p className="text-[12px] text-[var(--admin-text-secondary)]">
+                <p className="text-[12px] text-(--admin-text-secondary)">
                     JPEG, PNG, GIF, WebP. Max 5MB.
                 </p>
                 <div className="flex gap-2">
@@ -123,7 +123,7 @@ const MenuItemImageUpload = ({
                         size="xs"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploading}
-                        className="border-[var(--admin-border)] text-[11px] text-[var(--admin-text-secondary)]"
+                        className="border-(--admin-border) text-[11px] text-(--admin-text-secondary)"
                     >
                         <UploadSimpleIcon className="size-3" />
                         {imageUrl ? "Replace" : "Upload"}

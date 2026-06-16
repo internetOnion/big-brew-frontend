@@ -28,12 +28,12 @@ export const PaymentOrderSummary = ({
     onConfirm,
     resetInput,
 }: PaymentOrderSummaryProps) => (
-    <div className="flex w-[280px] flex-col border-l border-[var(--pos-border)] bg-[var(--pos-card)]">
+    <div className="flex w-[280px] flex-col border-l border-(--pos-border) bg-(--pos-card)">
         <div className="px-4 pt-4">
-            <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.1em] text-[var(--pos-text-muted)]">
+            <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.1em] text-(--pos-text-muted)">
                 Order Summary
             </p>
-            <div className="mb-3 flex overflow-hidden rounded-lg bg-[var(--pos-hover)] p-0.5 gap-0.5">
+            <div className="mb-3 flex overflow-hidden rounded-lg bg-(--pos-hover) p-0.5 gap-0.5">
                 {(["USD", "KHR"] as const).map((c) => (
                     <Button
                         key={c}
@@ -59,17 +59,17 @@ export const PaymentOrderSummary = ({
                 return (
                     <div
                         key={item.id}
-                        className="flex items-start gap-2 border-b border-[var(--pos-border)] py-2 pl-1"
+                        className="flex items-start gap-2 border-b border-(--pos-border) py-2 pl-1"
                     >
                         <Icon
                             size={14}
                             strokeWidth={1.5}
-                            className="mt-0.5 shrink-0 text-[var(--pos-primary)]"
+                            className="mt-0.5 shrink-0 text-(--pos-primary)"
                         />
                         <div className="min-w-0 flex-1">
-                            <p className="text-[12px] font-medium text-[var(--pos-text)]">
+                            <p className="text-[12px] font-medium text-(--pos-text)">
                                 {item.quantity > 1 && (
-                                    <span className="font-bold text-[var(--pos-accent)]">
+                                    <span className="font-bold text-(--pos-accent)">
                                         {item.quantity}×{" "}
                                     </span>
                                 )}
@@ -111,7 +111,7 @@ export const PaymentOrderSummary = ({
                                 )}
                             </div>
                         </div>
-                        <span className="shrink-0 text-right font-mono text-[12px] font-semibold text-[var(--pos-text)]">
+                        <span className="shrink-0 text-right font-mono text-[12px] font-semibold text-(--pos-text)">
                             {currency === "KHR"
                                 ? "៛" +
                                   Math.round(
@@ -124,7 +124,7 @@ export const PaymentOrderSummary = ({
             })}
         </div>
 
-        <div className="border-t border-[var(--pos-border)] p-4 pb-5">
+        <div className="border-t border-(--pos-border) p-4 pb-5">
             <motion.div
                 animate={
                     isFullyPaid && !isProcessing

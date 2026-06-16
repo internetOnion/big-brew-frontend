@@ -24,9 +24,12 @@ const MenuItemCard = ({ item, onEdit, onDelete }: MenuItemCardProps) => {
     const price = parseFloat(item.basePrice);
 
     return (
-        <div className="group relative overflow-hidden rounded-lg border border-[var(--admin-border)] bg-[var(--admin-card)] transition-colors hover:border-[var(--admin-accent)]">
+        <div
+            onClick={() => onEdit(item)}
+            className="group relative cursor-pointer overflow-hidden rounded-lg border border-(--admin-border) bg-(--admin-card) transition-colors hover:border-(--admin-accent)"
+        >
             {/* Image */}
-            <div className="relative aspect-[4/3] overflow-hidden bg-[var(--admin-hover)]">
+            <div className="relative aspect-[4/3] overflow-hidden bg-(--admin-hover)">
                 {item.imageUrl && !imgError ? (
                     <img
                         src={item.imageUrl}
@@ -36,7 +39,7 @@ const MenuItemCard = ({ item, onEdit, onDelete }: MenuItemCardProps) => {
                     />
                 ) : (
                     <div className="flex size-full items-center justify-center">
-                        <ForkKnifeIcon className="size-8 text-[var(--admin-text-muted)]" />
+                        <ForkKnifeIcon className="size-8 text-(--admin-text-muted)" />
                     </div>
                 )}
                 {/* Category badge */}
@@ -54,35 +57,37 @@ const MenuItemCard = ({ item, onEdit, onDelete }: MenuItemCardProps) => {
             {/* Info */}
             <div className="flex items-center justify-between p-3">
                 <div className="min-w-0">
-                    <p className="truncate text-[13px] font-medium text-[var(--admin-text)]">
+                    <p className="truncate text-[13px] font-medium text-(--admin-text)">
                         {item.name}
                     </p>
-                    <p className="font-mono text-[12px] text-[var(--admin-text-secondary)]">
+                    <p className="font-mono text-[12px] text-(--admin-text-secondary)">
                         ${price.toFixed(2)}
                     </p>
                 </div>
-                <DropdownMenu>
-                    <DropdownMenuTrigger className="flex size-7 shrink-0 items-center justify-center rounded-md border border-[var(--admin-border)] text-[var(--admin-text-secondary)] transition-colors hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]">
-                        <DotsThreeVerticalIcon className="size-4" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                        align="end"
-                        sideOffset={4}
-                        className="border-[var(--admin-border)] bg-[var(--admin-card)]"
-                    >
-                        <DropdownMenuItem onClick={() => onEdit(item)}>
-                            <PencilSimpleIcon className="size-4" />
-                            Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            variant="destructive"
-                            onClick={() => onDelete(item)}
+                <div onClick={(e) => e.stopPropagation()}>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className="flex size-7 shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text)">
+                            <DotsThreeVerticalIcon className="size-4" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                            align="end"
+                            sideOffset={4}
+                            className="border-(--admin-border) bg-(--admin-card)"
                         >
-                            <TrashIcon className="size-4" />
-                            Delete
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                            <DropdownMenuItem onClick={() => onEdit(item)}>
+                                <PencilSimpleIcon className="size-4" />
+                                Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                variant="destructive"
+                                onClick={() => onDelete(item)}
+                            >
+                                <TrashIcon className="size-4" />
+                                Delete
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </div>
         </div>
     );

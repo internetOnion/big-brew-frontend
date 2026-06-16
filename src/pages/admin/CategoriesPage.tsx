@@ -80,11 +80,11 @@ const CategoriesPage = () => {
                     variant="ghost"
                     size="icon-xs"
                     onClick={() => navigate("/admin/menu")}
-                    className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
+                    className="text-(--admin-text-muted) hover:text-(--admin-text)"
                 >
                     <ArrowLeftIcon className="size-4" />
                 </Button>
-                <h1 className="text-[13px] font-medium text-[var(--admin-primary)]">
+                <h1 className="text-[13px] font-medium text-(--admin-primary)">
                     Categories
                 </h1>
                 <div className="ml-auto">
@@ -95,7 +95,7 @@ const CategoriesPage = () => {
                             setNewName("");
                         }}
                         disabled={isAdding}
-                        className="h-7 gap-1.5 bg-[var(--admin-primary)] text-[11px] text-white hover:bg-[#3a1d0e]"
+                        className="h-7 gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-[#3a1d0e]"
                     >
                         <PlusIcon className="size-3" />
                         Add Category
@@ -104,17 +104,17 @@ const CategoriesPage = () => {
             </div>
 
             {/* List */}
-            <div className="rounded-lg border border-[var(--admin-border)] bg-[var(--admin-card)]">
+            <div className="rounded-lg border border-(--admin-border) bg-(--admin-card)">
                 {isLoading ? (
-                    <div className="flex h-24 items-center justify-center text-xs text-[var(--admin-text-muted)]">
+                    <div className="flex h-24 items-center justify-center text-xs text-(--admin-text-muted)">
                         Loading...
                     </div>
                 ) : !categories || categories.length === 0 ? (
-                    <div className="flex h-24 items-center justify-center text-xs text-[var(--admin-text-muted)]">
+                    <div className="flex h-24 items-center justify-center text-xs text-(--admin-text-muted)">
                         No categories yet. Add one to get started.
                     </div>
                 ) : (
-                    <div className="divide-y divide-[var(--admin-border)]">
+                    <div className="divide-y divide-(--admin-border)">
                         {/* Add row */}
                         {isAdding && (
                             <div className="flex items-center gap-2 px-4 py-2.5">
@@ -130,7 +130,7 @@ const CategoriesPage = () => {
                                     }}
                                     placeholder="Category name..."
                                     autoFocus
-                                    className="h-8 flex-1 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs placeholder:text-[var(--admin-text-muted)]"
+                                    className="h-8 flex-1 border-(--admin-border) bg-(--admin-card) text-xs placeholder:text-(--admin-text-muted)"
                                 />
                                 <Button
                                     size="sm"
@@ -139,7 +139,7 @@ const CategoriesPage = () => {
                                         !newName.trim() ||
                                         createMutation.isPending
                                     }
-                                    className="h-7 bg-[var(--admin-primary)] text-[11px] text-white hover:bg-[#3a1d0e]"
+                                    className="h-7 bg-(--admin-primary) text-[11px] text-white hover:bg-[#3a1d0e]"
                                 >
                                     Save
                                 </Button>
@@ -150,7 +150,7 @@ const CategoriesPage = () => {
                                         setIsAdding(false);
                                         setNewName("");
                                     }}
-                                    className="h-7 text-[11px] text-[var(--admin-text-secondary)]"
+                                    className="h-7 text-[11px] text-(--admin-text-secondary)"
                                 >
                                     Cancel
                                 </Button>
@@ -181,7 +181,7 @@ const CategoriesPage = () => {
                                                         handleCancelEdit();
                                                 }}
                                                 autoFocus
-                                                className="h-8 flex-1 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs"
+                                                className="h-8 flex-1 border-(--admin-border) bg-(--admin-card) text-xs"
                                             />
                                             <Button
                                                 size="sm"
@@ -190,7 +190,7 @@ const CategoriesPage = () => {
                                                     !editName.trim() ||
                                                     updateMutation.isPending
                                                 }
-                                                className="h-7 bg-[var(--admin-primary)] text-[11px] text-white hover:bg-[#3a1d0e]"
+                                                className="h-7 bg-(--admin-primary) text-[11px] text-white hover:bg-[#3a1d0e]"
                                             >
                                                 Save
                                             </Button>
@@ -198,18 +198,18 @@ const CategoriesPage = () => {
                                                 variant="ghost"
                                                 size="sm"
                                                 onClick={handleCancelEdit}
-                                                className="h-7 text-[11px] text-[var(--admin-text-secondary)]"
+                                                className="h-7 text-[11px] text-(--admin-text-secondary)"
                                             >
                                                 Cancel
                                             </Button>
                                         </>
                                     ) : (
                                         <>
-                                            <span className="flex-1 text-[12px] font-medium text-[var(--admin-text)]">
+                                            <span className="flex-1 text-[12px] font-medium text-(--admin-text)">
                                                 {cat.name}
                                             </span>
                                             {!isEmpty && (
-                                                <span className="text-[10px] text-[var(--admin-text-muted)]">
+                                                <span className="text-[10px] text-(--admin-text-muted)">
                                                     {itemCount} item
                                                     {itemCount !== 1 ? "s" : ""}
                                                 </span>
@@ -220,7 +220,7 @@ const CategoriesPage = () => {
                                                 onClick={() =>
                                                     handleEdit(cat.id)
                                                 }
-                                                className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text)]"
+                                                className="text-(--admin-text-muted) hover:text-(--admin-text)"
                                             >
                                                 <PencilSimpleIcon className="size-3.5" />
                                             </Button>
@@ -239,7 +239,7 @@ const CategoriesPage = () => {
                                                 className={
                                                     isEmpty
                                                         ? "text-red-500 hover:text-red-700"
-                                                        : "text-[var(--admin-text-muted)]/30"
+                                                        : "text-(--admin-text-muted)/30"
                                                 }
                                             >
                                                 <TrashIcon className="size-3.5" />

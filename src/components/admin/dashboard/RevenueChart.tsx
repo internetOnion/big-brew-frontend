@@ -64,10 +64,10 @@ const RevenueChart = ({
     return (
         <div className="admin-card p-4">
             <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-[11px] font-medium uppercase tracking-wide text-[var(--admin-text-muted)]">
+                <h3 className="text-[11px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
                     Revenue Over Time
                 </h3>
-                <div className="flex gap-0.5 rounded-md bg-[var(--admin-hover)] p-0.5">
+                <div className="flex gap-0.5 rounded-md bg-(--admin-hover) p-0.5">
                     {groupByOptions.map((opt) => (
                         <Button
                             key={opt.value}
@@ -76,8 +76,8 @@ const RevenueChart = ({
                             onClick={() => onGroupByChange(opt.value)}
                             className={`h-6 px-2 text-[11px] ${
                                 groupBy === opt.value
-                                    ? "bg-[var(--admin-card)] font-medium text-[var(--admin-primary)] shadow-sm"
-                                    : "text-[var(--admin-text-muted)] hover:text-[var(--admin-text-secondary)]"
+                                    ? "bg-(--admin-card) font-medium text-(--admin-primary) shadow-sm"
+                                    : "text-(--admin-text-muted) hover:text-(--admin-text-secondary)"
                             }`}
                         >
                             {opt.label}
@@ -87,9 +87,9 @@ const RevenueChart = ({
             </div>
 
             {isLoading ? (
-                <Skeleton className="h-[260px] w-full bg-[var(--admin-hover)]" />
+                <Skeleton className="h-[260px] w-full bg-(--admin-hover)" />
             ) : chartData.length === 0 ? (
-                <div className="flex h-[260px] items-center justify-center text-xs text-[var(--admin-text-muted)]">
+                <div className="flex h-[260px] items-center justify-center text-xs text-(--admin-text-muted)">
                     No revenue data for this period
                 </div>
             ) : (

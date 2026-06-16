@@ -60,34 +60,34 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
 
     return (
         <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-            <DialogContent className="max-w-sm border-[var(--admin-border)] bg-[var(--admin-card)]">
+            <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card)">
                 <DialogHeader>
-                    <DialogTitle className="text-[var(--admin-text)]">
+                    <DialogTitle className="text-(--admin-text)">
                         Add Ingredient
                     </DialogTitle>
                 </DialogHeader>
 
                 <div className="space-y-4">
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                        <Label className="text-[11px] text-(--admin-text-secondary)">
                             Name
                         </Label>
                         <Input
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs"
+                            className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
                         />
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                        <Label className="text-[11px] text-(--admin-text-secondary)">
                             Unit
                         </Label>
                         <Select
                             value={unit}
                             onValueChange={(v) => setUnit(v ?? "g")}
                         >
-                            <SelectTrigger className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] text-xs">
+                            <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -101,7 +101,7 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
 
                     <div className="grid grid-cols-2 gap-3">
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                            <Label className="text-[11px] text-(--admin-text-secondary)">
                                 Initial Stock
                             </Label>
                             <Input
@@ -112,11 +112,11 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
                                 onChange={(e) =>
                                     setStockQuantity(e.target.value)
                                 }
-                                className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-xs"
+                                className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                             />
                         </div>
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-[var(--admin-text-secondary)]">
+                            <Label className="text-[11px] text-(--admin-text-secondary)">
                                 Low Stock Alert
                             </Label>
                             <Input
@@ -127,7 +127,7 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
                                 onChange={(e) =>
                                     setLowStockThreshold(e.target.value)
                                 }
-                                className="h-8 border-[var(--admin-border)] bg-[var(--admin-card)] font-mono text-xs"
+                                className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                             />
                         </div>
                     </div>
@@ -137,14 +137,14 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
                     <Button
                         variant="ghost"
                         onClick={onClose}
-                        className="text-[var(--admin-text-secondary)]"
+                        className="text-(--admin-text-secondary)"
                     >
                         Cancel
                     </Button>
                     <Button
                         onClick={() => createMutation.mutate()}
                         disabled={!name || createMutation.isPending}
-                        className="bg-[var(--admin-primary)] text-white hover:bg-[#3a1d0e]"
+                        className="bg-(--admin-primary) text-white hover:bg-[#3a1d0e]"
                     >
                         {createMutation.isPending
                             ? "Creating..."

@@ -36,15 +36,15 @@ const ExpenseBreakdown = ({
     return (
         <div className="admin-card p-4">
             <div className="mb-4">
-                <h3 className="text-[11px] font-medium uppercase tracking-wide text-[var(--admin-text-muted)]">
+                <h3 className="text-[11px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
                     Expenses by Category
                 </h3>
             </div>
 
             {isLoading ? (
-                <Skeleton className="h-[260px] w-full bg-[var(--admin-hover)]" />
+                <Skeleton className="h-[260px] w-full bg-(--admin-hover)" />
             ) : chartData.length === 0 ? (
-                <div className="flex h-[200px] items-center justify-center text-xs text-[var(--admin-text-muted)]">
+                <div className="flex h-[200px] items-center justify-center text-xs text-(--admin-text-muted)">
                     No expense data for this period
                 </div>
             ) : (

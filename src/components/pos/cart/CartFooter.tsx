@@ -18,28 +18,28 @@ export const CartFooter = ({
     onConfirm,
     onReset,
 }: CartFooterProps) => (
-    <div className="border-t border-[var(--pos-border)] bg-[var(--pos-card)] px-4 py-3">
-        <div className="mb-1 flex justify-between text-[11px] text-[var(--pos-text-muted)]">
+    <div className="border-t border-(--pos-border) bg-(--pos-card) px-4 py-3">
+        <div className="mb-1 flex justify-between text-[11px] text-(--pos-text-muted)">
             <span>Subtotal</span>
             <span className="font-mono tabular-nums">
                 ${subtotal.toFixed(2)}
             </span>
         </div>
-        <div className="mb-2 flex justify-between text-[11px] text-[var(--pos-text-muted)]">
+        <div className="mb-2 flex justify-between text-[11px] text-(--pos-text-muted)">
             <span>Tax (7%)</span>
             <span className="font-mono tabular-nums">${tax.toFixed(2)}</span>
         </div>
         <Separator className="mb-3" />
-        <div className="mb-3 flex justify-between text-[13px] font-bold text-[var(--pos-text)]">
+        <div className="mb-3 flex justify-between text-[13px] font-bold text-(--pos-text)">
             <span>Total</span>
-            <span className="font-mono tabular-nums text-[var(--pos-primary)]">
+            <span className="font-mono tabular-nums text-(--pos-primary)">
                 ${total.toFixed(2)}
             </span>
         </div>
         <Button
             onClick={onConfirm}
             disabled={isEmpty}
-            className="h-10 w-full rounded-lg bg-[var(--pos-primary)] font-sans text-xs font-bold text-white hover:bg-[#3a1d0e]"
+            className="h-10 w-full rounded-lg bg-(--pos-primary) font-sans text-xs font-bold text-white hover:bg-[#3a1d0e] cursor-pointer"
         >
             Confirm
         </Button>
