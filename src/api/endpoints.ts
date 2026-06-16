@@ -17,6 +17,10 @@ export const ENDPOINTS = {
         MODIFIER_GROUPS: (id: string) => `/menu-items/${id}/modifier-groups`,
         MODIFIER_GROUP: (menuItemId: string, groupId: string) =>
             `/menu-items/${menuItemId}/modifier-groups/${groupId}`,
+        OPTIONS: (menuItemId: string, groupId: string) =>
+            `/menu-items/${menuItemId}/modifier-groups/${groupId}/options`,
+        OPTION: (menuItemId: string, groupId: string, optionId: string) =>
+            `/menu-items/${menuItemId}/modifier-groups/${groupId}/options/${optionId}`,
         OPTION_INGREDIENTS: (
             menuItemId: string,
             groupId: string,

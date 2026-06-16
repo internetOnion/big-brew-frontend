@@ -109,7 +109,13 @@ const StockAdjustDialog = ({
                             }
                         >
                             <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
-                                <SelectValue />
+                                <SelectValue>
+                                    {(val) =>
+                                        reasonOptions.find(
+                                            (r) => r.value === val,
+                                        )?.label ?? "Reason"
+                                    }
+                                </SelectValue>
                             </SelectTrigger>
                             <SelectContent>
                                 {reasonOptions.map((opt) => (

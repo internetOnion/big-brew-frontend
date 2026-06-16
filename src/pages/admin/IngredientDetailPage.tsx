@@ -230,7 +230,13 @@ const IngredientDetailPage = () => {
                                     onValueChange={(v) => setUnit(v ?? "g")}
                                 >
                                     <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
-                                        <SelectValue />
+                                        <SelectValue>
+                                            {(val) =>
+                                                val === "g"
+                                                    ? "Grams (g)"
+                                                    : "Milliliters (ml)"
+                                            }
+                                        </SelectValue>
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="g">

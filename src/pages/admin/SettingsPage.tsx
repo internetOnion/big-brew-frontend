@@ -152,12 +152,14 @@ const SettingsPage = () => {
                             </Label>
                             <Input
                                 type="number"
+                                min="0"
+                                step="0.01"
                                 value={form.khrRate ?? ""}
                                 onChange={(e) =>
                                     handleChange(
                                         "khrRate",
                                         e.target.value
-                                            ? parseInt(e.target.value)
+                                            ? parseFloat(e.target.value)
                                             : null,
                                     )
                                 }

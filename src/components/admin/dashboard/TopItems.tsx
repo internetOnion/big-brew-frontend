@@ -67,7 +67,7 @@ const TopItems = ({
             </div>
 
             {isLoading ? (
-                <div className="space-y-1">
+                <div className="flex h-[260px] flex-col gap-1">
                     {Array.from({ length: 5 }).map((_, i) => (
                         <Skeleton
                             key={i}
@@ -76,18 +76,18 @@ const TopItems = ({
                     ))}
                 </div>
             ) : !data || data.length === 0 ? (
-                <div className="flex h-[200px] items-center justify-center text-xs text-(--admin-text-muted)">
+                <div className="flex h-[260px] items-center justify-center text-xs text-(--admin-text-muted)">
                     No data for this period
                 </div>
             ) : (
-                <div>
+                <div className="flex h-[260px] flex-col">
                     <div className="flex items-center gap-3 border-b border-(--admin-border) pb-2 text-[10px] text-(--admin-text-muted)">
                         <span className="w-5 text-right">#</span>
                         <span className="flex-1">Item</span>
                         <span className="w-16 text-right">Qty</span>
                         <span className="w-20 text-right">Revenue</span>
                     </div>
-                    <div className="divide-y divide-(--admin-border)">
+                    <div className="divide-y divide-(--admin-border) overflow-y-auto scrollbar-hide">
                         {data.map((item, i) => (
                             <div
                                 key={item.menuItemId}

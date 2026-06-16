@@ -87,9 +87,7 @@ const AdminLayout = () => {
                                 )}
                                 <item.icon
                                     className={`size-[15px] shrink-0 ${
-                                        isActive
-                                            ? "text-(--admin-primary)"
-                                            : ""
+                                        isActive ? "text-(--admin-primary)" : ""
                                     }`}
                                 />
                                 {item.label}
