@@ -18,6 +18,8 @@ import { PaymentMethodToggle } from "./PaymentMethodToggle";
 import { NumericKeypad } from "./NumericKeypad";
 import { AmountDisplay } from "./AmountDisplay";
 import { PaymentOrderSummary } from "./PaymentOrderSummary";
+import { PinDialog } from "@/components/common/PinDialog";
+import type { VerifiedEmployee } from "@/components/common/PinDialog";
 
 const DEFAULT_KHR_RATE = 4100;
 const STATIC_QR_CODE_URL =
@@ -33,6 +35,11 @@ const PaymentScreen = () => {
     const [success, setSuccess] = useState(false);
     const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [pinDialogOpen, setPinDialogOpen] = useState(false);
+    const [pendingConfirm, setPendingConfirm] = useState<{
+        method: PaymentMethod;
+        amountReceived?: number;
+    } | null>(null);
     const { data: settings } = useSettings();
     const khrRate = settings?.khrRate ?? DEFAULT_KHR_RATE;
 
@@ -58,19 +65,34 @@ const PaymentScreen = () => {
 
     const handleDelete = () => setEntered((prev) => prev.slice(0, -1));
 
-    const handleConfirmPayment = async () => {
+    const handleConfirmPayment = () => {
         if (isProcessing) return;
 
-        setIsProcessing(true);
-        try {
-            const amountReceived =
-                paymentMethod === "cash"
-                    ? currency === "KHR"
-                        ? enteredAmount / khrRate
-                        : enteredAmount
-                    : undefined;
+        const amountReceived =
+            paymentMethod === "cash"
+                ? currency === "KHR"
+                    ? enteredAmount / khrRate
+                    : enteredAmount
+                : undefined;
 
-            const order = await submitOrder(paymentMethod, amountReceived);
+        setPendingConfirm({ method: paymentMethod, amountReceived });
+        setPinDialogOpen(true);
+    };
+
+    const handlePinVerified = async (employee: VerifiedEmployee) => {
+        setPinDialogOpen(false);
+        if (!pendingConfirm) return;
+
+        const { method, amountReceived } = pendingConfirm;
+        setPendingConfirm(null);
+        setIsProcessing(true);
+
+        try {
+            const order = await submitOrder(
+                method,
+                amountReceived,
+                employee.id,
+            );
             setCompletedOrder(order);
             setSuccess(true);
         } catch {
@@ -78,17 +100,11 @@ const PaymentScreen = () => {
         }
     };
 
-    const handleQrConfirm = async () => {
+    const handleQrConfirm = () => {
         if (isProcessing) return;
 
-        setIsProcessing(true);
-        try {
-            const order = await submitOrder("qr");
-            setCompletedOrder(order);
-            setSuccess(true);
-        } catch {
-            setIsProcessing(false);
-        }
+        setPendingConfirm({ method: "qr" });
+        setPinDialogOpen(true);
     };
 
     const currencySymbol = currency === "USD" ? "$" : "៛";
@@ -182,6 +198,13 @@ const PaymentScreen = () => {
                     resetInput={() => setEntered("")}
                 />
             </div>
+
+            <PinDialog
+                open={pinDialogOpen}
+                onOpenChange={setPinDialogOpen}
+                onVerified={handlePinVerified}
+                title="Enter Pin"
+            />
 
             <Dialog
                 open={qrDialogOpen}

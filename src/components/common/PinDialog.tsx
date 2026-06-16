@@ -1,19 +1,20 @@
 import { useState, useEffect, useRef } from "react";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
-import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import { NumericKeypad } from "@/components/pos/payment/NumericKeypad";
 import { cn } from "@/lib/utils";
 
-interface VerifiedEmployee {
+export interface VerifiedEmployee {
     id: string;
     name: string;
     role: string;
+    pin: string;
 }
 
 interface PinDialogProps {
@@ -21,6 +22,8 @@ interface PinDialogProps {
     onOpenChange: (open: boolean) => void;
     onVerified: (employee: VerifiedEmployee) => void;
     title?: string;
+    /** If true, dialog is not closable while verifying */
+    preventClose?: boolean;
 }
 
 const PIN_LENGTH = 6;
@@ -53,7 +56,7 @@ export const PinDialog = ({
             const { data } = await api.post(ENDPOINTS.AUTH.VERIFY_PIN, {
                 pin: pinValue,
             });
-            onVerified(data.data as VerifiedEmployee);
+            onVerified({ ...data.data, pin: pinValue } as VerifiedEmployee);
             onOpenChange(false);
         } catch {
             setError("Invalid PIN. Please try again.");
@@ -64,6 +67,7 @@ export const PinDialog = ({
     };
 
     const handleKey = (key: string) => {
+        if (!/^\d$/.test(key)) return;
         if (pin.length >= PIN_LENGTH) return;
         const newPin = pin + key;
         setPin(newPin);
@@ -87,18 +91,16 @@ export const PinDialog = ({
         }
     };
 
-    const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "⌫"];
-
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="w-fit max-w-xs sm:max-w-xs">
+            <DialogContent className="max-w-sm sm:max-w-sm">
                 <DialogHeader>
-                    <DialogTitle className="text-center text-base">
+                    <DialogTitle className="text-center text-primary text-xl font-bold">
                         {title}
                     </DialogTitle>
                 </DialogHeader>
 
-                <div className="flex flex-col items-center gap-4">
+                <div className="flex w-full flex-col items-center gap-5">
                     {/* PIN dots */}
                     <div className="flex gap-2">
                         {Array.from({ length: PIN_LENGTH }).map((_, i) => (
@@ -149,43 +151,12 @@ export const PinDialog = ({
                     />
 
                     {/* Numeric keypad */}
-                    <div className="grid w-full grid-cols-3 gap-1.5">
-                        {keys.map((key, i) => {
-                            if (key === "") {
-                                return <div key={i} />;
-                            }
-                            if (key === "⌫") {
-                                return (
-                                    <Button
-                                        key={i}
-                                        variant="outline"
-                                        size="lg"
-                                        onClick={handleDelete}
-                                        disabled={
-                                            pin.length === 0 || isVerifying
-                                        }
-                                        className="h-14 text-lg font-bold"
-                                    >
-                                        ⌫
-                                    </Button>
-                                );
-                            }
-                            return (
-                                <Button
-                                    key={i}
-                                    variant="outline"
-                                    size="lg"
-                                    onClick={() => handleKey(key)}
-                                    disabled={
-                                        pin.length >= PIN_LENGTH || isVerifying
-                                    }
-                                    className="h-14 text-lg font-bold tabular-nums"
-                                >
-                                    {key}
-                                </Button>
-                            );
-                        })}
-                    </div>
+                    <NumericKeypad
+                        onKeyPress={handleKey}
+                        onDelete={handleDelete}
+                        disableDecimal
+                        className="w-full [&_button]:py-2.5"
+                    />
 
                     {/* Status */}
                     {isVerifying && (

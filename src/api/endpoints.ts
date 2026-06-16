@@ -37,6 +37,7 @@ export const ENDPOINTS = {
         STATUS: (id: string) => `/orders/${id}/status`,
         PAY: (id: string) => `/orders/${id}/pay`,
         VOID_REQUEST: (id: string) => `/orders/${id}/void-request`,
+        VOID_WITH_PIN: (id: string) => `/orders/${id}/void-with-pin`,
         VOID_APPROVE: (id: string) => `/orders/${id}/void-approve`,
         VOID_REJECT: (id: string) => `/orders/${id}/void-reject`,
     },

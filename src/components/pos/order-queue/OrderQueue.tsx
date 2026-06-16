@@ -2,17 +2,23 @@ import { useState } from "react";
 import { ListNumbersIcon, CoffeeIcon } from "@phosphor-icons/react";
 import type { Order } from "@/types/order";
 import { usePendingOrders } from "@/hooks/usePendingOrders";
-import { useCompleteOrder, useVoidOrder } from "@/hooks/useOrderMutations";
+import { useCompleteOrder, useVoidWithPin } from "@/hooks/useOrderMutations";
 import { getTimeSince, isUrgent } from "@/lib/order-utils";
 import OrderDetailModal from "./OrderDetailModal";
 import { OrderQueueCard } from "./OrderQueueCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PinDialog } from "@/components/common/PinDialog";
 
 export const OrderQueue = () => {
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+    const [pinDialogOpen, setPinDialogOpen] = useState(false);
+    const [pendingVoid, setPendingVoid] = useState<{
+        orderId: string;
+        reason: string;
+    } | null>(null);
     const { data: orders, isLoading } = usePendingOrders();
     const completeMutation = useCompleteOrder();
-    const voidMutation = useVoidOrder();
+    const voidWithPinMutation = useVoidWithPin();
 
     const handleComplete = (orderId: string) => {
         completeMutation.mutate(orderId, {
@@ -21,8 +27,26 @@ export const OrderQueue = () => {
     };
 
     const handleVoid = (orderId: string, reason: string) => {
-        voidMutation.mutate(
-            { orderId, reason },
+        setPendingVoid({ orderId, reason });
+        setPinDialogOpen(true);
+    };
+
+    const handlePinVerified = ({
+        pin,
+    }: {
+        id: string;
+        name: string;
+        role: string;
+        pin: string;
+    }) => {
+        setPinDialogOpen(false);
+        if (!pendingVoid) return;
+
+        const { orderId, reason } = pendingVoid;
+        setPendingVoid(null);
+
+        voidWithPinMutation.mutate(
+            { orderId, pin, reason },
             {
                 onSuccess: () => setSelectedOrder(null),
             },
@@ -101,6 +125,13 @@ export const OrderQueue = () => {
                     onCancel={() => setSelectedOrder(null)}
                 />
             )}
+
+            <PinDialog
+                open={pinDialogOpen}
+                onOpenChange={setPinDialogOpen}
+                onVerified={handlePinVerified}
+                title="Enter Pin"
+            />
         </div>
     );
 };

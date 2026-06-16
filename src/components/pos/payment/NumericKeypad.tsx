@@ -13,14 +13,16 @@ interface NumericKeypadProps {
     onKeyPress: (key: string) => void;
     onDelete: () => void;
     disableDecimal?: boolean;
+    className?: string;
 }
 
 export const NumericKeypad = ({
     onKeyPress,
     onDelete,
     disableDecimal,
+    className,
 }: NumericKeypadProps) => (
-    <div className="grid grid-cols-3 gap-1.5">
+    <div className={cn("grid grid-cols-3 gap-1.5", className)}>
         {KEYS.flat().map((k) => (
             <motion.button
                 key={k}
