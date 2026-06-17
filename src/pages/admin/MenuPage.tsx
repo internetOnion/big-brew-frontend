@@ -6,12 +6,9 @@ import {
     ForkKnifeIcon,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import api from "@/api/api";
-import { ENDPOINTS } from "@/api/endpoints";
 import { useMenuItems } from "@/hooks/useMenuItems";
 import { useCategories } from "@/hooks/useCategories";
-import { menuItemKeys } from "@/lib/query-keys";
+import { useDeleteMenuItem } from "@/hooks/useDeleteMenuItem";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,7 +31,6 @@ const MenuPage = () => {
     const navigate = useNavigate();
     const { data: items, isLoading } = useMenuItems();
     const { data: categories } = useCategories();
-    const queryClient = useQueryClient();
 
     const [search, setSearch] = useState("");
     const [categoryFilter, setCategoryFilter] = useState<string>("all");
@@ -44,34 +40,7 @@ const MenuPage = () => {
     const [deletingItem, setDeletingItem] =
         useState<MenuItemListResponse | null>(null);
 
-    const deleteMutation = useMutation({
-        mutationFn: async (id: string) => {
-            await api.delete(ENDPOINTS.MENU.BY_ID(id));
-        },
-        onMutate: async (id) => {
-            await queryClient.cancelQueries({ queryKey: menuItemKeys.all });
-            const previous = queryClient.getQueryData(menuItemKeys.all);
-            queryClient.setQueryData(
-                menuItemKeys.all,
-                (old: MenuItemListResponse[] | undefined) =>
-                    old?.filter((item) => item.id !== id) ?? [],
-            );
-            setDeletingItem(null);
-            return { previous };
-        },
-        onError: (_err, _id, context) => {
-            if (context?.previous) {
-                queryClient.setQueryData(menuItemKeys.all, context.previous);
-            }
-            toast.error("Failed to delete item");
-        },
-        onSuccess: () => {
-            toast.success("Item deleted");
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: menuItemKeys.all });
-        },
-    });
+    const deleteMutation = useDeleteMenuItem();
 
     const filteredItems = items?.filter((item) => {
         if (search && !item.name.toLowerCase().includes(search.toLowerCase()))
@@ -233,10 +202,17 @@ const MenuPage = () => {
                             Cancel
                         </Button>
                         <Button
-                            onClick={() =>
-                                deletingItem &&
-                                deleteMutation.mutate(deletingItem.id)
-                            }
+                            onClick={() => {
+                                if (!deletingItem) return;
+                                const id = deletingItem.id;
+                                setDeletingItem(null);
+                                deleteMutation.mutate(id, {
+                                    onSuccess: () =>
+                                        toast.success("Item deleted"),
+                                    onError: () =>
+                                        toast.error("Failed to delete item"),
+                                });
+                            }}
                             disabled={deleteMutation.isPending}
                             className="bg-red-600 text-white hover:bg-red-700"
                         >

@@ -66,7 +66,7 @@ const MenuItemCard = ({ item, onEdit, onDelete }: MenuItemCardProps) => {
                 </div>
                 <div onClick={(e) => e.stopPropagation()}>
                     <DropdownMenu>
-                        <DropdownMenuTrigger className="flex size-7 shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text)">
+                        <DropdownMenuTrigger className="flex size-7 shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text) cursor-pointer">
                             <DotsThreeVerticalIcon className="size-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent

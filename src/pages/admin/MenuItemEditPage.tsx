@@ -7,6 +7,7 @@ import { ENDPOINTS } from "@/api/endpoints";
 import { useMenuItem } from "@/hooks/useMenuItem";
 import { useIngredients } from "@/hooks/useInventory";
 import { useCategories } from "@/hooks/useCategories";
+import { useDeleteMenuItem } from "@/hooks/useDeleteMenuItem";
 import { useQueryClient } from "@tanstack/react-query";
 import { menuItemKeys } from "@/lib/query-keys";
 import { Button } from "@/components/ui/button";
@@ -61,6 +62,7 @@ const MenuItemEditPage = () => {
 
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [deleting, setDeleting] = useState(false);
+    const deleteMutation = useDeleteMenuItem();
 
     useEffect(() => {
         if (!item) return;
@@ -94,26 +96,20 @@ const MenuItemEditPage = () => {
         queryClient.invalidateQueries({ queryKey: menuItemKeys.detail(id!) });
     };
 
-    const handleDelete = async () => {
+    const handleDelete = () => {
         if (!id) return;
         setDeleting(true);
-        await queryClient.cancelQueries({ queryKey: menuItemKeys.all });
-        const previous = queryClient.getQueryData(menuItemKeys.all);
-        queryClient.setQueryData(
-            menuItemKeys.all,
-            (old: { id: string }[] | undefined) =>
-                old?.filter((item) => item.id !== id) ?? [],
-        );
         setShowDeleteDialog(false);
-        try {
-            await api.delete(ENDPOINTS.MENU.BY_ID(id));
-            toast.success("Item removed from menu");
-            navigate("/admin/menu");
-        } catch {
-            queryClient.setQueryData(menuItemKeys.all, previous);
-            toast.error("Failed to remove item");
-            setDeleting(false);
-        }
+        deleteMutation.mutate(id, {
+            onSuccess: () => {
+                toast.success("Item removed from menu");
+                navigate("/admin/menu");
+            },
+            onError: () => {
+                toast.error("Failed to remove item");
+                setDeleting(false);
+            },
+        });
     };
 
     const handleSaveBasic = async () => {
