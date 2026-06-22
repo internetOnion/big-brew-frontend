@@ -106,7 +106,7 @@ const OrdersPage = () => {
     const fromStr = dateRange.from.toISOString();
     const toStr = dateRange.to.toISOString();
 
-    const { data: orders, isLoading } = useAdminOrders({
+    const { data: response, isLoading } = useAdminOrders({
         status: statusFilter || undefined,
         created_by_id: employeeFilter || undefined,
         limit: PAGE_SIZE,
@@ -114,13 +114,16 @@ const OrdersPage = () => {
         from: fromStr,
         to: toStr,
     });
+    const orders = response?.data ?? [];
+    const totalPages = response?.pagination?.totalPages ?? 0;
+    const total = response?.pagination?.total ?? 0;
     const { data: employees } = useEmployees();
 
     const completeMutation = useCompleteOrder();
     const approveVoidMutation = useApproveVoid();
     const rejectVoidMutation = useRejectVoid();
 
-    const hasNextPage = (orders?.length ?? 0) >= PAGE_SIZE;
+    const hasNextPage = page + 1 < totalPages;
 
     const handleFilterChange =
         (setter: (v: string) => void) => (val: string | null) => {
@@ -307,7 +310,7 @@ const OrdersPage = () => {
                                         <td className="px-2 py-3" />
                                     </tr>
                                 ))
-                            ) : !orders || orders.length === 0 ? (
+                            ) : orders.length === 0 ? (
                                 <tr>
                                     <td
                                         colSpan={8}
@@ -406,7 +409,7 @@ const OrdersPage = () => {
             {/* Pagination */}
             <div className="flex items-center justify-between">
                 <p className="text-[11px] text-(--admin-text-muted)">
-                    Page {page + 1}
+                    {total} orders · Page {page + 1} of {totalPages || 1}
                 </p>
                 <div className="flex items-center gap-1">
                     <Button
