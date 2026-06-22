@@ -9,6 +9,8 @@ interface OrderFilters {
     created_by_id?: string;
     limit?: number;
     offset?: number;
+    from?: string;
+    to?: string;
 }
 
 const fetchOrders = async (filters?: OrderFilters): Promise<Order[]> => {
@@ -18,6 +20,8 @@ const fetchOrders = async (filters?: OrderFilters): Promise<Order[]> => {
         params.set("created_by_id", filters.created_by_id);
     if (filters?.limit) params.set("limit", String(filters.limit));
     if (filters?.offset) params.set("offset", String(filters.offset));
+    if (filters?.from) params.set("from", filters.from);
+    if (filters?.to) params.set("to", filters.to);
     const qs = params.toString();
     const { data } = await api.get<Order[]>(
         `${ENDPOINTS.ORDERS.BASE}${qs ? `?${qs}` : ""}`,

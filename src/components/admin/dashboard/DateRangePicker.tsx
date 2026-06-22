@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
     format,
+    startOfDay,
     startOfMonth,
     endOfDay,
     subDays,
@@ -29,7 +30,10 @@ interface DateRangePickerProps {
 const presets = [
     {
         label: "Today",
-        getRange: () => ({ from: new Date(), to: endOfDay(new Date()) }),
+        getRange: () => ({
+            from: startOfDay(new Date()),
+            to: endOfDay(new Date()),
+        }),
     },
     {
         label: "This Week",
