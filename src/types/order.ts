@@ -73,6 +73,19 @@ export interface Order {
     updatedAt: string;
 }
 
+export interface OrderPagination {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+}
+
+export interface PaginatedOrdersResponse {
+    success: boolean;
+    data: Order[];
+    pagination: OrderPagination;
+}
+
 export interface CreateOrderPayload {
     dining_option: DiningOption;
     discount_id?: string;

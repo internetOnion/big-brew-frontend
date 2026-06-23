@@ -15,9 +15,9 @@ export const useDeleteMenuItem = () => {
             await queryClient.cancelQueries({
                 queryKey: menuItemKeys.all,
             });
-            const previous = queryClient.getQueryData<
-                MenuItemListResponse[]
-            >(menuItemKeys.all);
+            const previous = queryClient.getQueryData<MenuItemListResponse[]>(
+                menuItemKeys.all,
+            );
             queryClient.setQueryData<MenuItemListResponse[]>(
                 menuItemKeys.all,
                 (old) => old?.filter((item) => item.id !== id) ?? [],
@@ -26,10 +26,7 @@ export const useDeleteMenuItem = () => {
         },
         onError: (_err, _id, context) => {
             if (context?.previous) {
-                queryClient.setQueryData(
-                    menuItemKeys.all,
-                    context.previous,
-                );
+                queryClient.setQueryData(menuItemKeys.all, context.previous);
             }
         },
         onSettled: () => {

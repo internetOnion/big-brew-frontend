@@ -20,8 +20,9 @@ export const useCompleteOrder = () => {
             const snapshot = queryClient.getQueryData<Order[]>(
                 orderKeys.pending,
             );
-            queryClient.setQueryData<Order[]>(orderKeys.pending, (old) =>
-                old?.filter((o) => o.id !== orderId) ?? [],
+            queryClient.setQueryData<Order[]>(
+                orderKeys.pending,
+                (old) => old?.filter((o) => o.id !== orderId) ?? [],
             );
             return { snapshot };
         },
