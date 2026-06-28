@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { useCreateEmployee } from "@/hooks/useEmployees";
 import {
     Dialog,
@@ -35,12 +36,21 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [role, setRole] = useState<string>("barista");
     const [pin, setPin] = useState("");
+    const [pinError, setPinError] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!open) setPinError(null);
+    }, [open]);
 
     const handlePinChange = (value: string) => {
         const digits = value.replace(/\D/g, "").slice(0, 6);
         setPin(digits);
+        setPinError(null);
     };
 
     const handleSubmit = () => {
@@ -58,18 +68,33 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                     setName("");
                     setEmail("");
                     setPassword("");
+                    setConfirmPassword("");
+                    setShowPassword(false);
+                    setShowConfirmPassword(false);
                     setRole("barista");
                     setPin("");
+                    setPinError(null);
                     onClose();
                 },
-                onError: () => {
-                    toast.error("Failed to create employee");
+                onError: (error) => {
+                    const msg =
+                        (error as { response?: { data?: { message?: string; error?: string } } })?.response?.data?.message ||
+                        (error as { response?: { data?: { message?: string; error?: string } } })?.response?.data?.error ||
+                        "Failed to create employee";
+                    toast.error(msg);
+                    setPinError(msg);
                 },
             },
         );
     };
 
-    const isValid = name.trim() && email.trim() && password.length >= 6;
+    const isPasswordMismatch =
+        confirmPassword.length > 0 && password !== confirmPassword;
+    const isValid =
+        name.trim() &&
+        email.trim() &&
+        password.length >= 6 &&
+        password === confirmPassword;
 
     return (
         <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
@@ -110,13 +135,67 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                         <Label className="text-[11px] text-(--admin-text-secondary)">
                             Password
                         </Label>
-                        <Input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Min 6 characters"
-                            className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
-                        />
+                        <div className="relative">
+                            <Input
+                                type={showPassword ? "text" : "password"}
+                                value={password}
+                                onChange={(e) =>
+                                    setPassword(e.target.value)
+                                }
+                                placeholder="Min 6 characters"
+                                className="h-8 border-(--admin-border) bg-(--admin-card) pr-8 text-xs"
+                            />
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    setShowPassword(!showPassword)
+                                }
+                                className="absolute top-1/2 right-2 flex cursor-pointer -translate-y-1/2 items-center text-(--admin-text-muted) transition-colors hover:text-(--admin-text)"
+                            >
+                                {showPassword ? (
+                                    <EyeSlashIcon className="size-3.5" />
+                                ) : (
+                                    <EyeIcon className="size-3.5" />
+                                )}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="grid gap-1.5">
+                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                            Confirm Password
+                        </Label>
+                        <div className="relative">
+                            <Input
+                                type={showConfirmPassword ? "text" : "password"}
+                                value={confirmPassword}
+                                onChange={(e) =>
+                                    setConfirmPassword(e.target.value)
+                                }
+                                placeholder="Re-enter password"
+                                className="h-8 border-(--admin-border) bg-(--admin-card) pr-8 text-xs"
+                            />
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    setShowConfirmPassword(
+                                        !showConfirmPassword,
+                                    )
+                                }
+                                className="absolute top-1/2 right-2 flex cursor-pointer -translate-y-1/2 items-center text-(--admin-text-muted) transition-colors hover:text-(--admin-text)"
+                            >
+                                {showConfirmPassword ? (
+                                    <EyeSlashIcon className="size-3.5" />
+                                ) : (
+                                    <EyeIcon className="size-3.5" />
+                                )}
+                            </button>
+                        </div>
+                        {isPasswordMismatch && (
+                            <p className="text-[10px] font-medium text-red-600">
+                                Passwords don&apos;t match
+                            </p>
+                        )}
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
@@ -160,6 +239,11 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                                 placeholder="000000"
                                 className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs tracking-widest"
                             />
+                            {pinError && (
+                                <p className="text-[10px] font-medium text-red-600">
+                                    {pinError}
+                                </p>
+                            )}
                         </div>
                     </div>
                 </div>

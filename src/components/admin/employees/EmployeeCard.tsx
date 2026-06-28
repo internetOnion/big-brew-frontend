@@ -1,6 +1,5 @@
 import {
     DotsThreeVerticalIcon,
-    EyeIcon,
     KeyIcon,
     ProhibitIcon,
     CheckCircleIcon,
@@ -51,8 +50,12 @@ const EmployeeCard = ({
 
     return (
         <div
+            onClick={(e) => {
+                e.stopPropagation();
+                onSelect();
+            }}
             className={cn(
-                "group relative flex flex-col gap-3 rounded-xl border bg-(--admin-card) p-4",
+                "group relative flex cursor-pointer flex-col gap-3 rounded-xl border bg-(--admin-card) p-4",
                 "shadow-sm transition-shadow duration-200",
                 isSelected
                     ? "border-(--admin-primary)/40 ring-1 ring-(--admin-primary)/20"
@@ -93,7 +96,10 @@ const EmployeeCard = ({
                 <DropdownMenu>
                     <DropdownMenuTrigger
                         render={
-                            <button className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-lg opacity-0 transition-opacity group-hover:opacity-100 hover:bg-(--admin-hover)">
+                            <button
+                                onClick={(e) => e.stopPropagation()}
+                                className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-lg opacity-0 transition-opacity group-hover:opacity-100 hover:bg-(--admin-hover)"
+                            >
                                 <DotsThreeVerticalIcon className="size-4 text-(--admin-text-secondary)" />
                             </button>
                         }
@@ -103,21 +109,20 @@ const EmployeeCard = ({
                         className="w-44 border-(--admin-border) bg-(--admin-card)"
                     >
                         <DropdownMenuItem
-                            onClick={onSelect}
-                            className="gap-2 text-[12px] text-(--admin-text)"
-                        >
-                            <EyeIcon className="size-3.5" />
-                            View Activity
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={onResetPin}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onResetPin();
+                            }}
                             className="gap-2 text-[12px] text-(--admin-text)"
                         >
                             <KeyIcon className="size-3.5" />
                             Reset PIN
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                            onClick={onToggleStatus}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onToggleStatus();
+                            }}
                             className="gap-2 text-[12px]"
                         >
                             {isActive ? (
@@ -156,13 +161,6 @@ const EmployeeCard = ({
                 >
                     {isActive ? "Active" : "Inactive"}
                 </span>
-
-                <button
-                    onClick={onSelect}
-                    className="ml-auto cursor-pointer text-[11px] font-medium text-(--admin-primary)/70 transition-colors hover:text-(--admin-primary)"
-                >
-                    View details →
-                </button>
             </div>
         </div>
     );

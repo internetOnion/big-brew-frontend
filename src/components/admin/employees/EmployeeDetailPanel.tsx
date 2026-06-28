@@ -47,11 +47,12 @@ const EmployeeDetailPanel = ({
         .toUpperCase()
         .slice(0, 2);
 
-    const { data: orders = [], isLoading } = useAdminOrders({
+    const { data: ordersResponse, isLoading } = useAdminOrders({
         created_by_id: employee.id,
         limit,
         offset: 0,
     });
+    const orders = ordersResponse?.data ?? [];
 
     const completedOrders = orders.filter(
         (o) => o.status === "completed",
