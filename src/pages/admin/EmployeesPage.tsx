@@ -7,11 +7,7 @@ import {
     UsersIcon,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
-import {
-    useEmployees,
-    useDeactivateEmployee,
-    useReactivateEmployee,
-} from "@/hooks/useEmployees";
+import { useEmployees, useDeleteEmployee } from "@/hooks/useEmployees";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -21,9 +17,13 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import StatusFilterTabs from "@/components/admin/employees/StatusFilterTabs";
-import type { StatusFilter } from "@/components/admin/employees/StatusFilterTabs";
 import EmployeeCard from "@/components/admin/employees/EmployeeCard";
 import CreateEmployeeDialog from "@/components/admin/employees/CreateEmployeeDialog";
 import ResetPinDialog from "@/components/admin/employees/ResetPinDialog";
@@ -31,12 +31,6 @@ import EmployeeDetailPanel from "@/components/admin/employees/EmployeeDetailPane
 import OrderDetailModal from "@/components/admin/orders/OrderDetailModal";
 import type { AdminEmployee } from "@/types/admin";
 import type { Order } from "@/types/order";
-
-const STATUS_TABS: { value: StatusFilter; label: string }[] = [
-    { value: "all", label: "All" },
-    { value: "active", label: "Active" },
-    { value: "inactive", label: "Inactive" },
-];
 
 const ROLES = [
     { value: "", label: "All Roles" },
@@ -47,17 +41,17 @@ const ROLES = [
 
 const EmployeesPage = () => {
     const { data: employees, isLoading } = useEmployees();
-    const deactivateEmployee = useDeactivateEmployee();
-    const reactivateEmployee = useReactivateEmployee();
+    const deleteEmployee = useDeleteEmployee();
 
     const [searchQuery, setSearchQuery] = useState("");
     const [roleFilter, setRoleFilter] = useState("");
-    const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
 
     const [selectedEmployee, setSelectedEmployee] =
         useState<AdminEmployee | null>(null);
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
     const [resetPinEmployee, setResetPinEmployee] =
+        useState<AdminEmployee | null>(null);
+    const [deletingEmployee, setDeletingEmployee] =
         useState<AdminEmployee | null>(null);
     const [detailOrder, setDetailOrder] = useState<Order | null>(null);
 
@@ -71,32 +65,16 @@ const EmployeesPage = () => {
                 if (!matchesName && !matchesEmail) return false;
             }
             if (roleFilter && emp.role !== roleFilter) return false;
-            const isActive = emp.isActive !== false;
-            if (statusFilter === "active" && !isActive) return false;
-            if (statusFilter === "inactive" && isActive) return false;
             return true;
         });
-    }, [employees, searchQuery, roleFilter, statusFilter]);
-
-    const handleToggleStatus = (employee: AdminEmployee) => {
-        const isActive = employee.isActive !== false;
-        if (isActive) {
-            deactivateEmployee.mutate(employee.id, {
-                onSuccess: () =>
-                    toast.success(`${employee.name} deactivated`),
-                onError: () => toast.error("Failed to deactivate"),
-            });
-        } else {
-            reactivateEmployee.mutate(employee.id, {
-                onSuccess: () =>
-                    toast.success(`${employee.name} reactivated`),
-                onError: () => toast.error("Failed to reactivate"),
-            });
-        }
-    };
+    }, [employees, searchQuery, roleFilter]);
 
     const handleResetPin = (employee: AdminEmployee) => {
         setResetPinEmployee(employee);
+    };
+
+    const handleDeleteEmployee = (employee: AdminEmployee) => {
+        setDeletingEmployee(employee);
     };
 
     const handleOrderClick = (order: Order) => {
@@ -123,12 +101,14 @@ const EmployeesPage = () => {
 
                     <div className="ml-auto flex items-center gap-2">
                         <div className="relative">
-                            <MagnifyingGlassIcon className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-(--admin-text-muted)" />
+                            <MagnifyingGlassIcon className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-(--admin-text-muted)" />
                             <Input
                                 value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onChange={(e) =>
+                                    setSearchQuery(e.target.value)
+                                }
                                 placeholder="Search name or email..."
-                                className="h-7.5 w-44 border-(--admin-border) bg-(--admin-card) pl-7.5 text-[11px] placeholder:text-[10px]"
+                                className="h-8 w-48 border-(--admin-border) bg-(--admin-card) pl-8 text-xs placeholder:text-(--admin-text-muted)"
                             />
                         </div>
 
@@ -138,13 +118,14 @@ const EmployeesPage = () => {
                         >
                             <SelectTrigger
                                 size="sm"
-                                className="h-7.5 w-28 border-(--admin-border) bg-(--admin-card) text-[11px]"
+                                className="h-8 w-28 border-(--admin-border) bg-(--admin-card) text-xs"
                             >
                                 <SelectValue placeholder="All Roles">
                                     {(val) =>
                                         val
-                                            ? (ROLES.find((r) => r.value === val)
-                                                  ?.label ?? val)
+                                            ? (ROLES.find(
+                                                  (r) => r.value === val,
+                                              )?.label ?? val)
                                             : "All Roles"
                                     }
                                 </SelectValue>
@@ -168,12 +149,6 @@ const EmployeesPage = () => {
                         </Button>
                     </div>
                 </div>
-
-                <StatusFilterTabs
-                    tabs={STATUS_TABS}
-                    value={statusFilter}
-                    onChange={setStatusFilter}
-                />
             </div>
 
             {/* Content */}
@@ -202,7 +177,6 @@ const EmployeesPage = () => {
                                     </div>
                                     <div className="mt-3 flex items-center gap-2">
                                         <Skeleton className="h-5 w-14 rounded-full" />
-                                        <Skeleton className="h-3 w-12" />
                                     </div>
                                 </div>
                             ))}
@@ -236,11 +210,13 @@ const EmployeesPage = () => {
                                 <EmployeeCard
                                     key={emp.id}
                                     employee={emp}
-                                    isSelected={selectedEmployee?.id === emp.id}
+                                    isSelected={
+                                        selectedEmployee?.id === emp.id
+                                    }
                                     onSelect={() => setSelectedEmployee(emp)}
                                     onResetPin={() => handleResetPin(emp)}
-                                    onToggleStatus={() =>
-                                        handleToggleStatus(emp)
+                                    onDelete={() =>
+                                        handleDeleteEmployee(emp)
                                     }
                                 />
                             ))}
@@ -284,6 +260,63 @@ const EmployeesPage = () => {
                 employeeId={resetPinEmployee?.id ?? null}
                 employeeName={resetPinEmployee?.name ?? ""}
             />
+
+            {/* Delete employee confirmation dialog */}
+            <Dialog
+                open={deletingEmployee !== null}
+                onOpenChange={(v) =>
+                    !v && !deleteEmployee.isPending && setDeletingEmployee(null)
+                }
+            >
+                <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card) shadow-xl">
+                    <DialogHeader>
+                        <DialogTitle className="text-[14px] font-medium text-(--admin-text)">
+                            Delete Employee
+                        </DialogTitle>
+                    </DialogHeader>
+                    <p className="text-[13px] text-(--admin-text-secondary)">
+                        Are you sure you want to delete{" "}
+                        <span className="font-medium text-(--admin-text)">
+                            {deletingEmployee?.name}
+                        </span>
+                        ? This action cannot be undone.
+                    </p>
+                    <div className="flex justify-end gap-2 border-t border-(--admin-border) pt-3">
+                        <Button
+                            variant="ghost"
+                            onClick={() => setDeletingEmployee(null)}
+                            disabled={deleteEmployee.isPending}
+                            className="text-(--admin-text-secondary)"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                if (!deletingEmployee) return;
+                                const id = deletingEmployee.id;
+                                const name = deletingEmployee.name;
+                                setDeletingEmployee(null);
+                                deleteEmployee.mutate(id, {
+                                    onSuccess: () =>
+                                        toast.success(
+                                            `${name} deleted`,
+                                        ),
+                                    onError: () =>
+                                        toast.error(
+                                            "Failed to delete employee",
+                                        ),
+                                });
+                            }}
+                            disabled={deleteEmployee.isPending}
+                            className="bg-red-600 text-white hover:bg-red-700"
+                        >
+                            {deleteEmployee.isPending
+                                ? "Deleting..."
+                                : "Delete"}
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
 
             {/* Order detail modal */}
             <OrderDetailModal

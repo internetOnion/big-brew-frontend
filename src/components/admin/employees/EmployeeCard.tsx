@@ -1,13 +1,13 @@
 import {
     DotsThreeVerticalIcon,
     KeyIcon,
-    ProhibitIcon,
-    CheckCircleIcon,
+    TrashIcon,
 } from "@phosphor-icons/react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
@@ -30,7 +30,7 @@ interface EmployeeCardProps {
     isSelected: boolean;
     onSelect: () => void;
     onResetPin: () => void;
-    onToggleStatus: () => void;
+    onDelete: () => void;
 }
 
 const EmployeeCard = ({
@@ -38,9 +38,8 @@ const EmployeeCard = ({
     isSelected,
     onSelect,
     onResetPin,
-    onToggleStatus,
+    onDelete,
 }: EmployeeCardProps) => {
-    const isActive = employee.isActive !== false;
     const initials = employee.name
         .split(" ")
         .map((n) => n[0])
@@ -67,25 +66,16 @@ const EmployeeCard = ({
                 <div
                     className={cn(
                         "flex size-10 shrink-0 items-center justify-center rounded-full",
-                        "font-sans text-[14px] font-bold text-white",
-                        isActive ? "bg-(--admin-primary)" : "bg-(--admin-text-muted)",
+                        "bg-(--admin-primary) font-sans text-[14px] font-bold text-white",
                     )}
                 >
                     {initials}
                 </div>
 
                 <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                        <h3 className="truncate text-[13px] font-medium text-(--admin-text)">
-                            {employee.name}
-                        </h3>
-                        <div
-                            className={cn(
-                                "size-1.5 shrink-0 rounded-full",
-                                isActive ? "bg-emerald-500" : "bg-(--admin-text-muted)",
-                            )}
-                        />
-                    </div>
+                    <h3 className="truncate text-[13px] font-medium text-(--admin-text)">
+                        {employee.name}
+                    </h3>
                     {employee.email && (
                         <p className="truncate text-[11px] text-(--admin-text-muted)">
                             {employee.email}
@@ -118,28 +108,16 @@ const EmployeeCard = ({
                             <KeyIcon className="size-3.5" />
                             Reset PIN
                         </DropdownMenuItem>
+                        <DropdownMenuSeparator className="bg-(--admin-border)" />
                         <DropdownMenuItem
                             onClick={(e) => {
                                 e.stopPropagation();
-                                onToggleStatus();
+                                onDelete();
                             }}
-                            className="gap-2 text-[12px]"
+                            className="gap-2 text-[12px] text-destructive"
                         >
-                            {isActive ? (
-                                <>
-                                    <ProhibitIcon className="size-3.5 text-destructive" />
-                                    <span className="text-destructive">
-                                        Deactivate
-                                    </span>
-                                </>
-                            ) : (
-                                <>
-                                    <CheckCircleIcon className="size-3.5 text-emerald-600" />
-                                    <span className="text-emerald-600">
-                                        Reactivate
-                                    </span>
-                                </>
-                            )}
+                            <TrashIcon className="size-3.5" />
+                            Delete Account
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -153,14 +131,6 @@ const EmployeeCard = ({
                 >
                     {employee.role}
                 </Badge>
-                <span
-                    className={cn(
-                        "text-[10px] font-medium",
-                        isActive ? "text-emerald-600" : "text-(--admin-text-muted)",
-                    )}
-                >
-                    {isActive ? "Active" : "Inactive"}
-                </span>
             </div>
         </div>
     );
