@@ -11,11 +11,7 @@ import {
     PencilSimpleIcon,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
-import {
-    useEmployees,
-    useDeactivateEmployee,
-    useReactivateEmployee,
-} from "@/hooks/useEmployees";
+import { useEmployees, useDeleteEmployee } from "@/hooks/useEmployees";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -69,8 +65,7 @@ const roleBadge = (role: string) => {
 const EmployeesPage = () => {
     const navigate = useNavigate();
     const { data: employees, isLoading } = useEmployees();
-    const deactivateEmployee = useDeactivateEmployee();
-    const reactivateEmployee = useReactivateEmployee();
+    const deleteEmployee = useDeleteEmployee();
 
     const [searchQuery, setSearchQuery] = useState("");
     const [roleFilter, setRoleFilter] = useState("");
@@ -88,9 +83,6 @@ const EmployeesPage = () => {
                 if (!matchesName && !matchesEmail) return false;
             }
             if (roleFilter && emp.role !== roleFilter) return false;
-            const isActive = emp.isActive !== false;
-            if (statusFilter === "active" && !isActive) return false;
-            if (statusFilter === "inactive" && isActive) return false;
             return true;
         });
     }, [employees, searchQuery, roleFilter, statusFilter]);

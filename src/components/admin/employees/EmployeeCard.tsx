@@ -1,13 +1,13 @@
 import {
     DotsThreeVerticalIcon,
     KeyIcon,
-    ProhibitIcon,
-    CheckCircleIcon,
+    TrashIcon,
 } from "@phosphor-icons/react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
@@ -30,7 +30,7 @@ interface EmployeeCardProps {
     isSelected: boolean;
     onSelect: () => void;
     onResetPin: () => void;
-    onToggleStatus: () => void;
+    onDelete: () => void;
 }
 
 const EmployeeCard = ({
@@ -38,9 +38,8 @@ const EmployeeCard = ({
     isSelected,
     onSelect,
     onResetPin,
-    onToggleStatus,
+    onDelete,
 }: EmployeeCardProps) => {
-    const isActive = employee.isActive !== false;
     const initials = employee.name
         .split(" ")
         .map((n) => n[0])
@@ -122,28 +121,16 @@ const EmployeeCard = ({
                             <KeyIcon className="size-3.5" />
                             Reset PIN
                         </DropdownMenuItem>
+                        <DropdownMenuSeparator className="bg-(--admin-border)" />
                         <DropdownMenuItem
                             onClick={(e) => {
                                 e.stopPropagation();
-                                onToggleStatus();
+                                onDelete();
                             }}
-                            className="gap-2 text-[12px]"
+                            className="gap-2 text-[12px] text-destructive"
                         >
-                            {isActive ? (
-                                <>
-                                    <ProhibitIcon className="size-3.5 text-destructive" />
-                                    <span className="text-destructive">
-                                        Deactivate
-                                    </span>
-                                </>
-                            ) : (
-                                <>
-                                    <CheckCircleIcon className="size-3.5 text-emerald-600" />
-                                    <span className="text-emerald-600">
-                                        Reactivate
-                                    </span>
-                                </>
-                            )}
+                            <TrashIcon className="size-3.5" />
+                            Delete Account
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
