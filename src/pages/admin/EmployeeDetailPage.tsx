@@ -8,12 +8,14 @@ import {
     XCircleIcon,
     KeyIcon,
     EyeIcon,
+    TrashIcon,
 } from "@phosphor-icons/react";
 import {
     useEmployees,
     useUpdateEmployee,
     useReactivateEmployee,
     useDeactivateEmployee,
+    useDeleteEmployee,
     useResetEmployeePin,
 } from "@/hooks/useEmployees";
 import { useAdminOrders } from "@/hooks/useOrders";
@@ -80,6 +82,7 @@ const EmployeeDetailPage = () => {
     const updateMutation = useUpdateEmployee();
     const deactivateMutation = useDeactivateEmployee();
     const reactivateMutation = useReactivateEmployee();
+    const deleteMutation = useDeleteEmployee();
     const resetPinMutation = useResetEmployeePin();
 
     const employee = employees?.find((e) => e.id === id);
@@ -89,6 +92,7 @@ const EmployeeDetailPage = () => {
     const [newPin, setNewPin] = useState("");
     const [detailOrder, setDetailOrder] = useState<Order | null>(null);
     const [showToggleDialog, setShowToggleDialog] = useState(false);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
     useEffect(() => {
         if (!employee) return;
@@ -134,12 +138,6 @@ const EmployeeDetailPage = () => {
     }
 
     const isActive = employee.isActive !== false;
-    const initials = employee.name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2);
 
     const completedOrders = orders.filter(
         (o) => o.status === "completed",
@@ -169,16 +167,17 @@ const EmployeeDetailPage = () => {
     const handleConfirmToggle = () => {
         setShowToggleDialog(false);
         if (isActive) {
-            deactivateMutation.mutate(id, {
-                onSuccess: () => toast.success(`${employee.name} deactivated`),
-                onError: () => toast.error("Failed to deactivate"),
-            });
+            deactivateMutation.mutate(id);
         } else {
-            reactivateMutation.mutate(id, {
-                onSuccess: () => toast.success(`${employee.name} reactivated`),
-                onError: () => toast.error("Failed to reactivate"),
-            });
+            reactivateMutation.mutate(id);
         }
+    };
+
+    const handleDelete = () => {
+        setShowDeleteDialog(false);
+        deleteMutation.mutate(id, {
+            onSuccess: () => navigate("/admin/employees"),
+        });
     };
 
     const handleResetPin = () => {
@@ -210,11 +209,6 @@ const EmployeeDetailPage = () => {
                 >
                     <ArrowLeftIcon className="size-4" />
                 </Button>
-                <div
-                    className={`flex size-8 shrink-0 items-center justify-center rounded-full font-sans text-[12px] font-bold text-white ${isActive ? "bg-(--admin-primary)" : "bg-(--admin-text-muted)"}`}
-                >
-                    {initials}
-                </div>
                 <h1 className="text-[13px] font-medium text-(--admin-primary)">
                     {employee.name}
                 </h1>
@@ -313,6 +307,19 @@ const EmployeeDetailPage = () => {
                                 >
                                     {isActive ? "Deactivate" : "Reactivate"}
                                 </Button>
+                                {employee.role !== "owner" && (
+                                    <Button
+                                        variant="outline"
+                                        onClick={() =>
+                                            setShowDeleteDialog(true)
+                                        }
+                                        disabled={deleteMutation.isPending}
+                                        className="h-8 border-red-200 text-xs text-red-600 hover:bg-red-50"
+                                    >
+                                        <TrashIcon className="size-3" />
+                                        Delete
+                                    </Button>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -490,6 +497,41 @@ const EmployeeDetailPage = () => {
                             }
                         >
                             {isActive ? "Deactivate" : "Reactivate"}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog
+                open={showDeleteDialog}
+                onOpenChange={(v) => !v && setShowDeleteDialog(false)}
+            >
+                <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card)">
+                    <DialogHeader>
+                        <DialogTitle className="text-(--admin-text)">
+                            Delete Employee
+                        </DialogTitle>
+                    </DialogHeader>
+                    <p className="text-xs text-(--admin-text-secondary)">
+                        Are you sure you want to permanently delete{" "}
+                        <span className="font-medium text-(--admin-text)">
+                            {employee.name}
+                        </span>
+                        ? This action cannot be undone.
+                    </p>
+                    <DialogFooter>
+                        <Button
+                            variant="ghost"
+                            onClick={() => setShowDeleteDialog(false)}
+                            className="text-(--admin-text-secondary)"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleDelete}
+                            className="bg-red-600 text-white hover:bg-red-700"
+                        >
+                            Delete
                         </Button>
                     </DialogFooter>
                 </DialogContent>

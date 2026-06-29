@@ -67,7 +67,7 @@ const EmployeeCard = ({
                     className={cn(
                         "flex size-10 shrink-0 items-center justify-center rounded-full",
                         "font-sans text-[14px] font-bold text-white",
-                        isActive
+                        employee.isActive !== false
                             ? "bg-(--admin-primary)"
                             : "bg-(--admin-text-muted)",
                     )}
@@ -83,7 +83,7 @@ const EmployeeCard = ({
                         <div
                             className={cn(
                                 "size-1.5 shrink-0 rounded-full",
-                                isActive
+                                employee.isActive !== false
                                     ? "bg-emerald-500"
                                     : "bg-(--admin-text-muted)",
                             )}
@@ -147,12 +147,12 @@ const EmployeeCard = ({
                 <span
                     className={cn(
                         "text-[10px] font-medium",
-                        isActive
+                        employee.isActive !== false
                             ? "text-emerald-600"
                             : "text-(--admin-text-muted)",
                     )}
                 >
-                    {isActive ? "Active" : "Inactive"}
+                    {employee.isActive !== false ? "Active" : "Inactive"}
                 </span>
             </div>
         </div>

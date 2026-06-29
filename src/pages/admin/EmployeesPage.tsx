@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import {
     PlusIcon,
     MagnifyingGlassIcon,
@@ -9,9 +8,15 @@ import {
     CheckCircleIcon,
     DotsThreeVerticalIcon,
     PencilSimpleIcon,
+    TrashIcon,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
-import { useEmployees, useDeleteEmployee } from "@/hooks/useEmployees";
+import {
+    useEmployees,
+    useDeactivateEmployee,
+    useReactivateEmployee,
+    useDeleteEmployee,
+} from "@/hooks/useEmployees";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -65,12 +70,16 @@ const roleBadge = (role: string) => {
 const EmployeesPage = () => {
     const navigate = useNavigate();
     const { data: employees, isLoading } = useEmployees();
+    const deactivateEmployee = useDeactivateEmployee();
+    const reactivateEmployee = useReactivateEmployee();
     const deleteEmployee = useDeleteEmployee();
 
     const [searchQuery, setSearchQuery] = useState("");
     const [roleFilter, setRoleFilter] = useState("");
     const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
     const [confirmDialogEmployee, setConfirmDialogEmployee] =
+        useState<AdminEmployee | null>(null);
+    const [deleteDialogEmployee, setDeleteDialogEmployee] =
         useState<AdminEmployee | null>(null);
 
     const filteredEmployees = useMemo(() => {
@@ -100,16 +109,25 @@ const EmployeesPage = () => {
         setConfirmDialogEmployee(null);
         const isActive = employee.isActive !== false;
         if (isActive) {
-            deactivateEmployee.mutate(employee.id, {
-                onSuccess: () => toast.success(`${employee.name} deactivated`),
-                onError: () => toast.error("Failed to deactivate"),
-            });
+            deactivateEmployee.mutate(employee.id);
         } else {
-            reactivateEmployee.mutate(employee.id, {
-                onSuccess: () => toast.success(`${employee.name} reactivated`),
-                onError: () => toast.error("Failed to reactivate"),
-            });
+            reactivateEmployee.mutate(employee.id);
         }
+    };
+
+    const handleDeleteClick = (
+        e: React.MouseEvent,
+        employee: AdminEmployee,
+    ) => {
+        e.stopPropagation();
+        setDeleteDialogEmployee(employee);
+    };
+
+    const handleDeleteConfirm = () => {
+        if (!deleteDialogEmployee) return;
+        const employee = deleteDialogEmployee;
+        setDeleteDialogEmployee(null);
+        deleteEmployee.mutate(employee.id);
     };
     const isLoadingRows = () => (
         <tr>
@@ -314,7 +332,11 @@ const EmployeesPage = () => {
                                                                     Edit
                                                                 </DropdownMenuItem>
                                                                 <DropdownMenuItem
-                                                                    variant="destructive"
+                                                                    variant={
+                                                                        isActive
+                                                                            ? "destructive"
+                                                                            : undefined
+                                                                    }
                                                                     onClick={() =>
                                                                         handleToggleStatus(
                                                                             {
@@ -334,6 +356,23 @@ const EmployeesPage = () => {
                                                                         ? "Deactivate"
                                                                         : "Reactivate"}
                                                                 </DropdownMenuItem>
+                                                                {emp.role !==
+                                                                    "owner" && (
+                                                                    <DropdownMenuItem
+                                                                        variant="destructive"
+                                                                        onClick={(
+                                                                            e,
+                                                                        ) =>
+                                                                            handleDeleteClick(
+                                                                                e as unknown as React.MouseEvent,
+                                                                                emp,
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <TrashIcon className="size-4" />
+                                                                        Delete
+                                                                    </DropdownMenuItem>
+                                                                )}
                                                             </DropdownMenuContent>
                                                         </DropdownMenu>
                                                     </div>
@@ -388,6 +427,41 @@ const EmployeesPage = () => {
                             {confirmDialogEmployee?.isActive !== false
                                 ? "Deactivate"
                                 : "Reactivate"}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog
+                open={deleteDialogEmployee !== null}
+                onOpenChange={(v) => !v && setDeleteDialogEmployee(null)}
+            >
+                <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card)">
+                    <DialogHeader>
+                        <DialogTitle className="text-(--admin-text)">
+                            Delete Employee
+                        </DialogTitle>
+                    </DialogHeader>
+                    <p className="text-xs text-(--admin-text-secondary)">
+                        Are you sure you want to permanently delete{" "}
+                        <span className="font-medium text-(--admin-text)">
+                            {deleteDialogEmployee?.name}
+                        </span>
+                        ? This action cannot be undone.
+                    </p>
+                    <DialogFooter>
+                        <Button
+                            variant="ghost"
+                            onClick={() => setDeleteDialogEmployee(null)}
+                            className="text-(--admin-text-secondary)"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleDeleteConfirm}
+                            className="bg-red-600 text-white hover:bg-red-700"
+                        >
+                            Delete
                         </Button>
                     </DialogFooter>
                 </DialogContent>
