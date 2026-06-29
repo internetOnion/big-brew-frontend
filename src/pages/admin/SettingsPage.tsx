@@ -1,20 +1,28 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 import { useSettings } from "@/hooks/useSettings";
 import { useUpdateSettings } from "@/hooks/useUpdateSettings";
+import { settingKeys } from "@/lib/query-keys";
+import api from "@/api/api";
+import { ENDPOINTS } from "@/api/endpoints";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import ReceiptPreview from "@/components/admin/settings/ReceiptPreview";
+import ImageUpload from "@/components/admin/settings/ImageUpload";
 import type { Settings } from "@/types/order";
 
 const SettingsPage = () => {
     const { data: settings, isLoading } = useSettings();
     const updateMutation = useUpdateSettings();
+    const queryClient = useQueryClient();
 
     const [form, setForm] = useState<Partial<Settings>>({});
+    const [uploadingLogo, setUploadingLogo] = useState(false);
+    const [uploadingQr, setUploadingQr] = useState(false);
 
     useEffect(() => {
         if (settings) {
@@ -25,8 +33,6 @@ const SettingsPage = () => {
                 receiptHeader: settings.receiptHeader,
                 receiptFooter: settings.receiptFooter,
                 taxLabel: settings.taxLabel,
-                logoUrl: settings.logoUrl,
-                qrCodeUrl: settings.qrCodeUrl,
                 khrRate: settings.khrRate,
             });
         }
@@ -46,6 +52,66 @@ const SettingsPage = () => {
         });
     };
 
+    const handleLogoUpload = async (file: File) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        setUploadingLogo(true);
+        try {
+            await api.put(ENDPOINTS.SETTINGS.LOGO, formData, {
+                headers: { "Content-Type": undefined },
+            });
+            await queryClient.invalidateQueries({
+                queryKey: settingKeys.all,
+            });
+            toast.success("Logo uploaded");
+        } finally {
+            setUploadingLogo(false);
+        }
+    };
+
+    const handleLogoRemove = async () => {
+        setUploadingLogo(true);
+        try {
+            await api.delete(ENDPOINTS.SETTINGS.LOGO);
+            await queryClient.invalidateQueries({
+                queryKey: settingKeys.all,
+            });
+            toast.success("Logo removed");
+        } finally {
+            setUploadingLogo(false);
+        }
+    };
+
+    const handleQrUpload = async (file: File) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        setUploadingQr(true);
+        try {
+            await api.put(ENDPOINTS.SETTINGS.QR_CODE, formData, {
+                headers: { "Content-Type": undefined },
+            });
+            await queryClient.invalidateQueries({
+                queryKey: settingKeys.all,
+            });
+            toast.success("QR code uploaded");
+        } finally {
+            setUploadingQr(false);
+        }
+    };
+
+    const handleQrRemove = async () => {
+        setUploadingQr(true);
+        try {
+            await api.delete(ENDPOINTS.SETTINGS.QR_CODE);
+            await queryClient.invalidateQueries({
+                queryKey: settingKeys.all,
+            });
+            toast.success("QR code removed");
+        } finally {
+            setUploadingQr(false);
+        }
+    };
+
     const previewSettings: Settings = {
         id: 1,
         storeName: form.storeName ?? "",
@@ -54,8 +120,8 @@ const SettingsPage = () => {
         receiptHeader: form.receiptHeader ?? null,
         receiptFooter: form.receiptFooter ?? null,
         taxLabel: form.taxLabel ?? "Tax",
-        logoUrl: form.logoUrl ?? null,
-        qrCodeUrl: form.qrCodeUrl ?? null,
+        logoUrl: settings?.logoUrl ?? null,
+        qrCodeUrl: settings?.qrCodeUrl ?? null,
         khrRate: form.khrRate ?? null,
         createdAt: settings?.createdAt ?? "",
         updatedAt: settings?.updatedAt ?? "",
@@ -203,35 +269,27 @@ const SettingsPage = () => {
 
                         <div className="grid gap-1.5">
                             <Label className="text-[11px] text-(--admin-text-secondary)">
-                                Logo URL
+                                Logo
                             </Label>
-                            <Input
-                                value={form.logoUrl ?? ""}
-                                onChange={(e) =>
-                                    handleChange(
-                                        "logoUrl",
-                                        e.target.value || null,
-                                    )
-                                }
-                                placeholder="https://..."
-                                className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs text-(--admin-text) placeholder:text-(--admin-text-muted) focus-visible:ring-(--admin-accent)"
+                            <ImageUpload
+                                imageUrl={settings?.logoUrl ?? null}
+                                onUpload={handleLogoUpload}
+                                onRemove={handleLogoRemove}
+                                uploading={uploadingLogo}
+                                label="Logo"
                             />
                         </div>
 
                         <div className="grid gap-1.5">
                             <Label className="text-[11px] text-(--admin-text-secondary)">
-                                QR Code URL
+                                QR Code
                             </Label>
-                            <Input
-                                value={form.qrCodeUrl ?? ""}
-                                onChange={(e) =>
-                                    handleChange(
-                                        "qrCodeUrl",
-                                        e.target.value || null,
-                                    )
-                                }
-                                placeholder="https://..."
-                                className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs text-(--admin-text) placeholder:text-(--admin-text-muted) focus-visible:ring-(--admin-accent)"
+                            <ImageUpload
+                                imageUrl={settings?.qrCodeUrl ?? null}
+                                onUpload={handleQrUpload}
+                                onRemove={handleQrRemove}
+                                uploading={uploadingQr}
+                                label="QR code"
                             />
                         </div>
 

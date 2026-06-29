@@ -23,8 +23,6 @@ import { PinDialog } from "@/components/common/PinDialog";
 import type { VerifiedEmployee } from "@/components/common/PinDialog";
 
 const DEFAULT_KHR_RATE = 4100;
-const STATIC_QR_CODE_URL =
-    "https://djscleluxtunyhuqrfrq.supabase.co/storage/v1/object/public/assets/uploads/3bffaf1b-aef9-4fc9-b721-f55316fde49a.png";
 
 const PaymentScreen = () => {
     const { total, subtotal, cartItems, submitOrder } = usePOS();
@@ -222,11 +220,17 @@ const PaymentScreen = () => {
                     </DialogHeader>
                     <div className="flex flex-col items-center gap-4 py-2">
                         <div className="rounded-xl bg-white p-4">
-                            <img
-                                src={STATIC_QR_CODE_URL}
-                                alt="QR Code"
-                                className="size-96 object-contain"
-                            />
+                            {settings?.qrCodeUrl ? (
+                                <img
+                                    src={settings.qrCodeUrl}
+                                    alt="QR Code"
+                                    className="size-96 object-contain"
+                                />
+                            ) : (
+                                <div className="flex size-96 items-center justify-center text-sm text-muted-foreground">
+                                    No QR code configured
+                                </div>
+                            )}
                         </div>
                         <p className="font-mono text-lg font-bold text-primary">
                             ${total.toFixed(2)}

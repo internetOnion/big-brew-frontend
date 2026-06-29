@@ -21,9 +21,8 @@ export const OrderQueue = () => {
     const voidWithPinMutation = useVoidWithPin();
 
     const handleComplete = (orderId: string) => {
-        completeMutation.mutate(orderId, {
-            onSuccess: () => setSelectedOrder(null),
-        });
+        setSelectedOrder(null);
+        completeMutation.mutate(orderId);
     };
 
     const handleVoid = (orderId: string, reason: string) => {

@@ -27,6 +27,9 @@ export const useCompleteOrder = () => {
             );
             return { snapshot };
         },
+        onSuccess: () => {
+            toast.success("Order completed");
+        },
         onError: (_error, _orderId, context) => {
             if (context?.snapshot) {
                 queryClient.setQueryData(orderKeys.pending, context.snapshot);
