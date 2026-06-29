@@ -587,7 +587,7 @@ const MenuItemEditPage = () => {
 
                         <TabsContent
                             value="modifiers"
-                            className="min-h-[520px]"
+                            className="h-[520px] overflow-hidden"
                         >
                             <ModifierTab
                                 groups={detailGroups}

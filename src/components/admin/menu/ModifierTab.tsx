@@ -75,8 +75,6 @@ const ModifierTab = ({
     useEffect(() => {
         if (selectedGroupId && !groups.find((g) => g.id === selectedGroupId)) {
             setSelectedGroupId(groups[0]?.id ?? null);
-        } else if (!selectedGroupId && groups.length > 0) {
-            setSelectedGroupId(groups[0].id);
         }
     }, [groups, selectedGroupId]);
 
@@ -85,8 +83,10 @@ const ModifierTab = ({
         : null;
 
     return (
-        <div className="flex h-full min-h-0 rounded-lg border border-(--admin-border) bg-(--admin-card)">
-            <div className="w-56 shrink-0">
+        <div className="flex flex-col rounded-lg border border-(--admin-border) bg-(--admin-card) md:h-full md:min-h-0 md:flex-row">
+            <div
+                className={`shrink-0 overflow-hidden md:h-full md:w-56 ${selectedGroup ? "hidden md:block" : "block"}`}
+            >
                 <ModifierGroupList
                     groups={groupListItems}
                     selectedGroupId={selectedGroupId}
@@ -94,10 +94,13 @@ const ModifierTab = ({
                     onAdd={onAddGroup}
                 />
             </div>
-            <div className="flex flex-1 min-w-0 flex-col">
+            <div
+                className={`flex flex-1 min-w-0 flex-col ${selectedGroup ? "block" : "hidden md:flex"}`}
+            >
                 {selectedGroup ? (
                     <ModifierGroupDetail
                         group={selectedGroup}
+                        onBack={() => setSelectedGroupId(null)}
                         onUpdate={onUpdateGroup}
                         onDelete={onDeleteGroup}
                         onAddOption={onAddOption}

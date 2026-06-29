@@ -105,17 +105,6 @@ const ReceiptPreview = ({ settings }: ReceiptPreviewProps) => {
 
             <div className="my-2 border-t border-dashed border-gray-400" />
 
-            {/* QR Code */}
-            {settings.qrCodeUrl && (
-                <div className="my-2 flex justify-center">
-                    <img
-                        src={settings.qrCodeUrl}
-                        alt="QR Code"
-                        className="h-20 w-20 object-contain"
-                    />
-                </div>
-            )}
-
             {/* Footer */}
             {settings.receiptFooter && (
                 <div className="mt-2 text-center text-[10px] text-gray-600">

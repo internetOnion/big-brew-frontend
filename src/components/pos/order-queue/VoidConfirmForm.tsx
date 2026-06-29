@@ -21,10 +21,7 @@ export const VoidConfirmForm = ({
     };
 
     return (
-        <div className="border-t border-border pt-4">
-            <h4 className="mb-2 text-sm font-bold text-foreground">
-                Void Order
-            </h4>
+        <div>
             <p className="mb-3 text-xs text-muted-foreground">
                 Please provide a reason for voiding this order.
             </p>

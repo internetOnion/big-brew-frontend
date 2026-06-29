@@ -87,11 +87,30 @@ export const useVoidWithPin = () => {
                 reason,
             });
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: orderKeys.pending });
+        onMutate: async ({ orderId }) => {
+            await queryClient.cancelQueries({
+                queryKey: orderKeys.pending,
+            });
+            const snapshot = queryClient.getQueryData<Order[]>(
+                orderKeys.pending,
+            );
+            queryClient.setQueryData<Order[]>(
+                orderKeys.pending,
+                (old) => old?.filter((o) => o.id !== orderId) ?? [],
+            );
+            return { snapshot };
         },
-        onError: () => {
+        onSuccess: () => {
+            toast.success("Order voided");
+        },
+        onError: (_error, _vars, context) => {
+            if (context?.snapshot) {
+                queryClient.setQueryData(orderKeys.pending, context.snapshot);
+            }
             toast.error("Failed to void order");
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: orderKeys.pending });
         },
     });
 };
