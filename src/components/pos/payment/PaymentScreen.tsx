@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { ArrowLeftIcon } from "@phosphor-icons/react";
+import { toast } from "sonner";
 import { ROUTES } from "@/lib/constants";
 import { usePOS } from "@/hooks/usePos";
 import { useSettings } from "@/hooks/useSettings";
@@ -95,6 +96,8 @@ const PaymentScreen = () => {
             );
             setCompletedOrder(order);
             setSuccess(true);
+            toast.success(`Payment complete · Order #${order.orderNumber}`);
+            setTimeout(() => navigate(ROUTES.POS), 2000);
         } catch {
             setIsProcessing(false);
         }

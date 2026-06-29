@@ -82,21 +82,11 @@ const MenuPage = () => {
 
             {/* Filters */}
             <div className="flex flex-wrap items-center gap-2">
-                <div className="relative">
-                    <MagnifyingGlassIcon className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-(--admin-text-muted)" />
-                    <Input
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Search items..."
-                        className="h-8 w-48 border-(--admin-border) bg-(--admin-card) pl-8 text-xs placeholder:text-(--admin-text-muted)"
-                    />
-                </div>
-
                 <Select
                     value={categoryFilter}
                     onValueChange={(v) => setCategoryFilter(v ?? "all")}
                 >
-                    <SelectTrigger className="h-8 w-36 border-(--admin-border) bg-(--admin-card) text-xs">
+                    <SelectTrigger className="h-7 w-36 border-(--admin-border) bg-(--admin-card) text-xs">
                         <SelectValue placeholder="Category">
                             {(val) =>
                                 val === "all"
@@ -124,7 +114,7 @@ const MenuPage = () => {
                                 variant="ghost"
                                 size="xs"
                                 onClick={() => setAvailabilityFilter(opt)}
-                                className={`h-6 px-2 text-[11px] capitalize ${
+                                className={`h-6 px-2 text-xs capitalize ${
                                     availabilityFilter === opt
                                         ? "bg-(--admin-card) font-medium text-(--admin-primary) shadow-sm"
                                         : "text-(--admin-text-muted) hover:text-(--admin-text-secondary)"
@@ -134,6 +124,16 @@ const MenuPage = () => {
                             </Button>
                         ),
                     )}
+                </div>
+
+                <div className="relative ml-auto">
+                    <MagnifyingGlassIcon className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-(--admin-text-muted)" />
+                    <Input
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Search..."
+                        className="h-7 w-48 border-(--admin-border) bg-(--admin-card) pl-8 text-xs placeholder:text-xs"
+                    />
                 </div>
             </div>
 

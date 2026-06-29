@@ -198,7 +198,7 @@ const OrdersPage = () => {
                 >
                     <SelectTrigger
                         size="sm"
-                        className="h-8 w-36 border-(--admin-border) bg-(--admin-card) text-xs"
+                        className="h-7 w-36 border-(--admin-border) bg-(--admin-card) text-xs"
                     >
                         <SelectValue placeholder="All Statuses">
                             {(val) =>
@@ -225,7 +225,7 @@ const OrdersPage = () => {
                 >
                     <SelectTrigger
                         size="sm"
-                        className="h-8 w-44 border-(--admin-border) bg-(--admin-card) text-xs"
+                        className="h-7 w-44 border-(--admin-border) bg-(--admin-card) text-xs"
                     >
                         <SelectValue placeholder="All Employees">
                             {(val) =>

@@ -17,6 +17,7 @@ export interface AdminEmployee {
     role: "barista" | "manager" | "owner";
     supabaseUid: string | null;
     email?: string;
+    isActive?: boolean;
 }
 
 export interface CreateEmployeePayload {
@@ -30,6 +31,7 @@ export interface CreateEmployeePayload {
 export interface UpdateEmployeePayload {
     name?: string;
     email?: string;
+    role?: "barista" | "manager" | "owner";
     pin?: string;
     password?: string;
 }

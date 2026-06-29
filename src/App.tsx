@@ -19,6 +19,12 @@ const IngredientCreatePage = lazy(
     () => import("./pages/admin/IngredientCreatePage"),
 );
 const EmployeesPage = lazy(() => import("./pages/admin/EmployeesPage"));
+const EmployeeCreatePage = lazy(
+    () => import("./pages/admin/EmployeeCreatePage"),
+);
+const EmployeeDetailPage = lazy(
+    () => import("./pages/admin/EmployeeDetailPage"),
+);
 const OrdersPage = lazy(() => import("./pages/admin/OrdersPage"));
 const ExpensesPage = lazy(() => import("./pages/admin/ExpensesPage"));
 const AdminSettingsPage = lazy(() => import("./pages/admin/SettingsPage"));
@@ -69,6 +75,14 @@ const App = () => {
                             <Route
                                 path="employees"
                                 element={<EmployeesPage />}
+                            />
+                            <Route
+                                path="employees/new"
+                                element={<EmployeeCreatePage />}
+                            />
+                            <Route
+                                path="employees/:id"
+                                element={<EmployeeDetailPage />}
                             />
                             <Route path="orders" element={<OrdersPage />} />
                             <Route path="expenses" element={<ExpensesPage />} />

@@ -52,11 +52,26 @@ export const useUpdateEmployee = () => {
     });
 };
 
-export const useDeactivateEmployee = () => {
+export const useDeleteEmployee = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (id: string) => {
             await api.delete(ENDPOINTS.EMPLOYEES.BY_ID(id));
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: employeeKeys.all });
+        },
+    });
+};
+
+export const useResetEmployeePin = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ id, pin }: { id: string; pin: string }) => {
+            const { data } = await api.patch(ENDPOINTS.EMPLOYEES.BY_ID(id), {
+                pin,
+            });
+            return data;
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: employeeKeys.all });
