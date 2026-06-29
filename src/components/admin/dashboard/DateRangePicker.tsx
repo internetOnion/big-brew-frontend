@@ -111,7 +111,7 @@ const DateRangePicker = ({ value, onChange }: DateRangePickerProps) => {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="h-7 gap-1.5 border-(--admin-border) bg-(--admin-card) px-2.5 font-mono text-[11px] text-(--admin-text-secondary) hover:bg-(--admin-hover) hover:text-(--admin-text)"
+                                className="h-7 gap-1.5 border-(--admin-border) bg-(--admin-card) px-2.5 font-mono text-xs text-(--admin-text-secondary) hover:bg-(--admin-hover) hover:text-(--admin-text)"
                             />
                         }
                     >
@@ -141,7 +141,7 @@ const DateRangePicker = ({ value, onChange }: DateRangePickerProps) => {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="h-7 gap-1.5 border-(--admin-border) bg-(--admin-card) px-2.5 font-mono text-[11px] text-(--admin-text-secondary) hover:bg-(--admin-hover) hover:text-(--admin-text)"
+                                className="h-7 gap-1.5 border-(--admin-border) bg-(--admin-card) px-2.5 font-mono text-xs text-(--admin-text-secondary) hover:bg-(--admin-hover) hover:text-(--admin-text)"
                             />
                         }
                     >
@@ -168,7 +168,7 @@ const DateRangePicker = ({ value, onChange }: DateRangePickerProps) => {
                     <button
                         key={preset.label}
                         onClick={() => handlePresetClick(preset.label)}
-                        className={`cursor-pointer rounded px-2 py-1 text-[11px] transition-colors ${
+                        className={`cursor-pointer rounded px-2 py-1 text-xs transition-colors ${
                             activePreset === preset.label
                                 ? "bg-(--admin-card) font-medium text-(--admin-primary) shadow-sm"
                                 : "text-(--admin-text-muted) hover:text-(--admin-text-secondary)"

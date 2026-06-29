@@ -1,10 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
     MagnifyingGlassIcon,
     SpinnerIcon,
     WarningCircleIcon,
     ArrowClockwiseIcon,
 } from "@phosphor-icons/react";
+import { toast } from "sonner";
 import { useCategories } from "@/contexts/CategoryContext";
 import { usePOS } from "@/hooks/usePos";
 import { useMenuItems } from "@/hooks/useMenuItems";
@@ -26,6 +27,10 @@ export const MenuGrid = () => {
         refetch,
         fetchItemById,
     } = useMenuItems();
+
+    useEffect(() => {
+        if (error) toast.error(error.message);
+    }, [error]);
 
     const filteredItems = useMemo(() => {
         return (items ?? []).filter((item) => {
@@ -98,7 +103,7 @@ export const MenuGrid = () => {
                     <div className="flex flex-col items-center justify-center gap-3 py-16">
                         <WarningCircleIcon className="size-10 text-destructive" />
                         <p className="text-sm font-medium text-muted-foreground">
-                            {error.message}
+                            Could not load menu items
                         </p>
                         <Button
                             variant="outline"

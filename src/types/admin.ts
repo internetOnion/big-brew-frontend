@@ -31,6 +31,7 @@ export interface CreateEmployeePayload {
 export interface UpdateEmployeePayload {
     name?: string;
     email?: string;
+    role?: "barista" | "manager" | "owner";
     pin?: string;
     password?: string;
 }

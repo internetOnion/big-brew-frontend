@@ -15,6 +15,13 @@ import {
 import { useMenuItems } from "@/hooks/useMenuItems";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from "@/components/ui/dialog";
 
 const CategoriesPage = () => {
     const navigate = useNavigate();
@@ -28,6 +35,7 @@ const CategoriesPage = () => {
     const [newName, setNewName] = useState("");
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editName, setEditName] = useState("");
+    const [deletingId, setDeletingId] = useState<string | null>(null);
 
     const handleAdd = () => {
         if (!newName.trim()) return;
@@ -228,9 +236,7 @@ const CategoriesPage = () => {
                                                 variant="ghost"
                                                 size="icon-xs"
                                                 onClick={() =>
-                                                    deleteMutation.mutate(
-                                                        cat.id,
-                                                    )
+                                                    setDeletingId(cat.id)
                                                 }
                                                 disabled={
                                                     !isEmpty ||
@@ -252,6 +258,50 @@ const CategoriesPage = () => {
                     </div>
                 )}
             </div>
+
+            <Dialog
+                open={deletingId !== null}
+                onOpenChange={(v) => !v && setDeletingId(null)}
+            >
+                <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card)">
+                    <DialogHeader>
+                        <DialogTitle className="text-(--admin-text)">
+                            Delete Category
+                        </DialogTitle>
+                    </DialogHeader>
+                    <p className="text-xs text-(--admin-text-secondary)">
+                        Are you sure you want to delete{" "}
+                        <span className="font-medium text-(--admin-text)">
+                            {categories?.find((c) => c.id === deletingId)
+                                ?.name ?? ""}
+                        </span>
+                        ?
+                    </p>
+                    <DialogFooter>
+                        <Button
+                            variant="ghost"
+                            onClick={() => setDeletingId(null)}
+                            className="text-(--admin-text-secondary)"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                if (deletingId) {
+                                    deleteMutation.mutate(deletingId);
+                                    setDeletingId(null);
+                                }
+                            }}
+                            disabled={deleteMutation.isPending}
+                            className="bg-red-600 text-white hover:bg-red-700"
+                        >
+                            {deleteMutation.isPending
+                                ? "Deleting..."
+                                : "Delete"}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 };

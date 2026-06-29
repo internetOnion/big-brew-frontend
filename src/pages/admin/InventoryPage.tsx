@@ -1,21 +1,40 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import {
     MagnifyingGlassIcon,
     PlusIcon,
     PackageIcon,
+    DotsThreeVerticalIcon,
+    PencilSimpleIcon,
+    TrashIcon,
 } from "@phosphor-icons/react";
 import { useIngredients } from "@/hooks/useInventory";
+import { useDeleteIngredient } from "@/hooks/useDeleteIngredient";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
 import { getStockStatus, stockStatusConfig } from "@/lib/format-stock";
 
 const InventoryPage = () => {
     const navigate = useNavigate();
     const { data: ingredients, isLoading } = useIngredients();
+    const deleteMutation = useDeleteIngredient();
 
     const [search, setSearch] = useState("");
     const [lowStockOnly, setLowStockOnly] = useState(false);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
 
     const filtered = ingredients?.filter((ing) => {
         if (
@@ -27,6 +46,16 @@ const InventoryPage = () => {
             return false;
         return true;
     });
+
+    const handleDelete = () => {
+        if (!deletingId) return;
+        const id = deletingId;
+        setDeletingId(null);
+        deleteMutation.mutate(id, {
+            onSuccess: () => toast.success("Ingredient deleted"),
+            onError: () => toast.error("Failed to delete ingredient"),
+        });
+    };
 
     return (
         <div className="flex flex-col gap-4 p-5">
@@ -46,21 +75,11 @@ const InventoryPage = () => {
 
             {/* Filters */}
             <div className="flex flex-wrap items-center gap-2">
-                <div className="relative">
-                    <MagnifyingGlassIcon className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-(--admin-text-muted)" />
-                    <Input
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Search ingredients..."
-                        className="h-8 w-48 border-(--admin-border) bg-(--admin-card) pl-8 text-xs placeholder:text-(--admin-text-muted)"
-                    />
-                </div>
-
                 <Button
                     variant={lowStockOnly ? "default" : "outline"}
                     size="sm"
                     onClick={() => setLowStockOnly(!lowStockOnly)}
-                    className={`h-7 text-[11px] ${
+                    className={`h-7 text-xs ${
                         lowStockOnly
                             ? "bg-red-100 text-red-700 hover:bg-red-200"
                             : "border-(--admin-border) text-(--admin-text-secondary)"
@@ -68,6 +87,16 @@ const InventoryPage = () => {
                 >
                     Low Stock Only
                 </Button>
+
+                <div className="relative ml-auto">
+                    <MagnifyingGlassIcon className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-(--admin-text-muted)" />
+                    <Input
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Search..."
+                        className="h-7 w-48 border-(--admin-border) bg-(--admin-card) pl-8 text-xs placeholder:text-xs"
+                    />
+                </div>
             </div>
 
             {/* Table */}
@@ -91,7 +120,7 @@ const InventoryPage = () => {
                                 <th className="px-4 py-2.5 text-center text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
                                     Status
                                 </th>
-                                <th className="w-16 px-2 py-2.5" />
+                                <th className="w-36 px-2 py-2.5" />
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-(--admin-border)">
@@ -164,13 +193,45 @@ const InventoryPage = () => {
                                                 </span>
                                             </td>
                                             <td className="px-2 py-2.5 text-right">
-                                                <Button
-                                                    variant="outline"
-                                                    size="xs"
-                                                    className="border-(--admin-border) text-[11px] text-(--admin-text-secondary) hover:text-(--admin-text)"
+                                                <div
+                                                    className="flex justify-end"
+                                                    onClick={(e) =>
+                                                        e.stopPropagation()
+                                                    }
                                                 >
-                                                    Edit
-                                                </Button>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger className="flex size-7 shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text) cursor-pointer">
+                                                            <DotsThreeVerticalIcon className="size-4" />
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent
+                                                            align="end"
+                                                            sideOffset={4}
+                                                            className="border-(--admin-border) bg-(--admin-card)"
+                                                        >
+                                                            <DropdownMenuItem
+                                                                onClick={() =>
+                                                                    navigate(
+                                                                        `/admin/inventory/${ing.id}`,
+                                                                    )
+                                                                }
+                                                            >
+                                                                <PencilSimpleIcon className="size-4" />
+                                                                Edit
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem
+                                                                variant="destructive"
+                                                                onClick={() =>
+                                                                    setDeletingId(
+                                                                        ing.id,
+                                                                    )
+                                                                }
+                                                            >
+                                                                <TrashIcon className="size-4" />
+                                                                Delete
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </div>
                                             </td>
                                         </tr>
                                     );
@@ -180,6 +241,49 @@ const InventoryPage = () => {
                     </table>
                 </div>
             </div>
+
+            {/* Delete confirmation */}
+            <Dialog
+                open={deletingId !== null}
+                onOpenChange={(v) =>
+                    !v && !deleteMutation.isPending && setDeletingId(null)
+                }
+            >
+                <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card) shadow-xl">
+                    <DialogHeader>
+                        <DialogTitle className="text-[14px] font-medium text-(--admin-text)">
+                            Delete Ingredient
+                        </DialogTitle>
+                    </DialogHeader>
+                    <p className="text-[13px] text-(--admin-text-secondary)">
+                        Are you sure you want to delete{" "}
+                        <span className="font-medium text-(--admin-text)">
+                            {ingredients?.find((i) => i.id === deletingId)
+                                ?.name ?? ""}
+                        </span>
+                        ? This action cannot be undone.
+                    </p>
+                    <div className="flex justify-end gap-2 border-t border-(--admin-border) pt-3">
+                        <Button
+                            variant="ghost"
+                            onClick={() => setDeletingId(null)}
+                            disabled={deleteMutation.isPending}
+                            className="text-(--admin-text-secondary)"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleDelete}
+                            disabled={deleteMutation.isPending}
+                            className="bg-red-600 text-white hover:bg-red-700"
+                        >
+                            {deleteMutation.isPending
+                                ? "Deleting..."
+                                : "Delete"}
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 };

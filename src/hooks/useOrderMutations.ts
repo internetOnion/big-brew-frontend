@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
 import { orderKeys } from "@/lib/query-keys";
@@ -30,6 +31,7 @@ export const useCompleteOrder = () => {
             if (context?.snapshot) {
                 queryClient.setQueryData(orderKeys.pending, context.snapshot);
             }
+            toast.error("Failed to complete order");
         },
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: orderKeys.pending });
@@ -58,6 +60,9 @@ export const useVoidOrder = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: orderKeys.pending });
         },
+        onError: () => {
+            toast.error("Failed to void order");
+        },
     });
 };
 
@@ -81,6 +86,9 @@ export const useVoidWithPin = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: orderKeys.pending });
+        },
+        onError: () => {
+            toast.error("Failed to void order");
         },
     });
 };

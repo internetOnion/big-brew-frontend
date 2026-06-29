@@ -126,8 +126,7 @@ const OrderDetailModal = ({ order, open, onClose }: OrderDetailModalProps) => {
                                 >
                                     {statusBadgeConfig[order.status].label}
                                 </span>
-                                {order.paymentStatus in
-                                    paymentStatusConfig && (
+                                {order.paymentStatus in paymentStatusConfig && (
                                     <span
                                         className={`inline-block rounded-full border px-2 py-0.5 text-[10px] font-medium ${paymentStatusConfig[order.paymentStatus].className}`}
                                     >
@@ -321,9 +320,7 @@ const OrderDetailModal = ({ order, open, onClose }: OrderDetailModalProps) => {
                                         <p className="mt-0.5 text-[11px] text-red-600">
                                             Rejected on{" "}
                                             {format(
-                                                new Date(
-                                                    order.voidRejectedAt,
-                                                ),
+                                                new Date(order.voidRejectedAt),
                                                 "MMM d, h:mm a",
                                             )}
                                         </p>

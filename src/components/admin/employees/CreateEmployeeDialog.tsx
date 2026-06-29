@@ -78,8 +78,20 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                 },
                 onError: (error) => {
                     const msg =
-                        (error as { response?: { data?: { message?: string; error?: string } } })?.response?.data?.message ||
-                        (error as { response?: { data?: { message?: string; error?: string } } })?.response?.data?.error ||
+                        (
+                            error as {
+                                response?: {
+                                    data?: { message?: string; error?: string };
+                                };
+                            }
+                        )?.response?.data?.message ||
+                        (
+                            error as {
+                                response?: {
+                                    data?: { message?: string; error?: string };
+                                };
+                            }
+                        )?.response?.data?.error ||
                         "Failed to create employee";
                     toast.error(msg);
                     setPinError(msg);
@@ -139,17 +151,13 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                             <Input
                                 type={showPassword ? "text" : "password"}
                                 value={password}
-                                onChange={(e) =>
-                                    setPassword(e.target.value)
-                                }
+                                onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Min 6 characters"
                                 className="h-8 border-(--admin-border) bg-(--admin-card) pr-8 text-xs"
                             />
                             <button
                                 type="button"
-                                onClick={() =>
-                                    setShowPassword(!showPassword)
-                                }
+                                onClick={() => setShowPassword(!showPassword)}
                                 className="absolute top-1/2 right-2 flex cursor-pointer -translate-y-1/2 items-center text-(--admin-text-muted) transition-colors hover:text-(--admin-text)"
                             >
                                 {showPassword ? (
@@ -178,9 +186,7 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                             <button
                                 type="button"
                                 onClick={() =>
-                                    setShowConfirmPassword(
-                                        !showConfirmPassword,
-                                    )
+                                    setShowConfirmPassword(!showConfirmPassword)
                                 }
                                 className="absolute top-1/2 right-2 flex cursor-pointer -translate-y-1/2 items-center text-(--admin-text-muted) transition-colors hover:text-(--admin-text)"
                             >
@@ -217,7 +223,10 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                                 </SelectTrigger>
                                 <SelectContent>
                                     {ROLES.map((r) => (
-                                        <SelectItem key={r.value} value={r.value}>
+                                        <SelectItem
+                                            key={r.value}
+                                            value={r.value}
+                                        >
                                             {r.label}
                                         </SelectItem>
                                     ))}
@@ -235,7 +244,9 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                                 pattern="\d*"
                                 maxLength={6}
                                 value={pin}
-                                onChange={(e) => handlePinChange(e.target.value)}
+                                onChange={(e) =>
+                                    handlePinChange(e.target.value)
+                                }
                                 placeholder="000000"
                                 className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs tracking-widest"
                             />

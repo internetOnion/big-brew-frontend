@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { Toaster } from "sonner";
 import { IconProvider } from "@/components/providers/IconProvider";
 import { useAuth } from "@/hooks/useAuth";
 import LoadingScreen from "@/components/common/LoadingScreen";
@@ -30,6 +31,7 @@ const Root = () => {
     return (
         <BrowserRouter>
             <App />
+            <Toaster />
         </BrowserRouter>
     );
 };
