@@ -3,6 +3,7 @@ import {
     ShoppingBagIcon,
     CheckCircleIcon,
     XCircleIcon,
+    ReceiptIcon,
     ClockIcon,
     CoffeeIcon,
 } from "@phosphor-icons/react";
@@ -17,6 +18,7 @@ interface OrderQueueCardProps {
     onClick: () => void;
     onComplete: (e: React.MouseEvent) => void;
     onVoid: (e: React.MouseEvent) => void;
+    onReceipt: (e: React.MouseEvent) => void;
 }
 
 export const OrderQueueCard = ({
@@ -26,6 +28,7 @@ export const OrderQueueCard = ({
     onClick,
     onComplete,
     onVoid,
+    onReceipt,
 }: OrderQueueCardProps) => {
     const TypeIcon =
         order.diningOption === "dine_in" ? ForkKnifeIcon : ShoppingBagIcon;
@@ -86,6 +89,14 @@ export const OrderQueueCard = ({
                     </span>
                 </div>
                 <div className="flex gap-1">
+                    <Button
+                        variant="ghost"
+                        size="icon-xs"
+                        onClick={onReceipt}
+                        title="Receipt"
+                    >
+                        <ReceiptIcon className="text-(--pos-text-muted)" />
+                    </Button>
                     <Button
                         variant="ghost"
                         size="icon-xs"

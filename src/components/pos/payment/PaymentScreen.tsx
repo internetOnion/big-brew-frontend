@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
-import { ArrowLeftIcon } from "@phosphor-icons/react";
+import { ArrowLeftIcon, ReceiptIcon } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { ROUTES } from "@/lib/constants";
 import { usePOS } from "@/hooks/usePos";
@@ -13,8 +13,9 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogFooter,
 } from "@/components/ui/dialog";
-import { PaymentSuccessScreen } from "./PaymentSuccessScreen";
+import OrderReceipt from "./OrderReceipt";
 import { PaymentMethodToggle } from "./PaymentMethodToggle";
 import { NumericKeypad } from "./NumericKeypad";
 import { AmountDisplay } from "./AmountDisplay";
@@ -23,8 +24,6 @@ import { PinDialog } from "@/components/common/PinDialog";
 import type { VerifiedEmployee } from "@/components/common/PinDialog";
 
 const DEFAULT_KHR_RATE = 4100;
-const STATIC_QR_CODE_URL =
-    "https://djscleluxtunyhuqrfrq.supabase.co/storage/v1/object/public/assets/uploads/3bffaf1b-aef9-4fc9-b721-f55316fde49a.png";
 
 const PaymentScreen = () => {
     const { total, subtotal, cartItems, submitOrder } = usePOS();
@@ -97,7 +96,6 @@ const PaymentScreen = () => {
             setCompletedOrder(order);
             setSuccess(true);
             toast.success(`Payment complete · Order #${order.orderNumber}`);
-            setTimeout(() => navigate(ROUTES.POS), 2000);
         } catch {
             setIsProcessing(false);
         }
@@ -119,18 +117,11 @@ const PaymentScreen = () => {
 
     const itemCount = cartItems.reduce((s: number, i) => s + i.quantity, 0);
 
-    if (success && completedOrder) {
-        const cashPayment = completedOrder.payments.find(
-            (p) => p.method === "cash",
-        );
-        return (
-            <PaymentSuccessScreen
-                orderNumber={completedOrder.orderNumber}
-                changeAmount={cashPayment?.changeAmount}
-                paymentMethod={paymentMethod}
-            />
-        );
-    }
+    const handleNewOrder = () => {
+        setSuccess(false);
+        setCompletedOrder(null);
+        navigate(ROUTES.POS);
+    };
 
     return (
         <div className="flex flex-1 flex-col bg-(--pos-bg)">
@@ -222,11 +213,17 @@ const PaymentScreen = () => {
                     </DialogHeader>
                     <div className="flex flex-col items-center gap-4 py-2">
                         <div className="rounded-xl bg-white p-4">
-                            <img
-                                src={STATIC_QR_CODE_URL}
-                                alt="QR Code"
-                                className="size-96 object-contain"
-                            />
+                            {settings?.qrCodeUrl ? (
+                                <img
+                                    src={settings.qrCodeUrl}
+                                    alt="QR Code"
+                                    className="size-96 object-contain"
+                                />
+                            ) : (
+                                <div className="flex size-96 items-center justify-center text-sm text-muted-foreground">
+                                    No QR code configured
+                                </div>
+                            )}
                         </div>
                         <p className="font-mono text-lg font-bold text-primary">
                             ${total.toFixed(2)}
@@ -261,6 +258,33 @@ const PaymentScreen = () => {
                             </Button>
                         </motion.div>
                     </div>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog
+                open={success && !!completedOrder}
+                onOpenChange={(open) => {
+                    if (!open) handleNewOrder();
+                }}
+            >
+                <DialogContent className="max-w-sm">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2">
+                            <ReceiptIcon size={18} />
+                            Receipt
+                        </DialogTitle>
+                    </DialogHeader>
+                    {completedOrder && settings && (
+                        <OrderReceipt
+                            order={completedOrder}
+                            settings={settings}
+                        />
+                    )}
+                    <DialogFooter>
+                        <Button onClick={handleNewOrder} className="w-full">
+                            New Order
+                        </Button>
+                    </DialogFooter>
                 </DialogContent>
             </Dialog>
         </div>

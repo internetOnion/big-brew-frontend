@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import {
+    ArrowLeftIcon,
     CaretDownIcon,
     CaretRightIcon,
     PencilSimpleIcon,
@@ -44,6 +46,7 @@ type DetailGroup = {
 
 type ModifierGroupDetailProps = {
     group: DetailGroup;
+    onBack?: () => void;
     onUpdate: (
         groupId: string,
         name: string,
@@ -81,6 +84,7 @@ type ModifierGroupDetailProps = {
 
 const ModifierGroupDetail = ({
     group,
+    onBack,
     onUpdate,
     onDelete,
     onAddOption,
@@ -128,7 +132,10 @@ const ModifierGroupDetail = ({
     };
 
     const saveEdit = () => {
-        if (!editName.trim()) return;
+        if (!editName.trim()) {
+            toast.error("Group name is required");
+            return;
+        }
         onUpdate(group.id, editName.trim(), editType, editRequired);
         setEditing(false);
     };
@@ -153,7 +160,10 @@ const ModifierGroupDetail = ({
     };
 
     const saveOption = () => {
-        if (!editingOptionId || !editOptionName.trim()) return;
+        if (!editingOptionId || !editOptionName.trim()) {
+            toast.error("Option name is required");
+            return;
+        }
         onUpdateOption(
             group.id,
             editingOptionId,
@@ -164,7 +174,10 @@ const ModifierGroupDetail = ({
     };
 
     const handleAddOption = () => {
-        if (!newOptionName.trim()) return;
+        if (!newOptionName.trim()) {
+            toast.error("Option name is required");
+            return;
+        }
         onAddOption(group.id, newOptionName.trim(), newOptionPrice || "0");
         setNewOptionName("");
         setNewOptionPrice("0");
@@ -172,8 +185,14 @@ const ModifierGroupDetail = ({
     };
 
     const handleAddIngredient = (optionId: string) => {
-        if (!newIngId || !newIngQty) return;
-        if (parseFloat(newIngQty) <= 0) return;
+        if (!newIngId || !newIngQty) {
+            toast.error("Select an ingredient and enter quantity");
+            return;
+        }
+        if (parseFloat(newIngQty) <= 0) {
+            toast.error("Quantity must be greater than 0");
+            return;
+        }
         onAddIngredient(group.id, optionId, newIngId, newIngQty);
         setNewIngId("");
         setNewIngQty("");
@@ -186,9 +205,15 @@ const ModifierGroupDetail = ({
     };
 
     const saveIngredient = (optionId: string, ingredient: DetailIngredient) => {
-        if (!onUpdateIngredient || !editIngQty) return;
+        if (!onUpdateIngredient || !editIngQty) {
+            toast.error("Enter a valid quantity");
+            return;
+        }
         const qty = parseFloat(editIngQty);
-        if (isNaN(qty) || qty <= 0) return;
+        if (isNaN(qty) || qty <= 0) {
+            toast.error("Quantity must be greater than 0");
+            return;
+        }
         onUpdateIngredient(
             group.id,
             optionId,
@@ -203,11 +228,11 @@ const ModifierGroupDetail = ({
             {/* Group header */}
             <div className="border-b border-(--admin-border) px-4 py-3">
                 {editing ? (
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                         <Input
                             value={editName}
                             onChange={(e) => setEditName(e.target.value)}
-                            className="h-7 flex-1 border-(--admin-border) bg-(--admin-card) text-xs"
+                            className="h-7 flex-1 min-w-32 border-(--admin-border) bg-(--admin-card) text-xs"
                             autoFocus
                         />
                         <Select
@@ -230,7 +255,7 @@ const ModifierGroupDetail = ({
                                 </SelectItem>
                             </SelectContent>
                         </Select>
-                        <label className="flex items-center gap-1 text-[11px] text-(--admin-text-secondary)">
+                        <label className="flex items-center gap-1.5 text-xs text-(--admin-text-secondary)">
                             <input
                                 type="checkbox"
                                 checked={editRequired}
@@ -239,7 +264,7 @@ const ModifierGroupDetail = ({
                                 }
                                 className="size-3 accent-(--admin-accent)"
                             />
-                            Req
+                            Required
                         </label>
                         <Button
                             variant="ghost"
@@ -259,12 +284,22 @@ const ModifierGroupDetail = ({
                         </Button>
                     </div>
                 ) : (
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                        {onBack && (
+                            <Button
+                                variant="ghost"
+                                size="icon-xs"
+                                onClick={onBack}
+                                className="shrink-0 text-(--admin-text-muted) hover:text-(--admin-text) md:hidden"
+                            >
+                                <ArrowLeftIcon className="size-4" />
+                            </Button>
+                        )}
                         <div className="flex-1">
                             <h3 className="text-[13px] font-medium text-(--admin-text)">
                                 {group.name}
                             </h3>
-                            <span className="text-[10px] capitalize text-(--admin-text-muted)">
+                            <span className="text-[11px] capitalize text-(--admin-text-muted)">
                                 {group.selectionType}
                                 {group.isRequired ? " · required" : ""}
                             </span>
@@ -304,7 +339,7 @@ const ModifierGroupDetail = ({
                         <div key={option.id}>
                             {/* Option row */}
                             {editingOptionId === option.id ? (
-                                <div className="flex items-center gap-2 px-4 py-2.5">
+                                <div className="flex flex-wrap items-center gap-2 px-4 py-2.5">
                                     <Input
                                         value={editOptionName}
                                         onChange={(e) =>
@@ -352,10 +387,10 @@ const ModifierGroupDetail = ({
                                         ) : (
                                             <CaretRightIcon className="size-3 text-(--admin-text-muted)" />
                                         )}
-                                        <span className="text-[12px] text-(--admin-text)">
+                                        <span className="text-[13px] text-(--admin-text)">
                                             {option.name}
                                         </span>
-                                        <span className="ml-auto font-mono text-[11px] text-(--admin-text-secondary)">
+                                        <span className="ml-auto font-mono text-xs text-(--admin-text-secondary)">
                                             +$
                                             {parseFloat(option.price).toFixed(
                                                 2,
@@ -385,14 +420,14 @@ const ModifierGroupDetail = ({
 
                             {/* Option ingredients (expandable) */}
                             {expandedOptions.has(option.id) && (
-                                <div className="border-t border-(--admin-border) bg-(--admin-hover)/50 px-8 py-2">
+                                <div className="border-t border-(--admin-border) bg-(--admin-hover)/50 px-4 py-2 md:px-8">
                                     {option.ingredients.map((ing) =>
                                         editingIngredientId === ing.id ? (
                                             <div
                                                 key={ing.id}
                                                 className="flex items-center justify-between py-0.5"
                                             >
-                                                <span className="text-[11px] text-(--admin-text)">
+                                                <span className="text-xs text-(--admin-text)">
                                                     {ing.name}
                                                 </span>
                                                 <div className="flex items-center gap-1.5">
@@ -406,9 +441,9 @@ const ModifierGroupDetail = ({
                                                                 e.target.value,
                                                             )
                                                         }
-                                                        className="h-6 w-16 border-(--admin-border) bg-(--admin-card) font-mono text-[10px]"
+                                                        className="h-6 w-16 border-(--admin-border) bg-(--admin-card) font-mono text-[11px]"
                                                     />
-                                                    <span className="text-[10px] text-(--admin-text-muted)">
+                                                    <span className="text-[11px] text-(--admin-text-muted)">
                                                         {ing.unit}
                                                     </span>
                                                     <Button
@@ -443,11 +478,11 @@ const ModifierGroupDetail = ({
                                                 key={ing.id}
                                                 className="flex items-center justify-between py-0.5"
                                             >
-                                                <span className="text-[11px] text-(--admin-text)">
+                                                <span className="text-xs text-(--admin-text)">
                                                     {ing.name}
                                                 </span>
                                                 <div className="flex items-center gap-2">
-                                                    <span className="font-mono text-[10px] text-(--admin-text-muted)">
+                                                    <span className="font-mono text-[11px] text-(--admin-text-muted)">
                                                         {ing.quantity}{" "}
                                                         {ing.unit}
                                                     </span>
@@ -485,14 +520,14 @@ const ModifierGroupDetail = ({
                                     )}
 
                                     {addingIngredientToOption === option.id ? (
-                                        <div className="flex items-center gap-2 py-1">
+                                        <div className="flex flex-wrap items-center gap-2 py-1">
                                             <Select
                                                 value={newIngId}
                                                 onValueChange={(v) =>
                                                     setNewIngId(v ?? "")
                                                 }
                                             >
-                                                <SelectTrigger className="h-6 flex-1 border-(--admin-border) bg-(--admin-card) text-[10px]">
+                                                <SelectTrigger className="h-6 flex-1 border-(--admin-border) bg-(--admin-card) text-[11px]">
                                                     <SelectValue placeholder="Select..." />
                                                 </SelectTrigger>
                                                 <SelectContent>
@@ -516,7 +551,7 @@ const ModifierGroupDetail = ({
                                                     setNewIngQty(e.target.value)
                                                 }
                                                 placeholder="Qty"
-                                                className="h-6 w-16 border-(--admin-border) bg-(--admin-card) font-mono text-[10px]"
+                                                className="h-6 w-16 border-(--admin-border) bg-(--admin-card) font-mono text-[11px]"
                                             />
                                             <Button
                                                 variant="ghost"
@@ -554,7 +589,7 @@ const ModifierGroupDetail = ({
                                                     option.id,
                                                 )
                                             }
-                                            className="mt-1 h-6 gap-1 text-[10px] text-(--admin-text-muted) hover:text-(--admin-text)"
+                                            className="mt-1 h-6 gap-1 text-[11px] text-(--admin-text-muted) hover:text-(--admin-text)"
                                         >
                                             <PlusIcon className="size-2.5" />
                                             Add ingredient
@@ -568,7 +603,7 @@ const ModifierGroupDetail = ({
 
                 {/* Add option form / button */}
                 {showAddOption ? (
-                    <div className="flex items-center gap-2 px-4 py-2.5">
+                    <div className="flex flex-wrap items-center gap-2 px-4 py-2.5">
                         <Input
                             value={newOptionName}
                             onChange={(e) => setNewOptionName(e.target.value)}

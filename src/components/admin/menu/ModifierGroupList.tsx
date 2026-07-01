@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import { PlusIcon, CheckIcon, XIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,7 +42,10 @@ const ModifierGroupList = ({
     const [newRequired, setNewRequired] = useState(false);
 
     const handleAdd = () => {
-        if (!newName.trim()) return;
+        if (!newName.trim()) {
+            toast.error("Group name is required");
+            return;
+        }
         onAdd(newName.trim(), newType, newRequired);
         setNewName("");
         setNewType("single");
@@ -56,7 +60,7 @@ const ModifierGroupList = ({
     };
 
     return (
-        <div className="flex flex-col border-r border-(--admin-border)">
+        <div className="flex h-full flex-col border-b border-(--admin-border) md:border-b-0 md:border-r">
             <div className="flex items-center justify-between border-b border-(--admin-border) px-4 py-3">
                 <h3 className="text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
                     Modifier Groups
@@ -114,14 +118,14 @@ const ModifierGroupList = ({
                             className="h-7 border-(--admin-border) bg-(--admin-card) text-xs"
                             autoFocus
                         />
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 overflow-hidden">
                             <Select
                                 value={newType}
                                 onValueChange={(v) =>
                                     setNewType(v as "single" | "multiple")
                                 }
                             >
-                                <SelectTrigger className="h-7 w-24 border-(--admin-border) bg-(--admin-card) text-xs">
+                                <SelectTrigger className="h-7 flex-1 min-w-0 border-(--admin-border) bg-(--admin-card) text-xs">
                                     <SelectValue>
                                         {(val) =>
                                             val === "single"
@@ -139,7 +143,7 @@ const ModifierGroupList = ({
                                     </SelectItem>
                                 </SelectContent>
                             </Select>
-                            <label className="flex items-center gap-1 text-[11px] text-(--admin-text-secondary)">
+                            <label className="flex shrink-0 items-center gap-1.5 text-xs text-(--admin-text-secondary)">
                                 <input
                                     type="checkbox"
                                     checked={newRequired}
@@ -148,9 +152,9 @@ const ModifierGroupList = ({
                                     }
                                     className="size-3 accent-(--admin-accent)"
                                 />
-                                Req
+                                Required
                             </label>
-                            <div className="ml-auto flex gap-1">
+                            <div className="ml-auto flex shrink-0 gap-1">
                                 <Button
                                     variant="ghost"
                                     size="icon-xs"

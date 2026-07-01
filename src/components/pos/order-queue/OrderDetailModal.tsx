@@ -2,11 +2,12 @@ import { useState } from "react";
 import {
     CheckCircleIcon,
     XCircleIcon,
+    ReceiptIcon,
     ForkKnifeIcon,
     ShoppingBagIcon,
     ClockIcon,
 } from "@phosphor-icons/react";
-import type { Order, OrderItem } from "@/types/order";
+import type { Order, OrderItem, Settings } from "@/types/order";
 import { cn } from "@/lib/utils";
 import { getTimeSince, isUrgent } from "@/lib/order-utils";
 import { Button } from "@/components/ui/button";
@@ -18,12 +19,13 @@ import {
     DialogFooter,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { VoidConfirmForm } from "./VoidConfirmForm";
+import OrderReceipt from "../payment/OrderReceipt";
 
 interface OrderDetailModalProps {
     order: Order;
+    settings: Settings | undefined;
     onComplete: () => void;
-    onVoid: (reason: string) => void;
+    onVoid: () => void;
     onCancel: () => void;
 }
 
@@ -41,11 +43,12 @@ const groupModifiers = (
 
 export const OrderDetailModal = ({
     order,
+    settings,
     onComplete,
     onVoid,
     onCancel,
 }: OrderDetailModalProps) => {
-    const [showVoidConfirm, setShowVoidConfirm] = useState(false);
+    const [showReceipt, setShowReceipt] = useState(false);
 
     const urgent = isUrgent(order.createdAt);
     const timeSince = getTimeSince(order.createdAt);
@@ -58,16 +61,6 @@ export const OrderDetailModal = ({
             <DialogContent className="max-w-sm">
                 <DialogHeader>
                     <div className="flex items-center gap-3">
-                        <div
-                            className={cn(
-                                "flex size-10 items-center justify-center rounded-xl",
-                                urgent ? "bg-destructive" : "bg-primary",
-                            )}
-                        >
-                            <span className="font-mono text-sm font-bold tabular-nums text-primary-foreground">
-                                #{order.orderNumber}
-                            </span>
-                        </div>
                         <div>
                             <DialogTitle>
                                 Order #{order.orderNumber}
@@ -170,34 +163,48 @@ export const OrderDetailModal = ({
                     </div>
                 </div>
 
-                {showVoidConfirm ? (
-                    <VoidConfirmForm
-                        onConfirm={(reason) => {
-                            onVoid(reason);
-                            setShowVoidConfirm(false);
-                        }}
-                        onCancel={() => setShowVoidConfirm(false)}
-                    />
-                ) : (
-                    <DialogFooter>
-                        <Button
-                            variant="destructive"
-                            onClick={() => setShowVoidConfirm(true)}
-                            className="h-auto flex-1 py-2.5"
-                        >
-                            <XCircleIcon />
-                            Void
-                        </Button>
-                        <Button
-                            onClick={onComplete}
-                            className="h-auto flex-1 rounded-xl bg-chart-4 py-2.5 font-bold hover:brightness-110"
-                        >
-                            <CheckCircleIcon />
-                            Complete
-                        </Button>
-                    </DialogFooter>
-                )}
+                <DialogFooter>
+                    <Button
+                        variant="outline"
+                        onClick={() => setShowReceipt(true)}
+                        className="h-auto flex-1 py-2.5"
+                    >
+                        <ReceiptIcon />
+                        Receipt
+                    </Button>
+                    <Button
+                        variant="destructive"
+                        onClick={onVoid}
+                        className="h-auto flex-1 py-2.5"
+                    >
+                        <XCircleIcon />
+                        Void
+                    </Button>
+                    <Button
+                        onClick={onComplete}
+                        className="h-auto flex-1 rounded-xl bg-chart-4 py-2.5 font-bold hover:brightness-110"
+                    >
+                        <CheckCircleIcon />
+                        Complete
+                    </Button>
+                </DialogFooter>
             </DialogContent>
+            {showReceipt && settings && (
+                <Dialog
+                    open
+                    onOpenChange={(open) => !open && setShowReceipt(false)}
+                >
+                    <DialogContent className="max-w-sm">
+                        <DialogHeader>
+                            <DialogTitle className="flex items-center gap-2">
+                                <ReceiptIcon size={18} />
+                                Receipt
+                            </DialogTitle>
+                        </DialogHeader>
+                        <OrderReceipt order={order} settings={settings} />
+                    </DialogContent>
+                </Dialog>
+            )}
         </Dialog>
     );
 };

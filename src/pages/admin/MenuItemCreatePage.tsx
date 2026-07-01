@@ -268,6 +268,35 @@ const MenuItemCreatePage = () => {
         );
     };
 
+    const handleUpdateOptionIngredient = (
+        groupId: string,
+        optionId: string,
+        ingredientId: string,
+        quantity: string,
+    ) => {
+        setGroups((prev) =>
+            prev.map((g) =>
+                g.id === groupId
+                    ? {
+                          ...g,
+                          options: g.options.map((o) =>
+                              o.id === optionId
+                                  ? {
+                                        ...o,
+                                        ingredients: o.ingredients.map((i) =>
+                                            i.ingredientId === ingredientId
+                                                ? { ...i, quantity }
+                                                : i,
+                                        ),
+                                    }
+                                  : o,
+                          ),
+                      }
+                    : g,
+            ),
+        );
+    };
+
     const handleCreate = async () => {
         if (!name.trim() || !basePrice || !categoryId) {
             toast.error("Please fill in all required fields");
@@ -466,7 +495,10 @@ const MenuItemCreatePage = () => {
                     />
                 </TabsContent>
 
-                <TabsContent value="modifiers" className="min-h-[520px]">
+                <TabsContent
+                    value="modifiers"
+                    className="md:overflow-hidden md:h-[520px]"
+                >
                     <ModifierTab
                         groups={detailGroups}
                         onAddGroup={handleAddGroup}
@@ -476,6 +508,7 @@ const MenuItemCreatePage = () => {
                         onUpdateOption={handleUpdateOption}
                         onDeleteOption={handleDeleteOption}
                         onAddIngredient={handleAddOptionIngredient}
+                        onUpdateIngredient={handleUpdateOptionIngredient}
                         onDeleteIngredient={handleDeleteOptionIngredient}
                         ingredients={ingredients}
                     />

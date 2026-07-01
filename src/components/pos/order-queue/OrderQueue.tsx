@@ -1,29 +1,44 @@
 import { useState } from "react";
-import { ListNumbersIcon, CoffeeIcon } from "@phosphor-icons/react";
+import {
+    ListNumbersIcon,
+    CoffeeIcon,
+    ReceiptIcon,
+} from "@phosphor-icons/react";
 import type { Order } from "@/types/order";
 import { usePendingOrders } from "@/hooks/usePendingOrders";
+import { useSettings } from "@/hooks/useSettings";
 import { useCompleteOrder, useVoidWithPin } from "@/hooks/useOrderMutations";
 import { getTimeSince, isUrgent } from "@/lib/order-utils";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
 import OrderDetailModal from "./OrderDetailModal";
 import { OrderQueueCard } from "./OrderQueueCard";
+import { VoidConfirmForm } from "./VoidConfirmForm";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PinDialog } from "@/components/common/PinDialog";
+import OrderReceipt from "../payment/OrderReceipt";
 
 export const OrderQueue = () => {
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+    const [receiptOrder, setReceiptOrder] = useState<Order | null>(null);
+    const [voidOrder, setVoidOrder] = useState<Order | null>(null);
     const [pinDialogOpen, setPinDialogOpen] = useState(false);
     const [pendingVoid, setPendingVoid] = useState<{
         orderId: string;
         reason: string;
     } | null>(null);
     const { data: orders, isLoading } = usePendingOrders();
+    const { data: settings } = useSettings();
     const completeMutation = useCompleteOrder();
     const voidWithPinMutation = useVoidWithPin();
 
     const handleComplete = (orderId: string) => {
-        completeMutation.mutate(orderId, {
-            onSuccess: () => setSelectedOrder(null),
-        });
+        setSelectedOrder(null);
+        completeMutation.mutate(orderId);
     };
 
     const handleVoid = (orderId: string, reason: string) => {
@@ -45,12 +60,8 @@ export const OrderQueue = () => {
         const { orderId, reason } = pendingVoid;
         setPendingVoid(null);
 
-        voidWithPinMutation.mutate(
-            { orderId, pin, reason },
-            {
-                onSuccess: () => setSelectedOrder(null),
-            },
-        );
+        voidWithPinMutation.mutate({ orderId, pin, reason });
+        setSelectedOrder(null);
     };
 
     if (isLoading) {
@@ -110,7 +121,11 @@ export const OrderQueue = () => {
                             }}
                             onVoid={(e) => {
                                 e.stopPropagation();
-                                handleVoid(order.id, "Voided from queue");
+                                setVoidOrder(order);
+                            }}
+                            onReceipt={(e) => {
+                                e.stopPropagation();
+                                setReceiptOrder(order);
                             }}
                         />
                     ))
@@ -120,8 +135,9 @@ export const OrderQueue = () => {
             {selectedOrder && (
                 <OrderDetailModal
                     order={selectedOrder}
+                    settings={settings}
                     onComplete={() => handleComplete(selectedOrder.id)}
-                    onVoid={(reason) => handleVoid(selectedOrder.id, reason)}
+                    onVoid={() => setVoidOrder(selectedOrder)}
                     onCancel={() => setSelectedOrder(null)}
                 />
             )}
@@ -132,6 +148,53 @@ export const OrderQueue = () => {
                 onVerified={handlePinVerified}
                 title="Enter Pin"
             />
+
+            <Dialog
+                open={!!receiptOrder}
+                onOpenChange={(open) => {
+                    if (!open) setReceiptOrder(null);
+                }}
+            >
+                <DialogContent className="max-w-sm">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2">
+                            <ReceiptIcon size={18} />
+                            Receipt
+                        </DialogTitle>
+                    </DialogHeader>
+                    {receiptOrder && settings && (
+                        <OrderReceipt
+                            order={receiptOrder}
+                            settings={settings}
+                        />
+                    )}
+                </DialogContent>
+            </Dialog>
+
+            <Dialog
+                open={!!voidOrder}
+                onOpenChange={(open) => {
+                    if (!open) setVoidOrder(null);
+                }}
+            >
+                <DialogContent className="max-w-sm">
+                    <DialogHeader>
+                        <DialogTitle>
+                            Void Order
+                            {voidOrder && ` #${voidOrder.orderNumber}`}
+                        </DialogTitle>
+                    </DialogHeader>
+                    <VoidConfirmForm
+                        onConfirm={(reason) => {
+                            if (voidOrder) {
+                                handleVoid(voidOrder.id, reason);
+                            }
+                            setVoidOrder(null);
+                        }}
+                        onCancel={() => setVoidOrder(null)}
+                    />
+                </DialogContent>
+            </Dialog>
         </div>
     );
 };

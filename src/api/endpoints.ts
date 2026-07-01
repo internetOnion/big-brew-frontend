@@ -82,5 +82,6 @@ export const ENDPOINTS = {
     SETTINGS: {
         BASE: "/settings",
         LOGO: "/settings/logo",
+        QR_CODE: "/settings/qr-code",
     },
 } as const;
