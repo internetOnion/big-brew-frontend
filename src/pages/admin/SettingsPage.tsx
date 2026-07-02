@@ -57,9 +57,12 @@ const SettingsPage = () => {
         formData.append("file", file);
         setUploadingLogo(true);
         try {
-            await api.put(ENDPOINTS.SETTINGS.LOGO, formData, {
-                headers: { "Content-Type": undefined },
-            });
+            const { url } = await api
+                .post(ENDPOINTS.STORAGE.UPLOAD, formData, {
+                    headers: { "Content-Type": undefined },
+                })
+                .then((r) => r.data);
+            await api.patch(ENDPOINTS.SETTINGS.BASE, { logoUrl: url });
             await queryClient.invalidateQueries({
                 queryKey: settingKeys.all,
             });
@@ -87,9 +90,12 @@ const SettingsPage = () => {
         formData.append("file", file);
         setUploadingQr(true);
         try {
-            await api.put(ENDPOINTS.SETTINGS.QR_CODE, formData, {
-                headers: { "Content-Type": undefined },
-            });
+            const { url } = await api
+                .post(ENDPOINTS.STORAGE.UPLOAD, formData, {
+                    headers: { "Content-Type": undefined },
+                })
+                .then((r) => r.data);
+            await api.patch(ENDPOINTS.SETTINGS.BASE, { qrCodeUrl: url });
             await queryClient.invalidateQueries({
                 queryKey: settingKeys.all,
             });
@@ -102,7 +108,7 @@ const SettingsPage = () => {
     const handleQrRemove = async () => {
         setUploadingQr(true);
         try {
-            await api.delete(ENDPOINTS.SETTINGS.QR_CODE);
+            await api.patch(ENDPOINTS.SETTINGS.BASE, { qrCodeUrl: null });
             await queryClient.invalidateQueries({
                 queryKey: settingKeys.all,
             });
@@ -289,7 +295,7 @@ const SettingsPage = () => {
                                 onUpload={handleQrUpload}
                                 onRemove={handleQrRemove}
                                 uploading={uploadingQr}
-                                label="QR code"
+                                label="QR Code"
                             />
                         </div>
 

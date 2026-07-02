@@ -79,9 +79,11 @@ export const ENDPOINTS = {
     MODIFIER_GROUPS: {
         BASE: "/modifier-groups",
     },
+    STORAGE: {
+        UPLOAD: "/storage/upload",
+    },
     SETTINGS: {
         BASE: "/settings",
         LOGO: "/settings/logo",
-        QR_CODE: "/settings/qr-code",
     },
 } as const;
