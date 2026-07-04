@@ -209,14 +209,6 @@
     background: var(--muted-foreground);
 }
 
-/* Keypad button hover effect */
-.keypad-btn:hover {
-    filter: brightness(0.96);
-}
-.keypad-btn:active {
-    transform: scale(0.95);
-}
-
 /* Pulse animation for urgent orders */
 @keyframes urgentPulse {
     0%,
@@ -229,20 +221,6 @@
 }
 .urgent-pulse {
     animation: urgentPulse 2s ease-in-out infinite;
-}
-
-/* Charge-ready pulse for Confirm Payment button */
-@keyframes chargeReady {
-    0%,
-    100% {
-        box-shadow: 0 0 0 0 oklch(from var(--accent) l c h / 0.4);
-    }
-    50% {
-        box-shadow: 0 0 0 8px oklch(from var(--accent) l c h / 0);
-    }
-}
-.charge-ready {
-    animation: chargeReady 2s ease-in-out infinite;
 }
 
 /* Grain overlay for texture */

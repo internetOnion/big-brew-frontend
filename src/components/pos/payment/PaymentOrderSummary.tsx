@@ -1,5 +1,4 @@
 import { motion } from "motion/react";
-import { cn } from "@/lib/utils";
 import { getCategoryIcon } from "@/lib/category-icons";
 import { getCategoryIconName } from "@/types/menu";
 import { Button } from "@/components/ui/button";
@@ -17,6 +16,11 @@ interface PaymentOrderSummaryProps {
     onConfirm: () => void;
     resetInput: () => void;
 }
+
+const prefersReducedMotion =
+    typeof window !== "undefined"
+        ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        : false;
 
 export const PaymentOrderSummary = ({
     cartItems,
@@ -127,12 +131,12 @@ export const PaymentOrderSummary = ({
         <div className="border-t border-(--pos-border) p-4 pb-5">
             <motion.div
                 animate={
-                    isFullyPaid && !isProcessing
+                    isFullyPaid && !isProcessing && !prefersReducedMotion
                         ? { scale: [1, 1.01, 1] }
                         : { scale: 1 }
                 }
                 transition={
-                    isFullyPaid && !isProcessing
+                    isFullyPaid && !isProcessing && !prefersReducedMotion
                         ? {
                               duration: 1.6,
                               repeat: Infinity,
@@ -144,12 +148,7 @@ export const PaymentOrderSummary = ({
                 <Button
                     onClick={onConfirm}
                     disabled={!isFullyPaid || isProcessing}
-                    className={cn(
-                        "h-auto w-full flex-col gap-1 py-4 rounded-lg",
-                        isFullyPaid && !isProcessing
-                            ? "cursor-pointer opacity-100"
-                            : "cursor-not-allowed opacity-30",
-                    )}
+                    className="h-auto w-full flex-col gap-1 py-4 rounded-lg"
                 >
                     <span className="text-[15px] font-bold">
                         {isProcessing ? "Processing..." : "Confirm Payment"}

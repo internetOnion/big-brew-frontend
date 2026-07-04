@@ -20,10 +20,16 @@ import { PaymentMethodToggle } from "./PaymentMethodToggle";
 import { NumericKeypad } from "./NumericKeypad";
 import { AmountDisplay } from "./AmountDisplay";
 import { PaymentOrderSummary } from "./PaymentOrderSummary";
+import { QuickTender } from "./QuickTender";
 import { PinDialog } from "@/components/common/PinDialog";
 import type { VerifiedEmployee } from "@/components/common/PinDialog";
 
 const DEFAULT_KHR_RATE = 4100;
+
+const prefersReducedMotion =
+    typeof window !== "undefined"
+        ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        : false;
 
 const PaymentScreen = () => {
     const { total, subtotal, cartItems, submitOrder } = usePOS();
@@ -64,6 +70,17 @@ const PaymentScreen = () => {
     };
 
     const handleDelete = () => setEntered((prev) => prev.slice(0, -1));
+
+    const handleQuickTender = (amount: string) => setEntered(amount);
+
+    const handleExact = () =>
+        setEntered(
+            currency === "KHR"
+                ? String(Math.round(totalInCurrency))
+                : totalInCurrency.toFixed(2),
+        );
+
+    const handleClear = () => setEntered("");
 
     const handleConfirmPayment = () => {
         if (isProcessing) return;
@@ -124,15 +141,15 @@ const PaymentScreen = () => {
     };
 
     return (
-        <div className="flex flex-1 flex-col bg-(--pos-bg)">
-            <div className="flex items-center gap-4 border-b border-(--pos-border) bg-(--pos-card) px-8 pb-4 pt-6">
+        <div className="flex flex-1 flex-col overflow-hidden bg-(--pos-bg)">
+            <div className="flex shrink-0 items-center gap-3 border-b border-(--pos-border) bg-(--pos-card) px-6 py-2.5">
                 <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => navigate(ROUTES.POS)}
                     className="gap-2 text-(--pos-text-muted)"
                 >
-                    <ArrowLeftIcon size={16} /> Back to Menu
+                    <ArrowLeftIcon size={14} /> Back to Menu
                 </Button>
                 <div className="flex-1" />
                 <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-(--pos-text-muted)">
@@ -144,43 +161,51 @@ const PaymentScreen = () => {
                 </span>
             </div>
 
-            <div className="flex flex-1 items-stretch">
-                <div className="mx-auto flex max-w-sm flex-1 flex-col gap-4 px-8 py-6">
-                    <PaymentMethodToggle
-                        value={paymentMethod}
-                        onChange={setPaymentMethod}
-                        onQrSelect={() => setQrDialogOpen(true)}
-                    />
-
-                    <AmountDisplay
-                        totalDisplay={formatDisplay(totalInCurrency)}
-                        currency={currency}
-                        totalUsd={
-                            currency === "KHR"
-                                ? `$${total.toFixed(2)}`
-                                : undefined
-                        }
-                        entered={entered}
-                        enteredDisplay={`${currencySymbol}${currency === "KHR" ? parseInt(entered || "0").toLocaleString() : entered}`}
-                        change={change}
-                        changeDisplay={
-                            enteredAmount === 0
-                                ? "—"
-                                : change >= 0
-                                  ? formatDisplay(change)
-                                  : `-${currency === "USD" ? "$" : ""}${currency === "KHR" ? "៛" + Math.round(Math.abs(change)).toLocaleString() : Math.abs(change).toFixed(2)}`
-                        }
-                        enteredAmount={enteredAmount}
-                        currencySymbol={currencySymbol}
-                    />
-
-                    <NumericKeypad
-                        onKeyPress={handleKey}
-                        onDelete={handleDelete}
-                        disableDecimal={currency === "KHR"}
-                    />
+            <div className="flex flex-1 items-stretch min-h-0">
+                <div className="mx-auto flex max-w-sm flex-1 flex-col min-h-0">
+                    <div className="sticky top-0 z-10 bg-(--pos-bg) pb-2 pt-4">
+                        <PaymentMethodToggle
+                            value={paymentMethod}
+                            onChange={setPaymentMethod}
+                            onQrSelect={() => setQrDialogOpen(true)}
+                        />
+                    </div>
+                    <div className="flex flex-col gap-3 overflow-y-auto px-6 pb-4">
+                        <AmountDisplay
+                            totalDisplay={formatDisplay(totalInCurrency)}
+                            currency={currency}
+                            totalUsd={
+                                currency === "KHR"
+                                    ? `$${total.toFixed(2)}`
+                                    : undefined
+                            }
+                            entered={entered}
+                            enteredDisplay={`${currencySymbol}${currency === "KHR" ? parseInt(entered || "0").toLocaleString() : entered}`}
+                            change={change}
+                            changeDisplay={
+                                enteredAmount === 0
+                                    ? "—"
+                                    : change >= 0
+                                      ? formatDisplay(change)
+                                      : `-${currency === "USD" ? "$" : ""}${currency === "KHR" ? "៛" + Math.round(Math.abs(change)).toLocaleString() : Math.abs(change).toFixed(2)}`
+                            }
+                            enteredAmount={enteredAmount}
+                            currencySymbol={currencySymbol}
+                        />
+                        <QuickTender
+                            currency={currency}
+                            onTender={handleQuickTender}
+                            onExact={handleExact}
+                            onClear={handleClear}
+                            disabled={isProcessing}
+                        />
+                        <NumericKeypad
+                            onKeyPress={handleKey}
+                            onDelete={handleDelete}
+                            disableDecimal={currency === "KHR"}
+                        />
+                    </div>
                 </div>
-
                 <PaymentOrderSummary
                     cartItems={cartItems}
                     currency={currency}
@@ -230,12 +255,12 @@ const PaymentScreen = () => {
                         </p>
                         <motion.div
                             animate={
-                                !isProcessing
+                                !isProcessing && !prefersReducedMotion
                                     ? { scale: [1, 1.01, 1] }
                                     : { scale: 1 }
                             }
                             transition={
-                                !isProcessing
+                                !isProcessing && !prefersReducedMotion
                                     ? {
                                           duration: 1.6,
                                           repeat: Infinity,

@@ -1,0 +1,340 @@
+{
+    "schemaVersion": 2,
+    "generatedAt": "2026-07-04T00:00:00.000Z",
+    "title": "Design System: Big Brew",
+    "extensions": {
+        "colorMeta": {
+            "warm-cream": {
+                "role": "neutral",
+                "displayName": "Warm Cream",
+                "canonical": "oklch(94% 0.015 70)",
+                "tonalRamp": [
+                    "oklch(15% 0.015 70)",
+                    "oklch(26% 0.015 70)",
+                    "oklch(38% 0.015 70)",
+                    "oklch(50% 0.015 70)",
+                    "oklch(62% 0.015 70)",
+                    "oklch(74% 0.015 70)",
+                    "oklch(86% 0.015 70)",
+                    "oklch(97% 0.015 70)"
+                ]
+            },
+            "dark-espresso": {
+                "role": "neutral",
+                "displayName": "Dark Espresso",
+                "canonical": "oklch(10% 0.02 30)",
+                "tonalRamp": [
+                    "oklch(5% 0.02 30)",
+                    "oklch(10% 0.02 30)",
+                    "oklch(18% 0.02 30)",
+                    "oklch(26% 0.02 30)",
+                    "oklch(36% 0.02 30)",
+                    "oklch(48% 0.02 30)",
+                    "oklch(64% 0.02 30)",
+                    "oklch(82% 0.02 30)"
+                ]
+            },
+            "rich-brown": {
+                "role": "primary",
+                "displayName": "Rich Brown",
+                "canonical": "oklch(28% 0.06 40)",
+                "tonalRamp": [
+                    "oklch(10% 0.06 40)",
+                    "oklch(18% 0.06 40)",
+                    "oklch(28% 0.06 40)",
+                    "oklch(38% 0.06 40)",
+                    "oklch(48% 0.06 40)",
+                    "oklch(60% 0.06 40)",
+                    "oklch(74% 0.06 40)",
+                    "oklch(88% 0.06 40)"
+                ]
+            },
+            "warm-amber": {
+                "role": "accent",
+                "displayName": "Warm Amber",
+                "canonical": "oklch(58% 0.12 65)",
+                "tonalRamp": [
+                    "oklch(12% 0.12 65)",
+                    "oklch(22% 0.12 65)",
+                    "oklch(34% 0.12 65)",
+                    "oklch(46% 0.12 65)",
+                    "oklch(58% 0.12 65)",
+                    "oklch(70% 0.12 65)",
+                    "oklch(82% 0.12 65)",
+                    "oklch(94% 0.12 65)"
+                ]
+            },
+            "warm-white": {
+                "role": "neutral",
+                "displayName": "Warm White",
+                "canonical": "oklch(92% 0.01 65)",
+                "tonalRamp": [
+                    "oklch(15% 0.01 65)",
+                    "oklch(27% 0.01 65)",
+                    "oklch(40% 0.01 65)",
+                    "oklch(52% 0.01 65)",
+                    "oklch(64% 0.01 65)",
+                    "oklch(76% 0.01 65)",
+                    "oklch(88% 0.01 65)",
+                    "oklch(96% 0.01 65)"
+                ]
+            },
+            "tan-border": {
+                "role": "neutral",
+                "displayName": "Tan Border",
+                "canonical": "oklch(86% 0.02 65)",
+                "tonalRamp": [
+                    "oklch(16% 0.02 65)",
+                    "oklch(28% 0.02 65)",
+                    "oklch(40% 0.02 65)",
+                    "oklch(52% 0.02 65)",
+                    "oklch(64% 0.02 65)",
+                    "oklch(76% 0.02 65)",
+                    "oklch(86% 0.02 65)",
+                    "oklch(96% 0.02 65)"
+                ]
+            },
+            "warm-gray": {
+                "role": "neutral",
+                "displayName": "Warm Gray",
+                "canonical": "oklch(56% 0.03 60)",
+                "tonalRamp": [
+                    "oklch(10% 0.03 60)",
+                    "oklch(22% 0.03 60)",
+                    "oklch(34% 0.03 60)",
+                    "oklch(46% 0.03 60)",
+                    "oklch(56% 0.03 60)",
+                    "oklch(68% 0.03 60)",
+                    "oklch(80% 0.03 60)",
+                    "oklch(92% 0.03 60)"
+                ]
+            },
+            "muted-red": {
+                "role": "semantic",
+                "displayName": "Muted Red",
+                "canonical": "oklch(48% 0.18 25)",
+                "tonalRamp": [
+                    "oklch(12% 0.18 25)",
+                    "oklch(22% 0.18 25)",
+                    "oklch(34% 0.18 25)",
+                    "oklch(46% 0.18 25)",
+                    "oklch(58% 0.18 25)",
+                    "oklch(68% 0.18 25)",
+                    "oklch(80% 0.18 25)",
+                    "oklch(92% 0.18 25)"
+                ]
+            },
+            "pure-white": {
+                "role": "neutral",
+                "displayName": "Pure White",
+                "canonical": "oklch(100% 0 0)",
+                "tonalRamp": [
+                    "oklch(20% 0 0)",
+                    "oklch(33% 0 0)",
+                    "oklch(46% 0 0)",
+                    "oklch(58% 0 0)",
+                    "oklch(70% 0 0)",
+                    "oklch(80% 0 0)",
+                    "oklch(90% 0 0)",
+                    "oklch(100% 0 0)"
+                ]
+            }
+        },
+        "typographyMeta": {
+            "display": {
+                "displayName": "Display",
+                "purpose": "Page titles, dashboard headings, large order IDs."
+            },
+            "headline": {
+                "displayName": "Headline",
+                "purpose": "Section headings, dialog titles."
+            },
+            "title": {
+                "displayName": "Title",
+                "purpose": "Card titles, panel headers, list item titles."
+            },
+            "body": {
+                "displayName": "Body",
+                "purpose": "Default reading text, descriptions, table cells."
+            },
+            "label": {
+                "displayName": "Label",
+                "purpose": "Form labels, metadata, secondary info, field hints."
+            },
+            "mono": {
+                "displayName": "Mono",
+                "purpose": "Prices, order IDs, tabular figures, codes."
+            }
+        },
+        "shadows": [
+            {
+                "name": "ambient-low",
+                "value": "0 1px 3px 0px hsl(0 0% 0% / 0.1)",
+                "purpose": "Subtle surface distinction for hover states."
+            },
+            {
+                "name": "ambient-md",
+                "value": "0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.1)",
+                "purpose": "Elevated surfaces and dropdown menus."
+            },
+            {
+                "name": "ambient-lg",
+                "value": "0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 4px 6px -1px hsl(0 0% 0% / 0.1)",
+                "purpose": "Dialog backdrops and modal surfaces."
+            },
+            {
+                "name": "urgent-pulse",
+                "value": "0 0 0 8px oklch(from var(--accent) l c h / 0)",
+                "purpose": "Pulse glow for charge-ready payment button."
+            }
+        ],
+        "motion": [
+            {
+                "name": "ease-state",
+                "value": "150ms ease-in-out",
+                "purpose": "Default transition for state changes (hover, focus, active)."
+            },
+            {
+                "name": "ease-dialog",
+                "value": "100ms ease-in-out",
+                "purpose": "Dialog and overlay enter/exit transitions."
+            },
+            {
+                "name": "duration-urgent-pulse",
+                "value": "2s ease-in-out infinite",
+                "purpose": "Urgent order pulse animation."
+            },
+            {
+                "name": "duration-charge-ready",
+                "value": "2s ease-in-out infinite",
+                "purpose": "Charge-ready payment glow pulse."
+            },
+            {
+                "name": "ease-steam",
+                "value": "2s ease-in-out infinite",
+                "purpose": "Steam wisp animation for menu item placeholders."
+            }
+        ],
+        "breakpoints": [
+            { "name": "sm", "value": "640px" },
+            { "name": "md", "value": "768px" },
+            { "name": "lg", "value": "1024px" },
+            { "name": "xl", "value": "1280px" },
+            { "name": "2xl", "value": "1536px" }
+        ]
+    },
+    "components": [
+        {
+            "name": "Primary Button",
+            "kind": "button",
+            "refersTo": "button-default",
+            "description": "Primary action button. Rich brown with white text. Used for confirm, save, submit.",
+            "html": "<button class=\"ds-btn-primary\"><svg class=\"ds-btn-icon\" xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 256 256\"><path d=\"M200,136H136v64a8,8,0,0,1-16,0V136H56a8,8,0,0,1,0-16h64V56a8,8,0,0,1,16,0v64h64a8,8,0,0,1,0,16Z\"/></svg>Save Changes</button>",
+            "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; padding: 6px 10px; background: #4a2512; color: #ffffff; font-family: 'Bricolage Grotesque', sans-serif; font-size: 0.875rem; font-weight: 500; border: 1px solid transparent; border-radius: 0.5rem; cursor: pointer; white-space: nowrap; transition: opacity 0.15s; } .ds-btn-primary:hover { opacity: 0.8; } .ds-btn-primary:focus-visible { outline: 2px solid #4a2512; outline-offset: 2px; } .ds-btn-primary:active { transform: translateY(1px); } .ds-btn-icon { pointer-events: none; flex-shrink: 0; }"
+        },
+        {
+            "name": "Outline Button",
+            "kind": "button",
+            "refersTo": "button-outline",
+            "description": "Secondary/outline button. Cream background with tan border.",
+            "html": "<button class=\"ds-btn-outline\">Cancel</button>",
+            "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 6px 10px; background: #f4efe8; color: #1a0f0a; font-family: 'Bricolage Grotesque', sans-serif; font-size: 0.875rem; font-weight: 500; border: 1px solid #e2d8cc; border-radius: 0.5rem; cursor: pointer; transition: background 0.15s; } .ds-btn-outline:hover { background: #e2d8cc; } .ds-btn-outline:focus-visible { outline: 2px solid #4a2512; outline-offset: 2px; }"
+        },
+        {
+            "name": "Destructive Button",
+            "kind": "button",
+            "refersTo": "button-destructive",
+            "description": "Destructive action button. Transparent with red tint on hover.",
+            "html": "<button class=\"ds-btn-destructive\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 256 256\"><path d=\"M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm64,152a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm-48,0a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Z\"/></svg>Delete</button>",
+            "css": ".ds-btn-destructive { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; padding: 6px 10px; background: rgba(192,57,43,0.1); color: #c0392b; font-family: 'Bricolage Grotesque', sans-serif; font-size: 0.875rem; font-weight: 500; border: 1px solid transparent; border-radius: 0.5rem; cursor: pointer; transition: background 0.15s; } .ds-btn-destructive:hover { background: rgba(192,57,43,0.2); } .ds-btn-destructive:focus-visible { outline: 2px solid #c0392b; outline-offset: 2px; }"
+        },
+        {
+            "name": "Input Field",
+            "kind": "input",
+            "refersTo": "input-default",
+            "description": "Default text input. Transparent with tan border stroke.",
+            "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Enter name...\" />",
+            "css": ".ds-input { width: 100%; min-width: 0; height: 32px; padding: 4px 10px; font-family: 'Bricolage Grotesque', sans-serif; font-size: 0.875rem; color: #1a0f0a; background: transparent; border: 1px solid #e2d8cc; border-radius: 0.7rem; outline: none; transition: border-color 0.15s; } .ds-input::placeholder { color: #8b7a67; } .ds-input:focus { border-color: #4a2512; box-shadow: 0 0 0 2px rgba(74,37,18,0.25); } .ds-input:disabled { opacity: 0.5; cursor: not-allowed; background: rgba(226,216,204,0.5); }"
+        },
+        {
+            "name": "Card",
+            "kind": "card",
+            "refersTo": "card-default",
+            "description": "Default content card. White with rounded corners and subtle ring.",
+            "html": "<div class=\"ds-card\"><div class=\"ds-card-header\"><div class=\"ds-card-title\">Card Title</div><div class=\"ds-card-description\">Supporting description text for the card content.</div></div><div class=\"ds-card-content\"><p>Main content area. Padded consistently with the card spacing.</p></div></div>",
+            "css": ".ds-card { display: flex; flex-direction: column; gap: 16px; overflow: hidden; border-radius: 0.7rem; background: #ffffff; color: #1a0f0a; padding: 16px; font-family: 'Bricolage Grotesque', sans-serif; font-size: 0.875rem; box-shadow: 0 0 0 1px rgba(0,0,0,0.1); } .ds-card-header { display: grid; gap: 4px; } .ds-card-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1rem; font-weight: 500; line-height: 1.25; } .ds-card-description { font-size: 0.875rem; color: #8b7a67; } .ds-card-content { padding: 0; }"
+        },
+        {
+            "name": "Navigation Item",
+            "kind": "nav",
+            "refersTo": "nav-item",
+            "description": "Admin sidebar navigation item. Muted at rest, rich brown when active.",
+            "html": "<nav><a class=\"ds-nav-item\" href=\"#\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" fill=\"currentColor\" viewBox=\"0 0 256 256\"><path d=\"M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z\"/></svg>Menu Items</a><a class=\"ds-nav-item ds-nav-item-active\" href=\"#\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" fill=\"currentColor\" viewBox=\"0 0 256 256\"><path d=\"M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z\"/></svg>Dashboard</a></nav>",
+            "css": ".ds-nav-item { display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; color: #a89888; font-family: 'Bricolage Grotesque', sans-serif; font-size: 0.875rem; text-decoration: none; border-radius: 0.4rem; transition: color 0.15s, background-color 0.15s; } .ds-nav-item:hover { color: #6b5b4e; background-color: #f4efe8; } .ds-nav-item-active { color: #4a2512; background-color: #f4efe8; font-weight: 500; }"
+        },
+        {
+            "name": "Dialog",
+            "kind": "custom",
+            "refersTo": "modal",
+            "description": "Modal dialog overlay with backdrop blur and centered white card.",
+            "html": "<div class=\"ds-dialog-overlay\"><div class=\"ds-dialog\"><div class=\"ds-dialog-header\"><h2 class=\"ds-dialog-title\">Confirm Action</h2><p class=\"ds-dialog-description\">Are you sure you want to proceed? This action cannot be undone.</p></div><div class=\"ds-dialog-footer\"><button class=\"ds-btn-outline\">Cancel</button><button class=\"ds-btn-primary\">Confirm</button></div><button class=\"ds-dialog-close\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 256 256\"><path d=\"M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z\"/></svg></button></div></div>",
+            "css": ".ds-dialog-overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.12); backdrop-filter: blur(4px); font-family: 'Bricolage Grotesque', sans-serif; } .ds-dialog { position: relative; width: 100%; max-width: 24rem; background: #ffffff; border-radius: 0.7rem; padding: 16px; box-shadow: 0 0 0 1px rgba(0,0,0,0.1); } .ds-dialog-header { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; } .ds-dialog-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1rem; font-weight: 500; line-height: 1.25; } .ds-dialog-description { font-size: 0.875rem; color: #8b7a67; } .ds-dialog-footer { display: flex; justify-content: flex-end; gap: 8px; padding-top: 16px; border-top: 1px solid #e2d8cc; } .ds-dialog-close { position: absolute; top: 8px; right: 8px; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border: none; background: transparent; color: #8b7a67; cursor: pointer; border-radius: 0.4rem; transition: color 0.15s; } .ds-dialog-close:hover { color: #1a0f0a; }"
+        }
+    ],
+    "narrative": {
+        "northStar": "Neighborhood Counter",
+        "overview": "This system is the counter where orders happen \u2014 welcoming, tactile, unpretentious. The visual identity evokes an independent craft coffee shop: warm earth tones, honest materials, confident simplicity. Every pixel serves the barista or manager under real time pressure; there is nothing decorative for its own sake.\n\nThe design is warm without being cute, grounded without being heavy, efficient without being cold. Surfaces use soft tonal layering rather than shadows for depth. Interactive elements feel tactile and confident \u2014 solid backgrounds, clear hover states, responsive press effects. The single-typeface approach (Bricolage Grotesque for everything) keeps noise low and legibility high. DM Mono is reserved for prices and tabular data, where exact alignment matters.",
+        "keyCharacteristics": [
+            "Warm earth-tone palette: cream backgrounds, rich brown primaries, amber accents",
+            "Single sans-serif typeface (Bricolage Grotesque) with mono for tabular numbers",
+            "Tonal layering instead of drop shadows for surface hierarchy",
+            "Gem-like border radii (8px default, scaling from 5px to 21px)",
+            "Grain texture overlay for tactile depth without decoration",
+            "Touch-first POS with large targets; mouse-friendly admin in the same system"
+        ],
+        "rules": [
+            {
+                "name": "The One Voice Rule",
+                "body": "Amber (#c07830) is the only accent. It never competes with a second accent color.",
+                "section": "colors"
+            },
+            {
+                "name": "The Cream Canvas Rule",
+                "body": "The page background (#f4efe8) is the warm anchor. Cards sit white on top; the contrast creates depth without shadows.",
+                "section": "colors"
+            },
+            {
+                "name": "The Mono-for-Data Rule",
+                "body": "Any displayed price, quantity, order ID, or code uses DM Mono with tabular numerals.",
+                "section": "typography"
+            },
+            {
+                "name": "The Flat-by-Default Rule",
+                "body": "Surfaces have no resting shadows. Hierarchy comes from background color (cream canvas / white card / dark modal backdrop).",
+                "section": "elevation"
+            }
+        ],
+        "dos": [
+            "Use `gap-*` for spacing. Never `space-y-*`.",
+            "Use semantic tokens only \u2014 no raw color classes.",
+            "Keep body text at 4.5:1 minimum contrast against its background.",
+            "Use DM Mono with `tabular-nums` for all prices, quantities, and order IDs.",
+            "Use the grain overlay (`grain-overlay` class) on full-page backgrounds for tactile depth.",
+            "Respect `prefers-reduced-motion` \u2014 animations degrade gracefully to instant transitions.",
+            "Set large touch targets (minimum 44px) on all POS interactive elements.",
+            "Keep the accent (amber) to <10% of any given screen.",
+            "Use Bricolage Grotesque for all UI copy. No second sans-serif face."
+        ],
+        "donts": [
+            "Don't use decorative shadows. Hierarchy comes from background color layering, not box-shadow.",
+            "Don't use glassmorphism, gradient text, or heavy blur effects.",
+            "Don't use a dark theme as default. The default is light (warm cream).",
+            "Don't introduce a second accent color. Amber is the single point of emphasis.",
+            "Don't use bright primary colors (reds, yellows, blues).",
+            "Don't use the fast-food aesthetic: no glossy surfaces, no neon, no aggressive gradients.",
+            "Don't style placeholder text as muted gray. Use #8b7a67 (4.5:1 contrast) or darker.",
+            "Don't place shadows on cards at rest.",
+            "Don't use `space-y-*` for vertical rhythm."
+        ]
+    }
+}
