@@ -1,15 +1,8 @@
-export const EXPENSE_CATEGORIES = [
-    "Supplies",
-    "Utilities",
-    "Rent",
-    "Maintenance",
-    "Ingredients",
-    "Equipment",
-    "Marketing",
-    "Other",
-] as const;
-
-export type ExpenseCategory = (typeof EXPENSE_CATEGORIES)[number];
+export interface ExpenseCategory {
+    id: string;
+    name: string;
+    createdAt: string;
+}
 
 export interface AdminEmployee {
     id: string;
@@ -50,14 +43,14 @@ export interface Expense {
 export interface CreateExpensePayload {
     description: string;
     amount: number;
-    category: ExpenseCategory;
+    category: string;
     recordedAt?: string;
 }
 
 export interface UpdateExpensePayload {
     description?: string;
     amount?: number;
-    category?: ExpenseCategory;
+    category?: string;
 }
 
 export interface ExpenseSummary {

@@ -47,6 +47,10 @@ export const ingredientKeys = {
     all: ["ingredients"] as const,
 };
 
+export const expenseCategoryKeys = {
+    all: ["expense-categories"] as const,
+};
+
 export const discountKeys = {
     all: ["discounts"] as const,
 };

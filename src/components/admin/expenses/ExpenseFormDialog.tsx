@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { format } from "date-fns";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import {
     Dialog,
@@ -18,9 +17,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { useCreateExpense, useUpdateExpense } from "@/hooks/useExpenses";
-import { EXPENSE_CATEGORIES } from "@/types/admin";
-import type { Expense, ExpenseCategory } from "@/types/admin";
+import { useUpdateExpense } from "@/hooks/useExpenses";
+import { useExpenseCategories } from "@/hooks/useExpenseCategories";
+import type { Expense } from "@/types/admin";
 
 interface ExpenseFormDialogProps {
     expense: Expense | null;
@@ -28,82 +27,49 @@ interface ExpenseFormDialogProps {
     onClose: () => void;
 }
 
-const todayStr = format(new Date(), "yyyy-MM-dd");
-
 const ExpenseFormDialog = ({
     expense,
     open,
     onClose,
 }: ExpenseFormDialogProps) => {
-    const isEdit = !!expense;
-    const createMutation = useCreateExpense();
     const updateMutation = useUpdateExpense();
+    const { data: categories } = useExpenseCategories();
 
     const [description, setDescription] = useState("");
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState<string>("");
-    const [recordedAt, setRecordedAt] = useState(todayStr);
+    const descRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        if (open) {
-            if (expense) {
-                setDescription(expense.description);
-                setAmount(expense.amount);
-                setCategory(expense.category ?? "");
-                setRecordedAt(
-                    format(new Date(expense.recordedAt), "yyyy-MM-dd"),
-                );
-            } else {
-                setDescription("");
-                setAmount("");
-                setCategory("");
-                setRecordedAt(todayStr);
-            }
+        if (open && expense) {
+            setDescription(expense.description);
+            setAmount(expense.amount);
+            setCategory(expense.category ?? "");
+            setTimeout(() => descRef.current?.focus(), 0);
         }
     }, [open, expense]);
 
-    const isPending = createMutation.isPending || updateMutation.isPending;
     const canSubmit =
         description.trim() && amount && parseFloat(amount) > 0 && category;
 
     const handleSubmit = () => {
-        if (!canSubmit) return;
+        if (!canSubmit || !expense) return;
 
-        const amountNum = parseFloat(amount);
-
-        if (isEdit && expense) {
-            updateMutation.mutate(
-                {
-                    id: expense.id,
-                    description: description.trim(),
-                    amount: amountNum,
-                    category: category as ExpenseCategory,
+        updateMutation.mutate(
+            {
+                id: expense.id,
+                description: description.trim(),
+                amount: parseFloat(amount),
+                category,
+            },
+            {
+                onSuccess: () => {
+                    toast.success("Expense updated");
+                    onClose();
                 },
-                {
-                    onSuccess: () => {
-                        toast.success("Expense updated");
-                        onClose();
-                    },
-                    onError: () => toast.error("Failed to update expense"),
-                },
-            );
-        } else {
-            createMutation.mutate(
-                {
-                    description: description.trim(),
-                    amount: amountNum,
-                    category: category as ExpenseCategory,
-                    recordedAt: new Date(recordedAt).toISOString(),
-                },
-                {
-                    onSuccess: () => {
-                        toast.success("Expense created");
-                        onClose();
-                    },
-                    onError: () => toast.error("Failed to create expense"),
-                },
-            );
-        }
+                onError: () => toast.error("Failed to update expense"),
+            },
+        );
     };
 
     return (
@@ -111,7 +77,7 @@ const ExpenseFormDialog = ({
             <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card)">
                 <DialogHeader>
                     <DialogTitle className="text-(--admin-text)">
-                        {isEdit ? "Edit Expense" : "Add Expense"}
+                        Edit Expense
                     </DialogTitle>
                 </DialogHeader>
                 <div className="flex flex-col gap-4">
@@ -120,6 +86,7 @@ const ExpenseFormDialog = ({
                             Description
                         </Label>
                         <Input
+                            ref={descRef}
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="Coffee beans"
@@ -145,6 +112,7 @@ const ExpenseFormDialog = ({
                             Category
                         </Label>
                         <Select
+                            key={categories?.length}
                             value={category || undefined}
                             onValueChange={(v) => setCategory(v ?? "")}
                         >
@@ -152,49 +120,30 @@ const ExpenseFormDialog = ({
                                 <SelectValue placeholder="Select category" />
                             </SelectTrigger>
                             <SelectContent>
-                                {EXPENSE_CATEGORIES.map((cat) => (
-                                    <SelectItem key={cat} value={cat}>
-                                        {cat}
+                                {categories?.map((cat) => (
+                                    <SelectItem key={cat.id} value={cat.name}>
+                                        {cat.name}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
                     </div>
-                    {!isEdit && (
-                        <div className="flex flex-col gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary">
-                                Date
-                            </Label>
-                            <Input
-                                type="date"
-                                value={recordedAt}
-                                onChange={(e) => setRecordedAt(e.target.value)}
-                                className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
-                            />
-                        </div>
-                    )}
                 </div>
                 <DialogFooter>
                     <Button
                         variant="ghost"
                         onClick={onClose}
                         className="text-(--admin-text-secondary)"
-                        disabled={isPending}
+                        disabled={updateMutation.isPending}
                     >
                         Cancel
                     </Button>
                     <Button
                         onClick={handleSubmit}
-                        disabled={!canSubmit || isPending}
+                        disabled={!canSubmit || updateMutation.isPending}
                         className="bg-(--admin-primary) text-white hover:bg-(--admin-primary)/80"
                     >
-                        {isPending
-                            ? isEdit
-                                ? "Saving..."
-                                : "Creating..."
-                            : isEdit
-                              ? "Save"
-                              : "Create"}
+                        {updateMutation.isPending ? "Saving..." : "Save"}
                     </Button>
                 </DialogFooter>
             </DialogContent>

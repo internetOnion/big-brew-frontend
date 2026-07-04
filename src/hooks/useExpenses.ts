@@ -13,15 +13,34 @@ interface ExpenseFilters {
     from?: string;
     to?: string;
     category?: string;
+    limit?: number;
+    offset?: number;
 }
 
-const fetchExpenses = async (filters?: ExpenseFilters): Promise<Expense[]> => {
+export interface ExpensePagination {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+}
+
+interface PaginatedResponse {
+    data: Expense[];
+    pagination: ExpensePagination;
+}
+
+const fetchExpenses = async (
+    filters?: ExpenseFilters,
+): Promise<PaginatedResponse> => {
     const params = new URLSearchParams();
     if (filters?.from) params.set("from", filters.from);
     if (filters?.to) params.set("to", filters.to);
     if (filters?.category) params.set("category", filters.category);
+    if (filters?.limit) params.set("limit", String(filters.limit));
+    if (filters?.offset !== undefined)
+        params.set("offset", String(filters.offset));
     const qs = params.toString();
-    const { data } = await api.get<Expense[]>(
+    const { data } = await api.get<PaginatedResponse>(
         `${ENDPOINTS.EXPENSES.BASE}${qs ? `?${qs}` : ""}`,
     );
     return data;
@@ -90,7 +109,35 @@ export const useDeleteExpense = () => {
         mutationFn: async (id: string) => {
             await api.delete(ENDPOINTS.EXPENSES.BY_ID(id));
         },
-        onSuccess: () => {
+        onMutate: async (id) => {
+            await queryClient.cancelQueries({ queryKey: ["expenses"] });
+            const previous = queryClient.getQueriesData<PaginatedResponse>({
+                queryKey: ["expenses"],
+            });
+            for (const [queryKey, cached] of previous) {
+                if (!cached) continue;
+                queryClient.setQueryData<PaginatedResponse>(queryKey, (old) =>
+                    old
+                        ? {
+                              data: old.data.filter((e) => e.id !== id),
+                              pagination: {
+                                  ...old.pagination,
+                                  total: Math.max(0, old.pagination.total - 1),
+                              },
+                          }
+                        : old,
+                );
+            }
+            return { previous };
+        },
+        onError: (_err, _id, context) => {
+            if (context?.previous) {
+                for (const [queryKey, cached] of context.previous) {
+                    queryClient.setQueryData(queryKey, cached);
+                }
+            }
+        },
+        onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ["expenses"] });
         },
     });
