@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
     BarChart,
     Bar,
@@ -21,17 +22,54 @@ interface ExpenseBreakdownProps {
     currencySymbol?: string;
 }
 
+const CustomTooltip = ({
+    active,
+    payload,
+    label,
+    currencySymbol = "$",
+}: {
+    active?: boolean;
+    payload?: { value?: number; name?: string }[];
+    label?: string;
+    currencySymbol?: string;
+}) => {
+    if (!active || !payload?.length) return null;
+    const value = payload[0].value ?? 0;
+    return (
+        <div className="rounded-md border border-(--admin-border) bg-(--admin-card) px-2.5 py-1.5 font-mono text-[11px] text-(--admin-text) shadow-xs">
+            <p className="mb-0.5 text-(--admin-text-muted)">{label}</p>
+            <p className="text-(--admin-text)">
+                {currencySymbol}
+                {Number(value).toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                })}
+            </p>
+        </div>
+    );
+};
+
 const ExpenseBreakdown = ({
     data,
     isLoading,
     currencySymbol = "$",
 }: ExpenseBreakdownProps) => {
-    const chartData =
-        data?.map((d) => ({
-            category: d.category ?? "Uncategorized",
-            total: parseFloat(d.total),
-            count: d.count,
-        })) ?? [];
+    const chartData = useMemo(
+        () =>
+            data?.map((d) => ({
+                category: d.category ?? "Uncategorized",
+                total: parseFloat(d.total),
+                count: d.count,
+            })) ?? [],
+        [data],
+    );
+
+    const yAxisWidth = useMemo(() => {
+        const maxLabelLen = Math.max(
+            ...chartData.map((d) => d.category.length),
+            0,
+        );
+        return Math.max(60, Math.min(maxLabelLen * 7 + 8, 160));
+    }, [chartData]);
 
     return (
         <div className="admin-card p-4">
@@ -82,27 +120,12 @@ const ExpenseBreakdown = ({
                             stroke="var(--admin-border)"
                             tickLine={false}
                             axisLine={false}
-                            width={80}
+                            width={yAxisWidth}
                         />
                         <Tooltip
-                            formatter={(value) => [
-                                `${currencySymbol}${Number(value).toLocaleString("en-US", { minimumFractionDigits: 2 })}`,
-                                "Total",
-                            ]}
-                            contentStyle={{
-                                borderRadius: "6px",
-                                border: "1px solid var(--admin-border)",
-                                backgroundColor: "var(--admin-card)",
-                                color: "var(--admin-text)",
-                                fontSize: "11px",
-                                fontFamily: "DM Mono, monospace",
-                                boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.05)",
-                            }}
-                            itemStyle={{ color: "var(--admin-text)" }}
-                            labelStyle={{
-                                color: "var(--admin-text-muted)",
-                                marginBottom: "4px",
-                            }}
+                            content={
+                                <CustomTooltip currencySymbol={currencySymbol} />
+                            }
                         />
                         <Bar
                             dataKey="total"

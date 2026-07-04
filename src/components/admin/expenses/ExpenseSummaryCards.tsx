@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
     CurrencyDollarIcon,
     TagIcon,
@@ -22,18 +23,25 @@ const ExpenseSummaryCards = ({
     isLoading,
     currencySymbol = "$",
 }: ExpenseSummaryCardsProps) => {
-    const topCategory = summary?.byCategory
-        ? [...summary.byCategory].sort(
-              (a, b) => parseFloat(b.total) - parseFloat(a.total),
-          )[0]
-        : null;
+    const topCategory = useMemo(
+        () =>
+            summary?.byCategory
+                ? [...summary.byCategory].sort(
+                      (a, b) => parseFloat(b.total) - parseFloat(a.total),
+                  )[0]
+                : null,
+        [summary],
+    );
 
-    const entryCount =
-        summary?.byCategory?.reduce((sum, c) => sum + c.count, 0) ?? 0;
+    const entryCount = useMemo(
+        () =>
+            summary?.byCategory?.reduce((sum, c) => sum + c.count, 0) ?? 0,
+        [summary],
+    );
 
     if (isLoading) {
         return (
-            <div className="grid gap-px grid-cols-3 overflow-hidden rounded-lg border border-(--admin-border) bg-(--admin-border)">
+            <div className="grid gap-px grid-cols-1 sm:grid-cols-3 overflow-hidden rounded-lg border border-(--admin-border) bg-(--admin-border)">
                 {Array.from({ length: 3 }).map((_, i) => (
                     <div key={i} className="bg-(--admin-card) p-4">
                         <Skeleton className="mb-3 h-3 w-20 bg-(--admin-hover)" />
@@ -45,10 +53,10 @@ const ExpenseSummaryCards = ({
     }
 
     return (
-        <div className="grid gap-px grid-cols-3 overflow-hidden rounded-lg border border-(--admin-border) bg-(--admin-border)">
-            <div className="bg-(--admin-card) p-4">
+        <div className="grid gap-px grid-cols-1 sm:grid-cols-3 overflow-hidden rounded-lg border border-(--admin-border) bg-(--admin-border)">
+            <div className="bg-(--admin-card) p-4 transition-colors duration-150 hover:bg-(--admin-hover)">
                 <div className="mb-2 flex items-center gap-2">
-                    <CurrencyDollarIcon className="size-3.5 text-destructive" />
+                    <CurrencyDollarIcon className="size-3.5 text-(--admin-primary)" />
                     <span className="text-[11px] text-(--admin-text-muted)">
                         Total Expenses
                     </span>
@@ -57,7 +65,7 @@ const ExpenseSummaryCards = ({
                     {fmt(summary?.total ?? "0", currencySymbol)}
                 </p>
             </div>
-            <div className="bg-(--admin-card) p-4">
+            <div className="bg-(--admin-card) p-4 transition-colors duration-150 hover:bg-(--admin-hover)">
                 <div className="mb-2 flex items-center gap-2">
                     <TagIcon className="size-3.5 text-(--admin-accent)" />
                     <span className="text-[11px] text-(--admin-text-muted)">
@@ -73,7 +81,7 @@ const ExpenseSummaryCards = ({
                         : `${currencySymbol}0.00`}
                 </p>
             </div>
-            <div className="bg-(--admin-card) p-4">
+            <div className="bg-(--admin-card) p-4 transition-colors duration-150 hover:bg-(--admin-hover)">
                 <div className="mb-2 flex items-center gap-2">
                     <ArticleIcon className="size-3.5 text-(--admin-primary)" />
                     <span className="text-[11px] text-(--admin-text-muted)">

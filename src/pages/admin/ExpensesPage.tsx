@@ -7,7 +7,11 @@ import {
     DownloadSimpleIcon,
     ReceiptIcon,
     PlusCircleIcon,
-    GearSixIcon,
+    ListIcon,
+    PencilSimpleIcon,
+    TrashIcon,
+    CaretLeftIcon,
+    CaretRightIcon,
 } from "@phosphor-icons/react";
 import {
     useExpenses,
@@ -109,6 +113,8 @@ const ExpensesPage = () => {
 
     const handleExport = () => {
         if (!expenses.length) return;
+        const filename = `expenses-${format(dateRange.from, "yyyy-MM-dd")}-to-${format(dateRange.to, "yyyy-MM-dd")}.csv`;
+        toast.success(`Downloaded ${filename} (${expenses.length} expense${expenses.length === 1 ? "" : "s"})`);
         const headers = [
             "Description",
             "Amount",
@@ -132,7 +138,7 @@ const ExpensesPage = () => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `expenses-${format(dateRange.from, "yyyy-MM-dd")}-to-${format(dateRange.to, "yyyy-MM-dd")}.csv`;
+        a.download = filename;
         a.click();
         URL.revokeObjectURL(url);
     };
@@ -200,7 +206,7 @@ const ExpensesPage = () => {
                         setPage(1);
                     }}
                 >
-                    <SelectTrigger className="h-7 w-[160px] border-(--admin-border) bg-(--admin-card) text-xs">
+                    <SelectTrigger className="h-7 max-md:min-h-[44px] w-[160px] border-(--admin-border) bg-(--admin-card) text-xs">
                         <SelectValue>{categoryFilter ?? "All Categories"}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>
@@ -218,7 +224,7 @@ const ExpensesPage = () => {
                         size="sm"
                         onClick={handleExport}
                         disabled={expenses.length === 0}
-                        className="h-7 border-(--admin-border) bg-(--admin-card) text-[11px] text-(--admin-text-secondary) hover:bg-(--admin-hover)"
+                        className="h-7 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-[11px] text-(--admin-text-secondary) hover:bg-(--admin-hover)"
                     >
                         <DownloadSimpleIcon
                             className="size-3"
@@ -230,9 +236,9 @@ const ExpensesPage = () => {
                         <Button
                             variant="outline"
                             size="sm"
-                            className="h-7 border-(--admin-border) bg-(--admin-card) text-[11px] text-(--admin-text-secondary) hover:bg-(--admin-hover)"
+                            className="h-7 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-[11px] text-(--admin-text-secondary) hover:bg-(--admin-hover)"
                         >
-                            <GearSixIcon
+                            <ListIcon
                                 className="size-3"
                                 data-icon="inline-start"
                             />
@@ -243,119 +249,107 @@ const ExpensesPage = () => {
             </div>
 
             <div className="admin-card overflow-hidden">
-                <table className="w-full">
-                    <thead>
-                        <tr className="border-b border-(--admin-border) text-[11px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
-                            <th className="px-4 py-2.5 text-left font-medium">
-                                Description
-                            </th>
-                            <th className="px-4 py-2.5 text-right font-medium">
-                                Amount
-                            </th>
-                            <th className="px-4 py-2.5 text-left font-medium">
-                                Category
-                            </th>
-                            <th className="px-4 py-2.5 text-left font-medium">
-                                By
-                            </th>
-                            <th className="px-4 py-2.5 text-left font-medium">
-                                Date
-                            </th>
-                            <th className="w-10 px-4 py-2.5" />
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {isLoading ? (
-                            Array.from({ length: 5 }).map((_, i) => (
-                                <tr key={i}>
-                                    <td className="px-4 py-3">
-                                        <Skeleton className="h-3.5 w-32 bg-(--admin-hover)" />
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <Skeleton className="ml-auto h-3.5 w-20 bg-(--admin-hover)" />
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <Skeleton className="h-3.5 w-20 bg-(--admin-hover)" />
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <Skeleton className="h-3.5 w-16 bg-(--admin-hover)" />
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <Skeleton className="h-3.5 w-20 bg-(--admin-hover)" />
-                                    </td>
-                                    <td className="px-4 py-3" />
-                                </tr>
-                            ))
-                        ) : !expenses.length ? (
-                            <tr>
-                                <td
-                                    colSpan={6}
-                                    className="px-4 py-16 text-center"
-                                >
-                                    <div className="flex flex-col items-center gap-2">
-                                        <ReceiptIcon className="size-8 text-(--admin-text-muted)" />
-                                        <p className="text-xs font-medium text-(--admin-text-secondary)">
-                                            {categoryFilter
-                                                ? "No matching expenses"
-                                                : "No expenses yet"}
-                                        </p>
-                                        <p className="text-[11px] text-(--admin-text-muted)">
-                                            {categoryFilter
-                                                ? "Try adjusting your filters or date range."
-                                                : "Add your first expense to start tracking spending."}
-                                        </p>
-                                        {!categoryFilter && (
-                                            <Link to="/admin/expenses/new">
-                                                <Button
-                                                    size="sm"
-                                                    className="mt-1 bg-(--admin-primary) text-white hover:bg-(--admin-primary)/80"
-                                                >
-                                                    <PlusCircleIcon
-                                                        className="size-3.5"
-                                                        data-icon="inline-start"
-                                                    />
-                                                    Add Expense
-                                                </Button>
-                                            </Link>
-                                        )}
-                                    </div>
-                                </td>
+                <div className="overflow-x-auto">
+                    <table className="w-full">
+                        <thead>
+                            <tr className="border-b border-(--admin-border) bg-(--admin-hover) text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-left">
+                                    Description
+                                </th>
+                                <th className="px-4 py-2.5 text-right">
+                                    Amount
+                                </th>
+                                <th className="px-4 py-2.5 text-left">
+                                    Category
+                                </th>
+                                <th className="px-4 py-2.5 text-left">
+                                    By
+                                </th>
+                                <th className="px-4 py-2.5 text-left">
+                                    Date
+                                </th>
+                                <th className="w-10 px-4 py-2.5" />
                             </tr>
-                        ) : (
-                            expenses.map((expense) => (
-                                <tr
-                                    key={expense.id}
-                                    className="admin-table-row border-b border-(--admin-border) last:border-0"
-                                >
-                                    <td className="px-4 py-3 text-[12px] text-(--admin-text)">
-                                        {expense.description}
+                        </thead>
+                        <tbody className="divide-y divide-(--admin-border)">
+                            {isLoading ? (
+                                Array.from({ length: 5 }).map((_, i) => (
+                                    <tr key={i}>
+                                        <td className="px-4 py-2.5">
+                                            <Skeleton className="h-3.5 w-32 bg-(--admin-hover)" />
+                                        </td>
+                                        <td className="px-4 py-2.5">
+                                            <Skeleton className="ml-auto h-3.5 w-20 bg-(--admin-hover)" />
+                                        </td>
+                                        <td className="px-4 py-2.5">
+                                            <Skeleton className="h-3.5 w-20 bg-(--admin-hover)" />
+                                        </td>
+                                        <td className="px-4 py-2.5">
+                                            <Skeleton className="h-3.5 w-16 bg-(--admin-hover)" />
+                                        </td>
+                                        <td className="px-4 py-2.5">
+                                            <Skeleton className="h-3.5 w-20 bg-(--admin-hover)" />
+                                        </td>
+                                        <td className="px-4 py-2.5" />
+                                    </tr>
+                                ))
+                            ) : !expenses.length ? (
+                                <tr>
+                                    <td
+                                        colSpan={6}
+                                        className="px-4 py-10 text-center"
+                                    >
+                                        <div className="flex flex-col items-center gap-2">
+                                            <ReceiptIcon className="size-8 text-(--admin-text-muted)" aria-hidden="true" />
+                                            <p className="text-xs font-medium text-(--admin-text-secondary)">
+                                {categoryFilter
+                                    ? "No matching expenses"
+                                    : "No expenses yet"}
+                            </p>
+                            <p className="text-[11px] text-(--admin-text-muted)">
+                                {categoryFilter
+                                    ? "Try adjusting your filters or date range."
+                                    : "Add your first expense to start tracking spending."}
+                            </p>
+                        </div>
                                     </td>
-                                    <td className="px-4 py-3 text-right font-mono text-[12px] text-(--admin-text)">
-                                        {formatAmount(expense.amount)}
-                                    </td>
-                                    <td className="px-4 py-3 text-[12px] text-(--admin-text-secondary)">
-                                        {expense.category ?? "—"}
-                                    </td>
-                                    <td className="px-4 py-3 text-[12px] text-(--admin-text-secondary)">
-                                        {expense.recordedByName ?? "—"}
-                                    </td>
-                                    <td className="px-4 py-3 text-[12px] text-(--admin-text-secondary)">
-                                        {formatDate(expense.recordedAt)}
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger
-                                                aria-label="Actions"
-                                                className="flex size-7 shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text) cursor-pointer"
-                                            >
-                                                <DotsThreeVerticalIcon className="size-3.5" />
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
+                                </tr>
+                            ) : (
+                                expenses.map((expense) => (
+                                    <tr
+                                        key={expense.id}
+                                        className="admin-table-row transition-colors hover:bg-(--admin-hover)"
+                                    >
+                                        <td className="max-w-[240px] truncate px-4 py-2.5 text-[12px] text-(--admin-text)" title={expense.description}>
+                                            {expense.description}
+                                        </td>
+                                        <td className="px-4 py-2.5 text-right font-mono text-[12px] text-(--admin-text)">
+                                            {formatAmount(expense.amount)}
+                                        </td>
+                                        <td className="px-4 py-2.5 text-[12px] text-(--admin-text-secondary)">
+                                            {expense.category ?? "—"}
+                                        </td>
+                                        <td className="px-4 py-2.5 text-[12px] text-(--admin-text-secondary)">
+                                            {expense.recordedByName ?? "—"}
+                                        </td>
+                                        <td className="px-4 py-2.5 text-[12px] text-(--admin-text-secondary)">
+                                            {formatDate(expense.recordedAt)}
+                                        </td>
+                                        <td className="px-4 py-2.5">
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger
+                                                    aria-label="Actions"
+                                                    className="flex size-7 max-md:size-10 shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text) cursor-pointer"
+                                                >
+                                                    <DotsThreeVerticalIcon className="size-3.5" />
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
                                                 <DropdownMenuItem
                                                     onClick={() =>
                                                         handleEdit(expense)
                                                     }
                                                 >
+                                                    <PencilSimpleIcon className="size-4" />
                                                     Edit
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
@@ -366,46 +360,50 @@ const ExpensesPage = () => {
                                                     }
                                                     className="text-destructive"
                                                 >
+                                                    <TrashIcon className="size-4" />
                                                     Delete
                                                 </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
                 {totalPages > 1 && !isLoading && expenses.length > 0 && (
                     <div className="flex items-center justify-between border-t border-(--admin-border) px-4 py-2.5">
                         <span className="text-[11px] text-(--admin-text-muted)">
                             {pagination?.total ?? 0} expenses
                         </span>
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1">
                             <Button
                                 variant="outline"
-                                size="xs"
+                                size="sm"
                                 onClick={() =>
                                     setPage((p) => Math.max(1, p - 1))
                                 }
                                 disabled={page <= 1}
-                                className="h-6 border-(--admin-border) bg-(--admin-card) text-[11px] text-(--admin-text-secondary)"
+                                className="h-7 max-md:min-h-[44px] border-(--admin-border) text-[11px] text-(--admin-text-secondary)"
                             >
+                                <CaretLeftIcon className="size-3.5" />
                                 Previous
                             </Button>
-                            <span className="text-[11px] tabular-nums text-(--admin-text-secondary) px-1">
+                            <span className="px-1 text-[11px] tabular-nums text-(--admin-text-secondary)">
                                 {page} of {totalPages}
                             </span>
                             <Button
                                 variant="outline"
-                                size="xs"
+                                size="sm"
                                 onClick={() =>
                                     setPage((p) => Math.min(totalPages, p + 1))
                                 }
                                 disabled={page >= totalPages}
-                                className="h-6 border-(--admin-border) bg-(--admin-card) text-[11px] text-(--admin-text-secondary)"
+                                className="h-7 max-md:min-h-[44px] border-(--admin-border) text-[11px] text-(--admin-text-secondary)"
                             >
                                 Next
+                                <CaretRightIcon className="size-3.5" />
                             </Button>
                         </div>
                     </div>

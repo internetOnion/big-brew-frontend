@@ -9,7 +9,14 @@ import { useDeleteIngredient } from "@/hooks/useDeleteIngredient";
 import { useStockMovements } from "@/hooks/useStockMovements";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Label } from "@/components/ui/label";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import {
     Select,
@@ -63,8 +70,15 @@ const IngredientDetailPage = () => {
 
     if (isLoading) {
         return (
-            <div className="flex h-64 items-center justify-center text-sm text-(--admin-text-muted)">
-                Loading...
+            <div className="flex flex-col gap-5 p-5">
+                <Skeleton className="h-5 w-48 bg-(--admin-hover)" />
+                <div className="grid gap-5 lg:grid-cols-2">
+                    <div className="flex flex-col gap-5">
+                        <Skeleton className="h-64 rounded-lg bg-(--admin-hover)" />
+                        <Skeleton className="h-80 rounded-lg bg-(--admin-hover)" />
+                    </div>
+                    <Skeleton className="h-96 rounded-lg bg-(--admin-hover)" />
+                </div>
             </div>
         );
     }
@@ -163,42 +177,15 @@ const IngredientDetailPage = () => {
                     {ingredient.unit}
                 </span>
                 <div className="ml-auto">
-                    {!showDelete ? (
-                        <Button
-                            variant="outline"
-                            size="xs"
-                            onClick={() => setShowDelete(true)}
-                            className="border-destructive/30 text-[11px] text-destructive hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive"
-                        >
-                            <TrashIcon className="size-3" />
-                            Delete
-                        </Button>
-                    ) : (
-                        <div className="flex items-center gap-2">
-                            <span className="text-[11px] text-destructive">
-                                Are you sure?
-                            </span>
-                            <Button
-                                variant="ghost"
-                                size="xs"
-                                onClick={() => setShowDelete(false)}
-                                disabled={deleteMutation.isPending}
-                                className="text-[11px] text-(--admin-text-secondary)"
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                size="xs"
-                                onClick={handleDelete}
-                                disabled={deleteMutation.isPending}
-                                className="bg-destructive text-[11px] text-destructive-foreground hover:bg-destructive/90"
-                            >
-                                {deleteMutation.isPending
-                                    ? "Deleting..."
-                                    : "Delete"}
-                            </Button>
-                        </div>
-                    )}
+                    <Button
+                        variant="outline"
+                        size="xs"
+                        onClick={() => setShowDelete(true)}
+                        className="border-destructive/30 text-[11px] text-destructive hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive"
+                    >
+                        <TrashIcon className="size-3" />
+                        Delete
+                    </Button>
                 </div>
             </div>
 
@@ -485,8 +472,16 @@ const IngredientDetailPage = () => {
                         </h2>
                         <div className="max-h-[500px] overflow-y-auto">
                             {historyLoading ? (
-                                <div className="flex h-32 items-center justify-center text-xs text-(--admin-text-muted)">
-                                    Loading...
+                                <div className="flex flex-col gap-2">
+                                    {Array.from({ length: 4 }).map((_, i) => (
+                                        <div
+                                            key={i}
+                                            className="flex items-center justify-between px-1 py-2"
+                                        >
+                                            <Skeleton className="h-4 w-24 bg-(--admin-hover)" />
+                                            <Skeleton className="h-4 w-14 bg-(--admin-hover)" />
+                                        </div>
+                                    ))}
                                 </div>
                             ) : !movements || movements.length === 0 ? (
                                 <div className="flex h-32 items-center justify-center text-xs text-(--admin-text-muted)">
@@ -542,6 +537,47 @@ const IngredientDetailPage = () => {
                     </div>
                 </div>
             </div>
+
+            <Dialog
+                open={showDelete}
+                onOpenChange={(v) =>
+                    !v && !deleteMutation.isPending && setShowDelete(false)
+                }
+            >
+                <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card) shadow-xl">
+                    <DialogHeader>
+                        <DialogTitle className="text-[14px] font-medium text-(--admin-text)">
+                            Delete {ingredient.name}
+                        </DialogTitle>
+                    </DialogHeader>
+                    <p className="text-[13px] text-(--admin-text-secondary)">
+                        Are you sure you want to delete{" "}
+                        <span className="font-medium text-(--admin-text)">
+                            {ingredient.name}
+                        </span>
+                        ? This action cannot be undone.
+                    </p>
+                    <div className="flex justify-end gap-2 border-t border-(--admin-border) pt-3">
+                        <Button
+                            variant="ghost"
+                            onClick={() => setShowDelete(false)}
+                            disabled={deleteMutation.isPending}
+                            className="text-(--admin-text-secondary)"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleDelete}
+                            disabled={deleteMutation.isPending}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                            {deleteMutation.isPending
+                                ? "Deleting..."
+                                : "Delete"}
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 };

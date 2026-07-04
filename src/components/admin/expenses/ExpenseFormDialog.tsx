@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import {
     Dialog,
@@ -38,14 +38,12 @@ const ExpenseFormDialog = ({
     const [description, setDescription] = useState("");
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState<string>("");
-    const descRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (open && expense) {
             setDescription(expense.description);
             setAmount(expense.amount);
             setCategory(expense.category ?? "");
-            setTimeout(() => descRef.current?.focus(), 0);
         }
     }, [open, expense]);
 
@@ -82,23 +80,26 @@ const ExpenseFormDialog = ({
                 </DialogHeader>
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label htmlFor="edit-expense-description" className="text-[11px] text-(--admin-text-secondary)">
                             Description
                         </Label>
                         <Input
-                            ref={descRef}
+                            id="edit-expense-description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="Coffee beans"
+                            autoFocus
                             className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
                         />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label htmlFor="edit-expense-amount" className="text-[11px] text-(--admin-text-secondary)">
                             Amount
                         </Label>
                         <Input
+                            id="edit-expense-amount"
                             type="number"
+                            inputMode="decimal"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
                             placeholder="0.00"
@@ -108,15 +109,14 @@ const ExpenseFormDialog = ({
                         />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label htmlFor="edit-expense-category" className="text-[11px] text-(--admin-text-secondary)">
                             Category
                         </Label>
                         <Select
-                            key={categories?.length}
                             value={category || undefined}
                             onValueChange={(v) => setCategory(v ?? "")}
                         >
-                            <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
+                            <SelectTrigger id="edit-expense-category" className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
                                 <SelectValue placeholder="Select category" />
                             </SelectTrigger>
                             <SelectContent>

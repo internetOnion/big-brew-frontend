@@ -17,9 +17,15 @@ interface MenuItemCardProps {
     item: MenuItemListResponse;
     onEdit: (item: MenuItemListResponse) => void;
     onDelete: (item: MenuItemListResponse) => void;
+    currencySymbol?: string;
 }
 
-const MenuItemCard = ({ item, onEdit, onDelete }: MenuItemCardProps) => {
+const MenuItemCard = ({
+    item,
+    onEdit,
+    onDelete,
+    currencySymbol = "$",
+}: MenuItemCardProps) => {
     const [imgError, setImgError] = useState(false);
     const price = parseFloat(item.basePrice);
 
@@ -80,7 +86,8 @@ const MenuItemCard = ({ item, onEdit, onDelete }: MenuItemCardProps) => {
                         {item.name}
                     </p>
                     <p className="font-mono text-[12px] text-(--admin-text-secondary)">
-                        ${price.toFixed(2)}
+                        {currencySymbol}
+                        {price.toFixed(2)}
                     </p>
                 </div>
                 <div

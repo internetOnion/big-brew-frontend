@@ -1,5 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import type { TopItem } from "@/types/admin";
 
 interface TopItemsProps {
@@ -52,17 +59,24 @@ const TopItems = ({
                             </Button>
                         ))}
                     </div>
-                    <select
-                        value={limit}
-                        onChange={(e) => onLimitChange(Number(e.target.value))}
-                        className="h-6 rounded border border-(--admin-border) bg-(--admin-card) px-1.5 font-mono text-[11px] text-(--admin-text-secondary) outline-none"
+                    <Select
+                        value={String(limit)}
+                        onValueChange={(v) => onLimitChange(Number(v))}
                     >
-                        {limitOptions.map((n) => (
-                            <option key={n} value={n}>
-                                Top {n}
-                            </option>
-                        ))}
-                    </select>
+                        <SelectTrigger
+                            size="sm"
+                            className="h-6 w-20 border-(--admin-border) bg-(--admin-card) text-[11px]"
+                        >
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {limitOptions.map((n) => (
+                                <SelectItem key={n} value={String(n)}>
+                                    Top {n}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
             </div>
 

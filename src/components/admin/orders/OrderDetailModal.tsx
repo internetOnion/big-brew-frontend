@@ -11,57 +11,12 @@ import { Button } from "@/components/ui/button";
 import { useCompleteOrder } from "@/hooks/useOrderMutations";
 import { useApproveVoid, useRejectVoid } from "@/hooks/useOrders";
 import { toast } from "sonner";
-import type { Order, OrderStatus } from "@/types/order";
-
-const statusBadgeConfig: Record<
-    OrderStatus,
-    { label: string; className: string }
-> = {
-    pending: {
-        label: "Pending",
-        className:
-            "bg-(--admin-warning)/10 text-(--admin-warning) border-(--admin-warning)/30",
-    },
-    completed: {
-        label: "Completed",
-        className:
-            "bg-(--admin-success)/10 text-(--admin-success) border-(--admin-success)/30",
-    },
-    void_requested: {
-        label: "Void Requested",
-        className:
-            "bg-(--admin-warning)/10 text-(--admin-warning) border-(--admin-warning)/30",
-    },
-    voided: {
-        label: "Voided",
-        className: "bg-destructive/10 text-destructive border-destructive/30",
-    },
-};
-
-const paymentStatusConfig: Record<
-    string,
-    { label: string; className: string }
-> = {
-    pending: {
-        label: "Unpaid",
-        className:
-            "bg-(--admin-warning)/10 text-(--admin-warning) border-(--admin-warning)/30",
-    },
-    paid: {
-        label: "Paid",
-        className:
-            "bg-(--admin-success)/10 text-(--admin-success) border-(--admin-success)/30",
-    },
-    refunded: {
-        label: "Refunded",
-        className: "bg-destructive/10 text-destructive border-destructive/30",
-    },
-};
-
-const diningLabel: Record<string, string> = {
-    dine_in: "Dine-in",
-    take_away: "Take-away",
-};
+import type { Order } from "@/types/order";
+import {
+    statusBadgeConfig,
+    paymentStatusConfig,
+    diningLabel,
+} from "@/components/admin/orders/order-constants";
 
 interface OrderDetailModalProps {
     order: Order | null;

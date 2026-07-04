@@ -27,14 +27,12 @@ const ExpenseCreatePage = () => {
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState("");
     const [recordedAt, setRecordedAt] = useState(todayStr);
-    const [submitting, setSubmitting] = useState(false);
 
     const canSubmit =
         description.trim() && amount && parseFloat(amount) > 0 && category;
 
     const handleSubmit = async () => {
         if (!canSubmit) return;
-        setSubmitting(true);
         try {
             await createMutation.mutateAsync({
                 description: description.trim(),
@@ -46,7 +44,6 @@ const ExpenseCreatePage = () => {
             navigate("/admin/expenses");
         } catch {
             toast.error("Failed to create expense");
-            setSubmitting(false);
         }
     };
 
@@ -61,7 +58,7 @@ const ExpenseCreatePage = () => {
                 >
                     <ArrowLeftIcon className="size-4" />
                 </Button>
-                <h1 className="text-sm font-semibold text-(--admin-primary)">
+                <h1 className="text-[13px] font-medium text-(--admin-primary)">
                     New Expense
                 </h1>
             </div>
@@ -72,10 +69,11 @@ const ExpenseCreatePage = () => {
                 </h2>
                 <div className="grid gap-3">
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label htmlFor="expense-description" className="text-[11px] text-(--admin-text-secondary)">
                             Description
                         </Label>
                         <Input
+                            id="expense-description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="e.g. Coffee beans"
@@ -85,11 +83,13 @@ const ExpenseCreatePage = () => {
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
+                            <Label htmlFor="expense-amount" className="text-[11px] text-(--admin-text-secondary)">
                                 Amount
                             </Label>
                             <Input
+                                id="expense-amount"
                                 type="number"
+                                inputMode="decimal"
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value)}
                                 placeholder="0.00"
@@ -99,15 +99,14 @@ const ExpenseCreatePage = () => {
                             />
                         </div>
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
+                            <Label htmlFor="expense-category" className="text-[11px] text-(--admin-text-secondary)">
                                 Category
                             </Label>
                             <Select
-                                key={categories?.length}
                                 value={category || undefined}
                                 onValueChange={(v) => setCategory(v ?? "")}
                             >
-                                <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
+                                <SelectTrigger id="expense-category" className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
                                     <SelectValue placeholder="Select category" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -124,14 +123,15 @@ const ExpenseCreatePage = () => {
                         </div>
                     </div>
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label htmlFor="expense-date" className="text-[11px] text-(--admin-text-secondary)">
                             Date
                         </Label>
                         <Input
+                            id="expense-date"
                             type="date"
                             value={recordedAt}
                             onChange={(e) => setRecordedAt(e.target.value)}
-                            className="h-8 w-[200px] border-(--admin-border) bg-(--admin-card) text-xs"
+                            className="h-8 w-full max-w-[200px] border-(--admin-border) bg-(--admin-card) text-xs"
                         />
                     </div>
                 </div>
@@ -140,15 +140,15 @@ const ExpenseCreatePage = () => {
             <div className="flex gap-2">
                 <Button
                     onClick={handleSubmit}
-                    disabled={!canSubmit || submitting}
+                    disabled={!canSubmit || createMutation.isPending}
                     className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
                 >
-                    {submitting ? "Creating..." : "Create Expense"}
+                    {createMutation.isPending ? "Creating..." : "Create Expense"}
                 </Button>
                 <Button
                     variant="ghost"
                     onClick={() => navigate("/admin/expenses")}
-                    disabled={submitting}
+                    disabled={createMutation.isPending}
                     className="h-8 text-xs text-(--admin-text-secondary)"
                 >
                     Cancel

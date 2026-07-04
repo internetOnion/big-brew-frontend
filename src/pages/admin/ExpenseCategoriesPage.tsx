@@ -15,11 +15,13 @@ import {
 } from "@/hooks/useExpenseCategories";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
     DialogFooter,
 } from "@/components/ui/dialog";
 
@@ -96,7 +98,7 @@ const ExpenseCategoriesPage = () => {
                             setNewName("");
                         }}
                         disabled={isAdding}
-                        className="h-7 gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80"
+                        className="h-7 max-md:min-h-[44px] gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80"
                     >
                         <PlusIcon className="size-3" />
                         Add Category
@@ -106,8 +108,10 @@ const ExpenseCategoriesPage = () => {
 
             <div className="rounded-lg border border-(--admin-border) bg-(--admin-card)">
                 {isLoading ? (
-                    <div className="flex h-24 items-center justify-center text-xs text-(--admin-text-muted)">
-                        Loading...
+                    <div className="flex flex-col gap-2 p-4">
+                        <Skeleton className="h-7 w-full bg-(--admin-hover)" />
+                        <Skeleton className="h-7 w-full bg-(--admin-hover)" />
+                        <Skeleton className="h-7 w-full bg-(--admin-hover)" />
                     </div>
                 ) : !categories || categories.length === 0 ? (
                     <div className="flex flex-col items-center justify-center gap-2 py-8">
@@ -127,6 +131,7 @@ const ExpenseCategoriesPage = () => {
                         {isAdding && (
                             <div className="flex items-center gap-2 px-4 py-2.5">
                                 <Input
+                                    aria-label="New category name"
                                     value={newName}
                                     onChange={(e) => setNewName(e.target.value)}
                                     onKeyDown={(e) => {
@@ -147,7 +152,7 @@ const ExpenseCategoriesPage = () => {
                                         !newName.trim() ||
                                         createMutation.isPending
                                     }
-                                    className="h-7 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80"
+                                    className="h-7 max-md:min-h-[44px] bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80"
                                 >
                                     Save
                                 </Button>
@@ -158,7 +163,7 @@ const ExpenseCategoriesPage = () => {
                                         setIsAdding(false);
                                         setNewName("");
                                     }}
-                                    className="h-7 text-[11px] text-(--admin-text-secondary)"
+                                    className="h-7 max-md:min-h-[44px] text-[11px] text-(--admin-text-secondary)"
                                 >
                                     Cancel
                                 </Button>
@@ -176,6 +181,7 @@ const ExpenseCategoriesPage = () => {
                                     {isEditing ? (
                                         <>
                                             <Input
+                                                aria-label="Edit category name"
                                                 value={editName}
                                                 onChange={(e) =>
                                                     setEditName(e.target.value)
@@ -196,7 +202,7 @@ const ExpenseCategoriesPage = () => {
                                                     !editName.trim() ||
                                                     updateMutation.isPending
                                                 }
-                                                className="h-7 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80"
+                                                className="h-7 max-md:min-h-[44px] bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80"
                                             >
                                                 Save
                                             </Button>
@@ -204,7 +210,7 @@ const ExpenseCategoriesPage = () => {
                                                 variant="ghost"
                                                 size="sm"
                                                 onClick={handleCancelEdit}
-                                                className="h-7 text-[11px] text-(--admin-text-secondary)"
+                                                className="h-7 max-md:min-h-[44px] text-[11px] text-(--admin-text-secondary)"
                                             >
                                                 Cancel
                                             </Button>
@@ -253,19 +259,20 @@ const ExpenseCategoriesPage = () => {
                             Delete Category
                         </DialogTitle>
                     </DialogHeader>
-                    <p className="text-xs text-(--admin-text-secondary)">
+                    <DialogDescription className="text-xs text-(--admin-text-secondary)">
                         Are you sure you want to delete{" "}
                         <span className="font-medium text-(--admin-text)">
                             {categories?.find((c) => c.id === deletingId)
                                 ?.name ?? ""}
                         </span>
-                        ?
-                    </p>
+                        ? This action cannot be undone.
+                    </DialogDescription>
                     <DialogFooter>
                         <Button
                             variant="ghost"
                             onClick={() => setDeletingId(null)}
                             className="text-(--admin-text-secondary)"
+                            disabled={deleteMutation.isPending}
                         >
                             Cancel
                         </Button>

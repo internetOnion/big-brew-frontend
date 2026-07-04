@@ -9,9 +9,11 @@ import {
 import { toast } from "sonner";
 import { useMenuItems } from "@/hooks/useMenuItems";
 import { useCategories } from "@/hooks/useCategories";
+import { useSettings } from "@/hooks/useSettings";
 import { useDeleteMenuItem } from "@/hooks/useDeleteMenuItem";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
     Select,
     SelectContent,
@@ -32,6 +34,8 @@ const MenuPage = () => {
     const navigate = useNavigate();
     const { data: items, isLoading } = useMenuItems();
     const { data: categories } = useCategories();
+    const { data: settings } = useSettings();
+    const currencySymbol = settings?.currencySymbol ?? "$";
 
     const [search, setSearch] = useState("");
     const [categoryFilter, setCategoryFilter] = useState<string>("all");
@@ -153,9 +157,9 @@ const MenuPage = () => {
             {isLoading ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
                     {Array.from({ length: 12 }).map((_, i) => (
-                        <div
+                        <Skeleton
                             key={i}
-                            className="h-48 animate-pulse rounded-lg border border-(--admin-border) bg-(--admin-hover)"
+                            className="h-48 rounded-lg border border-(--admin-border) bg-(--admin-hover)"
                         />
                     ))}
                 </div>
@@ -216,6 +220,7 @@ const MenuPage = () => {
                                 navigate(`/admin/menu/${item.id}`)
                             }
                             onDelete={setDeletingItem}
+                            currencySymbol={currencySymbol}
                         />
                     ))}
                 </div>

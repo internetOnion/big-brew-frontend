@@ -13,6 +13,7 @@ import { useIngredients } from "@/hooks/useInventory";
 import { useDeleteIngredient } from "@/hooks/useDeleteIngredient";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -125,14 +126,26 @@ const InventoryPage = () => {
                         </thead>
                         <tbody className="divide-y divide-(--admin-border)">
                             {isLoading ? (
-                                <tr>
-                                    <td
-                                        colSpan={6}
-                                        className="px-4 py-8 text-center text-xs text-(--admin-text-muted)"
-                                    >
-                                        Loading...
-                                    </td>
-                                </tr>
+                                Array.from({ length: 5 }).map((_, i) => (
+                                    <tr key={i}>
+                                        <td className="px-4 py-3">
+                                            <Skeleton className="h-4 w-32 bg-(--admin-hover)" />
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <Skeleton className="h-4 w-8 bg-(--admin-hover)" />
+                                        </td>
+                                        <td className="px-4 py-3 text-right">
+                                            <Skeleton className="ml-auto h-4 w-16 bg-(--admin-hover)" />
+                                        </td>
+                                        <td className="px-4 py-3 text-right">
+                                            <Skeleton className="ml-auto h-4 w-12 bg-(--admin-hover)" />
+                                        </td>
+                                        <td className="px-4 py-3 text-center">
+                                            <Skeleton className="mx-auto h-5 w-16 rounded-full bg-(--admin-hover)" />
+                                        </td>
+                                        <td className="px-2 py-3" />
+                                    </tr>
+                                ))
                             ) : !filtered || filtered.length === 0 ? (
                                 <tr>
                                     <td

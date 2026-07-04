@@ -19,6 +19,7 @@ import {
 } from "@/hooks/useEmployees";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
     Select,
     SelectContent,
@@ -130,14 +131,25 @@ const EmployeesPage = () => {
         deleteEmployee.mutate(employee.id);
     };
     const isLoadingRows = () => (
-        <tr>
-            <td
-                colSpan={6}
-                className="px-4 py-8 text-center text-xs text-(--admin-text-muted)"
-            >
-                Loading...
-            </td>
-        </tr>
+        <>
+            {Array.from({ length: 5 }).map((_, i) => (
+                <tr key={i}>
+                    <td className="px-4 py-3">
+                        <Skeleton className="h-4 w-32 bg-(--admin-hover)" />
+                    </td>
+                    <td className="px-4 py-3">
+                        <Skeleton className="h-5 w-14 rounded-full bg-(--admin-hover)" />
+                    </td>
+                    <td className="px-4 py-3">
+                        <Skeleton className="h-4 w-36 bg-(--admin-hover)" />
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                        <Skeleton className="mx-auto h-4 w-12 bg-(--admin-hover)" />
+                    </td>
+                    <td className="px-2 py-3" />
+                </tr>
+            ))}
+        </>
     );
 
     const emptyRows = () => (
@@ -208,17 +220,19 @@ const EmployeesPage = () => {
 
                 <div className="flex gap-0.5 rounded-md bg-(--admin-hover) p-0.5">
                     {STATUS_OPTIONS.map((opt) => (
-                        <button
+                        <Button
                             key={opt.value}
+                            variant="ghost"
+                            size="xs"
                             onClick={() => setStatusFilter(opt.value)}
-                            className={`h-6 rounded-md px-2 text-xs font-medium cursor-pointer transition-colors duration-150 ${
+                            className={`h-6 rounded-md px-2 text-xs focus-visible:ring-2 focus-visible:ring-(--admin-primary)/50 ${
                                 statusFilter === opt.value
                                     ? "bg-(--admin-card) font-medium text-(--admin-primary) shadow-sm"
                                     : "text-(--admin-text-muted) hover:text-(--admin-text-secondary)"
                             }`}
                         >
                             {opt.label}
-                        </button>
+                        </Button>
                     ))}
                 </div>
 

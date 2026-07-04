@@ -413,7 +413,7 @@ const MenuItemCreatePage = () => {
                 >
                     <ArrowLeftIcon className="size-4" />
                 </Button>
-                <h1 className="text-sm font-semibold text-(--admin-primary)">
+                <h1 className="text-[13px] font-medium text-(--admin-primary)">
                     New Menu Item
                 </h1>
             </div>
