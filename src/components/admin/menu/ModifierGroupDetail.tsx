@@ -429,7 +429,7 @@ const ModifierGroupDetail = ({
                                                 key={ing.id}
                                                 className="flex items-center justify-between py-0.5"
                                             >
-                                                <span className="text-xs text-(--admin-text)">
+                                                <span id={`ing-name-${ing.id}`} className="text-xs text-(--admin-text)">
                                                     {ing.name}
                                                 </span>
                                                 <div className="flex items-center gap-1.5">
@@ -443,7 +443,7 @@ const ModifierGroupDetail = ({
                                                 e.target.value,
                                             )
                                         }
-                                        aria-label="Ingredient quantity"
+                                        aria-labelledby={`ing-name-${ing.id}`}
                                         className="h-6 w-16 border-(--admin-border) bg-(--admin-card) font-mono text-[11px]"
                                     />
                                                     <span className="text-[11px] text-(--admin-text-muted)">

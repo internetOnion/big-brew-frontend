@@ -50,19 +50,19 @@ const statusBadgeConfig: Record<
 > = {
     pending: {
         label: "Pending",
-        className: "bg-amber-50 text-amber-700 border-amber-200",
+        className: "bg-(--admin-warning)/10 text-(--admin-warning) border-(--admin-warning)/30",
     },
     completed: {
         label: "Completed",
-        className: "bg-emerald-50 text-emerald-700 border-emerald-200",
+        className: "bg-(--admin-success)/10 text-(--admin-success) border-(--admin-success)/30",
     },
     void_requested: {
         label: "Void Requested",
-        className: "bg-orange-50 text-orange-700 border-orange-200",
+        className: "bg-(--admin-warning)/10 text-(--admin-warning) border-(--admin-warning)/30",
     },
     voided: {
         label: "Voided",
-        className: "bg-red-50 text-red-700 border-red-200",
+        className: "bg-destructive/10 text-destructive border-destructive/30",
     },
 };
 
@@ -72,15 +72,15 @@ const paymentStatusConfig: Record<
 > = {
     pending: {
         label: "Unpaid",
-        className: "bg-amber-50 text-amber-700 border-amber-200",
+        className: "bg-(--admin-warning)/10 text-(--admin-warning) border-(--admin-warning)/30",
     },
     paid: {
         label: "Paid",
-        className: "bg-emerald-50 text-emerald-700 border-emerald-200",
+        className: "bg-(--admin-success)/10 text-(--admin-success) border-(--admin-success)/30",
     },
     refunded: {
         label: "Refunded",
-        className: "bg-red-50 text-red-700 border-red-200",
+        className: "bg-destructive/10 text-destructive border-destructive/30",
     },
 };
 
@@ -538,7 +538,7 @@ const OrdersPage = () => {
                                             <span className="text-(--admin-text-muted)">
                                                 Discount
                                             </span>
-                                            <span className="font-mono text-red-600">
+                                            <span className="font-mono text-destructive">
                                                 -{selectedOrder.discountAmount}
                                             </span>
                                         </div>
@@ -641,9 +641,9 @@ const OrdersPage = () => {
                                 {/* Void info */}
                                 {(selectedOrder.status === "void_requested" ||
                                     selectedOrder.status === "voided") && (
-                                    <div className="rounded-md border border-red-200 bg-red-50 p-3">
+                                    <div className="rounded-md border border-destructive/30 bg-destructive/10 p-3">
                                         {selectedOrder.voidReason && (
-                                            <p className="text-[12px] text-red-700">
+                                            <p className="text-[12px] text-destructive">
                                                 <span className="font-medium">
                                                     Reason:
                                                 </span>{" "}
@@ -651,7 +651,7 @@ const OrdersPage = () => {
                                             </p>
                                         )}
                                         {selectedOrder.voidRequestedBy && (
-                                            <p className="mt-0.5 text-[11px] text-red-600">
+                                            <p className="mt-0.5 text-[11px] text-destructive">
                                                 Requested by{" "}
                                                 {
                                                     selectedOrder
@@ -662,7 +662,7 @@ const OrdersPage = () => {
                                             </p>
                                         )}
                                         {selectedOrder.voidApprovedBy && (
-                                            <p className="mt-0.5 text-[11px] text-emerald-600">
+                                            <p className="mt-0.5 text-[11px] text-(--admin-success)">
                                                 Approved by{" "}
                                                 {
                                                     selectedOrder.voidApprovedBy
@@ -673,7 +673,7 @@ const OrdersPage = () => {
                                             </p>
                                         )}
                                         {selectedOrder.voidRejectedAt && (
-                                            <p className="mt-0.5 text-[11px] text-red-600">
+                                            <p className="mt-0.5 text-[11px] text-destructive">
                                                 Rejected on{" "}
                                                 {format(
                                                     new Date(
@@ -700,7 +700,7 @@ const OrdersPage = () => {
                                     <Button
                                         disabled={completeMutation.isPending}
                                         onClick={handleModalComplete}
-                                        className="bg-emerald-600 text-white hover:bg-emerald-700"
+                                        className="bg-(--admin-success) text-white hover:bg-(--admin-success)/80"
                                     >
                                         {completeMutation.isPending
                                             ? "Completing..."
@@ -722,7 +722,7 @@ const OrdersPage = () => {
                                         variant="outline"
                                         disabled={rejectVoidMutation.isPending}
                                         onClick={handleRejectVoid}
-                                        className="border-red-200 text-red-700 hover:bg-red-50"
+                                        className="border-destructive/30 text-destructive hover:bg-destructive/10"
                                     >
                                         {rejectVoidMutation.isPending
                                             ? "..."
@@ -731,7 +731,7 @@ const OrdersPage = () => {
                                     <Button
                                         disabled={approveVoidMutation.isPending}
                                         onClick={handleApproveVoid}
-                                        className="bg-emerald-600 text-white hover:bg-emerald-700"
+                                        className="bg-(--admin-success) text-white hover:bg-(--admin-success)/80"
                                     >
                                         {approveVoidMutation.isPending
                                             ? "..."

@@ -81,7 +81,7 @@ const InventoryPage = () => {
                     onClick={() => setLowStockOnly(!lowStockOnly)}
                     className={`h-7 text-xs ${
                         lowStockOnly
-                            ? "bg-red-100 text-red-700 hover:bg-red-200"
+                            ? "bg-destructive/10 text-destructive hover:bg-destructive/20"
                             : "border-(--admin-border) text-(--admin-text-secondary)"
                     }`}
                 >
@@ -275,7 +275,7 @@ const InventoryPage = () => {
                         <Button
                             onClick={handleDelete}
                             disabled={deleteMutation.isPending}
-                            className="bg-red-600 text-white hover:bg-red-700"
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
                             {deleteMutation.isPending
                                 ? "Deleting..."

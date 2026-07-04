@@ -431,11 +431,11 @@ const MenuItemCreatePage = () => {
                             Basic Info
                         </h2>
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
+                            <Label htmlFor="create-item-name" className="text-[11px] text-(--admin-text-secondary)">
                                 Name
                             </Label>
                             <Input
-                                value={name}
+                                id="create-item-name"
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="e.g. Iced Caramel Latte"
                                 maxLength={100}
@@ -444,11 +444,11 @@ const MenuItemCreatePage = () => {
                         </div>
                         <div className="mt-3 grid grid-cols-2 gap-3">
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-(--admin-text-secondary)">
+                                <Label htmlFor="create-item-price" className="text-[11px] text-(--admin-text-secondary)">
                                     Base Price
                                 </Label>
                                 <Input
-                                    type="number"
+                                    id="create-item-price"
                                     step="0.01"
                                     min="0"
                                     value={basePrice}

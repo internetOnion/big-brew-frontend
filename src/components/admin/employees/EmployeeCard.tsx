@@ -19,7 +19,7 @@ const roleBadge = (role: string) => {
         case "owner":
             return "border-(--admin-primary)/30 bg-(--admin-primary)/10 text-(--admin-primary)";
         case "manager":
-            return "border-amber-200 bg-amber-50 text-amber-700";
+            return "border-(--admin-warning)/30 bg-(--admin-warning)/10 text-(--admin-warning)";
         default:
             return "border-(--admin-border) bg-(--admin-hover) text-(--admin-text-secondary)";
     }
@@ -84,7 +84,7 @@ const EmployeeCard = ({
                             className={cn(
                                 "size-1.5 shrink-0 rounded-full",
                                 employee.isActive !== false
-                                    ? "bg-emerald-500"
+                                    ? "bg-(--admin-success)"
                                     : "bg-(--admin-text-muted)",
                             )}
                         />
@@ -148,7 +148,7 @@ const EmployeeCard = ({
                     className={cn(
                         "text-[10px] font-medium",
                         employee.isActive !== false
-                            ? "text-emerald-600"
+                            ? "text-(--admin-success)"
                             : "text-(--admin-text-muted)",
                     )}
                 >

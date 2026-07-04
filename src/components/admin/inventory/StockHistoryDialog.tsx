@@ -76,7 +76,7 @@ const StockHistoryDialog = ({
                                         </div>
                                         <div className="flex items-center gap-3">
                                             <span
-                                                className={`font-mono text-[12px] font-medium ${isPositive ? "text-emerald-600" : "text-red-500"}`}
+                                                className={`font-mono text-[12px] font-medium ${isPositive ? "text-(--admin-success)" : "text-destructive"}`}
                                             >
                                                 {isPositive ? "+" : ""}
                                                 {qty.toFixed(2)}

@@ -119,11 +119,11 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
 
                 <div className="flex flex-col gap-4">
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label htmlFor="dialog-full-name" className="text-[11px] text-(--admin-text-secondary)">
                             Full Name
                         </Label>
                         <Input
-                            value={name}
+                            id="dialog-full-name"
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Jane Smith"
                             className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
@@ -131,11 +131,11 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label htmlFor="dialog-email" className="text-[11px] text-(--admin-text-secondary)">
                             Email
                         </Label>
                         <Input
-                            type="email"
+                            id="dialog-email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="jane@bigbrew.com"
@@ -144,13 +144,13 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label htmlFor="dialog-password" className="text-[11px] text-(--admin-text-secondary)">
                             Password
                         </Label>
                         <div className="relative">
                             <Input
+                                id="dialog-password"
                                 type={showPassword ? "text" : "password"}
-                                value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Min 6 characters"
                                 className="h-8 border-(--admin-border) bg-(--admin-card) pr-8 text-xs"
@@ -170,13 +170,13 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label htmlFor="dialog-confirm-password" className="text-[11px] text-(--admin-text-secondary)">
                             Confirm Password
                         </Label>
                         <div className="relative">
                             <Input
+                                id="dialog-confirm-password"
                                 type={showConfirmPassword ? "text" : "password"}
-                                value={confirmPassword}
                                 onChange={(e) =>
                                     setConfirmPassword(e.target.value)
                                 }
@@ -198,7 +198,7 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                             </button>
                         </div>
                         {isPasswordMismatch && (
-                            <p className="text-[10px] font-medium text-red-600">
+                            <p className="text-[10px] font-medium text-destructive">
                                 Passwords don&apos;t match
                             </p>
                         )}
@@ -235,11 +235,11 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                         </div>
 
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
+                            <Label htmlFor="dialog-pin" className="text-[11px] text-(--admin-text-secondary)">
                                 PIN (6 digits)
                             </Label>
                             <Input
-                                type="text"
+                                id="dialog-pin"
                                 inputMode="numeric"
                                 pattern="\d*"
                                 maxLength={6}
@@ -251,7 +251,7 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                                 className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs tracking-widest"
                             />
                             {pinError && (
-                                <p className="text-[10px] font-medium text-red-600">
+                                <p className="text-[10px] font-medium text-destructive">
                                     {pinError}
                                 </p>
                             )}

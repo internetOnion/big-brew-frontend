@@ -60,7 +60,7 @@ const ReceiptPreview = ({ settings }: ReceiptPreviewProps) => {
             </div>
 
             {/* Items */}
-            <div className="space-y-1">
+            <div className="flex flex-col gap-1">
                 {sampleItems.map((item, i) => (
                     <div key={i}>
                         <div className="flex justify-between">
@@ -79,7 +79,7 @@ const ReceiptPreview = ({ settings }: ReceiptPreviewProps) => {
             <div className="my-2 border-t border-dashed border-gray-400" />
 
             {/* Totals */}
-            <div className="space-y-1">
+            <div className="flex flex-col gap-1">
                 <div className="flex justify-between">
                     <span>Subtotal</span>
                     <span>

@@ -484,11 +484,11 @@ const MenuItemEditPage = () => {
                                     Basic Info
                                 </h2>
                                 <div className="grid gap-1.5">
-                                    <Label className="text-[11px] text-(--admin-text-secondary)">
+                                    <Label htmlFor="edit-item-name" className="text-[11px] text-(--admin-text-secondary)">
                                         Name
                                     </Label>
                                     <Input
-                                        value={name}
+                                        id="edit-item-name"
                                         onChange={(e) =>
                                             setName(e.target.value)
                                         }
@@ -497,11 +497,11 @@ const MenuItemEditPage = () => {
                                 </div>
                                 <div className="mt-3 grid grid-cols-2 gap-3">
                                     <div className="grid gap-1.5">
-                                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                                        <Label htmlFor="edit-item-price" className="text-[11px] text-(--admin-text-secondary)">
                                             Base Price
                                         </Label>
                                         <Input
-                                            type="number"
+                                            id="edit-item-price"
                                             step="0.01"
                                             min="0"
                                             value={basePrice}

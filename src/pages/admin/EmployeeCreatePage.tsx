@@ -132,13 +132,13 @@ const EmployeeCreatePage = () => {
                     Employee Info
                 </h2>
 
-                <div className="space-y-4">
+                <div className="flex flex-col gap-4">
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label htmlFor="employee-full-name" className="text-[11px] text-(--admin-text-secondary)">
                             Full Name
                         </Label>
                         <Input
-                            value={name}
+                            id="employee-full-name"
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Jane Smith"
                             className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
@@ -175,11 +175,11 @@ const EmployeeCreatePage = () => {
                             </Select>
                         </div>
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
+                            <Label htmlFor="employee-pin" className="text-[11px] text-(--admin-text-secondary)">
                                 PIN (6 digits)
                             </Label>
                             <Input
-                                type="text"
+                                id="employee-pin"
                                 inputMode="numeric"
                                 maxLength={6}
                                 value={pin}
@@ -199,11 +199,11 @@ const EmployeeCreatePage = () => {
                     {needsAccount && (
                         <>
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-(--admin-text-secondary)">
+                                <Label htmlFor="employee-email" className="text-[11px] text-(--admin-text-secondary)">
                                     Email
                                 </Label>
                                 <Input
-                                    type="email"
+                                    id="employee-email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="jane@bigbrew.com"
@@ -212,11 +212,12 @@ const EmployeeCreatePage = () => {
                             </div>
 
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-(--admin-text-secondary)">
+                                <Label htmlFor="employee-password" className="text-[11px] text-(--admin-text-secondary)">
                                     Password
                                 </Label>
                                 <div className="relative">
                                     <Input
+                                        id="employee-password"
                                         type={
                                             showPassword ? "text" : "password"
                                         }
@@ -244,11 +245,12 @@ const EmployeeCreatePage = () => {
                             </div>
 
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-(--admin-text-secondary)">
+                                <Label htmlFor="employee-confirm-password" className="text-[11px] text-(--admin-text-secondary)">
                                     Confirm Password
                                 </Label>
                                 <div className="relative">
                                     <Input
+                                        id="employee-confirm-password"
                                         type={
                                             showConfirmPassword
                                                 ? "text"
@@ -278,7 +280,7 @@ const EmployeeCreatePage = () => {
                                     </button>
                                 </div>
                                 {isPasswordMismatch && (
-                                    <p className="text-[10px] font-medium text-red-600">
+                                        <p className="text-[10px] font-medium text-destructive">
                                         Passwords don&apos;t match
                                     </p>
                                 )}
