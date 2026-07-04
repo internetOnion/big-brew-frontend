@@ -17,9 +17,15 @@ interface MenuItemCardProps {
     item: MenuItemListResponse;
     onEdit: (item: MenuItemListResponse) => void;
     onDelete: (item: MenuItemListResponse) => void;
+    currencySymbol?: string;
 }
 
-const MenuItemCard = ({ item, onEdit, onDelete }: MenuItemCardProps) => {
+const MenuItemCard = ({
+    item,
+    onEdit,
+    onDelete,
+    currencySymbol = "$",
+}: MenuItemCardProps) => {
     const [imgError, setImgError] = useState(false);
     const price = parseFloat(item.basePrice);
 
@@ -41,7 +47,7 @@ const MenuItemCard = ({ item, onEdit, onDelete }: MenuItemCardProps) => {
             role="button"
             tabIndex={0}
             aria-label={`Edit ${item.name}`}
-            className="group relative cursor-pointer overflow-hidden rounded-lg border border-(--admin-border) bg-(--admin-card) transition-colors hover:border-(--admin-accent)"
+            className="group relative cursor-pointer overflow-hidden rounded-lg border border-(--admin-border) bg-(--admin-card) transition-colors hover:border-(--admin-accent) focus-visible:outline-2 focus-visible:outline-(--admin-primary) focus-visible:-outline-offset-2"
         >
             {/* Image */}
             <div className="relative aspect-[4/3] overflow-hidden bg-(--admin-hover)">
@@ -80,7 +86,8 @@ const MenuItemCard = ({ item, onEdit, onDelete }: MenuItemCardProps) => {
                         {item.name}
                     </p>
                     <p className="font-mono text-[12px] text-(--admin-text-secondary)">
-                        ${price.toFixed(2)}
+                        {currencySymbol}
+                        {price.toFixed(2)}
                     </p>
                 </div>
                 <div

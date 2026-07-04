@@ -100,8 +100,8 @@ const MenuItemImageUpload = ({
                 )}
 
                 {uploading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                        <div className="size-6 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    <div className="absolute inset-0 flex items-center justify-center bg-(--admin-text)/30">
+                        <div className="size-6 animate-spin rounded-full border-2 border-(--admin-card) border-t-transparent" />
                     </div>
                 )}
 
@@ -109,9 +109,9 @@ const MenuItemImageUpload = ({
                     onClick={() => fileInputRef.current?.click()}
                     disabled={uploading}
                     aria-label={imageUrl ? "Replace image" : "Upload image"}
-                    className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/0 opacity-0 transition-opacity hover:bg-black/40 hover:opacity-100"
+                    className="absolute inset-0 flex cursor-pointer items-center justify-center bg-(--admin-text)/0 opacity-0 transition-opacity hover:bg-(--admin-text)/40 hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-(--admin-primary) focus-visible:outline"
                 >
-                    <UploadSimpleIcon className="size-5 text-white" />
+                    <UploadSimpleIcon className="size-5 text-(--admin-card)" />
                 </button>
             </div>
 

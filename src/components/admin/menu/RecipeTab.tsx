@@ -71,6 +71,7 @@ const RecipeTab = ({
                                     variant="ghost"
                                     size="icon-xs"
                                     onClick={() => onRemove(r)}
+                                    aria-label={`Remove ${r.name}`}
                                     className="text-destructive hover:text-destructive/80"
                                 >
                                     <TrashIcon className="size-3.5" />
@@ -82,14 +83,17 @@ const RecipeTab = ({
             </div>
             <div className="mt-3 flex items-end gap-2">
                 <div className="grid flex-1 gap-1.5">
-                    <Label className="text-[11px] text-(--admin-text-secondary)">
+                    <Label
+                        htmlFor="recipe-ingredient"
+                        className="text-[11px] text-(--admin-text-secondary)"
+                    >
                         Ingredient
                     </Label>
                     <Select
                         value={selectedIngredientId}
                         onValueChange={(v) => onIngredientIdChange(v ?? "")}
                     >
-                        <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs w-40">
+                        <SelectTrigger id="recipe-ingredient" className="h-8 border-(--admin-border) bg-(--admin-card) text-xs w-40">
                             <SelectValue placeholder="Select...">
                                 {(val) =>
                                     ingredients?.find((i) => i.id === val)
@@ -107,10 +111,14 @@ const RecipeTab = ({
                     </Select>
                 </div>
                 <div className="grid w-24 gap-1.5">
-                    <Label className="text-[11px] text-(--admin-text-secondary)">
+                    <Label
+                        htmlFor="recipe-qty"
+                        className="text-[11px] text-(--admin-text-secondary)"
+                    >
                         Qty
                     </Label>
                     <Input
+                        id="recipe-qty"
                         type="number"
                         step="0.01"
                         min="0.01"
@@ -135,6 +143,7 @@ const RecipeTab = ({
                 <Button
                     variant="outline"
                     size="sm"
+                    aria-label="Add ingredient"
                     onClick={onAdd}
                     className="h-8 border-(--admin-border) text-(--admin-text-secondary)"
                 >

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
@@ -13,6 +13,7 @@ import { useIngredients } from "@/hooks/useInventory";
 import { useDeleteIngredient } from "@/hooks/useDeleteIngredient";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -36,16 +37,24 @@ const InventoryPage = () => {
     const [lowStockOnly, setLowStockOnly] = useState(false);
     const [deletingId, setDeletingId] = useState<string | null>(null);
 
-    const filtered = ingredients?.filter((ing) => {
-        if (
-            lowStockOnly &&
-            parseFloat(ing.stockQuantity) > parseFloat(ing.lowStockThreshold)
-        )
-            return false;
-        if (search && !ing.name.toLowerCase().includes(search.toLowerCase()))
-            return false;
-        return true;
-    });
+    const filtered = useMemo(
+        () =>
+            ingredients?.filter((ing) => {
+                if (
+                    lowStockOnly &&
+                    parseFloat(ing.stockQuantity) >
+                        parseFloat(ing.lowStockThreshold)
+                )
+                    return false;
+                if (
+                    search &&
+                    !ing.name.toLowerCase().includes(search.toLowerCase())
+                )
+                    return false;
+                return true;
+            }),
+        [ingredients, search, lowStockOnly],
+    );
 
     const handleDelete = () => {
         if (!deletingId) return;
@@ -66,7 +75,7 @@ const InventoryPage = () => {
                 <Button
                     size="sm"
                     onClick={() => navigate("/admin/inventory/new")}
-                    className="h-7 gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80 cursor-pointer"
+                    className="h-7 max-md:min-h-[44px] gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80 cursor-pointer"
                 >
                     <PlusIcon className="size-3" />
                     Add Ingredient
@@ -94,7 +103,8 @@ const InventoryPage = () => {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Search..."
-                        className="h-7 w-48 border-(--admin-border) bg-(--admin-card) pl-8 text-xs placeholder:text-xs"
+                        aria-label="Search ingredients"
+                        className="h-7 max-md:min-h-[44px] w-48 border-(--admin-border) bg-(--admin-card) pl-8 text-xs placeholder:text-xs"
                     />
                 </div>
             </div>
@@ -105,19 +115,19 @@ const InventoryPage = () => {
                     <table className="w-full">
                         <thead>
                             <tr className="border-b border-(--admin-border) bg-(--admin-hover)">
-                                <th className="px-4 py-2.5 text-left text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-left text-[10px] font-medium text-(--admin-text-muted)">
                                     Name
                                 </th>
-                                <th className="px-4 py-2.5 text-left text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-left text-[10px] font-medium text-(--admin-text-muted)">
                                     Unit
                                 </th>
-                                <th className="px-4 py-2.5 text-right text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-right text-[10px] font-medium text-(--admin-text-muted)">
                                     Stock
                                 </th>
-                                <th className="px-4 py-2.5 text-right text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-right text-[10px] font-medium text-(--admin-text-muted)">
                                     Threshold
                                 </th>
-                                <th className="px-4 py-2.5 text-center text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-center text-[10px] font-medium text-(--admin-text-muted)">
                                     Status
                                 </th>
                                 <th className="w-36 px-2 py-2.5" />
@@ -125,14 +135,26 @@ const InventoryPage = () => {
                         </thead>
                         <tbody className="divide-y divide-(--admin-border)">
                             {isLoading ? (
-                                <tr>
-                                    <td
-                                        colSpan={6}
-                                        className="px-4 py-8 text-center text-xs text-(--admin-text-muted)"
-                                    >
-                                        Loading...
-                                    </td>
-                                </tr>
+                                Array.from({ length: 5 }).map((_, i) => (
+                                    <tr key={i}>
+                                        <td className="px-4 py-3">
+                                            <Skeleton className="h-4 w-32 bg-(--admin-hover)" />
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <Skeleton className="h-4 w-8 bg-(--admin-hover)" />
+                                        </td>
+                                        <td className="px-4 py-3 text-right">
+                                            <Skeleton className="ml-auto h-4 w-16 bg-(--admin-hover)" />
+                                        </td>
+                                        <td className="px-4 py-3 text-right">
+                                            <Skeleton className="ml-auto h-4 w-12 bg-(--admin-hover)" />
+                                        </td>
+                                        <td className="px-4 py-3 text-center">
+                                            <Skeleton className="mx-auto h-5 w-16 rounded-full bg-(--admin-hover)" />
+                                        </td>
+                                        <td className="px-2 py-3" />
+                                    </tr>
+                                ))
                             ) : !filtered || filtered.length === 0 ? (
                                 <tr>
                                     <td
@@ -144,7 +166,7 @@ const InventoryPage = () => {
                                             <p className="text-xs text-(--admin-text-muted)">
                                                 No ingredients found
                                             </p>
-                                            <p className="text-[10px] text-(--admin-text-muted)/70">
+                                            <p className="text-[11px] text-(--admin-text-muted)/70">
                                                 Try adjusting your search or add
                                                 a new ingredient
                                             </p>
@@ -167,7 +189,16 @@ const InventoryPage = () => {
                                                     `/admin/inventory/${ing.id}`,
                                                 )
                                             }
-                                            className="admin-table-row cursor-pointer transition-colors hover:bg-(--admin-hover)"
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter" || e.key === " ") {
+                                                    e.preventDefault();
+                                                    navigate(`/admin/inventory/${ing.id}`);
+                                                }
+                                            }}
+                                            tabIndex={0}
+                                            role="button"
+                                            aria-label={`View ${ing.name}`}
+                                            className="admin-table-row cursor-pointer transition-colors hover:bg-(--admin-hover) focus-visible:outline-2 focus-visible:outline-(--admin-primary) focus-visible:-outline-offset-2"
                                         >
                                             <td className="px-4 py-2.5 text-[12px] font-medium text-(--admin-text)">
                                                 {ing.name}
@@ -200,7 +231,9 @@ const InventoryPage = () => {
                                                     }
                                                 >
                                                     <DropdownMenu>
-                                                        <DropdownMenuTrigger className="flex size-7 shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text) cursor-pointer">
+                                                        <DropdownMenuTrigger
+                                                            aria-label="Actions"
+                                                            className="flex size-7 max-md:min-h-[44px] max-md:min-w-[44px] shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text) cursor-pointer">
                                                             <DotsThreeVerticalIcon className="size-4" />
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent
@@ -249,7 +282,7 @@ const InventoryPage = () => {
                     !v && !deleteMutation.isPending && setDeletingId(null)
                 }
             >
-                <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card) shadow-xl">
+                <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card)">
                     <DialogHeader>
                         <DialogTitle className="text-[14px] font-medium text-(--admin-text)">
                             Delete Ingredient
@@ -275,7 +308,7 @@ const InventoryPage = () => {
                         <Button
                             onClick={handleDelete}
                             disabled={deleteMutation.isPending}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            variant="destructive"
                         >
                             {deleteMutation.isPending
                                 ? "Deleting..."

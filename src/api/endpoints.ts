@@ -53,6 +53,8 @@ export const ENDPOINTS = {
         BASE: "/expenses",
         BY_ID: (id: string) => `/expenses/${id}`,
         SUMMARY: "/expenses/summary",
+        CATEGORIES: "/expenses/categories",
+        CATEGORY_BY_ID: (id: string) => `/expenses/categories/${id}`,
     },
     STOCK_MOVEMENTS: {
         BASE: "/stock-movements",

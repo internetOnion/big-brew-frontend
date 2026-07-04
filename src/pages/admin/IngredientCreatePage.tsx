@@ -52,6 +52,7 @@ const IngredientCreatePage = () => {
                     variant="ghost"
                     size="icon-xs"
                     onClick={() => navigate("/admin/inventory")}
+                    aria-label="Back to inventory"
                     className="text-(--admin-text-muted) hover:text-(--admin-text)"
                 >
                     <ArrowLeftIcon className="size-4" />
@@ -62,7 +63,7 @@ const IngredientCreatePage = () => {
             </div>
 
             <div className="max-w-md rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
-                <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
+                <h2 className="mb-3 text-[11px] font-medium text-(--admin-text-secondary)">
                     Ingredient Info
                 </h2>
 
@@ -77,19 +78,22 @@ const IngredientCreatePage = () => {
                         <Input
                             id="ingredient-name"
                             onChange={(e) => setName(e.target.value)}
-                            className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
+                            className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs"
                         />
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="ingredient-unit"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Unit
                         </Label>
                         <Select
                             value={unit}
                             onValueChange={(v) => setUnit(v ?? "g")}
                         >
-                            <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
+                            <SelectTrigger id="ingredient-unit" className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs">
                                 <SelectValue>
                                     {(val) =>
                                         val === "g"
@@ -107,7 +111,7 @@ const IngredientCreatePage = () => {
                         </Select>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div className="grid gap-1.5">
                             <Label
                                 htmlFor="ingredient-stock"
@@ -123,7 +127,7 @@ const IngredientCreatePage = () => {
                                 onChange={(e) =>
                                     setStockQuantity(e.target.value)
                                 }
-                                className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
+                                className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                             />
                         </div>
                         <div className="grid gap-1.5">
@@ -141,7 +145,7 @@ const IngredientCreatePage = () => {
                                 onChange={(e) =>
                                     setLowStockThreshold(e.target.value)
                                 }
-                                className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
+                                className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                             />
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     MagnifyingGlassIcon,
@@ -9,9 +9,11 @@ import {
 import { toast } from "sonner";
 import { useMenuItems } from "@/hooks/useMenuItems";
 import { useCategories } from "@/hooks/useCategories";
+import { useSettings } from "@/hooks/useSettings";
 import { useDeleteMenuItem } from "@/hooks/useDeleteMenuItem";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
     Select,
     SelectContent,
@@ -32,6 +34,8 @@ const MenuPage = () => {
     const navigate = useNavigate();
     const { data: items, isLoading } = useMenuItems();
     const { data: categories } = useCategories();
+    const { data: settings } = useSettings();
+    const currencySymbol = settings?.currencySymbol ?? "$";
 
     const [search, setSearch] = useState("");
     const [categoryFilter, setCategoryFilter] = useState<string>("all");
@@ -43,17 +47,33 @@ const MenuPage = () => {
 
     const deleteMutation = useDeleteMenuItem();
 
-    const filteredItems = items?.filter((item) => {
-        if (search && !item.name.toLowerCase().includes(search.toLowerCase()))
-            return false;
-        if (categoryFilter !== "all" && item.category.id !== categoryFilter)
-            return false;
-        if (availabilityFilter === "available" && item.isAvailable === false)
-            return false;
-        if (availabilityFilter === "unavailable" && item.isAvailable !== false)
-            return false;
-        return true;
-    });
+    const filteredItems = useMemo(
+        () =>
+            items?.filter((item) => {
+                if (
+                    search &&
+                    !item.name.toLowerCase().includes(search.toLowerCase())
+                )
+                    return false;
+                if (
+                    categoryFilter !== "all" &&
+                    item.category.id !== categoryFilter
+                )
+                    return false;
+                if (
+                    availabilityFilter === "available" &&
+                    item.isAvailable === false
+                )
+                    return false;
+                if (
+                    availabilityFilter === "unavailable" &&
+                    item.isAvailable !== false
+                )
+                    return false;
+                return true;
+            }),
+        [items, search, categoryFilter, availabilityFilter],
+    );
 
     const hasActiveFilters =
         search || categoryFilter !== "all" || availabilityFilter !== "all";
@@ -71,7 +91,7 @@ const MenuPage = () => {
                         size="sm"
                         onClick={() => navigate("/admin/menu/categories")}
                         aria-label="Manage Categories"
-                        className="h-7 gap-1.5 border border-(--admin-border) bg-(--admin-card) text-[11px] text-(--admin-text-secondary) hover:text-(--admin-text)"
+                        className="h-7 max-md:min-h-[44px] gap-1.5 border border-(--admin-border) bg-(--admin-card) text-[11px] text-(--admin-text-secondary) hover:text-(--admin-text)"
                     >
                         <ListIcon className="size-3" />
                         <span className="hidden sm:inline">
@@ -81,7 +101,7 @@ const MenuPage = () => {
                     <Button
                         size="sm"
                         onClick={() => navigate("/admin/menu/new")}
-                        className="h-7 gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80 cursor-pointer"
+                        className="h-7 max-md:min-h-[44px] gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80 cursor-pointer"
                     >
                         <PlusIcon className="size-3" />
                         Add Item
@@ -153,9 +173,9 @@ const MenuPage = () => {
             {isLoading ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
                     {Array.from({ length: 12 }).map((_, i) => (
-                        <div
+                        <Skeleton
                             key={i}
-                            className="h-48 animate-pulse rounded-lg border border-(--admin-border) bg-(--admin-hover)"
+                            className="h-48 rounded-lg border border-(--admin-border) bg-(--admin-hover)"
                         />
                     ))}
                 </div>
@@ -169,7 +189,7 @@ const MenuPage = () => {
                         <p className="text-xs text-(--admin-text-muted)">
                             No menu items yet
                         </p>
-                        <p className="text-[10px] text-(--admin-text-muted)/70 mt-0.5">
+                        <p className="text-[11px] text-(--admin-text-muted)/70 mt-0.5">
                             Add your first menu item to get started
                         </p>
                     </div>
@@ -216,6 +236,7 @@ const MenuPage = () => {
                                 navigate(`/admin/menu/${item.id}`)
                             }
                             onDelete={setDeletingItem}
+                            currencySymbol={currencySymbol}
                         />
                     ))}
                 </div>
@@ -228,7 +249,7 @@ const MenuPage = () => {
                     !v && !deleteMutation.isPending && setDeletingItem(null)
                 }
             >
-                <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card) shadow-xl">
+                <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card)">
                     <DialogHeader>
                         <DialogTitle className="text-[14px] font-medium text-(--admin-text)">
                             Delete
@@ -265,7 +286,7 @@ const MenuPage = () => {
                                 });
                             }}
                             disabled={deleteMutation.isPending}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            variant="destructive"
                         >
                             {deleteMutation.isPending
                                 ? "Deleting..."

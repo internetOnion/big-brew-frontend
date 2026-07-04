@@ -409,11 +409,12 @@ const MenuItemCreatePage = () => {
                     variant="ghost"
                     size="icon-xs"
                     onClick={handleBack}
+                    aria-label="Back to menu"
                     className="text-(--admin-text-muted) hover:text-(--admin-text)"
                 >
                     <ArrowLeftIcon className="size-4" />
                 </Button>
-                <h1 className="text-sm font-semibold text-(--admin-primary)">
+                <h1 className="text-[13px] font-medium text-(--admin-primary)">
                     New Menu Item
                 </h1>
             </div>
@@ -443,10 +444,10 @@ const MenuItemCreatePage = () => {
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="e.g. Iced Caramel Latte"
                                 maxLength={100}
-                                className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
+                                className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs"
                             />
                         </div>
-                        <div className="mt-3 grid grid-cols-2 gap-3">
+                        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div className="grid gap-1.5">
                                 <Label
                                     htmlFor="create-item-price"
@@ -464,7 +465,7 @@ const MenuItemCreatePage = () => {
                                         setBasePrice(e.target.value)
                                     }
                                     placeholder="0.00"
-                                    className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
+                                    className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                                 />
                             </div>
                             <div className="grid gap-1.5">
@@ -484,7 +485,7 @@ const MenuItemCreatePage = () => {
                                     <SelectTrigger
                                         id="create-item-category"
                                         aria-required="true"
-                                        className="h-8 w-full border-(--admin-border) bg-(--admin-card) text-xs"
+                                        className="h-8 max-md:min-h-[44px] w-full border-(--admin-border) bg-(--admin-card) text-xs"
                                     >
                                         <SelectValue>
                                             {(val) =>
@@ -562,7 +563,7 @@ const MenuItemCreatePage = () => {
                 <Button
                     onClick={handleCreate}
                     disabled={creating}
-                    className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80 cursor-pointer"
+                    className="h-8 max-md:min-h-[44px] bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80 cursor-pointer"
                 >
                     {creating ? "Creating..." : "Create Item"}
                 </Button>
@@ -570,7 +571,7 @@ const MenuItemCreatePage = () => {
                     variant="ghost"
                     onClick={handleBack}
                     disabled={creating}
-                    className="h-8 text-xs text-(--admin-text-secondary)"
+                    className="h-8 max-md:min-h-[44px] text-xs text-(--admin-text-secondary)"
                 >
                     Cancel
                 </Button>

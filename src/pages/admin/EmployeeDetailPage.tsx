@@ -19,6 +19,7 @@ import {
     useResetEmployeePin,
 } from "@/hooks/useEmployees";
 import { useAdminOrders } from "@/hooks/useOrders";
+import { useSettings } from "@/hooks/useSettings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -84,6 +85,8 @@ const EmployeeDetailPage = () => {
     const reactivateMutation = useReactivateEmployee();
     const deleteMutation = useDeleteEmployee();
     const resetPinMutation = useResetEmployeePin();
+    const { data: settings } = useSettings();
+    const currencySymbol = settings?.currencySymbol ?? "$";
 
     const employee = employees?.find((e) => e.id === id);
 
@@ -205,6 +208,7 @@ const EmployeeDetailPage = () => {
                     variant="ghost"
                     size="icon-xs"
                     onClick={() => navigate("/admin/employees")}
+                    aria-label="Back to employees"
                     className="text-(--admin-text-muted) hover:text-(--admin-text)"
                 >
                     <ArrowLeftIcon className="size-4" />
@@ -230,7 +234,7 @@ const EmployeeDetailPage = () => {
                 <div className="flex flex-col gap-5">
                     {/* Basic Info */}
                     <div className="rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
-                        <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
+                        <h2 className="mb-3 text-[11px] font-medium text-(--admin-text-secondary)">
                             Edit Details
                         </h2>
                         <div className="flex flex-col gap-3">
@@ -248,7 +252,10 @@ const EmployeeDetailPage = () => {
                                 />
                             </div>
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-(--admin-text-secondary)">
+                                <Label
+                                    htmlFor="detail-role"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
                                     Role
                                 </Label>
                                 <Select
@@ -257,7 +264,7 @@ const EmployeeDetailPage = () => {
                                         setRole(v ?? "barista")
                                     }
                                 >
-                                    <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
+                                    <SelectTrigger id="detail-role" className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
                                         <SelectValue>
                                             {(val) =>
                                                 ROLES.find(
@@ -329,7 +336,7 @@ const EmployeeDetailPage = () => {
 
                     {/* Reset PIN */}
                     <div className="rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
-                        <h2 className="mb-3 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
+                        <h2 className="mb-3 flex items-center gap-1.5 text-[11px] font-medium text-(--admin-text-secondary)">
                             <KeyIcon className="size-3" />
                             Reset PIN
                         </h2>
@@ -374,7 +381,7 @@ const EmployeeDetailPage = () => {
                 {/* Right column: Order history */}
                 <div>
                     <div className="rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
-                        <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
+                        <h2 className="mb-3 text-[11px] font-medium text-(--admin-text-secondary)">
                             Order History
                         </h2>
 
@@ -437,7 +444,7 @@ const EmployeeDetailPage = () => {
                                             </div>
                                             <div className="flex shrink-0 items-center gap-2">
                                                 <span className="font-mono text-[11px] font-medium text-(--admin-text)">
-                                                    ${order.total}
+                                                    {currencySymbol}{order.total}
                                                 </span>
                                                 <Badge
                                                     variant="outline"
@@ -535,7 +542,7 @@ const EmployeeDetailPage = () => {
                         </Button>
                         <Button
                             onClick={handleDelete}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            variant="destructive"
                         >
                             Delete
                         </Button>

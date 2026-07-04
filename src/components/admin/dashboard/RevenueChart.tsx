@@ -64,9 +64,9 @@ const RevenueChart = ({
     return (
         <div className="admin-card p-4">
             <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-[11px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                <h2 className="text-[11px] font-medium text-(--admin-text-muted)">
                     Revenue Over Time
-                </h3>
+                </h2>
                 <div className="flex gap-0.5 rounded-md bg-(--admin-hover) p-0.5">
                     {groupByOptions.map((opt) => (
                         <Button
@@ -74,7 +74,7 @@ const RevenueChart = ({
                             variant="ghost"
                             size="xs"
                             onClick={() => onGroupByChange(opt.value)}
-                            className={`h-6 px-2 text-[11px] ${
+                            className={`h-6 max-md:min-h-[44px] px-2 text-[11px] ${
                                 groupBy === opt.value
                                     ? "bg-(--admin-card) font-medium text-(--admin-primary) shadow-sm"
                                     : "text-(--admin-text-muted) hover:text-(--admin-text-secondary)"
@@ -136,7 +136,7 @@ const RevenueChart = ({
                                 color: "var(--admin-text)",
                                 fontSize: "11px",
                                 fontFamily: "DM Mono, monospace",
-                                boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.05)",
+                                boxShadow: "none",
                             }}
                             itemStyle={{ color: "var(--admin-text)" }}
                             labelStyle={{

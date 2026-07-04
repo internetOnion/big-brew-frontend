@@ -2,95 +2,46 @@
 
 ## Stack
 
-- Vite 8 + React 19 + TypeScript 6 + Tailwind CSS v4
-- shadcn/ui (base-nova style, @base-ui/react primitives, Phosphor icons)
-- axios API layer, react-router-dom (BrowserRouter — declarative mode), sonner toasts
-- motion (animations), recharts (charts)
-- Fonts: Bricolage Grotesque (sans/heading), DM Mono (mono) — loaded via `@fontsource`
+Vite 8 + React 19 + TypeScript 6 + Tailwind CSS v4. shadcn/ui base-nova (components.json `style`), `@base-ui/react` primitives. Phosphor icons (`duotone` weight via `IconProvider`; `components.json` says `lucide` — ignore). TanStack Query (first-class — `QueryClientProvider` in main.tsx, query key factories in `lib/query-keys.ts`). `react-router-dom` BrowserRouter declarative mode. `sonner` toasts, `motion` (import from `motion/react`), `recharts`, `date-fns`.
+
+Fonts: `@fontsource-variable/bricolage-grotesque` + `@fontsource/dm-mono` (imported in main.tsx). `@fontsource-variable/geist` is a stale shadcn-init dep — never use.
 
 ## Commands
 
 ```
-npm run dev       # dev server
-npm run build     # tsc -b && vite build (only typecheck — no separate lint/typecheck scripts)
-npm run format    # prettier --write .
+npm run dev       # vite dev server
+npm run build     # tsc -b && vite build (typecheck + bundle)
+npm run preview   # vite preview (production build preview)
+npm run format    # prettier --write . (4-space, semicolons, double quotes)
 npx shadcn@latest add <component>
 ```
 
-No test runner, linter, or CI is configured. `tsc -b` in the build script is the only type checking.
-
-## Shadcn UI — Always Use Components
-
-- Every UI element must use shadcn components (Button, Card, Input, Dialog, etc.). Never raw Tailwind for interactive UI.
-- Components: `src/components/ui/`. Utility: `@/lib/utils` (`cn()` for conditional classes).
-- Icons from `@phosphor-icons/react`; default weight is `duotone` (set via `IconContext.Provider` in `src/components/providers/IconProvider.tsx`). Use `data-icon="inline-start"` / `data-icon="inline-end"` inside buttons.
-- No `space-y-*` — use `flex flex-col gap-*`.
-- No raw color classes (`bg-blue-500`) — use semantic tokens only (`bg-primary`, `text-muted-foreground`).
-- `size-*` for equal dimensions, `truncate` shorthand.
-
-## Coffee Theme (Caffeine)
-
-Warm brown/amber palette applied from https://tweakcn.com/r/themes/caffeine.json.
-
-- Light: cream background (`#f4efe8`), brown primary (`#4a2512`)
-- Dark: deep brown background (`#1a0f0a`), warm amber primary (`#c07830`)
-- Toggle dark mode by adding/removing the `.dark` class on `<html>`.
-- All design must follow this palette — do not introduce colors outside the theme variables.
+No test runner, linter, or CI. Prettier ignores `node_modules`, `dist`, `*.local`, `.env*`, images, fonts (see `.prettierignore`).
 
 ## Conventions
 
-- **Path alias**: `@/` → `src/` (configured in `vite.config.ts` and `tsconfig.app.json`)
-- **Prettier**: 4-space indent, semicolons ON, double quotes — non-standard; run `npm run format` before committing
-- **TS strictness**: `noUnusedLocals`, `noUnusedParameters`, `erasableSyntaxOnly`
-- **Inline type imports**: Use `import { type Foo }` syntax, not `import type { Foo }` (enforced by `verbatimModuleSyntax`)
-- **No `baseUrl`** in tsconfig — deprecated in TS 6; paths resolve relative to tsconfig location
-- **Arrow functions only**: Always use arrow functions (`const fn = () => {}`), never `function` declarations
-- **No inline styles**: Use Tailwind classes instead of `style={{}}` objects. Map hardcoded colors to theme tokens (`bg-background`, `text-muted-foreground`, etc.).
-- **API**: `src/api/api.ts` (axios), base URL from `VITE_API_BASE_URL` env var (see `.env.example`)
+- **Path alias**: `@/` → `src/`
+- **TypeScript**: `noUnusedLocals`, `noUnusedParameters`, `erasableSyntaxOnly`; `verbatimModuleSyntax` → `import { type Foo }` not `import type { Foo }`
+- **Arrow functions only**, no inline `style={{}}`
+- **No `space-y-*`** — use `flex flex-col gap-*`
+- **No raw color classes** — use semantic tokens (`bg-primary`, `text-muted-foreground`). Coffee palette (light cream/brown `#f4efe8`/`#4a2512`, dark deep brown/amber `#1a0f0a`/`#c07830`). Dark mode via `.dark` class on `<html>`.
+- **shadcn** for all interactive UI. `cn()` from `@/lib/utils` for conditional classes. `data-icon="inline-start"` / `data-icon="inline-end"` inside buttons.
+- **API**: `src/api/api.ts` (axios), base URL from `VITE_API_BASE_URL`. Endpoint constants in `src/api/endpoints.ts`. Pass `silent: true` to suppress toasts (used during token refresh).
+- **TanStack Query**: All data-fetching hooks in `src/hooks/` use `useQuery`/`useMutation`. Query keys from `src/lib/query-keys.ts`. Cart persists to `localStorage` (`pos-cart`, `pos-order-type` keys) — see `src/lib/cart-storage.ts`.
 
-## Architecture
+## Wiring
 
-- **Router**: `BrowserRouter` declarative mode — routes defined with JSX `<Routes>/<Route>` in `App.tsx`, not data routers (`createBrowserRouter`). No loaders, actions, or `useLoaderData`. Use `useNavigate`, `useParams`, `useSearchParams`. Initial entry is `/login`. Protected routes redirect to `/login`.
-- **Lazy loading**: POSPage, MenuView, and PaymentView are lazy-loaded via `React.lazy()` with a `Suspense` fallback to `LoadingScreen`.
-- **Auth**: Two auth flows — email/password login and PIN verification. Token refresh is automatic via axios interceptor with a queuing system.
-    - `AuthProvider` is wired into `main.tsx` — wraps the entire app tree (including `BrowserRouter`).
-    - Access token is managed as module-level state in `api.ts` (not React state).
-    - Pass `silent: true` in axios request config to suppress toast errors (used during silent token refresh).
-- **POS page**: Route-level page at `pages/POSPage.tsx` wraps `POSProvider` + `CategoryProvider` + `POSLayout`. The main views (`MenuView`, `PaymentView`) live in `components/pos/` as child routes under `/`.
-- **Contexts**: Two providers — `AuthContext` (auth state, login/logout/PIN verify) and `POSContext` (cart items, order type, customization, editing). `POSContext` must be used within `POSProvider`.
+**Entry order** (main.tsx): `StrictMode > QueryClientProvider > AuthProvider > IconProvider > BrowserRouter > App`. Toaster inside BrowserRouter.
 
-## CSS Utilities (in `src/index.css`)
+**Auth**: Email/password login + PIN verify. Module-level `accessToken` in api.ts (not React state). On mount, silent `POST /auth/refresh` with `{ silent: true }` to restore session. Interceptor queues concurrent 401 retries during refresh. `ProtectedRoute` → `/login` if unauthenticated. `AdminRoute` redirects `barista` role to `/`.
 
-- `.scrollbar-hide` — hides scrollbars
-- `.pos-scroll` — custom 4px scrollbar for POS columns
-- `.keypad-btn` — hover/active effects for keypad
-- `.urgent-pulse` — pulse animation for urgent orders
-- `.charge-ready` — pulse glow for confirm payment button
-- `.grain-overlay` — texture overlay pseudo-element
+**POS** (`/` route): `POSPage` wraps `CategoryProvider > POSProvider > POSLayout`. POSLayout renders `OrderQueue` + child route (`MenuView` at `/`, `PaymentView` at `/payment`). `CustomizeModal` shown when `customizeItem` is set. Consume via `usePOS()` from `@/hooks/usePos`.
+
+**Admin** (`/admin`): `AdminLayout` with sidebar nav + mobile sheet. 10+ lazy-loaded pages (Dashboard, Menu, Inventory, Employees, Orders, Expenses, Settings). All admin pages + POSPage/MenuView/PaymentView use `React.lazy()` with `Suspense` → `LoadingScreen`.
 
 ## Shadcn CLI Gotchas
 
-- After `npx shadcn@latest add`, files may land literally under `@/components/` — move them to `src/components/ui/`.
-- `@fontsource-variable/geist` is a leftover dep from shadcn init; the app uses Bricolage Grotesque + DM Mono instead. Remove geist imports if they reappear.
-- VS Code schema warning on `components.json` is harmless.
-- When adding components from community registries, check for hardcoded import paths that don't match `@/`.
-
-## Layout
-
-```
-src/
-  api/           # axios instance + interceptors, endpoint constants
-  assets/        # static assets
-  components/
-    common/      # shared custom components (LoadingScreen, ProtectedRoute)
-    pos/         # POS views + sub-components (MenuView, PaymentView, Cart, MenuGrid, etc.)
-    ui/          # shadcn components (auto-managed by CLI)
-  contexts/      # React contexts (AuthContext, POSContext)
-  hooks/         # custom React hooks (useAuth)
-  layouts/       # layout wrapper components (POSLayout)
-  lib/           # cn() utility, constants (routes, app name)
-  pages/         # route-level page components (LoginPage, POSPage)
-  types/         # TS type definitions
-  App.tsx        # root component with routes
-  main.tsx       # entry point (BrowserRouter, AuthProvider, font imports)
-```
+- After `npx shadcn@latest add`, files land under `@/components/` — move to `src/components/ui/`
+- Community registry imports may hardcode wrong paths — fix manually
+- `@fontsource-variable/geist` imports reappear after re-init — delete
+- VS Code schema warning on `components.json` is harmless

@@ -1,20 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import {
     ArrowLeftIcon,
     PlusIcon,
     PencilSimpleIcon,
     TrashIcon,
-    ListIcon,
+    TagIcon,
 } from "@phosphor-icons/react";
 import {
-    useCategories,
-    useCreateCategory,
-    useUpdateCategory,
-    useDeleteCategory,
-} from "@/hooks/useCategories";
-import { useMenuItems } from "@/hooks/useMenuItems";
+    useExpenseCategories,
+    useCreateExpenseCategory,
+    useUpdateExpenseCategory,
+    useDeleteExpenseCategory,
+} from "@/hooks/useExpenseCategories";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -23,16 +21,16 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
     DialogFooter,
 } from "@/components/ui/dialog";
 
-const CategoriesPage = () => {
+const ExpenseCategoriesPage = () => {
     const navigate = useNavigate();
-    const { data: categories, isLoading } = useCategories();
-    const { data: items } = useMenuItems();
-    const createMutation = useCreateCategory();
-    const updateMutation = useUpdateCategory();
-    const deleteMutation = useDeleteCategory();
+    const { data: categories, isLoading } = useExpenseCategories();
+    const createMutation = useCreateExpenseCategory();
+    const updateMutation = useUpdateExpenseCategory();
+    const deleteMutation = useDeleteExpenseCategory();
 
     const [isAdding, setIsAdding] = useState(false);
     const [newName, setNewName] = useState("");
@@ -49,7 +47,6 @@ const CategoriesPage = () => {
                     setNewName("");
                     setIsAdding(false);
                 },
-                onError: () => toast.error("Failed to create category"),
             },
         );
     };
@@ -70,7 +67,6 @@ const CategoriesPage = () => {
                     setEditingId(null);
                     setEditName("");
                 },
-                onError: () => toast.error("Failed to update category"),
             },
         );
     };
@@ -80,26 +76,20 @@ const CategoriesPage = () => {
         setEditName("");
     };
 
-    const getItemCount = (categoryId: string): number => {
-        return (items ?? []).filter((item) => item.category.id === categoryId)
-            .length;
-    };
-
     return (
         <div className="flex flex-col gap-5 p-5">
-            {/* Header */}
             <div className="flex items-center gap-3">
                 <Button
                     variant="ghost"
                     size="icon-xs"
-                    onClick={() => navigate("/admin/menu")}
-                    aria-label="Back to menu"
+                    onClick={() => navigate("/admin/expenses")}
+                    aria-label="Back to expenses"
                     className="text-(--admin-text-muted) hover:text-(--admin-text)"
                 >
                     <ArrowLeftIcon className="size-4" />
                 </Button>
                 <h1 className="text-[13px] font-medium text-(--admin-primary)">
-                    Categories
+                    Expense Categories
                 </h1>
                 <div className="ml-auto">
                     <Button
@@ -117,36 +107,32 @@ const CategoriesPage = () => {
                 </div>
             </div>
 
-            {/* List */}
             <div className="rounded-lg border border-(--admin-border) bg-(--admin-card)">
                 {isLoading ? (
-                    <div className="divide-y divide-(--admin-border)">
-                        {Array.from({ length: 3 }).map((_, i) => (
-                            <div key={i} className="flex items-center gap-2 px-4 py-2.5">
-                                <Skeleton className="h-4 flex-1 bg-(--admin-hover)" />
-                                <Skeleton className="h-4 w-12 bg-(--admin-hover)" />
-                            </div>
-                        ))}
+                    <div className="flex flex-col gap-2 p-4">
+                        <Skeleton className="h-7 w-full bg-(--admin-hover)" />
+                        <Skeleton className="h-7 w-full bg-(--admin-hover)" />
+                        <Skeleton className="h-7 w-full bg-(--admin-hover)" />
                     </div>
                 ) : !categories || categories.length === 0 ? (
                     <div className="flex flex-col items-center justify-center gap-2 py-8">
-                        <ListIcon
+                        <TagIcon
                             className="size-5 text-(--admin-text-muted)"
                             aria-hidden="true"
                         />
                         <p className="text-xs text-(--admin-text-muted)">
-                            No categories yet
+                            No expense categories yet
                         </p>
-                        <p className="text-[10px] text-(--admin-text-muted)/70">
-                            Add a category to organize your menu items
+                        <p className="text-[11px] text-(--admin-text-muted)/70">
+                            Add categories to organize your expenses
                         </p>
                     </div>
                 ) : (
                     <div className="divide-y divide-(--admin-border)">
-                        {/* Add row */}
                         {isAdding && (
                             <div className="flex items-center gap-2 px-4 py-2.5">
                                 <Input
+                                    aria-label="New category name"
                                     value={newName}
                                     onChange={(e) => setNewName(e.target.value)}
                                     onKeyDown={(e) => {
@@ -167,7 +153,7 @@ const CategoriesPage = () => {
                                         !newName.trim() ||
                                         createMutation.isPending
                                     }
-                                    className="h-7 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80"
+                                    className="h-7 max-md:min-h-[44px] bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80"
                                 >
                                     Save
                                 </Button>
@@ -178,7 +164,7 @@ const CategoriesPage = () => {
                                         setIsAdding(false);
                                         setNewName("");
                                     }}
-                                    className="h-7 text-[11px] text-(--admin-text-secondary)"
+                                    className="h-7 max-md:min-h-[44px] text-[11px] text-(--admin-text-secondary)"
                                 >
                                     Cancel
                                 </Button>
@@ -186,8 +172,6 @@ const CategoriesPage = () => {
                         )}
 
                         {categories.map((cat) => {
-                            const itemCount = getItemCount(cat.id);
-                            const isEmpty = itemCount === 0;
                             const isEditing = editingId === cat.id;
 
                             return (
@@ -198,6 +182,7 @@ const CategoriesPage = () => {
                                     {isEditing ? (
                                         <>
                                             <Input
+                                                aria-label="Edit category name"
                                                 value={editName}
                                                 onChange={(e) =>
                                                     setEditName(e.target.value)
@@ -218,7 +203,7 @@ const CategoriesPage = () => {
                                                     !editName.trim() ||
                                                     updateMutation.isPending
                                                 }
-                                                className="h-7 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80"
+                                                className="h-7 max-md:min-h-[44px] bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80"
                                             >
                                                 Save
                                             </Button>
@@ -226,7 +211,7 @@ const CategoriesPage = () => {
                                                 variant="ghost"
                                                 size="sm"
                                                 onClick={handleCancelEdit}
-                                                className="h-7 text-[11px] text-(--admin-text-secondary)"
+                                                className="h-7 max-md:min-h-[44px] text-[11px] text-(--admin-text-secondary)"
                                             >
                                                 Cancel
                                             </Button>
@@ -236,12 +221,6 @@ const CategoriesPage = () => {
                                             <span className="flex-1 text-[12px] font-medium text-(--admin-text)">
                                                 {cat.name}
                                             </span>
-                                            {!isEmpty && (
-                                                <span className="text-[10px] text-(--admin-text-muted)">
-                                                    {itemCount} item
-                                                    {itemCount !== 1 ? "s" : ""}
-                                                </span>
-                                            )}
                                             <Button
                                                 variant="ghost"
                                                 size="icon-xs"
@@ -260,15 +239,7 @@ const CategoriesPage = () => {
                                                 onClick={() =>
                                                     setDeletingId(cat.id)
                                                 }
-                                                disabled={
-                                                    !isEmpty ||
-                                                    deleteMutation.isPending
-                                                }
-                                                className={
-                                                    isEmpty
-                                                        ? "text-destructive hover:text-destructive/80"
-                                                        : "text-(--admin-text-muted)/30"
-                                                }
+                                                className="text-destructive hover:text-destructive/80"
                                             >
                                                 <TrashIcon className="size-3.5" />
                                             </Button>
@@ -291,32 +262,28 @@ const CategoriesPage = () => {
                             Delete Category
                         </DialogTitle>
                     </DialogHeader>
-                    <p className="text-xs text-(--admin-text-secondary)">
+                    <DialogDescription className="text-xs text-(--admin-text-secondary)">
                         Are you sure you want to delete{" "}
                         <span className="font-medium text-(--admin-text)">
                             {categories?.find((c) => c.id === deletingId)
                                 ?.name ?? ""}
                         </span>
-                        ?
-                    </p>
+                        ? This action cannot be undone.
+                    </DialogDescription>
                     <DialogFooter>
                         <Button
                             variant="ghost"
                             onClick={() => setDeletingId(null)}
                             className="text-(--admin-text-secondary)"
+                            disabled={deleteMutation.isPending}
                         >
                             Cancel
                         </Button>
                         <Button
                             onClick={() => {
                                 if (deletingId) {
-                                    deleteMutation.mutate(deletingId, {
-                                        onSuccess: () => setDeletingId(null),
-                                        onError: () => {
-                                            toast.error("Failed to delete category");
-                                            setDeletingId(null);
-                                        },
-                                    });
+                                    deleteMutation.mutate(deletingId);
+                                    setDeletingId(null);
                                 }
                             }}
                             disabled={deleteMutation.isPending}
@@ -333,4 +300,4 @@ const CategoriesPage = () => {
     );
 };
 
-export default CategoriesPage;
+export default ExpenseCategoriesPage;
