@@ -89,7 +89,7 @@ const ExpenseFormDialog = ({
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="Coffee beans"
                             autoFocus
-                            className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
+                            className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs"
                         />
                     </div>
                     <div className="flex flex-col gap-1.5">
@@ -105,7 +105,7 @@ const ExpenseFormDialog = ({
                             placeholder="0.00"
                             min="0"
                             step="0.01"
-                            className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
+                            className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs"
                         />
                     </div>
                     <div className="flex flex-col gap-1.5">
@@ -116,7 +116,7 @@ const ExpenseFormDialog = ({
                             value={category || undefined}
                             onValueChange={(v) => setCategory(v ?? "")}
                         >
-                            <SelectTrigger id="edit-expense-category" className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
+                            <SelectTrigger id="edit-expense-category" className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs">
                                 <SelectValue placeholder="Select category" />
                             </SelectTrigger>
                             <SelectContent>

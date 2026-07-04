@@ -9,6 +9,7 @@ import {
     EyeIcon,
 } from "@phosphor-icons/react";
 import { useAdminOrders } from "@/hooks/useOrders";
+import { useSettings } from "@/hooks/useSettings";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { AdminEmployee } from "@/types/admin";
@@ -40,6 +41,8 @@ const EmployeeDetailPanel = ({
 }: EmployeeDetailPanelProps) => {
     const [limit] = useState(10);
     const isActive = employee.isActive !== false;
+    const { data: settings } = useSettings();
+    const currencySymbol = settings?.currencySymbol ?? "$";
     const initials = employee.name
         .split(" ")
         .map((n) => n[0])
@@ -121,6 +124,7 @@ const EmployeeDetailPanel = ({
                         variant="ghost"
                         size="icon"
                         onClick={onClose}
+                        aria-label="Close panel"
                         className="size-7 text-(--admin-text-secondary) hover:text-(--admin-text)"
                     >
                         <XIcon className="size-4" />
@@ -157,7 +161,7 @@ const EmployeeDetailPanel = ({
                 <div className="flex-1 overflow-auto min-h-0">
                     <div className="flex items-center gap-1.5 mb-3">
                         <ClipboardTextIcon className="size-3 text-(--admin-text-muted)" />
-                        <span className="text-[10px] font-medium text-(--admin-text-muted) uppercase tracking-wide">
+                        <span className="text-[10px] font-medium text-(--admin-text-muted)">
                             Recent Orders
                         </span>
                     </div>
@@ -201,7 +205,7 @@ const EmployeeDetailPanel = ({
                                     </div>
                                     <div className="flex shrink-0 items-center gap-2">
                                         <span className="text-[11px] font-mono font-medium text-(--admin-text)">
-                                            ${order.total}
+                                            {currencySymbol}{order.total}
                                         </span>
                                         <Badge
                                             variant="outline"

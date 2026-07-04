@@ -6,11 +6,7 @@ import {
     CaretLeftIcon,
     CaretRightIcon,
 } from "@phosphor-icons/react";
-import {
-    useAdminOrders,
-    useApproveVoid,
-    useRejectVoid,
-} from "@/hooks/useOrders";
+import { useAdminOrders } from "@/hooks/useOrders";
 import { useCompleteOrder } from "@/hooks/useOrderMutations";
 import { useEmployees } from "@/hooks/useEmployees";
 import { Button } from "@/components/ui/button";
@@ -22,13 +18,6 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogFooter,
-} from "@/components/ui/dialog";
 import { toast } from "sonner";
 import DateRangePicker, {
     type DateRange,
@@ -37,9 +26,9 @@ import type { Order, OrderStatus } from "@/types/order";
 import {
     ORDER_STATUSES,
     statusBadgeConfig,
-    paymentStatusConfig,
     diningLabel,
 } from "@/components/admin/orders/order-constants";
+import OrderDetailModal from "@/components/admin/orders/OrderDetailModal";
 
 const PAGE_SIZE = 20;
 
@@ -74,8 +63,6 @@ const OrdersPage = () => {
     const { data: employees } = useEmployees();
 
     const completeMutation = useCompleteOrder();
-    const approveVoidMutation = useApproveVoid();
-    const rejectVoidMutation = useRejectVoid();
 
     const hasNextPage = page + 1 < totalPages;
 
@@ -103,41 +90,6 @@ const OrdersPage = () => {
         });
     };
 
-    const handleApproveVoid = () => {
-        if (!selectedOrder) return;
-        approveVoidMutation.mutate(selectedOrder.id, {
-            onSuccess: () => {
-                toast.success("Void approved");
-                setSelectedOrder(null);
-            },
-            onError: () => toast.error("Failed to approve void"),
-        });
-    };
-
-    const handleRejectVoid = () => {
-        if (!selectedOrder) return;
-        rejectVoidMutation.mutate(selectedOrder.id, {
-            onSuccess: () => {
-                toast.success("Void rejected");
-                setSelectedOrder(null);
-            },
-            onError: () => toast.error("Failed to reject void"),
-        });
-    };
-
-    const handleModalComplete = () => {
-        if (!selectedOrder) return;
-        const id = selectedOrder.id;
-        setSelectedOrder(null);
-        completeMutation.mutate(id, {
-            onSuccess: () => {
-                toast.success("Order completed");
-                queryClient.invalidateQueries({ queryKey: ["orders"] });
-            },
-            onError: () => toast.error("Failed to complete order"),
-        });
-    };
-
     return (
         <div className="flex flex-col gap-4 p-5">
             <h1 className="text-[13px] font-medium text-(--admin-primary)">
@@ -152,7 +104,8 @@ const OrdersPage = () => {
                 >
                     <SelectTrigger
                         size="sm"
-                        className="h-7 w-36 border-(--admin-border) bg-(--admin-card) text-xs"
+                        aria-label="Filter by status"
+                        className="h-7 max-md:min-h-[44px] w-36 border-(--admin-border) bg-(--admin-card) text-xs"
                     >
                         <SelectValue placeholder="All Statuses">
                             {(val) =>
@@ -179,7 +132,8 @@ const OrdersPage = () => {
                 >
                     <SelectTrigger
                         size="sm"
-                        className="h-7 w-44 border-(--admin-border) bg-(--admin-card) text-xs"
+                        aria-label="Filter by employee"
+                        className="h-7 max-md:min-h-[44px] w-44 border-(--admin-border) bg-(--admin-card) text-xs"
                     >
                         <SelectValue placeholder="All Employees">
                             {(val) =>
@@ -212,25 +166,25 @@ const OrdersPage = () => {
                     <table className="w-full">
                         <thead>
                             <tr className="border-b border-(--admin-border) bg-(--admin-hover)">
-                                <th className="px-4 py-2.5 text-left text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-left text-[10px] font-medium text-(--admin-text-muted)">
                                     Order #
                                 </th>
-                                <th className="px-4 py-2.5 text-center text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-center text-[10px] font-medium text-(--admin-text-muted)">
                                     Status
                                 </th>
-                                <th className="px-4 py-2.5 text-left text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-left text-[10px] font-medium text-(--admin-text-muted)">
                                     Type
                                 </th>
-                                <th className="px-4 py-2.5 text-center text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-center text-[10px] font-medium text-(--admin-text-muted)">
                                     Items
                                 </th>
-                                <th className="px-4 py-2.5 text-right text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-right text-[10px] font-medium text-(--admin-text-muted)">
                                     Total
                                 </th>
-                                <th className="px-4 py-2.5 text-left text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-left text-[10px] font-medium text-(--admin-text-muted)">
                                     Created By
                                 </th>
-                                <th className="px-4 py-2.5 text-left text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-left text-[10px] font-medium text-(--admin-text-muted)">
                                     Time
                                 </th>
                                 <th className="w-20 px-2 py-2.5" />
@@ -277,7 +231,7 @@ const OrdersPage = () => {
                                                     ? "No orders match your filters"
                                                     : "No orders yet"}
                                             </p>
-                                            <p className="text-[10px] text-(--admin-text-muted)/70">
+                                            <p className="text-[11px] text-(--admin-text-muted)/70">
                                                 {statusFilter || employeeFilter
                                                     ? "Try adjusting your filters"
                                                     : "Orders will appear here"}
@@ -295,7 +249,16 @@ const OrdersPage = () => {
                                             onClick={() =>
                                                 setSelectedOrder(order)
                                             }
-                                            className="admin-table-row cursor-pointer transition-colors hover:bg-(--admin-hover)"
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter" || e.key === " ") {
+                                                    e.preventDefault();
+                                                    setSelectedOrder(order);
+                                                }
+                                            }}
+                                            tabIndex={0}
+                                            role="button"
+                                            aria-label={`View order #${order.receiptNumber}`}
+                                            className="admin-table-row cursor-pointer transition-colors hover:bg-(--admin-hover) focus-visible:outline-2 focus-visible:outline-(--admin-primary) focus-visible:-outline-offset-2"
                                         >
                                             <td className="px-4 py-2.5 font-mono text-[12px] font-medium text-(--admin-text)">
                                                 #{order.receiptNumber}
@@ -389,322 +352,11 @@ const OrdersPage = () => {
                 </div>
             </div>
 
-            {/* Detail Modal */}
-            <Dialog
+            <OrderDetailModal
+                order={selectedOrder}
                 open={selectedOrder !== null}
-                onOpenChange={(v) => !v && setSelectedOrder(null)}
-            >
-                <DialogContent
-                    className="max-w-lg border-(--admin-border) bg-(--admin-card) shadow-xl"
-                    showCloseButton={false}
-                >
-                    {selectedOrder && (
-                        <>
-                            <DialogHeader>
-                                <DialogTitle className="text-[14px] font-medium text-(--admin-text)">
-                                    Order #{selectedOrder.receiptNumber}
-                                </DialogTitle>
-                            </DialogHeader>
-
-                            <div className="flex max-h-[60vh] flex-col gap-3 overflow-y-auto">
-                                {/* Status badges */}
-                                <div className="flex items-center gap-2">
-                                    <span
-                                        className={`inline-block rounded-full border px-2 py-0.5 text-[10px] font-medium ${statusBadgeConfig[selectedOrder.status].className}`}
-                                    >
-                                        {
-                                            statusBadgeConfig[
-                                                selectedOrder.status
-                                            ].label
-                                        }
-                                    </span>
-                                    {selectedOrder.paymentStatus in
-                                        paymentStatusConfig && (
-                                        <span
-                                            className={`inline-block rounded-full border px-2 py-0.5 text-[10px] font-medium ${paymentStatusConfig[selectedOrder.paymentStatus].className}`}
-                                        >
-                                            {
-                                                paymentStatusConfig[
-                                                    selectedOrder.paymentStatus
-                                                ].label
-                                            }
-                                        </span>
-                                    )}
-                                </div>
-
-                                {/* Info grid */}
-                                <div className="grid grid-cols-2 gap-2 text-[12px]">
-                                    <div>
-                                        <span className="text-(--admin-text-muted)">
-                                            Type
-                                        </span>
-                                        <p className="text-(--admin-text-secondary)">
-                                            {diningLabel[
-                                                selectedOrder.diningOption
-                                            ] ?? selectedOrder.diningOption}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <span className="text-(--admin-text-muted)">
-                                            Created by
-                                        </span>
-                                        <p className="text-(--admin-text-secondary)">
-                                            {selectedOrder.createdBy.name}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <span className="text-(--admin-text-muted)">
-                                            Confirmed by
-                                        </span>
-                                        <p className="text-(--admin-text-secondary)">
-                                            {selectedOrder.confirmedBy?.name ??
-                                                "—"}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <span className="text-(--admin-text-muted)">
-                                            Created at
-                                        </span>
-                                        <p className="text-(--admin-text-secondary)">
-                                            {format(
-                                                new Date(
-                                                    selectedOrder.createdAt,
-                                                ),
-                                                "MMM d, yyyy h:mm a",
-                                            )}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* Financials */}
-                                <div className="rounded-md border border-(--admin-border) bg-(--admin-hover) p-3">
-                                    <div className="flex justify-between text-[12px]">
-                                        <span className="text-(--admin-text-muted)">
-                                            Subtotal
-                                        </span>
-                                        <span className="font-mono text-(--admin-text)">
-                                            {selectedOrder.subtotal}
-                                        </span>
-                                    </div>
-                                    {parseFloat(selectedOrder.discountAmount) >
-                                        0 && (
-                                        <div className="mt-1 flex justify-between text-[12px]">
-                                            <span className="text-(--admin-text-muted)">
-                                                Discount
-                                            </span>
-                                            <span className="font-mono text-destructive">
-                                                -{selectedOrder.discountAmount}
-                                            </span>
-                                        </div>
-                                    )}
-                                    <div className="mt-1.5 flex justify-between border-t border-(--admin-border) pt-1.5 text-[13px] font-semibold">
-                                        <span className="text-(--admin-text)">
-                                            Total
-                                        </span>
-                                        <span className="font-mono text-(--admin-primary)">
-                                            {selectedOrder.total}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                {/* Items */}
-                                <div>
-                                    <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
-                                        Items ({selectedOrder.items.length})
-                                    </p>
-                                    <div className="divide-y divide-(--admin-border) rounded-md border border-(--admin-border)">
-                                        {selectedOrder.items.map((item) => (
-                                            <div
-                                                key={item.id}
-                                                className="flex items-start justify-between px-3 py-2"
-                                            >
-                                                <div className="min-w-0">
-                                                    <p className="truncate text-[12px] font-medium text-(--admin-text)">
-                                                        {item.name}
-                                                    </p>
-                                                    {item.modifiers.length >
-                                                        0 && (
-                                                        <p className="text-[10px] text-(--admin-text-muted)">
-                                                            {item.modifiers
-                                                                .map(
-                                                                    (m) =>
-                                                                        m.name,
-                                                                )
-                                                                .join(", ")}
-                                                        </p>
-                                                    )}
-                                                </div>
-                                                <div className="ml-3 shrink-0 text-right">
-                                                    <p className="text-[12px] text-(--admin-text-secondary)">
-                                                        {item.quantity} ×{" "}
-                                                        {item.unitPrice}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Payments */}
-                                {selectedOrder.payments.length > 0 && (
-                                    <div>
-                                        <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
-                                            Payments
-                                        </p>
-                                        <div className="divide-y divide-(--admin-border) rounded-md border border-(--admin-border)">
-                                            {selectedOrder.payments.map((p) => (
-                                                <div
-                                                    key={p.id}
-                                                    className="flex items-center justify-between px-3 py-2"
-                                                >
-                                                    <div>
-                                                        <p className="text-[12px] font-medium capitalize text-(--admin-text)">
-                                                            {p.method}
-                                                        </p>
-                                                        <p className="text-[10px] text-(--admin-text-muted)">
-                                                            {format(
-                                                                new Date(
-                                                                    p.createdAt,
-                                                                ),
-                                                                "h:mm a",
-                                                            )}
-                                                        </p>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <p className="text-[12px] text-(--admin-text-secondary)">
-                                                            {p.amount}
-                                                        </p>
-                                                        {p.changeAmount &&
-                                                            parseFloat(
-                                                                p.changeAmount,
-                                                            ) > 0 && (
-                                                                <p className="text-[10px] text-(--admin-text-muted)">
-                                                                    Change:{" "}
-                                                                    {
-                                                                        p.changeAmount
-                                                                    }
-                                                                </p>
-                                                            )}
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Void info */}
-                                {(selectedOrder.status === "void_requested" ||
-                                    selectedOrder.status === "voided") && (
-                                    <div className="rounded-md border border-destructive/30 bg-destructive/10 p-3">
-                                        {selectedOrder.voidReason && (
-                                            <p className="text-[12px] text-destructive">
-                                                <span className="font-medium">
-                                                    Reason:
-                                                </span>{" "}
-                                                {selectedOrder.voidReason}
-                                            </p>
-                                        )}
-                                        {selectedOrder.voidRequestedBy && (
-                                            <p className="mt-0.5 text-[11px] text-destructive">
-                                                Requested by{" "}
-                                                {
-                                                    selectedOrder
-                                                        .voidRequestedBy.name
-                                                }
-                                                {selectedOrder.voidRequestedAt &&
-                                                    ` on ${format(new Date(selectedOrder.voidRequestedAt), "MMM d, h:mm a")}`}
-                                            </p>
-                                        )}
-                                        {selectedOrder.voidApprovedBy && (
-                                            <p className="mt-0.5 text-[11px] text-(--admin-success)">
-                                                Approved by{" "}
-                                                {
-                                                    selectedOrder.voidApprovedBy
-                                                        .name
-                                                }
-                                                {selectedOrder.voidApprovedAt &&
-                                                    ` on ${format(new Date(selectedOrder.voidApprovedAt), "MMM d, h:mm a")}`}
-                                            </p>
-                                        )}
-                                        {selectedOrder.voidRejectedAt && (
-                                            <p className="mt-0.5 text-[11px] text-destructive">
-                                                Rejected on{" "}
-                                                {format(
-                                                    new Date(
-                                                        selectedOrder.voidRejectedAt,
-                                                    ),
-                                                    "MMM d, h:mm a",
-                                                )}
-                                            </p>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Footer actions */}
-                            {selectedOrder.status === "pending" && (
-                                <DialogFooter className="border-(--admin-border) bg-(--admin-card)">
-                                    <Button
-                                        variant="ghost"
-                                        className="text-(--admin-text-secondary)"
-                                        onClick={() => setSelectedOrder(null)}
-                                    >
-                                        Close
-                                    </Button>
-                                    <Button
-                                        disabled={completeMutation.isPending}
-                                        onClick={handleModalComplete}
-                                        className="bg-(--admin-success) text-white hover:bg-(--admin-success)/80"
-                                    >
-                                        {completeMutation.isPending
-                                            ? "Completing..."
-                                            : "Mark Complete"}
-                                    </Button>
-                                </DialogFooter>
-                            )}
-
-                            {selectedOrder.status === "void_requested" && (
-                                <DialogFooter className="border-(--admin-border) bg-(--admin-card)">
-                                    <Button
-                                        variant="ghost"
-                                        className="text-(--admin-text-secondary)"
-                                        onClick={() => setSelectedOrder(null)}
-                                    >
-                                        Close
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        disabled={rejectVoidMutation.isPending}
-                                        onClick={handleRejectVoid}
-                                        className="border-destructive/30 text-destructive hover:bg-destructive/10"
-                                    >
-                                        {rejectVoidMutation.isPending
-                                            ? "..."
-                                            : "Reject Void"}
-                                    </Button>
-                                    <Button
-                                        disabled={approveVoidMutation.isPending}
-                                        onClick={handleApproveVoid}
-                                        className="bg-(--admin-success) text-white hover:bg-(--admin-success)/80"
-                                    >
-                                        {approveVoidMutation.isPending
-                                            ? "..."
-                                            : "Approve Void"}
-                                    </Button>
-                                </DialogFooter>
-                            )}
-
-                            {(selectedOrder.status === "completed" ||
-                                selectedOrder.status === "voided") && (
-                                <DialogFooter
-                                    className="border-(--admin-border) bg-(--admin-card)"
-                                    showCloseButton
-                                />
-                            )}
-                        </>
-                    )}
-                </DialogContent>
-            </Dialog>
+                onClose={() => setSelectedOrder(null)}
+            />
         </div>
     );
 };

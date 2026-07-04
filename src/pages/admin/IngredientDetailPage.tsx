@@ -166,6 +166,7 @@ const IngredientDetailPage = () => {
                     variant="ghost"
                     size="icon-xs"
                     onClick={() => navigate("/admin/inventory")}
+                    aria-label="Back to inventory"
                     className="text-(--admin-text-muted) hover:text-(--admin-text)"
                 >
                     <ArrowLeftIcon className="size-4" />
@@ -194,29 +195,36 @@ const IngredientDetailPage = () => {
                 <div className="flex flex-col gap-5">
                     {/* Basic Info */}
                     <div className="rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
-                        <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
+                        <h2 className="mb-3 text-[11px] font-medium text-(--admin-text-secondary)">
                             Basic Info
                         </h2>
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="detail-name"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 Name
                             </Label>
                             <Input
+                                id="detail-name"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
+                                className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs"
                             />
                         </div>
-                        <div className="mt-3 grid grid-cols-2 gap-3">
+                        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-(--admin-text-secondary)">
+                                <Label
+                                    htmlFor="detail-unit"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
                                     Unit
                                 </Label>
                                 <Select
                                     value={unit}
                                     onValueChange={(v) => setUnit(v ?? "g")}
                                 >
-                                    <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
+                                    <SelectTrigger id="detail-unit" className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs">
                                         <SelectValue>
                                             {(val) =>
                                                 val === "g"
@@ -236,10 +244,14 @@ const IngredientDetailPage = () => {
                                 </Select>
                             </div>
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-(--admin-text-secondary)">
+                                <Label
+                                    htmlFor="detail-low-stock"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
                                     Low Stock Alert
                                 </Label>
                                 <Input
+                                    id="detail-low-stock"
                                     type="number"
                                     step="0.01"
                                     min="0"
@@ -247,7 +259,7 @@ const IngredientDetailPage = () => {
                                     onChange={(e) =>
                                         setLowStockThreshold(e.target.value)
                                     }
-                                    className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
+                                    className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                                 />
                             </div>
                         </div>
@@ -263,7 +275,7 @@ const IngredientDetailPage = () => {
                             <Button
                                 onClick={handleSave}
                                 disabled={updateMutation.isPending}
-                                className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
+                                className="h-8 max-md:min-h-[44px] bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
                             >
                                 {updateMutation.isPending
                                     ? "Saving..."
@@ -274,7 +286,7 @@ const IngredientDetailPage = () => {
 
                     {/* Adjust Stock */}
                     <div className="rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
-                        <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
+                        <h2 className="mb-3 text-[11px] font-medium text-(--admin-text-secondary)">
                             Adjust Stock
                         </h2>
                         <div className="flex flex-col gap-4">
@@ -343,7 +355,7 @@ const IngredientDetailPage = () => {
                                         );
                                         setQuantity(v);
                                     }}
-                                    className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
+                                    className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                                 />
                             </div>
 
@@ -454,7 +466,7 @@ const IngredientDetailPage = () => {
                                     qtyNum <= 0 ||
                                     adjustMutation.isPending
                                 }
-                                className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
+                                className="h-8 max-md:min-h-[44px] bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
                             >
                                 {adjustMutation.isPending
                                     ? "Adjusting..."
@@ -467,7 +479,7 @@ const IngredientDetailPage = () => {
                 {/* Right column: Stock History */}
                 <div>
                     <div className="rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
-                        <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
+                        <h2 className="mb-3 text-[11px] font-medium text-(--admin-text-secondary)">
                             Stock History
                         </h2>
                         <div className="max-h-[500px] overflow-y-auto">
@@ -544,7 +556,7 @@ const IngredientDetailPage = () => {
                     !v && !deleteMutation.isPending && setShowDelete(false)
                 }
             >
-                <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card) shadow-xl">
+                <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card)">
                     <DialogHeader>
                         <DialogTitle className="text-[14px] font-medium text-(--admin-text)">
                             Delete {ingredient.name}
@@ -569,7 +581,7 @@ const IngredientDetailPage = () => {
                         <Button
                             onClick={handleDelete}
                             disabled={deleteMutation.isPending}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            variant="destructive"
                         >
                             {deleteMutation.isPending
                                 ? "Deleting..."

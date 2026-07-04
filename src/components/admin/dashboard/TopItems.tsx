@@ -38,9 +38,9 @@ const TopItems = ({
     return (
         <div className="admin-card p-4">
             <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-[11px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                <h2 className="text-[11px] font-medium text-(--admin-text-muted)">
                     Top Selling Items
-                </h3>
+                </h2>
                 <div className="flex items-center gap-1">
                     <div className="flex gap-0.5 rounded-md bg-(--admin-hover) p-0.5">
                         {sortOptions.map((opt) => (
@@ -49,7 +49,7 @@ const TopItems = ({
                                 variant="ghost"
                                 size="xs"
                                 onClick={() => onSortByChange(opt.value)}
-                                className={`h-6 px-2 text-[11px] ${
+                                className={`h-6 max-md:min-h-[44px] px-2 text-[11px] ${
                                     sortBy === opt.value
                                         ? "bg-(--admin-card) font-medium text-(--admin-primary) shadow-sm"
                                         : "text-(--admin-text-muted) hover:text-(--admin-text-secondary)"
@@ -65,7 +65,7 @@ const TopItems = ({
                     >
                         <SelectTrigger
                             size="sm"
-                            className="h-6 w-20 border-(--admin-border) bg-(--admin-card) text-[11px]"
+                            className="h-6 max-md:min-h-[44px] w-20 border-(--admin-border) bg-(--admin-card) text-[11px]"
                         >
                             <SelectValue />
                         </SelectTrigger>

@@ -216,7 +216,7 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                         )}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div className="grid gap-1.5">
                             <Label className="text-[11px] text-(--admin-text-secondary)">
                                 Role

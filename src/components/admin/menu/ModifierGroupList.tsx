@@ -159,6 +159,7 @@ const ModifierGroupList = ({
                                     variant="ghost"
                                     size="icon-xs"
                                     onClick={handleAdd}
+                                    aria-label="Confirm add group"
                                     className="text-(--admin-accent) hover:text-(--admin-accent)/80"
                                 >
                                     <CheckIcon className="size-3.5" />
@@ -167,6 +168,7 @@ const ModifierGroupList = ({
                                     variant="ghost"
                                     size="icon-xs"
                                     onClick={handleCancel}
+                                    aria-label="Cancel adding group"
                                     className="text-(--admin-text-muted)"
                                 >
                                     <XIcon className="size-3.5" />

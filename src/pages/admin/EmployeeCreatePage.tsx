@@ -118,6 +118,7 @@ const EmployeeCreatePage = () => {
                     variant="ghost"
                     size="icon-xs"
                     onClick={() => navigate("/admin/employees")}
+                    aria-label="Back to employees"
                     className="text-(--admin-text-muted) hover:text-(--admin-text)"
                 >
                     <ArrowLeftIcon className="size-4" />
@@ -128,7 +129,7 @@ const EmployeeCreatePage = () => {
             </div>
 
             <div className="max-w-md rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
-                <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
+                <h2 className="mb-3 text-[11px] font-medium text-(--admin-text-secondary)">
                     Employee Info
                 </h2>
 
@@ -148,16 +149,19 @@ const EmployeeCreatePage = () => {
                         />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="employee-role"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 Role
                             </Label>
                             <Select
                                 value={role}
                                 onValueChange={(v) => setRole(v ?? "barista")}
                             >
-                                <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
+                                <SelectTrigger id="employee-role" className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
                                     <SelectValue>
                                         {(val) =>
                                             ROLES.find((r) => r.value === val)
@@ -245,6 +249,7 @@ const EmployeeCreatePage = () => {
                                         onClick={() =>
                                             setShowPassword(!showPassword)
                                         }
+                                        aria-label={showPassword ? "Hide password" : "Show password"}
                                         className="absolute top-1/2 right-2 flex cursor-pointer -translate-y-1/2 items-center text-(--admin-text-muted) transition-colors hover:text-(--admin-text)"
                                     >
                                         {showPassword ? (
@@ -285,6 +290,7 @@ const EmployeeCreatePage = () => {
                                                 !showConfirmPassword,
                                             )
                                         }
+                                        aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                                         className="absolute top-1/2 right-2 flex cursor-pointer -translate-y-1/2 items-center text-(--admin-text-muted) transition-colors hover:text-(--admin-text)"
                                     >
                                         {showConfirmPassword ? (

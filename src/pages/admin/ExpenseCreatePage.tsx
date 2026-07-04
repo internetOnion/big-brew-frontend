@@ -54,6 +54,7 @@ const ExpenseCreatePage = () => {
                     variant="ghost"
                     size="icon-xs"
                     onClick={() => navigate("/admin/expenses")}
+                    aria-label="Back to expenses"
                     className="text-(--admin-text-muted) hover:text-(--admin-text)"
                 >
                     <ArrowLeftIcon className="size-4" />
@@ -78,10 +79,10 @@ const ExpenseCreatePage = () => {
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="e.g. Coffee beans"
                             autoFocus
-                            className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
+                            className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs"
                         />
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div className="grid gap-1.5">
                             <Label htmlFor="expense-amount" className="text-[11px] text-(--admin-text-secondary)">
                                 Amount
@@ -95,7 +96,7 @@ const ExpenseCreatePage = () => {
                                 placeholder="0.00"
                                 min="0"
                                 step="0.01"
-                                className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
+                                className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                             />
                         </div>
                         <div className="grid gap-1.5">
@@ -106,7 +107,7 @@ const ExpenseCreatePage = () => {
                                 value={category || undefined}
                                 onValueChange={(v) => setCategory(v ?? "")}
                             >
-                                <SelectTrigger id="expense-category" className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
+                                <SelectTrigger id="expense-category" className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs">
                                     <SelectValue placeholder="Select category" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -131,7 +132,7 @@ const ExpenseCreatePage = () => {
                             type="date"
                             value={recordedAt}
                             onChange={(e) => setRecordedAt(e.target.value)}
-                            className="h-8 w-full max-w-[200px] border-(--admin-border) bg-(--admin-card) text-xs"
+                            className="h-8 max-md:min-h-[44px] w-full max-w-[200px] border-(--admin-border) bg-(--admin-card) text-xs"
                         />
                     </div>
                 </div>
@@ -141,7 +142,7 @@ const ExpenseCreatePage = () => {
                 <Button
                     onClick={handleSubmit}
                     disabled={!canSubmit || createMutation.isPending}
-                    className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
+                    className="h-8 max-md:min-h-[44px] bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
                 >
                     {createMutation.isPending ? "Creating..." : "Create Expense"}
                 </Button>
@@ -149,7 +150,7 @@ const ExpenseCreatePage = () => {
                     variant="ghost"
                     onClick={() => navigate("/admin/expenses")}
                     disabled={createMutation.isPending}
-                    className="h-8 text-xs text-(--admin-text-secondary)"
+                    className="h-8 max-md:min-h-[44px] text-xs text-(--admin-text-secondary)"
                 >
                     Cancel
                 </Button>

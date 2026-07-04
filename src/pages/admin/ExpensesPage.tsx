@@ -206,7 +206,7 @@ const ExpensesPage = () => {
                         setPage(1);
                     }}
                 >
-                    <SelectTrigger className="h-7 max-md:min-h-[44px] w-[160px] border-(--admin-border) bg-(--admin-card) text-xs">
+                    <SelectTrigger className="h-7 max-md:min-h-[44px] w-[160px] max-md:w-full border-(--admin-border) bg-(--admin-card) text-xs">
                         <SelectValue>{categoryFilter ?? "All Categories"}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>
@@ -252,7 +252,7 @@ const ExpensesPage = () => {
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-(--admin-border) bg-(--admin-hover) text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                            <tr className="border-b border-(--admin-border) bg-(--admin-hover) text-[10px] font-medium text-(--admin-text-muted)">
                                 <th className="px-4 py-2.5 text-left">
                                     Description
                                 </th>

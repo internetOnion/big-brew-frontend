@@ -270,6 +270,7 @@ const ModifierGroupDetail = ({
                             variant="ghost"
                             size="icon-xs"
                             onClick={saveEdit}
+                            aria-label="Save group"
                             className="text-(--admin-accent) hover:text-(--admin-accent)/80"
                         >
                             <CheckIcon className="size-3.5" />
@@ -278,6 +279,7 @@ const ModifierGroupDetail = ({
                             variant="ghost"
                             size="icon-xs"
                             onClick={cancelEdit}
+                            aria-label="Cancel editing group"
                             className="text-(--admin-text-muted)"
                         >
                             <XIcon className="size-3.5" />
@@ -290,6 +292,7 @@ const ModifierGroupDetail = ({
                                 variant="ghost"
                                 size="icon-xs"
                                 onClick={onBack}
+                                aria-label="Back to groups"
                                 className="shrink-0 text-(--admin-text-muted) hover:text-(--admin-text) md:hidden"
                             >
                                 <ArrowLeftIcon className="size-4" />
@@ -309,6 +312,7 @@ const ModifierGroupDetail = ({
                                 variant="ghost"
                                 size="icon-xs"
                                 onClick={startEdit}
+                                aria-label="Edit group"
                                 className="text-(--admin-text-muted) hover:text-(--admin-text)"
                             >
                                 <PencilSimpleIcon className="size-3" />
@@ -317,6 +321,7 @@ const ModifierGroupDetail = ({
                                 variant="ghost"
                                 size="icon-xs"
                                 onClick={() => onDelete(group.id)}
+                                aria-label="Delete group"
                                 className="text-destructive hover:text-destructive/80"
                             >
                                 <TrashIcon className="size-3" />
@@ -365,6 +370,7 @@ const ModifierGroupDetail = ({
                                         variant="ghost"
                                         size="icon-xs"
                                         onClick={saveOption}
+                                        aria-label="Save option"
                                         className="text-(--admin-accent) hover:text-(--admin-accent)/80"
                                     >
                                         <CheckIcon className="size-3.5" />
@@ -373,6 +379,7 @@ const ModifierGroupDetail = ({
                                         variant="ghost"
                                         size="icon-xs"
                                         onClick={() => setEditingOptionId(null)}
+                                        aria-label="Cancel editing option"
                                         className="text-(--admin-text-muted)"
                                     >
                                         <XIcon className="size-3.5" />
@@ -403,6 +410,7 @@ const ModifierGroupDetail = ({
                                         variant="ghost"
                                         size="icon-xs"
                                         onClick={() => startEditOption(option)}
+                                        aria-label="Edit option"
                                         className="mr-1 text-(--admin-text-muted) hover:text-(--admin-text)"
                                     >
                                         <PencilSimpleIcon className="size-3" />
@@ -413,6 +421,7 @@ const ModifierGroupDetail = ({
                                         onClick={() =>
                                             onDeleteOption(group.id, option.id)
                                         }
+                                        aria-label="Delete option"
                                         className="mr-2 text-destructive hover:text-destructive/80"
                                     >
                                         <TrashIcon className="size-3" />
@@ -461,6 +470,7 @@ const ModifierGroupDetail = ({
                                                                 ing,
                                                             )
                                                         }
+                                                        aria-label="Save ingredient quantity"
                                                         className="text-(--admin-accent) hover:text-(--admin-accent)/80"
                                                     >
                                                         <CheckIcon className="size-3" />
@@ -473,6 +483,7 @@ const ModifierGroupDetail = ({
                                                                 null,
                                                             )
                                                         }
+                                                        aria-label="Cancel editing ingredient"
                                                         className="text-(--admin-text-muted)"
                                                     >
                                                         <XIcon className="size-3" />
@@ -501,6 +512,7 @@ const ModifierGroupDetail = ({
                                                                     ing,
                                                                 )
                                                             }
+                                                            aria-label="Edit ingredient quantity"
                                                             className="text-(--admin-text-muted) hover:text-(--admin-text)"
                                                         >
                                                             <PencilSimpleIcon className="size-2.5" />
@@ -516,6 +528,7 @@ const ModifierGroupDetail = ({
                                                                 ing.ingredientId,
                                                             )
                                                         }
+                                                        aria-label="Delete ingredient"
                                                         className="text-destructive hover:text-destructive/80"
                                                     >
                                                         <TrashIcon className="size-2.5" />
@@ -568,6 +581,7 @@ const ModifierGroupDetail = ({
                                                         option.id,
                                                     )
                                                 }
+                                                aria-label="Confirm add ingredient"
                                                 className="text-(--admin-accent) hover:text-(--admin-accent)/80"
                                             >
                                                 <CheckIcon className="size-3" />
@@ -582,6 +596,7 @@ const ModifierGroupDetail = ({
                                                     setNewIngId("");
                                                     setNewIngQty("");
                                                 }}
+                                                aria-label="Cancel adding ingredient"
                                                 className="text-(--admin-text-muted)"
                                             >
                                                 <XIcon className="size-3" />
@@ -633,6 +648,7 @@ const ModifierGroupDetail = ({
                             variant="ghost"
                             size="icon-xs"
                             onClick={handleAddOption}
+                            aria-label="Confirm add option"
                             className="text-(--admin-accent) hover:text-(--admin-accent)/80"
                         >
                             <CheckIcon className="size-3.5" />
@@ -645,6 +661,7 @@ const ModifierGroupDetail = ({
                                 setNewOptionName("");
                                 setNewOptionPrice("0");
                             }}
+                            aria-label="Cancel adding option"
                             className="text-(--admin-text-muted)"
                         >
                             <XIcon className="size-3.5" />

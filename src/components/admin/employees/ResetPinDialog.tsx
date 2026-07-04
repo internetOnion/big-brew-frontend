@@ -133,6 +133,7 @@ const ResetPinDialog = ({
                             <Button
                                 variant="ghost"
                                 size="icon"
+                                aria-label="Back to step 1"
                                 onClick={handleBack}
                                 className="size-7 text-(--admin-text-secondary) hover:text-(--admin-text)"
                             >

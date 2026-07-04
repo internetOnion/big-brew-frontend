@@ -33,17 +33,16 @@ const navItems = [
     { to: "/admin/settings", icon: GearSixIcon, label: "Settings" },
 ];
 
-const AdminLayout = () => {
-    const { user, logout } = useAuth();
-    const navigate = useNavigate();
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+const SidebarContent = ({
+    onNavClick,
+    onLogout,
+}: {
+    onNavClick: () => void;
+    onLogout: () => void;
+}) => {
+    const { user } = useAuth();
 
-    const handleLogout = async () => {
-        await logout();
-        navigate("/login");
-    };
-
-    const SidebarContent = () => (
+    return (
         <div className="flex h-full flex-col">
             {/* Brand */}
             <div className="flex h-11 shrink-0 items-center gap-2.5 px-3.5">
@@ -65,7 +64,7 @@ const AdminLayout = () => {
                         key={item.to}
                         to={item.to}
                         end={item.end}
-                        onClick={() => setSidebarOpen(false)}
+                        onClick={onNavClick}
                         className={({ isActive }) =>
                             `admin-nav-item relative flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] ${
                                 isActive ? "data-[active=true] font-medium" : ""
@@ -102,14 +101,14 @@ const AdminLayout = () => {
             <div className="space-y-0.5 px-2.5 py-3">
                 <NavLink
                     to="/"
-                    onClick={() => setSidebarOpen(false)}
+                    onClick={onNavClick}
                     className="flex w-full items-center gap-2.5 rounded-lg bg-(--admin-accent) px-2.5 py-1.5 text-[13px] text-white transition-opacity duration-150 hover:opacity-85"
                 >
                     <MonitorIcon className="size-[15px] shrink-0" />
                     Switch to POS
                 </NavLink>
                 <button
-                    onClick={handleLogout}
+                    onClick={onLogout}
                     className="admin-nav-item flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px]"
                 >
                     <SignOutIcon className="size-[15px] shrink-0" />
@@ -137,6 +136,19 @@ const AdminLayout = () => {
             )}
         </div>
     );
+};
+
+const AdminLayout = () => {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
+    const handleLogout = async () => {
+        await logout();
+        navigate("/login");
+    };
+
+    const closeSidebar = () => setSidebarOpen(false);
 
     return (
         <div className="admin-theme flex h-screen w-screen overflow-hidden">
@@ -150,7 +162,7 @@ const AdminLayout = () => {
 
             {/* Desktop sidebar */}
             <aside className="admin-sidebar hidden w-56 shrink-0 bg-(--admin-sidebar) md:block">
-                <SidebarContent />
+                <SidebarContent onNavClick={closeSidebar} onLogout={handleLogout} />
             </aside>
 
             {/* Mobile sidebar */}
@@ -163,6 +175,7 @@ const AdminLayout = () => {
                                 <Button
                                     variant="ghost"
                                     size="icon"
+                                    aria-label="Open navigation"
                                     className="size-8 text-(--admin-text-secondary)"
                                 />
                             }
@@ -195,7 +208,7 @@ const AdminLayout = () => {
                     className="w-56 border-r border-(--admin-sidebar-border) bg-(--admin-sidebar) p-0"
                 >
                     <SheetTitle className="sr-only">Navigation</SheetTitle>
-                    <SidebarContent />
+                    <SidebarContent onNavClick={closeSidebar} onLogout={handleLogout} />
                 </SheetContent>
             </Sheet>
         </div>
