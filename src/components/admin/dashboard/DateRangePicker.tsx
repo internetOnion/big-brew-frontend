@@ -111,7 +111,7 @@ const DateRangePicker = ({ value, onChange }: DateRangePickerProps) => {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="h-7 gap-1.5 border-(--admin-border) bg-(--admin-card) px-2.5 font-mono text-xs text-(--admin-text-secondary) hover:bg-(--admin-hover) hover:text-(--admin-text)"
+                                className="h-7 max-md:min-h-[44px] gap-1.5 border-(--admin-border) bg-(--admin-card) px-2.5 font-mono text-xs text-(--admin-text-secondary) hover:bg-(--admin-hover) hover:text-(--admin-text)"
                             />
                         }
                     >
@@ -141,7 +141,7 @@ const DateRangePicker = ({ value, onChange }: DateRangePickerProps) => {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="h-7 gap-1.5 border-(--admin-border) bg-(--admin-card) px-2.5 font-mono text-xs text-(--admin-text-secondary) hover:bg-(--admin-hover) hover:text-(--admin-text)"
+                                className="h-7 max-md:min-h-[44px] gap-1.5 border-(--admin-border) bg-(--admin-card) px-2.5 font-mono text-xs text-(--admin-text-secondary) hover:bg-(--admin-hover) hover:text-(--admin-text)"
                             />
                         }
                     >

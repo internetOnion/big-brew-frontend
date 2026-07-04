@@ -83,14 +83,17 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="dialog-ingredient-unit"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Unit
                         </Label>
                         <Select
                             value={unit}
                             onValueChange={(v) => setUnit(v ?? "g")}
                         >
-                            <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
+                            <SelectTrigger id="dialog-ingredient-unit" className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
                                 <SelectValue>
                                     {(val) =>
                                         val === "g"
@@ -108,7 +111,7 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
                         </Select>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div className="grid gap-1.5">
                             <Label
                                 htmlFor="dialog-ingredient-stock"

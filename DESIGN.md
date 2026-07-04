@@ -18,7 +18,7 @@ colors:
     admin-card: "#ffffff"
     admin-border: "#e8e2da"
     admin-text-secondary: "#6b5b4e"
-    admin-text-muted: "#a89888"
+    admin-text-muted: "#756556"
     admin-hover: "#f4efe8"
     admin-sidebar: "#faf7f3"
     admin-sidebar-border: "#ede7df"

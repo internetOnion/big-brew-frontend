@@ -93,6 +93,10 @@ const EmployeesPage = () => {
                 if (!matchesName && !matchesEmail) return false;
             }
             if (roleFilter && emp.role !== roleFilter) return false;
+            if (statusFilter === "active" && emp.isActive === false)
+                return false;
+            if (statusFilter === "inactive" && emp.isActive !== false)
+                return false;
             return true;
         });
     }, [employees, searchQuery, roleFilter, statusFilter]);
@@ -162,7 +166,7 @@ const EmployeesPage = () => {
                             ? "No employees match your filters"
                             : "No employees yet"}
                     </p>
-                    <p className="text-[10px] text-(--admin-text-muted)/70">
+                    <p className="text-[11px] text-(--admin-text-muted)/70">
                         {searchQuery || roleFilter
                             ? "Try adjusting your search or filters"
                             : 'Click "Add" to onboard your first staff'}
@@ -181,9 +185,9 @@ const EmployeesPage = () => {
                 </h1>
 
                 <Button
-                    size="sm"
-                    onClick={() => navigate("/admin/employees/new")}
-                    className="h-7 gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80 cursor-pointer"
+                        size="sm"
+                        onClick={() => navigate("/admin/employees/new")}
+                        className="h-7 max-md:min-h-[44px] gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80 cursor-pointer"
                 >
                     <PlusIcon className="size-3" />
                     Add
@@ -198,7 +202,8 @@ const EmployeesPage = () => {
                 >
                     <SelectTrigger
                         size="sm"
-                        className="h-7 w-28 border-(--admin-border) bg-(--admin-card) text-xs"
+                        aria-label="Filter by role"
+                        className="h-7 max-md:min-h-[44px] w-28 border-(--admin-border) bg-(--admin-card) text-xs"
                     >
                         <SelectValue placeholder="All Roles">
                             {(val) =>
@@ -242,7 +247,8 @@ const EmployeesPage = () => {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search..."
-                        className="h-7 w-44 border-(--admin-border) bg-(--admin-card) pl-8 text-xs placeholder:text-xs"
+                        aria-label="Search employees"
+                        className="h-7 max-md:min-h-[44px] w-44 border-(--admin-border) bg-(--admin-card) pl-8 text-xs placeholder:text-xs"
                     />
                 </div>
             </div>
@@ -253,19 +259,19 @@ const EmployeesPage = () => {
                     <table className="w-full">
                         <thead>
                             <tr className="border-b border-(--admin-border) bg-(--admin-hover)">
-                                <th className="px-4 py-2.5 text-left text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-left text-[10px] font-medium text-(--admin-text-muted)">
                                     Name
                                 </th>
-                                <th className="px-4 py-2.5 text-left text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-left text-[10px] font-medium text-(--admin-text-muted)">
                                     Role
                                 </th>
-                                <th className="px-4 py-2.5 text-left text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-left text-[10px] font-medium text-(--admin-text-muted)">
                                     Email
                                 </th>
-                                <th className="px-4 py-2.5 text-center text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="px-4 py-2.5 text-center text-[10px] font-medium text-(--admin-text-muted)">
                                     Status
                                 </th>
-                                <th className="w-32 px-2 py-2.5 text-right text-[10px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <th className="w-32 px-2 py-2.5 text-right text-[10px] font-medium text-(--admin-text-muted)">
                                     Actions
                                 </th>
                             </tr>
@@ -286,7 +292,16 @@ const EmployeesPage = () => {
                                                         `/admin/employees/${emp.id}`,
                                                     )
                                                 }
-                                                className="admin-table-row cursor-pointer transition-colors hover:bg-(--admin-hover)"
+                                                onKeyDown={(e) => {
+                                                    if (e.key === "Enter" || e.key === " ") {
+                                                        e.preventDefault();
+                                                        navigate(`/admin/employees/${emp.id}`);
+                                                    }
+                                                }}
+                                                tabIndex={0}
+                                                role="button"
+                                                aria-label={`View ${emp.name}`}
+                                                className="admin-table-row cursor-pointer transition-colors hover:bg-(--admin-hover) focus-visible:outline-2 focus-visible:outline-(--admin-primary) focus-visible:-outline-offset-2"
                                             >
                                                 <td className="px-4 py-2.5 text-[12px] font-medium text-(--admin-text)">
                                                     {emp.name}
@@ -327,7 +342,9 @@ const EmployeesPage = () => {
                                                         }
                                                     >
                                                         <DropdownMenu>
-                                                            <DropdownMenuTrigger className="flex size-7 shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text) cursor-pointer">
+                                                            <DropdownMenuTrigger
+                                                                aria-label="Actions"
+                                                                className="flex size-7 max-md:min-h-[44px] max-md:min-w-[44px] shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text) cursor-pointer">
                                                                 <DotsThreeVerticalIcon className="size-4" />
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent
@@ -473,7 +490,7 @@ const EmployeesPage = () => {
                         </Button>
                         <Button
                             onClick={handleDeleteConfirm}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            variant="destructive"
                         >
                             Delete
                         </Button>

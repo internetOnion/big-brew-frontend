@@ -83,6 +83,7 @@ const ExpenseCategoriesPage = () => {
                     variant="ghost"
                     size="icon-xs"
                     onClick={() => navigate("/admin/expenses")}
+                    aria-label="Back to expenses"
                     className="text-(--admin-text-muted) hover:text-(--admin-text)"
                 >
                     <ArrowLeftIcon className="size-4" />
@@ -122,7 +123,7 @@ const ExpenseCategoriesPage = () => {
                         <p className="text-xs text-(--admin-text-muted)">
                             No expense categories yet
                         </p>
-                        <p className="text-[10px] text-(--admin-text-muted)/70">
+                        <p className="text-[11px] text-(--admin-text-muted)/70">
                             Add categories to organize your expenses
                         </p>
                     </div>
@@ -223,6 +224,7 @@ const ExpenseCategoriesPage = () => {
                                             <Button
                                                 variant="ghost"
                                                 size="icon-xs"
+                                                aria-label="Edit category"
                                                 onClick={() =>
                                                     handleEdit(cat.id)
                                                 }
@@ -233,6 +235,7 @@ const ExpenseCategoriesPage = () => {
                                             <Button
                                                 variant="ghost"
                                                 size="icon-xs"
+                                                aria-label="Delete category"
                                                 onClick={() =>
                                                     setDeletingId(cat.id)
                                                 }
@@ -284,7 +287,7 @@ const ExpenseCategoriesPage = () => {
                                 }
                             }}
                             disabled={deleteMutation.isPending}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            variant="destructive"
                         >
                             {deleteMutation.isPending
                                 ? "Deleting..."

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import {
     ArrowLeftIcon,
     PlusIcon,
@@ -48,6 +49,7 @@ const CategoriesPage = () => {
                     setNewName("");
                     setIsAdding(false);
                 },
+                onError: () => toast.error("Failed to create category"),
             },
         );
     };
@@ -68,6 +70,7 @@ const CategoriesPage = () => {
                     setEditingId(null);
                     setEditName("");
                 },
+                onError: () => toast.error("Failed to update category"),
             },
         );
     };
@@ -90,6 +93,7 @@ const CategoriesPage = () => {
                     variant="ghost"
                     size="icon-xs"
                     onClick={() => navigate("/admin/menu")}
+                    aria-label="Back to menu"
                     className="text-(--admin-text-muted) hover:text-(--admin-text)"
                 >
                     <ArrowLeftIcon className="size-4" />
@@ -105,7 +109,7 @@ const CategoriesPage = () => {
                             setNewName("");
                         }}
                         disabled={isAdding}
-                        className="h-7 gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80"
+                        className="h-7 max-md:min-h-[44px] gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80"
                     >
                         <PlusIcon className="size-3" />
                         Add Category
@@ -241,6 +245,7 @@ const CategoriesPage = () => {
                                             <Button
                                                 variant="ghost"
                                                 size="icon-xs"
+                                                aria-label="Edit category"
                                                 onClick={() =>
                                                     handleEdit(cat.id)
                                                 }
@@ -251,6 +256,7 @@ const CategoriesPage = () => {
                                             <Button
                                                 variant="ghost"
                                                 size="icon-xs"
+                                                aria-label="Delete category"
                                                 onClick={() =>
                                                     setDeletingId(cat.id)
                                                 }
@@ -304,12 +310,17 @@ const CategoriesPage = () => {
                         <Button
                             onClick={() => {
                                 if (deletingId) {
-                                    deleteMutation.mutate(deletingId);
-                                    setDeletingId(null);
+                                    deleteMutation.mutate(deletingId, {
+                                        onSuccess: () => setDeletingId(null),
+                                        onError: () => {
+                                            toast.error("Failed to delete category");
+                                            setDeletingId(null);
+                                        },
+                                    });
                                 }
                             }}
                             disabled={deleteMutation.isPending}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            variant="destructive"
                         >
                             {deleteMutation.isPending
                                 ? "Deleting..."

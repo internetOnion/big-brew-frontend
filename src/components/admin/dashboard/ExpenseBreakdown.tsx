@@ -74,9 +74,9 @@ const ExpenseBreakdown = ({
     return (
         <div className="admin-card p-4">
             <div className="mb-4">
-                <h3 className="text-[11px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                <h2 className="text-[11px] font-medium text-(--admin-text-muted)">
                     Expenses by Category
-                </h3>
+                </h2>
             </div>
 
             {isLoading ? (

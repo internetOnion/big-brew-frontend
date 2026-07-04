@@ -168,10 +168,11 @@ const SettingsPage = () => {
                             </Label>
                             <Input
                                 id="settings-store-name"
+                                value={form.storeName ?? ""}
                                 onChange={(e) =>
                                     handleChange("storeName", e.target.value)
                                 }
-                                className="h-8 border-(--admin-border) bg-(--admin-card) text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
+                                className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
                             />
                         </div>
 
@@ -184,17 +185,18 @@ const SettingsPage = () => {
                             </Label>
                             <Input
                                 id="settings-address"
+                                value={form.storeAddress ?? ""}
                                 onChange={(e) =>
                                     handleChange(
                                         "storeAddress",
                                         e.target.value || null,
                                     )
                                 }
-                                className="h-8 border-(--admin-border) bg-(--admin-card) text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
+                                className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
                             />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div className="grid gap-1.5">
                                 <Label
                                     htmlFor="settings-currency"
@@ -204,13 +206,14 @@ const SettingsPage = () => {
                                 </Label>
                                 <Input
                                     id="settings-currency"
+                                    value={form.currencySymbol ?? ""}
                                     onChange={(e) =>
                                         handleChange(
                                             "currencySymbol",
                                             e.target.value,
                                         )
                                     }
-                                    className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
+                                    className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) font-mono text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
                                 />
                             </div>
                             <div className="grid gap-1.5">
@@ -222,10 +225,11 @@ const SettingsPage = () => {
                                 </Label>
                                 <Input
                                     id="settings-tax-label"
+                                    value={form.taxLabel ?? ""}
                                     onChange={(e) =>
                                         handleChange("taxLabel", e.target.value)
                                     }
-                                    className="h-8 border-(--admin-border) bg-(--admin-card) text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
+                                    className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
                                 />
                             </div>
                         </div>
@@ -250,7 +254,7 @@ const SettingsPage = () => {
                                             : null,
                                     )
                                 }
-                                className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
+                                className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) font-mono text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
                             />
                         </div>
 
@@ -263,6 +267,7 @@ const SettingsPage = () => {
                             </Label>
                             <Textarea
                                 id="settings-receipt-header"
+                                value={form.receiptHeader ?? ""}
                                 onChange={(e) =>
                                     handleChange(
                                         "receiptHeader",
@@ -283,6 +288,7 @@ const SettingsPage = () => {
                             </Label>
                             <Textarea
                                 id="settings-receipt-footer"
+                                value={form.receiptFooter ?? ""}
                                 onChange={(e) =>
                                     handleChange(
                                         "receiptFooter",
@@ -323,7 +329,7 @@ const SettingsPage = () => {
                         <Button
                             onClick={handleSave}
                             disabled={updateMutation.isPending}
-                            className="h-8 bg-(--admin-primary) text-xs font-medium text-white hover:bg-(--admin-primary)/80"
+                            className="h-8 max-md:min-h-[44px] bg-(--admin-primary) text-xs font-medium text-white hover:bg-(--admin-primary)/80"
                         >
                             {updateMutation.isPending
                                 ? "Saving..."

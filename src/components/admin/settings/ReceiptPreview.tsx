@@ -20,13 +20,14 @@ const ReceiptPreview = ({ settings }: ReceiptPreviewProps) => {
     const total = subtotal + tax;
 
     return (
-        <div className="mx-auto w-full max-w-[300px] rounded-lg border border-border bg-white p-4 font-mono text-xs text-black shadow-sm">
+        <div className="mx-auto w-full max-w-[300px] rounded-lg border border-(--admin-border) bg-(--admin-card) p-4 font-mono text-xs text-(--admin-text)">
             {/* Logo */}
             {settings.logoUrl && (
                 <div className="mb-2 flex justify-center">
                     <img
                         src={settings.logoUrl}
                         alt="Logo"
+                        loading="lazy"
                         className="h-12 w-auto object-contain"
                     />
                 </div>
@@ -39,19 +40,19 @@ const ReceiptPreview = ({ settings }: ReceiptPreviewProps) => {
 
             {/* Address */}
             {settings.storeAddress && (
-                <div className="mb-2 text-center text-[10px] text-gray-600">
+                <div className="mb-2 text-center text-[10px] text-(--admin-text-muted)">
                     {settings.storeAddress}
                 </div>
             )}
 
             {/* Header */}
             {settings.receiptHeader && (
-                <div className="mb-2 text-center text-[10px] text-gray-600">
+                <div className="mb-2 text-center text-[10px] text-(--admin-text-muted)">
                     {settings.receiptHeader}
                 </div>
             )}
 
-            <div className="my-2 border-t border-dashed border-gray-400" />
+            <div className="my-2 border-t border-dashed border-(--admin-text-muted)/40" />
 
             {/* Order info */}
             <div className="mb-2 flex justify-between text-[10px]">
@@ -76,7 +77,7 @@ const ReceiptPreview = ({ settings }: ReceiptPreviewProps) => {
                 ))}
             </div>
 
-            <div className="my-2 border-t border-dashed border-gray-400" />
+            <div className="my-2 border-t border-dashed border-(--admin-text-muted)/40" />
 
             {/* Totals */}
             <div className="flex flex-col gap-1">
@@ -94,7 +95,7 @@ const ReceiptPreview = ({ settings }: ReceiptPreviewProps) => {
                         {tax.toFixed(2)}
                     </span>
                 </div>
-                <div className="flex justify-between border-t border-gray-400 pt-1 text-sm font-bold">
+                <div className="flex justify-between border-t border-(--admin-text-muted)/40 pt-1 text-sm font-bold">
                     <span>Total</span>
                     <span>
                         {settings.currencySymbol}
@@ -103,16 +104,16 @@ const ReceiptPreview = ({ settings }: ReceiptPreviewProps) => {
                 </div>
             </div>
 
-            <div className="my-2 border-t border-dashed border-gray-400" />
+            <div className="my-2 border-t border-dashed border-(--admin-text-muted)/40" />
 
             {/* Footer */}
             {settings.receiptFooter && (
-                <div className="mt-2 text-center text-[10px] text-gray-600">
+                <div className="mt-2 text-center text-[10px] text-(--admin-text-muted)">
                     {settings.receiptFooter}
                 </div>
             )}
 
-            <div className="mt-2 text-center text-[10px] text-gray-500">
+            <div className="mt-2 text-center text-[10px] text-(--admin-text-secondary)">
                 Thank you!
             </div>
         </div>

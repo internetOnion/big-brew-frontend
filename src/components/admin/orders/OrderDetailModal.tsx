@@ -100,7 +100,7 @@ const OrderDetailModal = ({ order, open, onClose }: OrderDetailModalProps) => {
                             </div>
 
                             {/* Info grid */}
-                            <div className="grid grid-cols-2 gap-2 text-[12px]">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[12px]">
                                 <div>
                                     <span className="text-(--admin-text-muted)">
                                         Type
@@ -171,7 +171,7 @@ const OrderDetailModal = ({ order, open, onClose }: OrderDetailModalProps) => {
 
                             {/* Items */}
                             <div>
-                                <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                <p className="mb-1.5 text-[11px] font-medium text-(--admin-text-muted)">
                                     Items ({order.items.length})
                                 </p>
                                 <div className="divide-y divide-(--admin-border) rounded-md border border-(--admin-border)">
@@ -206,7 +206,7 @@ const OrderDetailModal = ({ order, open, onClose }: OrderDetailModalProps) => {
                             {/* Payments */}
                             {order.payments.length > 0 && (
                                 <div>
-                                    <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                                    <p className="mb-1.5 text-[11px] font-medium text-(--admin-text-muted)">
                                         Payments
                                     </p>
                                     <div className="divide-y divide-(--admin-border) rounded-md border border-(--admin-border)">

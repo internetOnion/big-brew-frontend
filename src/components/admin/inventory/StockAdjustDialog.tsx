@@ -99,7 +99,10 @@ const StockAdjustDialog = ({
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="adjust-reason"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Reason
                         </Label>
                         <Select
@@ -108,7 +111,7 @@ const StockAdjustDialog = ({
                                 setReason(v ?? "manual_restock")
                             }
                         >
-                            <SelectTrigger className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
+                            <SelectTrigger id="adjust-reason" className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs">
                                 <SelectValue>
                                     {(val) =>
                                         reasonOptions.find(
@@ -145,7 +148,7 @@ const StockAdjustDialog = ({
                             }
                             value={quantity}
                             onChange={(e) => setQuantity(e.target.value)}
-                            className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
+                            className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                         />
                     </div>
 

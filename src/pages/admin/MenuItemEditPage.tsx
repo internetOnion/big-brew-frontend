@@ -421,6 +421,7 @@ const MenuItemEditPage = () => {
                     variant="ghost"
                     size="icon-xs"
                     onClick={() => navigate("/admin/menu")}
+                    aria-label="Back to menu"
                     className="text-(--admin-text-muted) hover:text-(--admin-text)"
                 >
                     <ArrowLeftIcon className="size-4" />
@@ -496,10 +497,10 @@ const MenuItemEditPage = () => {
                                         onChange={(e) =>
                                             setName(e.target.value)
                                         }
-                                        className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
+                                        className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs"
                                     />
                                 </div>
-                                <div className="mt-3 grid grid-cols-2 gap-3">
+                                <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div className="grid gap-1.5">
                                         <Label
                                             htmlFor="edit-item-price"
@@ -516,7 +517,7 @@ const MenuItemEditPage = () => {
                                             onChange={(e) =>
                                                 setBasePrice(e.target.value)
                                             }
-                                            className="h-8 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
+                                            className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                                         />
                                     </div>
                                     <div className="grid gap-1.5">
@@ -536,7 +537,7 @@ const MenuItemEditPage = () => {
                                             <SelectTrigger
                                                 id="edit-item-category"
                                                 aria-required="true"
-                                                className="h-8 w-full border-(--admin-border) bg-(--admin-card) text-xs"
+                                                className="h-8 max-md:min-h-[44px] w-full border-(--admin-border) bg-(--admin-card) text-xs"
                                             >
                                                 <SelectValue>
                                                     {(val) =>
@@ -578,7 +579,7 @@ const MenuItemEditPage = () => {
                                 <div className="mt-4">
                                     <Button
                                         onClick={handleSaveBasic}
-                                        className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
+                                        className="h-8 max-md:min-h-[44px] bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
                                     >
                                         Save Changes
                                     </Button>
@@ -629,7 +630,7 @@ const MenuItemEditPage = () => {
                             !v && !deleting && setShowDeleteDialog(false)
                         }
                     >
-                        <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card) shadow-xl">
+                        <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card)">
                             <DialogHeader>
                                 <DialogTitle className="text-[14px] font-medium text-(--admin-text)">
                                     Remove Item
@@ -654,7 +655,7 @@ const MenuItemEditPage = () => {
                                 <Button
                                     onClick={handleDelete}
                                     disabled={deleting}
-                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                    variant="destructive"
                                 >
                                     {deleting ? "Removing..." : "Remove"}
                                 </Button>
