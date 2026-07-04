@@ -431,11 +431,15 @@ const MenuItemCreatePage = () => {
                             Basic Info
                         </h2>
                         <div className="grid gap-1.5">
-                            <Label htmlFor="create-item-name" className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="create-item-name"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 Name
                             </Label>
                             <Input
                                 id="create-item-name"
+                                required
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="e.g. Iced Caramel Latte"
                                 maxLength={100}
@@ -444,11 +448,15 @@ const MenuItemCreatePage = () => {
                         </div>
                         <div className="mt-3 grid grid-cols-2 gap-3">
                             <div className="grid gap-1.5">
-                                <Label htmlFor="create-item-price" className="text-[11px] text-(--admin-text-secondary)">
+                                <Label
+                                    htmlFor="create-item-price"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
                                     Base Price
                                 </Label>
                                 <Input
                                     id="create-item-price"
+                                    required
                                     step="0.01"
                                     min="0"
                                     value={basePrice}
@@ -460,7 +468,10 @@ const MenuItemCreatePage = () => {
                                 />
                             </div>
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-(--admin-text-secondary)">
+                                <Label
+                                    htmlFor="create-item-category"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
                                     Category
                                 </Label>
                                 <Select
@@ -470,7 +481,11 @@ const MenuItemCreatePage = () => {
                                         setCategoryId(v ?? "")
                                     }
                                 >
-                                    <SelectTrigger className="h-8 w-full border-(--admin-border) bg-(--admin-card) text-xs">
+                                    <SelectTrigger
+                                        id="create-item-category"
+                                        aria-required="true"
+                                        className="h-8 w-full border-(--admin-border) bg-(--admin-card) text-xs"
+                                    >
                                         <SelectValue>
                                             {(val) =>
                                                 categories?.find(

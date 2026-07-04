@@ -66,7 +66,7 @@ const InventoryPage = () => {
                 <Button
                     size="sm"
                     onClick={() => navigate("/admin/inventory/new")}
-                    className="h-7 gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-[#3a1d0e] cursor-pointer"
+                    className="h-7 gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80 cursor-pointer"
                 >
                     <PlusIcon className="size-3" />
                     Add Ingredient

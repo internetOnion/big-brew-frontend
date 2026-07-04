@@ -269,7 +269,7 @@ const ResetPinDialog = ({
                                 newPin.length !== PIN_LENGTH ||
                                 resetPin.isPending
                             }
-                            className="bg-(--admin-primary) text-white hover:bg-[#3a1d0e]"
+                            className="bg-(--admin-primary) text-white hover:bg-(--admin-primary)/80"
                         >
                             {resetPin.isPending ? "Saving..." : "Save PIN"}
                         </Button>

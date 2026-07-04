@@ -120,7 +120,10 @@ const CategoriesPage = () => {
                     </div>
                 ) : !categories || categories.length === 0 ? (
                     <div className="flex flex-col items-center justify-center gap-2 py-8">
-                        <ListIcon className="size-5 text-(--admin-text-muted)" aria-hidden="true" />
+                        <ListIcon
+                            className="size-5 text-(--admin-text-muted)"
+                            aria-hidden="true"
+                        />
                         <p className="text-xs text-(--admin-text-muted)">
                             No categories yet
                         </p>

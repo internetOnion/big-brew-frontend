@@ -69,7 +69,10 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
 
                 <div className="flex flex-col gap-4">
                     <div className="grid gap-1.5">
-                        <Label htmlFor="dialog-ingredient-name" className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="dialog-ingredient-name"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Name
                         </Label>
                         <Input
@@ -107,7 +110,10 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
 
                     <div className="grid grid-cols-2 gap-3">
                         <div className="grid gap-1.5">
-                            <Label htmlFor="dialog-ingredient-stock" className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="dialog-ingredient-stock"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 Initial Stock
                             </Label>
                             <Input
@@ -122,7 +128,10 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
                             />
                         </div>
                         <div className="grid gap-1.5">
-                            <Label htmlFor="dialog-ingredient-low-stock" className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="dialog-ingredient-low-stock"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 Low Stock Alert
                             </Label>
                             <Input
@@ -150,7 +159,7 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
                     <Button
                         onClick={() => createMutation.mutate()}
                         disabled={!name || createMutation.isPending}
-                        className="bg-(--admin-primary) text-white hover:bg-[#3a1d0e]"
+                        className="bg-(--admin-primary) text-white hover:bg-(--admin-primary)/80"
                     >
                         {createMutation.isPending
                             ? "Creating..."

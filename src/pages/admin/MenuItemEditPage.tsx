@@ -459,7 +459,7 @@ const MenuItemEditPage = () => {
             ) : (
                 <>
                     <div className="rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
-                        <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
+                        <h2 className="mb-3 text-[11px] font-medium tracking-tight text-(--admin-text-secondary)">
                             Image
                         </h2>
                         <MenuItemImageUpload
@@ -480,15 +480,19 @@ const MenuItemEditPage = () => {
 
                         <TabsContent value="basic">
                             <div className="rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
-                                <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
+                                <h2 className="mb-3 text-[11px] font-medium tracking-tight text-(--admin-text-secondary)">
                                     Basic Info
                                 </h2>
                                 <div className="grid gap-1.5">
-                                    <Label htmlFor="edit-item-name" className="text-[11px] text-(--admin-text-secondary)">
+                                    <Label
+                                        htmlFor="edit-item-name"
+                                        className="text-[11px] text-(--admin-text-secondary)"
+                                    >
                                         Name
                                     </Label>
                                     <Input
                                         id="edit-item-name"
+                                        required
                                         onChange={(e) =>
                                             setName(e.target.value)
                                         }
@@ -497,11 +501,15 @@ const MenuItemEditPage = () => {
                                 </div>
                                 <div className="mt-3 grid grid-cols-2 gap-3">
                                     <div className="grid gap-1.5">
-                                        <Label htmlFor="edit-item-price" className="text-[11px] text-(--admin-text-secondary)">
+                                        <Label
+                                            htmlFor="edit-item-price"
+                                            className="text-[11px] text-(--admin-text-secondary)"
+                                        >
                                             Base Price
                                         </Label>
                                         <Input
                                             id="edit-item-price"
+                                            required
                                             step="0.01"
                                             min="0"
                                             value={basePrice}
@@ -512,7 +520,10 @@ const MenuItemEditPage = () => {
                                         />
                                     </div>
                                     <div className="grid gap-1.5">
-                                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                                        <Label
+                                            htmlFor="edit-item-category"
+                                            className="text-[11px] text-(--admin-text-secondary)"
+                                        >
                                             Category
                                         </Label>
                                         <Select
@@ -522,7 +533,11 @@ const MenuItemEditPage = () => {
                                                 setCategoryId(v ?? "")
                                             }
                                         >
-                                            <SelectTrigger className="h-8 w-full border-(--admin-border) bg-(--admin-card) text-xs">
+                                            <SelectTrigger
+                                                id="edit-item-category"
+                                                aria-required="true"
+                                                className="h-8 w-full border-(--admin-border) bg-(--admin-card) text-xs"
+                                            >
                                                 <SelectValue>
                                                     {(val) =>
                                                         categories?.find(
@@ -546,13 +561,13 @@ const MenuItemEditPage = () => {
                                     </div>
                                 </div>
                                 <div className="mt-3 flex items-center gap-2">
-                                <Checkbox
-                                    id="available"
-                                    checked={isAvailable}
-                                    onCheckedChange={(c) =>
-                                        setIsAvailable(c === true)
-                                    }
-                                />
+                                    <Checkbox
+                                        id="available"
+                                        checked={isAvailable}
+                                        onCheckedChange={(c) =>
+                                            setIsAvailable(c === true)
+                                        }
+                                    />
                                     <Label
                                         htmlFor="available"
                                         className="text-[12px] text-(--admin-text-secondary)"

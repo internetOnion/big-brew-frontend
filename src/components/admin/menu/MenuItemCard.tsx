@@ -83,7 +83,10 @@ const MenuItemCard = ({ item, onEdit, onDelete }: MenuItemCardProps) => {
                         ${price.toFixed(2)}
                     </p>
                 </div>
-                <div onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+                <div
+                    onClick={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => e.stopPropagation()}
+                >
                     <DropdownMenu>
                         <DropdownMenuTrigger
                             aria-label="Actions"

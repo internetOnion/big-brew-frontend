@@ -134,7 +134,10 @@ const EmployeeCreatePage = () => {
 
                 <div className="flex flex-col gap-4">
                     <div className="grid gap-1.5">
-                        <Label htmlFor="employee-full-name" className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="employee-full-name"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Full Name
                         </Label>
                         <Input
@@ -175,7 +178,10 @@ const EmployeeCreatePage = () => {
                             </Select>
                         </div>
                         <div className="grid gap-1.5">
-                            <Label htmlFor="employee-pin" className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="employee-pin"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 PIN (6 digits)
                             </Label>
                             <Input
@@ -199,7 +205,10 @@ const EmployeeCreatePage = () => {
                     {needsAccount && (
                         <>
                             <div className="grid gap-1.5">
-                                <Label htmlFor="employee-email" className="text-[11px] text-(--admin-text-secondary)">
+                                <Label
+                                    htmlFor="employee-email"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
                                     Email
                                 </Label>
                                 <Input
@@ -212,7 +221,10 @@ const EmployeeCreatePage = () => {
                             </div>
 
                             <div className="grid gap-1.5">
-                                <Label htmlFor="employee-password" className="text-[11px] text-(--admin-text-secondary)">
+                                <Label
+                                    htmlFor="employee-password"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
                                     Password
                                 </Label>
                                 <div className="relative">
@@ -245,7 +257,10 @@ const EmployeeCreatePage = () => {
                             </div>
 
                             <div className="grid gap-1.5">
-                                <Label htmlFor="employee-confirm-password" className="text-[11px] text-(--admin-text-secondary)">
+                                <Label
+                                    htmlFor="employee-confirm-password"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
                                     Confirm Password
                                 </Label>
                                 <div className="relative">
@@ -280,7 +295,7 @@ const EmployeeCreatePage = () => {
                                     </button>
                                 </div>
                                 {isPasswordMismatch && (
-                                        <p className="text-[10px] font-medium text-destructive">
+                                    <p className="text-[10px] font-medium text-destructive">
                                         Passwords don&apos;t match
                                     </p>
                                 )}
@@ -300,7 +315,7 @@ const EmployeeCreatePage = () => {
                     <Button
                         onClick={handleSubmit}
                         disabled={!isValid || isPending}
-                        className="bg-(--admin-primary) text-white hover:bg-[#3a1d0e]"
+                        className="bg-(--admin-primary) text-white hover:bg-(--admin-primary)/80"
                     >
                         {isPending ? "Creating..." : "Create Employee"}
                     </Button>

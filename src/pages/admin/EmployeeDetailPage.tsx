@@ -235,7 +235,10 @@ const EmployeeDetailPage = () => {
                         </h2>
                         <div className="flex flex-col gap-3">
                             <div className="grid gap-1.5">
-                                <Label htmlFor="detail-name" className="text-[11px] text-(--admin-text-secondary)">
+                                <Label
+                                    htmlFor="detail-name"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
                                     Name
                                 </Label>
                                 <Input
@@ -289,7 +292,7 @@ const EmployeeDetailPage = () => {
                                 <Button
                                     onClick={handleSave}
                                     disabled={updateMutation.isPending}
-                                    className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-[#3a1d0e]"
+                                    className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
                                 >
                                     {updateMutation.isPending
                                         ? "Saving..."
@@ -332,7 +335,10 @@ const EmployeeDetailPage = () => {
                         </h2>
                         <div className="flex flex-col gap-3">
                             <div className="grid gap-1.5">
-                                <Label htmlFor="detail-new-pin" className="text-[11px] text-(--admin-text-secondary)">
+                                <Label
+                                    htmlFor="detail-new-pin"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
                                     New PIN (4-6 digits)
                                 </Label>
                                 <Input

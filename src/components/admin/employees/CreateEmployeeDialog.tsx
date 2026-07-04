@@ -119,7 +119,10 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
 
                 <div className="flex flex-col gap-4">
                     <div className="grid gap-1.5">
-                        <Label htmlFor="dialog-full-name" className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="dialog-full-name"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Full Name
                         </Label>
                         <Input
@@ -131,7 +134,10 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label htmlFor="dialog-email" className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="dialog-email"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Email
                         </Label>
                         <Input
@@ -144,7 +150,10 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label htmlFor="dialog-password" className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="dialog-password"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Password
                         </Label>
                         <div className="relative">
@@ -170,7 +179,10 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label htmlFor="dialog-confirm-password" className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="dialog-confirm-password"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Confirm Password
                         </Label>
                         <div className="relative">
@@ -235,7 +247,10 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                         </div>
 
                         <div className="grid gap-1.5">
-                            <Label htmlFor="dialog-pin" className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="dialog-pin"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 PIN (6 digits)
                             </Label>
                             <Input
@@ -270,7 +285,7 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                     <Button
                         onClick={handleSubmit}
                         disabled={!isValid || createEmployee.isPending}
-                        className="bg-(--admin-primary) text-white hover:bg-[#3a1d0e]"
+                        className="bg-(--admin-primary) text-white hover:bg-(--admin-primary)/80"
                     >
                         {createEmployee.isPending
                             ? "Creating..."

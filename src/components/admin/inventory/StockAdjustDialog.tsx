@@ -131,7 +131,10 @@ const StockAdjustDialog = ({
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label htmlFor="stock-quantity" className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="stock-quantity"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Quantity
                         </Label>
                         <Input
@@ -147,7 +150,10 @@ const StockAdjustDialog = ({
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label htmlFor="stock-notes" className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="stock-notes"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Notes
                         </Label>
                         <Textarea
@@ -186,7 +192,7 @@ const StockAdjustDialog = ({
                         disabled={
                             !quantity || qtyNum <= 0 || adjustMutation.isPending
                         }
-                        className="bg-(--admin-primary) text-white hover:bg-[#3a1d0e]"
+                        className="bg-(--admin-primary) text-white hover:bg-(--admin-primary)/80"
                     >
                         {adjustMutation.isPending
                             ? "Adjusting..."

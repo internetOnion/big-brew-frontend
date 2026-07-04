@@ -68,7 +68,10 @@ const IngredientCreatePage = () => {
 
                 <div className="flex flex-col gap-4">
                     <div className="grid gap-1.5">
-                        <Label htmlFor="ingredient-name" className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="ingredient-name"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Name
                         </Label>
                         <Input
@@ -106,7 +109,10 @@ const IngredientCreatePage = () => {
 
                     <div className="grid grid-cols-2 gap-3">
                         <div className="grid gap-1.5">
-                            <Label htmlFor="ingredient-stock" className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="ingredient-stock"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 Initial Stock
                             </Label>
                             <Input
@@ -121,7 +127,10 @@ const IngredientCreatePage = () => {
                             />
                         </div>
                         <div className="grid gap-1.5">
-                            <Label htmlFor="ingredient-low-stock" className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="ingredient-low-stock"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 Low Stock Alert
                             </Label>
                             <Input
@@ -149,7 +158,7 @@ const IngredientCreatePage = () => {
                     <Button
                         onClick={() => createMutation.mutate()}
                         disabled={!name.trim() || createMutation.isPending}
-                        className="bg-(--admin-primary) text-white hover:bg-[#3a1d0e]"
+                        className="bg-(--admin-primary) text-white hover:bg-(--admin-primary)/80"
                     >
                         {createMutation.isPending
                             ? "Creating..."

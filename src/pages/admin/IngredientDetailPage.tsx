@@ -175,7 +175,7 @@ const IngredientDetailPage = () => {
                         </Button>
                     ) : (
                         <div className="flex items-center gap-2">
-                                <span className="text-[11px] text-destructive">
+                            <span className="text-[11px] text-destructive">
                                 Are you sure?
                             </span>
                             <Button
@@ -276,7 +276,7 @@ const IngredientDetailPage = () => {
                             <Button
                                 onClick={handleSave}
                                 disabled={updateMutation.isPending}
-                                className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-[#3a1d0e]"
+                                className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
                             >
                                 {updateMutation.isPending
                                     ? "Saving..."
@@ -467,7 +467,7 @@ const IngredientDetailPage = () => {
                                     qtyNum <= 0 ||
                                     adjustMutation.isPending
                                 }
-                                className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-[#3a1d0e]"
+                                className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
                             >
                                 {adjustMutation.isPending
                                     ? "Adjusting..."

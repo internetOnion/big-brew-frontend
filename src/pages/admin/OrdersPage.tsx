@@ -50,15 +50,18 @@ const statusBadgeConfig: Record<
 > = {
     pending: {
         label: "Pending",
-        className: "bg-(--admin-warning)/10 text-(--admin-warning) border-(--admin-warning)/30",
+        className:
+            "bg-(--admin-warning)/10 text-(--admin-warning) border-(--admin-warning)/30",
     },
     completed: {
         label: "Completed",
-        className: "bg-(--admin-success)/10 text-(--admin-success) border-(--admin-success)/30",
+        className:
+            "bg-(--admin-success)/10 text-(--admin-success) border-(--admin-success)/30",
     },
     void_requested: {
         label: "Void Requested",
-        className: "bg-(--admin-warning)/10 text-(--admin-warning) border-(--admin-warning)/30",
+        className:
+            "bg-(--admin-warning)/10 text-(--admin-warning) border-(--admin-warning)/30",
     },
     voided: {
         label: "Voided",
@@ -72,11 +75,13 @@ const paymentStatusConfig: Record<
 > = {
     pending: {
         label: "Unpaid",
-        className: "bg-(--admin-warning)/10 text-(--admin-warning) border-(--admin-warning)/30",
+        className:
+            "bg-(--admin-warning)/10 text-(--admin-warning) border-(--admin-warning)/30",
     },
     paid: {
         label: "Paid",
-        className: "bg-(--admin-success)/10 text-(--admin-success) border-(--admin-success)/30",
+        className:
+            "bg-(--admin-success)/10 text-(--admin-success) border-(--admin-success)/30",
     },
     refunded: {
         label: "Refunded",
