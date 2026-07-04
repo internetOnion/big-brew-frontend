@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ArrowLeftIcon } from "@phosphor-icons/react";
@@ -11,6 +11,7 @@ import { menuItemKeys } from "@/lib/query-keys";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     Select,
@@ -78,6 +79,30 @@ const MenuItemCreatePage = () => {
     const [newRecipeQuantity, setNewRecipeQuantity] = useState("");
 
     const [groups, setGroups] = useState<LocalGroup[]>([]);
+
+    const hasUnsaved = Boolean(
+        name ||
+        basePrice ||
+        categoryId ||
+        recipes.length > 0 ||
+        groups.length > 0,
+    );
+
+    const confirmLeave = useCallback(() => {
+        if (!hasUnsaved) return true;
+        return window.confirm(
+            "You have unsaved changes. Are you sure you want to leave?",
+        );
+    }, [hasUnsaved]);
+
+    useEffect(() => {
+        if (!hasUnsaved) return;
+        const handler = (e: BeforeUnloadEvent) => {
+            e.preventDefault();
+        };
+        window.addEventListener("beforeunload", handler);
+        return () => window.removeEventListener("beforeunload", handler);
+    }, [hasUnsaved]);
 
     const handleAddRecipe = () => {
         if (!newRecipeIngredient || !newRecipeQuantity) return;
@@ -373,18 +398,22 @@ const MenuItemCreatePage = () => {
         })),
     }));
 
+    const handleBack = () => {
+        if (confirmLeave()) navigate("/admin/menu");
+    };
+
     return (
         <div className="flex flex-col gap-5 p-5">
             <div className="flex items-center gap-3">
                 <Button
                     variant="ghost"
                     size="icon-xs"
-                    onClick={() => navigate("/admin/menu")}
+                    onClick={handleBack}
                     className="text-(--admin-text-muted) hover:text-(--admin-text)"
                 >
                     <ArrowLeftIcon className="size-4" />
                 </Button>
-                <h1 className="text-[13px] font-medium text-(--admin-primary)">
+                <h1 className="text-sm font-semibold text-(--admin-primary)">
                     New Menu Item
                 </h1>
             </div>
@@ -398,7 +427,7 @@ const MenuItemCreatePage = () => {
 
                 <TabsContent value="basic">
                     <div className="rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
-                        <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
+                        <h2 className="mb-3 text-xs font-semibold text-(--admin-text-secondary)">
                             Basic Info
                         </h2>
                         <div className="grid gap-1.5">
@@ -409,6 +438,7 @@ const MenuItemCreatePage = () => {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="e.g. Iced Caramel Latte"
+                                maxLength={100}
                                 className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
                             />
                         </div>
@@ -463,14 +493,12 @@ const MenuItemCreatePage = () => {
                             </div>
                         </div>
                         <div className="mt-3 flex items-center gap-2">
-                            <input
-                                type="checkbox"
+                            <Checkbox
                                 id="available"
                                 checked={isAvailable}
-                                onChange={(e) =>
-                                    setIsAvailable(e.target.checked)
+                                onCheckedChange={(c) =>
+                                    setIsAvailable(c === true)
                                 }
-                                className="size-3.5 accent-(--admin-accent)"
                             />
                             <Label
                                 htmlFor="available"
@@ -497,7 +525,7 @@ const MenuItemCreatePage = () => {
 
                 <TabsContent
                     value="modifiers"
-                    className="md:overflow-hidden md:h-[520px]"
+                    className="md:max-h-[520px] md:overflow-y-auto"
                 >
                     <ModifierTab
                         groups={detailGroups}
@@ -519,13 +547,13 @@ const MenuItemCreatePage = () => {
                 <Button
                     onClick={handleCreate}
                     disabled={creating}
-                    className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-[#3a1d0e]"
+                    className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80 cursor-pointer"
                 >
                     {creating ? "Creating..." : "Create Item"}
                 </Button>
                 <Button
                     variant="ghost"
-                    onClick={() => navigate("/admin/menu")}
+                    onClick={handleBack}
                     disabled={creating}
                     className="h-8 text-xs text-(--admin-text-secondary)"
                 >

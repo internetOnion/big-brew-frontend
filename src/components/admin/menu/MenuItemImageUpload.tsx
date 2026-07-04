@@ -89,6 +89,7 @@ const MenuItemImageUpload = ({
                     <img
                         src={imageUrl}
                         alt="Menu item"
+                        loading="lazy"
                         className="size-full object-cover"
                         onError={() => setImgError(true)}
                     />
@@ -107,6 +108,7 @@ const MenuItemImageUpload = ({
                 <button
                     onClick={() => fileInputRef.current?.click()}
                     disabled={uploading}
+                    aria-label={imageUrl ? "Replace image" : "Upload image"}
                     className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/0 opacity-0 transition-opacity hover:bg-black/40 hover:opacity-100"
                 >
                     <UploadSimpleIcon className="size-5 text-white" />
@@ -134,7 +136,7 @@ const MenuItemImageUpload = ({
                             size="xs"
                             onClick={handleDelete}
                             disabled={uploading}
-                            className="border-red-200 text-[11px] text-red-500 hover:border-red-300 hover:bg-red-50 hover:text-red-600"
+                            className="border-destructive/30 text-[11px] text-destructive hover:border-destructive/50 hover:bg-destructive/10 hover:text-destructive"
                         >
                             <TrashIcon className="size-3" />
                             Remove
@@ -144,8 +146,9 @@ const MenuItemImageUpload = ({
                 <input
                     ref={fileInputRef}
                     type="file"
-                    accept="image/jpeg,image/png,image/gif,image/webp,image/svg+xml,image/bmp,image/tiff"
+                    accept="image/jpeg,image/png,image/gif,image/webp"
                     onChange={handleUpload}
+                    aria-label="Upload menu item image"
                     className="hidden"
                 />
             </div>

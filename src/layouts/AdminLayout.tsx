@@ -77,7 +77,7 @@ const AdminLayout = () => {
                                 {isActive && (
                                     <motion.div
                                         layoutId="active-nav"
-                                        className="absolute inset-y-1 -left-px w-0.5 rounded-full bg-(--admin-primary)"
+                                        className="absolute inset-y-1 -left-px w-px rounded-full bg-(--admin-primary)"
                                         transition={{
                                             type: "spring",
                                             stiffness: 380,

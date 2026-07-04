@@ -262,12 +262,34 @@
     --admin-border: #e8e2da;
     --admin-text: #1a0f0a;
     --admin-text-secondary: #6b5b4e;
-    --admin-text-muted: #a89888;
+    --admin-text-muted: #756556;
     --admin-accent: #c07830;
     --admin-primary: #4a2512;
     --admin-hover: #f4efe8;
     --admin-sidebar: #faf7f3;
     --admin-sidebar-border: #ede7df;
+}
+
+.dark {
+    --admin-bg: #1a0f0a;
+    --admin-card: #2a1a10;
+    --admin-border: #3a2518;
+    --admin-text: #f4efe8;
+    --admin-text-secondary: #c4b5a5;
+    --admin-text-muted: #8b7a67;
+    --admin-accent: #c07830;
+    --admin-primary: #c07830;
+    --admin-hover: #3a2518;
+    --admin-sidebar: #1a0f0a;
+    --admin-sidebar-border: #3a2518;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
 
 /* Admin dashboard theme — light Caffeine with Drizzle Studio layout feel */
