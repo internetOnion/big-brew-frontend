@@ -154,17 +154,20 @@ const SettingsPage = () => {
             <div className="grid gap-4 lg:grid-cols-[1fr_340px]">
                 {/* Form */}
                 <div className="admin-card p-5">
-                    <h2 className="mb-4 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                    <h2 className="mb-4 text-[11px] font-medium tracking-tight text-(--admin-text-secondary)">
                         Store Configuration
                     </h2>
 
-                    <div className="space-y-4">
+                    <div className="flex flex-col gap-4">
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="settings-store-name"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 Store Name
                             </Label>
                             <Input
-                                value={form.storeName ?? ""}
+                                id="settings-store-name"
                                 onChange={(e) =>
                                     handleChange("storeName", e.target.value)
                                 }
@@ -173,11 +176,14 @@ const SettingsPage = () => {
                         </div>
 
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="settings-address"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 Store Address
                             </Label>
                             <Input
-                                value={form.storeAddress ?? ""}
+                                id="settings-address"
                                 onChange={(e) =>
                                     handleChange(
                                         "storeAddress",
@@ -190,11 +196,14 @@ const SettingsPage = () => {
 
                         <div className="grid grid-cols-2 gap-3">
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-(--admin-text-secondary)">
+                                <Label
+                                    htmlFor="settings-currency"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
                                     Currency Symbol
                                 </Label>
                                 <Input
-                                    value={form.currencySymbol ?? ""}
+                                    id="settings-currency"
                                     onChange={(e) =>
                                         handleChange(
                                             "currencySymbol",
@@ -205,11 +214,14 @@ const SettingsPage = () => {
                                 />
                             </div>
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-(--admin-text-secondary)">
+                                <Label
+                                    htmlFor="settings-tax-label"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
                                     Tax Label
                                 </Label>
                                 <Input
-                                    value={form.taxLabel ?? ""}
+                                    id="settings-tax-label"
                                     onChange={(e) =>
                                         handleChange("taxLabel", e.target.value)
                                     }
@@ -219,11 +231,14 @@ const SettingsPage = () => {
                         </div>
 
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="settings-exchange-rate"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 KHR Exchange Rate
                             </Label>
                             <Input
-                                type="number"
+                                id="settings-exchange-rate"
                                 min="0"
                                 step="0.01"
                                 value={form.khrRate ?? ""}
@@ -240,11 +255,14 @@ const SettingsPage = () => {
                         </div>
 
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="settings-receipt-header"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 Receipt Header
                             </Label>
                             <Textarea
-                                value={form.receiptHeader ?? ""}
+                                id="settings-receipt-header"
                                 onChange={(e) =>
                                     handleChange(
                                         "receiptHeader",
@@ -257,11 +275,14 @@ const SettingsPage = () => {
                         </div>
 
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="settings-receipt-footer"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 Receipt Footer
                             </Label>
                             <Textarea
-                                value={form.receiptFooter ?? ""}
+                                id="settings-receipt-footer"
                                 onChange={(e) =>
                                     handleChange(
                                         "receiptFooter",
@@ -302,7 +323,7 @@ const SettingsPage = () => {
                         <Button
                             onClick={handleSave}
                             disabled={updateMutation.isPending}
-                            className="h-8 bg-(--admin-primary) text-xs font-medium text-white hover:bg-[#3a1d0e]"
+                            className="h-8 bg-(--admin-primary) text-xs font-medium text-white hover:bg-(--admin-primary)/80"
                         >
                             {updateMutation.isPending
                                 ? "Saving..."
@@ -313,7 +334,7 @@ const SettingsPage = () => {
 
                 {/* Receipt Preview */}
                 <div className="admin-card p-5">
-                    <h2 className="mb-4 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-muted)">
+                    <h2 className="mb-4 text-[11px] font-medium tracking-tight text-(--admin-text-secondary)">
                         Receipt Preview
                     </h2>
                     <ReceiptPreview settings={previewSettings} />

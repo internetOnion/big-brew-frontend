@@ -88,7 +88,7 @@ const StockAdjustDialog = ({
                     </DialogTitle>
                 </DialogHeader>
 
-                <div className="space-y-4">
+                <div className="flex flex-col gap-4">
                     <div className="rounded border border-(--admin-border) bg-(--admin-hover) p-3">
                         <span className="text-[11px] text-(--admin-text-muted)">
                             Current Stock
@@ -131,11 +131,14 @@ const StockAdjustDialog = ({
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="stock-quantity"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Quantity
                         </Label>
                         <Input
-                            type="number"
+                            id="stock-quantity"
                             step="0.01"
                             min={
                                 reason === "manual_adjustment" ? undefined : "0"
@@ -147,11 +150,14 @@ const StockAdjustDialog = ({
                     </div>
 
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="stock-notes"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Notes
                         </Label>
                         <Textarea
-                            value={notes}
+                            id="stock-notes"
                             onChange={(e) => setNotes(e.target.value)}
                             rows={2}
                             placeholder="Optional notes..."
@@ -165,7 +171,7 @@ const StockAdjustDialog = ({
                                 New stock:{" "}
                             </span>
                             <span
-                                className={`font-mono text-sm font-medium ${newStock < 0 ? "text-red-500" : "text-(--admin-text)"}`}
+                                className={`font-mono text-sm font-medium ${newStock < 0 ? "text-destructive" : "text-(--admin-text)"}`}
                             >
                                 {newStock.toFixed(2)} {ingredient.unit}
                             </span>
@@ -186,7 +192,7 @@ const StockAdjustDialog = ({
                         disabled={
                             !quantity || qtyNum <= 0 || adjustMutation.isPending
                         }
-                        className="bg-(--admin-primary) text-white hover:bg-[#3a1d0e]"
+                        className="bg-(--admin-primary) text-white hover:bg-(--admin-primary)/80"
                     >
                         {adjustMutation.isPending
                             ? "Adjusting..."

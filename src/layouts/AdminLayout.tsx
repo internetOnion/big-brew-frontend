@@ -48,10 +48,10 @@ const AdminLayout = () => {
             {/* Brand */}
             <div className="flex h-11 shrink-0 items-center gap-2.5 px-3.5">
                 <img src="/homebrew.svg" alt="Homebrew" className="size-6" />
-                <span className="font-sans text-[13px] font-bold tracking-tight text-(--admin-primary)">
+                <span className="text-[13px] font-bold tracking-tight text-(--admin-primary)">
                     Big Brew
                 </span>
-                <span className="ml-auto rounded border border-(--admin-sidebar-border) bg-(--admin-hover) px-1.5 py-0.5 font-sans text-[10px] font-medium text-(--admin-text-muted)">
+                <span className="ml-auto rounded border border-(--admin-sidebar-border) bg-(--admin-hover) px-1.5 py-0.5 text-[10px] font-medium text-(--admin-text-muted)">
                     admin
                 </span>
             </div>
@@ -77,11 +77,10 @@ const AdminLayout = () => {
                                 {isActive && (
                                     <motion.div
                                         layoutId="active-nav"
-                                        className="absolute inset-y-1 -left-px w-0.5 rounded-full bg-(--admin-primary)"
+                                        className="absolute inset-y-1 -left-px w-px rounded-full bg-(--admin-primary)"
                                         transition={{
-                                            type: "spring",
-                                            stiffness: 380,
-                                            damping: 30,
+                                            duration: 0.2,
+                                            ease: [0.25, 0.1, 0.25, 1],
                                         }}
                                     />
                                 )}
@@ -122,14 +121,14 @@ const AdminLayout = () => {
             {user && (
                 <div className="border-t border-(--admin-sidebar-border) px-3.5 py-2.5">
                     <div className="flex items-center gap-2.5">
-                        <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-(--admin-primary) font-sans text-[11px] font-semibold text-white">
+                        <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-(--admin-primary) text-[11px] font-semibold text-white">
                             {user.name.charAt(0).toUpperCase()}
                         </div>
                         <div className="min-w-0">
                             <p className="truncate text-[12px] font-medium text-(--admin-text)">
                                 {user.name}
                             </p>
-                            <p className="font-sans text-[10px] capitalize text-(--admin-text-muted)">
+                            <p className="text-[10px] capitalize text-(--admin-text-muted)">
                                 {user.role}
                             </p>
                         </div>
@@ -141,6 +140,14 @@ const AdminLayout = () => {
 
     return (
         <div className="admin-theme flex h-screen w-screen overflow-hidden">
+            {/* Skip to content */}
+            <a
+                href="#admin-content"
+                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-(--admin-primary) focus:px-4 focus:py-2 focus:text-sm focus:text-white focus:outline-none"
+            >
+                Skip to content
+            </a>
+
             {/* Desktop sidebar */}
             <aside className="admin-sidebar hidden w-56 shrink-0 bg-(--admin-sidebar) md:block">
                 <SidebarContent />
@@ -168,14 +175,17 @@ const AdminLayout = () => {
                                 alt="Homebrew"
                                 className="size-6"
                             />
-                            <span className="font-sans text-[13px] font-bold text-(--admin-primary)">
+                            <span className="text-[13px] font-bold text-(--admin-primary)">
                                 BigBrew
                             </span>
                         </div>
                     </div>
 
                     {/* Page content */}
-                    <main className="flex-1 overflow-auto bg-(--admin-bg)">
+                    <main
+                        id="admin-content"
+                        className="flex-1 overflow-auto bg-(--admin-bg)"
+                    >
                         <Outlet />
                     </main>
                 </div>

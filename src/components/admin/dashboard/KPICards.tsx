@@ -23,19 +23,19 @@ const kpis = [
         key: "totalRevenue" as const,
         label: "Total Revenue",
         icon: CurrencyDollarIcon,
-        color: "text-emerald-600",
+        color: "text-(--admin-success)",
     },
     {
         key: "totalExpenses" as const,
         label: "Total Expenses",
         icon: TrendDownIcon,
-        color: "text-red-500",
+        color: "text-destructive",
     },
     {
         key: "netIncome" as const,
         label: "Net Income",
         icon: TrendUpIcon,
-        color: "text-blue-600",
+        color: "text-(--admin-primary)",
     },
     {
         key: "averageOrderValue" as const,
@@ -74,7 +74,7 @@ const KPICards = ({
                     <div key={kpi.key} className="bg-(--admin-card) p-4">
                         <div className="mb-2 flex items-center gap-2">
                             <kpi.icon
-                                className={`size-3.5 ${isNegative ? "text-red-500" : kpi.color}`}
+                                className={`size-3.5 ${isNegative ? "text-destructive" : kpi.color}`}
                             />
                             <span className="text-[11px] text-(--admin-text-muted)">
                                 {kpi.label}
@@ -83,7 +83,7 @@ const KPICards = ({
                         <p
                             className={`font-mono text-lg font-medium tracking-tight ${
                                 isNegative
-                                    ? "text-red-500"
+                                    ? "text-destructive"
                                     : "text-(--admin-text)"
                             }`}
                         >

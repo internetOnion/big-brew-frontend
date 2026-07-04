@@ -12,6 +12,7 @@ import {
 } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
     Select,
     SelectContent,
@@ -232,6 +233,7 @@ const ModifierGroupDetail = ({
                         <Input
                             value={editName}
                             onChange={(e) => setEditName(e.target.value)}
+                            aria-label="Group name"
                             className="h-7 flex-1 min-w-32 border-(--admin-border) bg-(--admin-card) text-xs"
                             autoFocus
                         />
@@ -256,13 +258,11 @@ const ModifierGroupDetail = ({
                             </SelectContent>
                         </Select>
                         <label className="flex items-center gap-1.5 text-xs text-(--admin-text-secondary)">
-                            <input
-                                type="checkbox"
+                            <Checkbox
                                 checked={editRequired}
-                                onChange={(e) =>
-                                    setEditRequired(e.target.checked)
+                                onCheckedChange={(c) =>
+                                    setEditRequired(c === true)
                                 }
-                                className="size-3 accent-(--admin-accent)"
                             />
                             Required
                         </label>
@@ -270,7 +270,7 @@ const ModifierGroupDetail = ({
                             variant="ghost"
                             size="icon-xs"
                             onClick={saveEdit}
-                            className="text-green-600 hover:text-green-700"
+                            className="text-(--admin-accent) hover:text-(--admin-accent)/80"
                         >
                             <CheckIcon className="size-3.5" />
                         </Button>
@@ -317,7 +317,7 @@ const ModifierGroupDetail = ({
                                 variant="ghost"
                                 size="icon-xs"
                                 onClick={() => onDelete(group.id)}
-                                className="text-red-500 hover:text-red-700"
+                                className="text-destructive hover:text-destructive/80"
                             >
                                 <TrashIcon className="size-3" />
                             </Button>
@@ -345,6 +345,7 @@ const ModifierGroupDetail = ({
                                         onChange={(e) =>
                                             setEditOptionName(e.target.value)
                                         }
+                                        aria-label="Option name"
                                         className="h-7 flex-1 border-(--admin-border) bg-(--admin-card) text-xs"
                                         autoFocus
                                     />
@@ -356,6 +357,7 @@ const ModifierGroupDetail = ({
                                         onChange={(e) =>
                                             setEditOptionPrice(e.target.value)
                                         }
+                                        aria-label="Option price"
                                         placeholder="$0.00"
                                         className="h-7 w-20 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                                     />
@@ -363,7 +365,7 @@ const ModifierGroupDetail = ({
                                         variant="ghost"
                                         size="icon-xs"
                                         onClick={saveOption}
-                                        className="text-green-600 hover:text-green-700"
+                                        className="text-(--admin-accent) hover:text-(--admin-accent)/80"
                                     >
                                         <CheckIcon className="size-3.5" />
                                     </Button>
@@ -411,7 +413,7 @@ const ModifierGroupDetail = ({
                                         onClick={() =>
                                             onDeleteOption(group.id, option.id)
                                         }
-                                        className="mr-2 text-red-500 hover:text-red-700"
+                                        className="mr-2 text-destructive hover:text-destructive/80"
                                     >
                                         <TrashIcon className="size-3" />
                                     </Button>
@@ -427,7 +429,10 @@ const ModifierGroupDetail = ({
                                                 key={ing.id}
                                                 className="flex items-center justify-between py-0.5"
                                             >
-                                                <span className="text-xs text-(--admin-text)">
+                                                <span
+                                                    id={`ing-name-${ing.id}`}
+                                                    className="text-xs text-(--admin-text)"
+                                                >
                                                     {ing.name}
                                                 </span>
                                                 <div className="flex items-center gap-1.5">
@@ -441,6 +446,7 @@ const ModifierGroupDetail = ({
                                                                 e.target.value,
                                                             )
                                                         }
+                                                        aria-labelledby={`ing-name-${ing.id}`}
                                                         className="h-6 w-16 border-(--admin-border) bg-(--admin-card) font-mono text-[11px]"
                                                     />
                                                     <span className="text-[11px] text-(--admin-text-muted)">
@@ -455,7 +461,7 @@ const ModifierGroupDetail = ({
                                                                 ing,
                                                             )
                                                         }
-                                                        className="text-green-600 hover:text-green-700"
+                                                        className="text-(--admin-accent) hover:text-(--admin-accent)/80"
                                                     >
                                                         <CheckIcon className="size-3" />
                                                     </Button>
@@ -510,7 +516,7 @@ const ModifierGroupDetail = ({
                                                                 ing.ingredientId,
                                                             )
                                                         }
-                                                        className="text-red-500 hover:text-red-700"
+                                                        className="text-destructive hover:text-destructive/80"
                                                     >
                                                         <TrashIcon className="size-2.5" />
                                                     </Button>
@@ -550,6 +556,7 @@ const ModifierGroupDetail = ({
                                                 onChange={(e) =>
                                                     setNewIngQty(e.target.value)
                                                 }
+                                                aria-label="New ingredient quantity"
                                                 placeholder="Qty"
                                                 className="h-6 w-16 border-(--admin-border) bg-(--admin-card) font-mono text-[11px]"
                                             />
@@ -561,7 +568,7 @@ const ModifierGroupDetail = ({
                                                         option.id,
                                                     )
                                                 }
-                                                className="text-green-600 hover:text-green-700"
+                                                className="text-(--admin-accent) hover:text-(--admin-accent)/80"
                                             >
                                                 <CheckIcon className="size-3" />
                                             </Button>
@@ -607,6 +614,7 @@ const ModifierGroupDetail = ({
                         <Input
                             value={newOptionName}
                             onChange={(e) => setNewOptionName(e.target.value)}
+                            aria-label="New option name"
                             placeholder="Option name"
                             className="h-7 flex-1 border-(--admin-border) bg-(--admin-card) text-xs"
                             autoFocus
@@ -617,6 +625,7 @@ const ModifierGroupDetail = ({
                             min="0"
                             value={newOptionPrice}
                             onChange={(e) => setNewOptionPrice(e.target.value)}
+                            aria-label="New option price"
                             placeholder="$0.00"
                             className="h-7 w-20 border-(--admin-border) bg-(--admin-card) font-mono text-xs"
                         />
@@ -624,7 +633,7 @@ const ModifierGroupDetail = ({
                             variant="ghost"
                             size="icon-xs"
                             onClick={handleAddOption}
-                            className="text-green-600 hover:text-green-700"
+                            className="text-(--admin-accent) hover:text-(--admin-accent)/80"
                         >
                             <CheckIcon className="size-3.5" />
                         </Button>

@@ -92,7 +92,7 @@ const ImageUpload = ({
                             size="xs"
                             onClick={onRemove}
                             disabled={uploading}
-                            className="border-red-200 text-[11px] text-red-500 hover:border-red-300 hover:bg-red-50 hover:text-red-600"
+                            className="border-destructive/30 text-[11px] text-destructive hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive"
                         >
                             <TrashIcon className="size-3" />
                             Remove

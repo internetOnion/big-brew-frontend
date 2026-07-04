@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { PlusIcon, CheckIcon, XIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
     Select,
     SelectContent,
@@ -62,9 +63,9 @@ const ModifierGroupList = ({
     return (
         <div className="flex h-full flex-col border-b border-(--admin-border) md:border-b-0 md:border-r">
             <div className="flex items-center justify-between border-b border-(--admin-border) px-4 py-3">
-                <h3 className="text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
+                <h2 className="text-xs font-semibold text-(--admin-text-secondary)">
                     Modifier Groups
-                </h3>
+                </h2>
             </div>
 
             <div className="flex-1 overflow-y-auto">
@@ -84,8 +85,8 @@ const ModifierGroupList = ({
                             onClick={() => onSelect(group.id)}
                             className={`flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-(--admin-hover) ${
                                 selectedGroupId === group.id
-                                    ? "border-l-2 border-(--admin-accent) bg-(--admin-hover)"
-                                    : "border-l-2 border-transparent"
+                                    ? "bg-(--admin-hover) font-medium"
+                                    : ""
                             }`}
                         >
                             <div className="flex flex-1 flex-col">
@@ -114,6 +115,7 @@ const ModifierGroupList = ({
                         <Input
                             value={newName}
                             onChange={(e) => setNewName(e.target.value)}
+                            aria-label="New group name"
                             placeholder="Group name"
                             className="h-7 border-(--admin-border) bg-(--admin-card) text-xs"
                             autoFocus
@@ -144,13 +146,11 @@ const ModifierGroupList = ({
                                 </SelectContent>
                             </Select>
                             <label className="flex shrink-0 items-center gap-1.5 text-xs text-(--admin-text-secondary)">
-                                <input
-                                    type="checkbox"
+                                <Checkbox
                                     checked={newRequired}
-                                    onChange={(e) =>
-                                        setNewRequired(e.target.checked)
+                                    onCheckedChange={(c) =>
+                                        setNewRequired(c === true)
                                     }
-                                    className="size-3 accent-(--admin-accent)"
                                 />
                                 Required
                             </label>
@@ -159,7 +159,7 @@ const ModifierGroupList = ({
                                     variant="ghost"
                                     size="icon-xs"
                                     onClick={handleAdd}
-                                    className="text-green-600 hover:text-green-700"
+                                    className="text-(--admin-accent) hover:text-(--admin-accent)/80"
                                 >
                                     <CheckIcon className="size-3.5" />
                                 </Button>

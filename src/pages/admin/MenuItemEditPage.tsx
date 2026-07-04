@@ -13,6 +13,7 @@ import { menuItemKeys } from "@/lib/query-keys";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     Select,
@@ -432,8 +433,8 @@ const MenuItemEditPage = () => {
                         <span
                             className={`ml-auto rounded-full px-2 py-0.5 text-[10px] font-medium ${
                                 isAvailable
-                                    ? "bg-green-100 text-green-700"
-                                    : "bg-red-100 text-red-700"
+                                    ? "bg-(--admin-primary)/10 text-(--admin-primary)"
+                                    : "bg-destructive/10 text-destructive"
                             }`}
                         >
                             {isAvailable ? "Available" : "Unavailable"}
@@ -442,7 +443,7 @@ const MenuItemEditPage = () => {
                             variant="outline"
                             size="xs"
                             onClick={() => setShowDeleteDialog(true)}
-                            className="border-red-200 text-[11px] text-red-500 hover:border-red-300 hover:bg-red-50 hover:text-red-600"
+                            className="border-destructive/30 text-[11px] text-destructive hover:border-destructive/50 hover:bg-destructive/10 hover:text-destructive"
                         >
                             <TrashIcon className="size-3" />
                             Delete
@@ -458,7 +459,7 @@ const MenuItemEditPage = () => {
             ) : (
                 <>
                     <div className="rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
-                        <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
+                        <h2 className="mb-3 text-[11px] font-medium tracking-tight text-(--admin-text-secondary)">
                             Image
                         </h2>
                         <MenuItemImageUpload
@@ -479,15 +480,19 @@ const MenuItemEditPage = () => {
 
                         <TabsContent value="basic">
                             <div className="rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
-                                <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
+                                <h2 className="mb-3 text-[11px] font-medium tracking-tight text-(--admin-text-secondary)">
                                     Basic Info
                                 </h2>
                                 <div className="grid gap-1.5">
-                                    <Label className="text-[11px] text-(--admin-text-secondary)">
+                                    <Label
+                                        htmlFor="edit-item-name"
+                                        className="text-[11px] text-(--admin-text-secondary)"
+                                    >
                                         Name
                                     </Label>
                                     <Input
-                                        value={name}
+                                        id="edit-item-name"
+                                        required
                                         onChange={(e) =>
                                             setName(e.target.value)
                                         }
@@ -496,11 +501,15 @@ const MenuItemEditPage = () => {
                                 </div>
                                 <div className="mt-3 grid grid-cols-2 gap-3">
                                     <div className="grid gap-1.5">
-                                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                                        <Label
+                                            htmlFor="edit-item-price"
+                                            className="text-[11px] text-(--admin-text-secondary)"
+                                        >
                                             Base Price
                                         </Label>
                                         <Input
-                                            type="number"
+                                            id="edit-item-price"
+                                            required
                                             step="0.01"
                                             min="0"
                                             value={basePrice}
@@ -511,7 +520,10 @@ const MenuItemEditPage = () => {
                                         />
                                     </div>
                                     <div className="grid gap-1.5">
-                                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                                        <Label
+                                            htmlFor="edit-item-category"
+                                            className="text-[11px] text-(--admin-text-secondary)"
+                                        >
                                             Category
                                         </Label>
                                         <Select
@@ -521,7 +533,11 @@ const MenuItemEditPage = () => {
                                                 setCategoryId(v ?? "")
                                             }
                                         >
-                                            <SelectTrigger className="h-8 w-full border-(--admin-border) bg-(--admin-card) text-xs">
+                                            <SelectTrigger
+                                                id="edit-item-category"
+                                                aria-required="true"
+                                                className="h-8 w-full border-(--admin-border) bg-(--admin-card) text-xs"
+                                            >
                                                 <SelectValue>
                                                     {(val) =>
                                                         categories?.find(
@@ -545,14 +561,12 @@ const MenuItemEditPage = () => {
                                     </div>
                                 </div>
                                 <div className="mt-3 flex items-center gap-2">
-                                    <input
-                                        type="checkbox"
+                                    <Checkbox
                                         id="available"
                                         checked={isAvailable}
-                                        onChange={(e) =>
-                                            setIsAvailable(e.target.checked)
+                                        onCheckedChange={(c) =>
+                                            setIsAvailable(c === true)
                                         }
-                                        className="size-3.5 accent-(--admin-accent)"
                                     />
                                     <Label
                                         htmlFor="available"
@@ -564,7 +578,7 @@ const MenuItemEditPage = () => {
                                 <div className="mt-4">
                                     <Button
                                         onClick={handleSaveBasic}
-                                        className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-[#3a1d0e]"
+                                        className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
                                     >
                                         Save Changes
                                     </Button>
@@ -640,7 +654,7 @@ const MenuItemEditPage = () => {
                                 <Button
                                     onClick={handleDelete}
                                     disabled={deleting}
-                                    className="bg-red-600 text-white hover:bg-red-700"
+                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                 >
                                     {deleting ? "Removing..." : "Remove"}
                                 </Button>

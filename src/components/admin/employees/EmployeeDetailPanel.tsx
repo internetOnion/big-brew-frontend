@@ -17,13 +17,13 @@ import type { Order } from "@/types/order";
 const statusBadgeVariant = (status: string) => {
     switch (status) {
         case "completed":
-            return "border-emerald-200 bg-emerald-50 text-emerald-700 text-[10px]";
+            return "border-(--admin-success)/30 bg-(--admin-success)/10 text-(--admin-success) text-[10px]";
         case "voided":
-            return "border-red-200 bg-red-50 text-red-700 text-[10px]";
+            return "border-destructive/30 bg-destructive/10 text-destructive text-[10px]";
         case "void_requested":
-            return "border-amber-200 bg-amber-50 text-amber-700 text-[10px]";
+            return "border-(--admin-warning)/30 bg-(--admin-warning)/10 text-(--admin-warning) text-[10px]";
         default:
-            return "border-blue-200 bg-blue-50 text-blue-700 text-[10px]";
+            return "border-(--admin-primary)/30 bg-(--admin-primary)/10 text-(--admin-primary) text-[10px]";
     }
 };
 
@@ -110,7 +110,7 @@ const EmployeeDetailPanel = ({
                                     {employee.role}
                                 </Badge>
                                 <span
-                                    className={`text-[10px] font-medium ${isActive ? "text-emerald-600" : "text-(--admin-text-muted)"}`}
+                                    className={`text-[10px] font-medium ${isActive ? "text-(--admin-success)" : "text-(--admin-text-muted)"}`}
                                 >
                                     {isActive ? "Active" : "Inactive"}
                                 </span>
@@ -131,7 +131,7 @@ const EmployeeDetailPanel = ({
                 <div className="grid grid-cols-2 gap-2.5 py-4 shrink-0">
                     <div className="rounded-lg border border-(--admin-border) bg-(--admin-hover) p-3">
                         <div className="flex items-center gap-1.5">
-                            <CheckCircleIcon className="size-3 text-emerald-600" />
+                            <CheckCircleIcon className="size-3 text-(--admin-success)" />
                             <span className="text-[10px] text-(--admin-text-muted)">
                                 Completed
                             </span>
@@ -142,7 +142,7 @@ const EmployeeDetailPanel = ({
                     </div>
                     <div className="rounded-lg border border-(--admin-border) bg-(--admin-hover) p-3">
                         <div className="flex items-center gap-1.5">
-                            <XCircleIcon className="size-3 text-red-500" />
+                            <XCircleIcon className="size-3 text-destructive" />
                             <span className="text-[10px] text-(--admin-text-muted)">
                                 Voided
                             </span>
@@ -163,7 +163,7 @@ const EmployeeDetailPanel = ({
                     </div>
 
                     {isLoading ? (
-                        <div className="space-y-2">
+                        <div className="flex flex-col gap-2">
                             {Array.from({ length: 3 }).map((_, i) => (
                                 <div
                                     key={i}
@@ -176,7 +176,7 @@ const EmployeeDetailPanel = ({
                             No orders yet
                         </p>
                     ) : (
-                        <div className="space-y-1.5">
+                        <div className="flex flex-col gap-1.5">
                             {orders.map((order) => (
                                 <button
                                     key={order.id}

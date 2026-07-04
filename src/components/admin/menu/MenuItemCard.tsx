@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
     ForkKnifeIcon,
     DotsThreeVerticalIcon,
@@ -23,9 +23,24 @@ const MenuItemCard = ({ item, onEdit, onDelete }: MenuItemCardProps) => {
     const [imgError, setImgError] = useState(false);
     const price = parseFloat(item.basePrice);
 
+    const handleClick = useCallback(() => onEdit(item), [item, onEdit]);
+    const handleKeyDown = useCallback(
+        (e: React.KeyboardEvent) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onEdit(item);
+            }
+        },
+        [item, onEdit],
+    );
+
     return (
         <div
-            onClick={() => onEdit(item)}
+            onClick={handleClick}
+            onKeyDown={handleKeyDown}
+            role="button"
+            tabIndex={0}
+            aria-label={`Edit ${item.name}`}
             className="group relative cursor-pointer overflow-hidden rounded-lg border border-(--admin-border) bg-(--admin-card) transition-colors hover:border-(--admin-accent)"
         >
             {/* Image */}
@@ -34,29 +49,33 @@ const MenuItemCard = ({ item, onEdit, onDelete }: MenuItemCardProps) => {
                     <img
                         src={item.imageUrl}
                         alt={item.name}
+                        loading="lazy"
                         className="size-full object-cover"
                         onError={() => setImgError(true)}
                     />
                 ) : (
                     <div className="flex size-full items-center justify-center">
-                        <ForkKnifeIcon className="size-8 text-(--admin-text-muted)" />
+                        <ForkKnifeIcon
+                            className="size-8 text-(--admin-text-muted)"
+                            aria-hidden="true"
+                        />
                     </div>
                 )}
-                {/* Category badge */}
-                <span className="absolute left-2 top-2 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary backdrop-blur-sm">
+                <span className="absolute left-2 top-2 rounded-full bg-(--admin-card)/90 px-2 py-0.5 text-[10px] font-medium text-(--admin-primary) max-sm:hidden">
                     {item.category.name}
                 </span>
-                {/* Availability badge */}
                 {item.isAvailable === false && (
-                    <span className="absolute right-2 top-2 rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-medium text-red-700">
+                    <span className="absolute right-2 top-2 rounded-full bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
                         Unavailable
                     </span>
                 )}
             </div>
 
-            {/* Info */}
-            <div className="flex items-center justify-between p-3">
+            <div className="flex items-center justify-between gap-1 p-2.5">
                 <div className="min-w-0">
+                    <span className="block truncate text-[10px] font-medium text-(--admin-primary) sm:hidden">
+                        {item.category.name}
+                    </span>
                     <p className="truncate text-[13px] font-medium text-(--admin-text)">
                         {item.name}
                     </p>
@@ -64,9 +83,15 @@ const MenuItemCard = ({ item, onEdit, onDelete }: MenuItemCardProps) => {
                         ${price.toFixed(2)}
                     </p>
                 </div>
-                <div onClick={(e) => e.stopPropagation()}>
+                <div
+                    onClick={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => e.stopPropagation()}
+                >
                     <DropdownMenu>
-                        <DropdownMenuTrigger className="flex size-7 shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text) cursor-pointer">
+                        <DropdownMenuTrigger
+                            aria-label="Actions"
+                            className="flex size-8 shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text) cursor-pointer"
+                        >
                             <DotsThreeVerticalIcon className="size-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent

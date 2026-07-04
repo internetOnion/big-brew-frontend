@@ -46,7 +46,7 @@ const RecipeTab = ({
 
     return (
         <div className="rounded-lg border border-(--admin-border) bg-(--admin-card) p-4">
-            <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
+            <h2 className="mb-3 text-xs font-semibold text-(--admin-text-secondary)">
                 Recipe
             </h2>
             <div className="flex flex-col gap-1">
@@ -71,7 +71,7 @@ const RecipeTab = ({
                                     variant="ghost"
                                     size="icon-xs"
                                     onClick={() => onRemove(r)}
-                                    className="text-red-500 hover:text-red-700"
+                                    className="text-destructive hover:text-destructive/80"
                                 >
                                     <TrashIcon className="size-3.5" />
                                 </Button>

@@ -61,7 +61,7 @@ const roleBadge = (role: string) => {
         case "owner":
             return "border-(--admin-primary)/30 bg-(--admin-primary)/10 text-(--admin-primary)";
         case "manager":
-            return "border-amber-200 bg-amber-50 text-amber-700";
+            return "border-(--admin-warning)/30 bg-(--admin-warning)/10 text-(--admin-warning)";
         default:
             return "border-(--admin-border) bg-(--admin-hover) text-(--admin-text-secondary)";
     }
@@ -171,7 +171,7 @@ const EmployeesPage = () => {
                 <Button
                     size="sm"
                     onClick={() => navigate("/admin/employees/new")}
-                    className="h-7 gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-[#3a1d0e] cursor-pointer"
+                    className="h-7 gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80 cursor-pointer"
                 >
                     <PlusIcon className="size-3" />
                     Add
@@ -296,7 +296,7 @@ const EmployeesPage = () => {
                                                         className={cn(
                                                             "text-[10px] font-medium",
                                                             isActive
-                                                                ? "text-emerald-600"
+                                                                ? "text-(--admin-success)"
                                                                 : "text-(--admin-text-muted)",
                                                         )}
                                                     >
@@ -420,8 +420,8 @@ const EmployeesPage = () => {
                             onClick={handleConfirmToggle}
                             className={
                                 confirmDialogEmployee?.isActive !== false
-                                    ? "bg-red-600 text-white hover:bg-red-700"
-                                    : "bg-emerald-600 text-white hover:bg-emerald-700"
+                                    ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                    : "bg-(--admin-success) text-white hover:bg-(--admin-success)/80"
                             }
                         >
                             {confirmDialogEmployee?.isActive !== false
@@ -459,7 +459,7 @@ const EmployeesPage = () => {
                         </Button>
                         <Button
                             onClick={handleDeleteConfirm}
-                            className="bg-red-600 text-white hover:bg-red-700"
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
                             Delete
                         </Button>

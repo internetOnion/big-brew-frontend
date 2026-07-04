@@ -203,18 +203,10 @@
 }
 .pos-scroll::-webkit-scrollbar-thumb {
     background: var(--border);
-    border-radius: 2px;
+    border-radius: 4px;
 }
 .pos-scroll::-webkit-scrollbar-thumb:hover {
     background: var(--muted-foreground);
-}
-
-/* Keypad button hover effect */
-.keypad-btn:hover {
-    filter: brightness(0.96);
-}
-.keypad-btn:active {
-    transform: scale(0.95);
 }
 
 /* Pulse animation for urgent orders */
@@ -229,20 +221,6 @@
 }
 .urgent-pulse {
     animation: urgentPulse 2s ease-in-out infinite;
-}
-
-/* Charge-ready pulse for Confirm Payment button */
-@keyframes chargeReady {
-    0%,
-    100% {
-        box-shadow: 0 0 0 0 oklch(from var(--accent) l c h / 0.4);
-    }
-    50% {
-        box-shadow: 0 0 0 8px oklch(from var(--accent) l c h / 0);
-    }
-}
-.charge-ready {
-    animation: chargeReady 2s ease-in-out infinite;
 }
 
 /* Grain overlay for texture */
@@ -284,12 +262,38 @@
     --admin-border: #e8e2da;
     --admin-text: #1a0f0a;
     --admin-text-secondary: #6b5b4e;
-    --admin-text-muted: #a89888;
+    --admin-text-muted: #756556;
     --admin-accent: #c07830;
     --admin-primary: #4a2512;
     --admin-hover: #f4efe8;
     --admin-sidebar: #faf7f3;
     --admin-sidebar-border: #ede7df;
+    --admin-success: #3a7d3a;
+    --admin-warning: #b85c00;
+}
+
+.dark {
+    --admin-bg: #1a0f0a;
+    --admin-card: #2a1a10;
+    --admin-border: #3a2518;
+    --admin-text: #f4efe8;
+    --admin-text-secondary: #c4b5a5;
+    --admin-text-muted: #8b7a67;
+    --admin-accent: #c07830;
+    --admin-primary: #c07830;
+    --admin-hover: #3a2518;
+    --admin-sidebar: #1a0f0a;
+    --admin-sidebar-border: #3a2518;
+    --admin-success: #6eb86e;
+    --admin-warning: #d4943a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
 
 /* Admin dashboard theme — light Caffeine with Drizzle Studio layout feel */

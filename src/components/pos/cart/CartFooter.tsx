@@ -39,7 +39,7 @@ export const CartFooter = ({
         <Button
             onClick={onConfirm}
             disabled={isEmpty}
-            className="h-10 w-full rounded-lg bg-(--pos-primary) font-sans text-xs font-bold text-white hover:bg-[#3a1d0e] cursor-pointer"
+            className="h-10 w-full rounded-lg bg-(--pos-primary) font-sans text-xs font-bold text-white hover:bg-(--pos-primary)/80 cursor-pointer"
         >
             Confirm
         </Button>

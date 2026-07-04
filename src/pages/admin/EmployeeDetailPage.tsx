@@ -49,13 +49,13 @@ const ROLES = [
 const statusBadgeVariant = (status: string) => {
     switch (status) {
         case "completed":
-            return "border-emerald-200 bg-emerald-50 text-emerald-700 text-[10px]";
+            return "border-(--admin-success)/30 bg-(--admin-success)/10 text-(--admin-success) text-[10px]";
         case "voided":
-            return "border-red-200 bg-red-50 text-red-700 text-[10px]";
+            return "border-destructive/30 bg-destructive/10 text-destructive text-[10px]";
         case "void_requested":
-            return "border-amber-200 bg-amber-50 text-amber-700 text-[10px]";
+            return "border-(--admin-warning)/30 bg-(--admin-warning)/10 text-(--admin-warning) text-[10px]";
         default:
-            return "border-blue-200 bg-blue-50 text-blue-700 text-[10px]";
+            return "border-(--admin-primary)/30 bg-(--admin-primary)/10 text-(--admin-primary) text-[10px]";
     }
 };
 
@@ -219,7 +219,7 @@ const EmployeeDetailPage = () => {
                     {employee.role}
                 </Badge>
                 <span
-                    className={`text-[10px] font-medium ${isActive ? "text-emerald-600" : "text-(--admin-text-muted)"}`}
+                    className={`text-[10px] font-medium ${isActive ? "text-(--admin-success)" : "text-(--admin-text-muted)"}`}
                 >
                     {isActive ? "Active" : "Inactive"}
                 </span>
@@ -233,13 +233,16 @@ const EmployeeDetailPage = () => {
                         <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
                             Edit Details
                         </h2>
-                        <div className="space-y-3">
+                        <div className="flex flex-col gap-3">
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-(--admin-text-secondary)">
+                                <Label
+                                    htmlFor="detail-name"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
                                     Name
                                 </Label>
                                 <Input
-                                    value={name}
+                                    id="detail-name"
                                     onChange={(e) => setName(e.target.value)}
                                     className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
                                 />
@@ -289,7 +292,7 @@ const EmployeeDetailPage = () => {
                                 <Button
                                     onClick={handleSave}
                                     disabled={updateMutation.isPending}
-                                    className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-[#3a1d0e]"
+                                    className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
                                 >
                                     {updateMutation.isPending
                                         ? "Saving..."
@@ -303,7 +306,7 @@ const EmployeeDetailPage = () => {
                                             ? deactivateMutation.isPending
                                             : reactivateMutation.isPending
                                     }
-                                    className={`h-8 text-xs ${isActive ? "border-red-200 text-red-600 hover:bg-red-50" : "border-emerald-200 text-emerald-600 hover:bg-emerald-50"}`}
+                                    className={`h-8 text-xs ${isActive ? "border-destructive/30 text-destructive hover:bg-destructive/10" : "border-(--admin-success)/30 text-(--admin-success) hover:bg-(--admin-success)/10"}`}
                                 >
                                     {isActive ? "Deactivate" : "Reactivate"}
                                 </Button>
@@ -314,7 +317,7 @@ const EmployeeDetailPage = () => {
                                             setShowDeleteDialog(true)
                                         }
                                         disabled={deleteMutation.isPending}
-                                        className="h-8 border-red-200 text-xs text-red-600 hover:bg-red-50"
+                                        className="h-8 border-destructive/30 text-xs text-destructive hover:bg-destructive/10"
                                     >
                                         <TrashIcon className="size-3" />
                                         Delete
@@ -330,13 +333,16 @@ const EmployeeDetailPage = () => {
                             <KeyIcon className="size-3" />
                             Reset PIN
                         </h2>
-                        <div className="space-y-3">
+                        <div className="flex flex-col gap-3">
                             <div className="grid gap-1.5">
-                                <Label className="text-[11px] text-(--admin-text-secondary)">
+                                <Label
+                                    htmlFor="detail-new-pin"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
                                     New PIN (4-6 digits)
                                 </Label>
                                 <Input
-                                    type="text"
+                                    id="detail-new-pin"
                                     inputMode="numeric"
                                     maxLength={6}
                                     value={newPin}
@@ -374,15 +380,15 @@ const EmployeeDetailPage = () => {
 
                         {/* Summary chips */}
                         <div className="mb-4 flex gap-3">
-                            <div className="flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
-                                <CheckCircleIcon className="size-3 text-emerald-600" />
-                                <span className="text-[10px] text-emerald-700">
+                            <div className="flex items-center gap-1.5 rounded-full border border-(--admin-success)/30 bg-(--admin-success)/10 px-3 py-1">
+                                <CheckCircleIcon className="size-3 text-(--admin-success)" />
+                                <span className="text-[10px] text-(--admin-success)">
                                     {completedOrders} completed
                                 </span>
                             </div>
-                            <div className="flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-3 py-1">
-                                <XCircleIcon className="size-3 text-red-500" />
-                                <span className="text-[10px] text-red-700">
+                            <div className="flex items-center gap-1.5 rounded-full border border-destructive/30 bg-destructive/10 px-3 py-1">
+                                <XCircleIcon className="size-3 text-destructive" />
+                                <span className="text-[10px] text-destructive">
                                     {voidedOrders} voided
                                 </span>
                             </div>
@@ -492,8 +498,8 @@ const EmployeeDetailPage = () => {
                             onClick={handleConfirmToggle}
                             className={
                                 isActive
-                                    ? "bg-red-600 text-white hover:bg-red-700"
-                                    : "bg-emerald-600 text-white hover:bg-emerald-700"
+                                    ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                    : "bg-(--admin-success) text-white hover:bg-(--admin-success)/80"
                             }
                         >
                             {isActive ? "Deactivate" : "Reactivate"}
@@ -529,7 +535,7 @@ const EmployeeDetailPage = () => {
                         </Button>
                         <Button
                             onClick={handleDelete}
-                            className="bg-red-600 text-white hover:bg-red-700"
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
                             Delete
                         </Button>

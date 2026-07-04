@@ -12,7 +12,7 @@ const OrderReceipt = ({ order, settings }: OrderReceiptProps) => {
     const payment = cashPayment ?? qrPayment;
 
     return (
-        <div className="mx-auto w-full max-w-[300px] rounded-lg border border-border bg-white p-4 font-mono text-xs text-black shadow-sm">
+        <div className="mx-auto w-full max-w-[300px] rounded-lg border border-border bg-card p-4 font-mono text-xs text-foreground shadow-sm">
             {settings.logoUrl && (
                 <div className="mb-2 flex justify-center">
                     <img
@@ -28,18 +28,18 @@ const OrderReceipt = ({ order, settings }: OrderReceiptProps) => {
             </div>
 
             {settings.storeAddress && (
-                <div className="mb-2 text-center text-[10px] text-gray-600">
+                <div className="mb-2 text-center text-[10px] text-muted-foreground">
                     {settings.storeAddress}
                 </div>
             )}
 
             {settings.receiptHeader && (
-                <div className="mb-2 text-center text-[10px] text-gray-600">
+                <div className="mb-2 text-center text-[10px] text-muted-foreground">
                     {settings.receiptHeader}
                 </div>
             )}
 
-            <div className="my-2 border-t border-dashed border-gray-400" />
+            <div className="my-2 border-t border-dashed border-border" />
 
             <div className="mb-2 flex justify-between text-[10px]">
                 <span>Order #{order.orderNumber}</span>
@@ -52,7 +52,7 @@ const OrderReceipt = ({ order, settings }: OrderReceiptProps) => {
                 </span>
             </div>
 
-            <div className="space-y-1">
+            <div className="flex flex-col gap-1">
                 {order.items.map((item) => {
                     const lineTotal =
                         parseFloat(item.unitPrice) * item.quantity;
@@ -68,7 +68,7 @@ const OrderReceipt = ({ order, settings }: OrderReceiptProps) => {
                                 </span>
                             </div>
                             {item.modifiers.length > 0 && (
-                                <div className="pl-3 text-[9px] text-gray-500">
+                                <div className="pl-3 text-[9px] text-muted-foreground">
                                     {item.modifiers.map((m, i) => (
                                         <span key={m.id}>
                                             {i > 0 && ", "}
@@ -84,9 +84,9 @@ const OrderReceipt = ({ order, settings }: OrderReceiptProps) => {
                 })}
             </div>
 
-            <div className="my-2 border-t border-dashed border-gray-400" />
+            <div className="my-2 border-t border-dashed border-border" />
 
-            <div className="space-y-1">
+            <div className="flex flex-col gap-1">
                 <div className="flex justify-between">
                     <span>Subtotal</span>
                     <span>
@@ -95,7 +95,7 @@ const OrderReceipt = ({ order, settings }: OrderReceiptProps) => {
                     </span>
                 </div>
                 {parseFloat(order.discountAmount) > 0 && (
-                    <div className="flex justify-between text-green-700">
+                    <div className="flex justify-between text-foreground">
                         <span>Discount</span>
                         <span>
                             -{cs}
@@ -103,7 +103,7 @@ const OrderReceipt = ({ order, settings }: OrderReceiptProps) => {
                         </span>
                     </div>
                 )}
-                <div className="flex justify-between border-t border-gray-400 pt-1 text-sm font-bold">
+                <div className="flex justify-between border-t border-border pt-1 text-sm font-bold">
                     <span>Total</span>
                     <span>
                         {cs}
@@ -114,8 +114,8 @@ const OrderReceipt = ({ order, settings }: OrderReceiptProps) => {
 
             {payment && (
                 <>
-                    <div className="my-2 border-t border-dashed border-gray-400" />
-                    <div className="space-y-1">
+                    <div className="my-2 border-t border-dashed border-border" />
+                    <div className="flex flex-col gap-1">
                         <div className="flex justify-between">
                             <span>Payment</span>
                             <span className="capitalize">
@@ -151,15 +151,15 @@ const OrderReceipt = ({ order, settings }: OrderReceiptProps) => {
                 </>
             )}
 
-            <div className="my-2 border-t border-dashed border-gray-400" />
+            <div className="my-2 border-t border-dashed border-border" />
 
             {settings.receiptFooter && (
-                <div className="mt-2 text-center text-[10px] text-gray-600">
+                <div className="mt-2 text-center text-[10px] text-muted-foreground">
                     {settings.receiptFooter}
                 </div>
             )}
 
-            <div className="mt-2 text-center text-[10px] text-gray-500">
+            <div className="mt-2 text-center text-[10px] text-muted-foreground">
                 Thank you!
             </div>
         </div>

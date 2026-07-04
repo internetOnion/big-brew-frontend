@@ -67,13 +67,16 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
                     </DialogTitle>
                 </DialogHeader>
 
-                <div className="space-y-4">
+                <div className="flex flex-col gap-4">
                     <div className="grid gap-1.5">
-                        <Label className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="dialog-ingredient-name"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Name
                         </Label>
                         <Input
-                            value={name}
+                            id="dialog-ingredient-name"
                             onChange={(e) => setName(e.target.value)}
                             className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
                         />
@@ -107,11 +110,14 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
 
                     <div className="grid grid-cols-2 gap-3">
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="dialog-ingredient-stock"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 Initial Stock
                             </Label>
                             <Input
-                                type="number"
+                                id="dialog-ingredient-stock"
                                 step="0.01"
                                 min="0"
                                 value={stockQuantity}
@@ -122,11 +128,14 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
                             />
                         </div>
                         <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="dialog-ingredient-low-stock"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 Low Stock Alert
                             </Label>
                             <Input
-                                type="number"
+                                id="dialog-ingredient-low-stock"
                                 step="0.01"
                                 min="0"
                                 value={lowStockThreshold}
@@ -150,7 +159,7 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
                     <Button
                         onClick={() => createMutation.mutate()}
                         disabled={!name || createMutation.isPending}
-                        className="bg-(--admin-primary) text-white hover:bg-[#3a1d0e]"
+                        className="bg-(--admin-primary) text-white hover:bg-(--admin-primary)/80"
                     >
                         {createMutation.isPending
                             ? "Creating..."

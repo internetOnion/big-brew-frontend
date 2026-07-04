@@ -5,6 +5,7 @@ import {
     PlusIcon,
     PencilSimpleIcon,
     TrashIcon,
+    ListIcon,
 } from "@phosphor-icons/react";
 import {
     useCategories,
@@ -103,7 +104,7 @@ const CategoriesPage = () => {
                             setNewName("");
                         }}
                         disabled={isAdding}
-                        className="h-7 gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-[#3a1d0e]"
+                        className="h-7 gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80"
                     >
                         <PlusIcon className="size-3" />
                         Add Category
@@ -118,8 +119,17 @@ const CategoriesPage = () => {
                         Loading...
                     </div>
                 ) : !categories || categories.length === 0 ? (
-                    <div className="flex h-24 items-center justify-center text-xs text-(--admin-text-muted)">
-                        No categories yet. Add one to get started.
+                    <div className="flex flex-col items-center justify-center gap-2 py-8">
+                        <ListIcon
+                            className="size-5 text-(--admin-text-muted)"
+                            aria-hidden="true"
+                        />
+                        <p className="text-xs text-(--admin-text-muted)">
+                            No categories yet
+                        </p>
+                        <p className="text-[10px] text-(--admin-text-muted)/70">
+                            Add a category to organize your menu items
+                        </p>
                     </div>
                 ) : (
                     <div className="divide-y divide-(--admin-border)">
@@ -147,7 +157,7 @@ const CategoriesPage = () => {
                                         !newName.trim() ||
                                         createMutation.isPending
                                     }
-                                    className="h-7 bg-(--admin-primary) text-[11px] text-white hover:bg-[#3a1d0e]"
+                                    className="h-7 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80"
                                 >
                                     Save
                                 </Button>
@@ -198,7 +208,7 @@ const CategoriesPage = () => {
                                                     !editName.trim() ||
                                                     updateMutation.isPending
                                                 }
-                                                className="h-7 bg-(--admin-primary) text-[11px] text-white hover:bg-[#3a1d0e]"
+                                                className="h-7 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80"
                                             >
                                                 Save
                                             </Button>
@@ -244,7 +254,7 @@ const CategoriesPage = () => {
                                                 }
                                                 className={
                                                     isEmpty
-                                                        ? "text-red-500 hover:text-red-700"
+                                                        ? "text-destructive hover:text-destructive/80"
                                                         : "text-(--admin-text-muted)/30"
                                                 }
                                             >
@@ -293,7 +303,7 @@ const CategoriesPage = () => {
                                 }
                             }}
                             disabled={deleteMutation.isPending}
-                            className="bg-red-600 text-white hover:bg-red-700"
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
                             {deleteMutation.isPending
                                 ? "Deleting..."

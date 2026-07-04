@@ -168,14 +168,14 @@ const IngredientDetailPage = () => {
                             variant="outline"
                             size="xs"
                             onClick={() => setShowDelete(true)}
-                            className="border-red-200 text-[11px] text-red-500 hover:border-red-300 hover:bg-red-50 hover:text-red-600"
+                            className="border-destructive/30 text-[11px] text-destructive hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive"
                         >
                             <TrashIcon className="size-3" />
                             Delete
                         </Button>
                     ) : (
                         <div className="flex items-center gap-2">
-                            <span className="text-[11px] text-red-500">
+                            <span className="text-[11px] text-destructive">
                                 Are you sure?
                             </span>
                             <Button
@@ -191,7 +191,7 @@ const IngredientDetailPage = () => {
                                 size="xs"
                                 onClick={handleDelete}
                                 disabled={deleteMutation.isPending}
-                                className="bg-red-600 text-[11px] text-white hover:bg-red-700"
+                                className="bg-destructive text-[11px] text-destructive-foreground hover:bg-destructive/90"
                             >
                                 {deleteMutation.isPending
                                     ? "Deleting..."
@@ -276,7 +276,7 @@ const IngredientDetailPage = () => {
                             <Button
                                 onClick={handleSave}
                                 disabled={updateMutation.isPending}
-                                className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-[#3a1d0e]"
+                                className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
                             >
                                 {updateMutation.isPending
                                     ? "Saving..."
@@ -290,7 +290,7 @@ const IngredientDetailPage = () => {
                         <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wide text-(--admin-text-secondary)">
                             Adjust Stock
                         </h2>
-                        <div className="space-y-4">
+                        <div className="flex flex-col gap-4">
                             <div className="rounded border border-(--admin-border) bg-(--admin-hover) p-3">
                                 <span className="text-[11px] text-(--admin-text-muted)">
                                     Current Stock
@@ -396,7 +396,7 @@ const IngredientDetailPage = () => {
                                                     New
                                                 </span>
                                                 <span
-                                                    className={`font-mono text-[13px] font-medium ${newStock < 0 ? "text-red-500" : "text-(--admin-text)"}`}
+                                                    className={`font-mono text-[13px] font-medium ${newStock < 0 ? "text-destructive" : "text-(--admin-text)"}`}
                                                 >
                                                     {newStock.toFixed(2)}{" "}
                                                     {ingredient.unit}
@@ -407,7 +407,7 @@ const IngredientDetailPage = () => {
                                                     Change
                                                 </span>
                                                 <span
-                                                    className={`font-mono text-[13px] font-medium ${delta > 0 ? "text-emerald-600" : delta < 0 ? "text-red-500" : "text-(--admin-text)"}`}
+                                                    className={`font-mono text-[13px] font-medium ${delta > 0 ? "text-(--admin-success)" : delta < 0 ? "text-destructive" : "text-(--admin-text)"}`}
                                                 >
                                                     {delta > 0 ? "+" : ""}
                                                     {delta.toFixed(2)}
@@ -433,7 +433,7 @@ const IngredientDetailPage = () => {
                                                     Change
                                                 </span>
                                                 <span
-                                                    className={`font-mono text-[13px] font-medium ${delta > 0 ? "text-emerald-600" : "text-red-500"}`}
+                                                    className={`font-mono text-[13px] font-medium ${delta > 0 ? "text-(--admin-success)" : "text-destructive"}`}
                                                 >
                                                     {delta > 0 ? "+" : ""}
                                                     {delta.toFixed(2)}
@@ -447,7 +447,7 @@ const IngredientDetailPage = () => {
                                                     New
                                                 </span>
                                                 <span
-                                                    className={`font-mono text-[13px] font-medium ${newStock < 0 ? "text-red-500" : "text-(--admin-text)"}`}
+                                                    className={`font-mono text-[13px] font-medium ${newStock < 0 ? "text-destructive" : "text-(--admin-text)"}`}
                                                 >
                                                     {newStock.toFixed(2)}{" "}
                                                     {ingredient.unit}
@@ -467,7 +467,7 @@ const IngredientDetailPage = () => {
                                     qtyNum <= 0 ||
                                     adjustMutation.isPending
                                 }
-                                className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-[#3a1d0e]"
+                                className="h-8 bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
                             >
                                 {adjustMutation.isPending
                                     ? "Adjusting..."
@@ -519,7 +519,7 @@ const IngredientDetailPage = () => {
                                                 </div>
                                                 <div className="flex items-center gap-3">
                                                     <span
-                                                        className={`font-mono text-[12px] font-medium ${isPositive ? "text-emerald-600" : "text-red-500"}`}
+                                                        className={`font-mono text-[12px] font-medium ${isPositive ? "text-(--admin-success)" : "text-destructive"}`}
                                                     >
                                                         {isPositive ? "+" : ""}
                                                         {qty.toFixed(2)}

@@ -153,7 +153,7 @@ const ResetPinDialog = ({
                                 "flex size-5 items-center justify-center rounded-full text-[10px] font-medium",
                                 step === 1
                                     ? "bg-(--admin-primary) text-white"
-                                    : "bg-emerald-500 text-white",
+                                    : "bg-(--admin-success) text-white",
                             )}
                         >
                             {step === 1 ? "1" : "✓"}
@@ -200,7 +200,7 @@ const ResetPinDialog = ({
 
                     {/* Error message */}
                     {error && (
-                        <p className="text-center text-[10px] font-medium text-red-600">
+                        <p className="text-center text-[10px] font-medium text-destructive">
                             {error}
                         </p>
                     )}
@@ -269,7 +269,7 @@ const ResetPinDialog = ({
                                 newPin.length !== PIN_LENGTH ||
                                 resetPin.isPending
                             }
-                            className="bg-(--admin-primary) text-white hover:bg-[#3a1d0e]"
+                            className="bg-(--admin-primary) text-white hover:bg-(--admin-primary)/80"
                         >
                             {resetPin.isPending ? "Saving..." : "Save PIN"}
                         </Button>
