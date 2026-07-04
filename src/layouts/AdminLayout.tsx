@@ -40,8 +40,6 @@ const SidebarContent = ({
     onNavClick: () => void;
     onLogout: () => void;
 }) => {
-    const { user } = useAuth();
-
     return (
         <div className="flex h-full flex-col">
             {/* Brand */}
@@ -115,25 +113,6 @@ const SidebarContent = ({
                     Logout
                 </button>
             </div>
-
-            {/* User info */}
-            {user && (
-                <div className="border-t border-(--admin-sidebar-border) px-3.5 py-2.5">
-                    <div className="flex items-center gap-2.5">
-                        <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-(--admin-primary) text-[11px] font-semibold text-white">
-                            {user.name.charAt(0).toUpperCase()}
-                        </div>
-                        <div className="min-w-0">
-                            <p className="truncate text-[12px] font-medium text-(--admin-text)">
-                                {user.name}
-                            </p>
-                            <p className="text-[10px] capitalize text-(--admin-text-muted)">
-                                {user.role}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
