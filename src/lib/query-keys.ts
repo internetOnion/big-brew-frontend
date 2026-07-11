@@ -53,4 +53,5 @@ export const expenseCategoryKeys = {
 
 export const discountKeys = {
     all: ["discounts"] as const,
+    active: ["discounts", "active"] as const,
 };

@@ -114,7 +114,9 @@ const ExpensesPage = () => {
     const handleExport = () => {
         if (!expenses.length) return;
         const filename = `expenses-${format(dateRange.from, "yyyy-MM-dd")}-to-${format(dateRange.to, "yyyy-MM-dd")}.csv`;
-        toast.success(`Downloaded ${filename} (${expenses.length} expense${expenses.length === 1 ? "" : "s"})`);
+        toast.success(
+            `Downloaded ${filename} (${expenses.length} expense${expenses.length === 1 ? "" : "s"})`,
+        );
         const headers = [
             "Description",
             "Amount",
@@ -207,7 +209,9 @@ const ExpensesPage = () => {
                     }}
                 >
                     <SelectTrigger className="h-7 max-md:min-h-[44px] w-[160px] max-md:w-full border-(--admin-border) bg-(--admin-card) text-xs">
-                        <SelectValue>{categoryFilter ?? "All Categories"}</SelectValue>
+                        <SelectValue>
+                            {categoryFilter ?? "All Categories"}
+                        </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="all">All Categories</SelectItem>
@@ -262,12 +266,8 @@ const ExpensesPage = () => {
                                 <th className="px-4 py-2.5 text-left">
                                     Category
                                 </th>
-                                <th className="px-4 py-2.5 text-left">
-                                    By
-                                </th>
-                                <th className="px-4 py-2.5 text-left">
-                                    Date
-                                </th>
+                                <th className="px-4 py-2.5 text-left">By</th>
+                                <th className="px-4 py-2.5 text-left">Date</th>
                                 <th className="w-10 px-4 py-2.5" />
                             </tr>
                         </thead>
@@ -300,18 +300,21 @@ const ExpensesPage = () => {
                                         className="px-4 py-10 text-center"
                                     >
                                         <div className="flex flex-col items-center gap-2">
-                                            <ReceiptIcon className="size-8 text-(--admin-text-muted)" aria-hidden="true" />
+                                            <ReceiptIcon
+                                                className="size-8 text-(--admin-text-muted)"
+                                                aria-hidden="true"
+                                            />
                                             <p className="text-xs font-medium text-(--admin-text-secondary)">
-                                {categoryFilter
-                                    ? "No matching expenses"
-                                    : "No expenses yet"}
-                            </p>
-                            <p className="text-[11px] text-(--admin-text-muted)">
-                                {categoryFilter
-                                    ? "Try adjusting your filters or date range."
-                                    : "Add your first expense to start tracking spending."}
-                            </p>
-                        </div>
+                                                {categoryFilter
+                                                    ? "No matching expenses"
+                                                    : "No expenses yet"}
+                                            </p>
+                                            <p className="text-[11px] text-(--admin-text-muted)">
+                                                {categoryFilter
+                                                    ? "Try adjusting your filters or date range."
+                                                    : "Add your first expense to start tracking spending."}
+                                            </p>
+                                        </div>
                                     </td>
                                 </tr>
                             ) : (
@@ -320,7 +323,10 @@ const ExpensesPage = () => {
                                         key={expense.id}
                                         className="admin-table-row transition-colors hover:bg-(--admin-hover)"
                                     >
-                                        <td className="max-w-[240px] truncate px-4 py-2.5 text-[12px] text-(--admin-text)" title={expense.description}>
+                                        <td
+                                            className="max-w-[240px] truncate px-4 py-2.5 text-[12px] text-(--admin-text)"
+                                            title={expense.description}
+                                        >
                                             {expense.description}
                                         </td>
                                         <td className="px-4 py-2.5 text-right font-mono text-[12px] text-(--admin-text)">
@@ -344,25 +350,25 @@ const ExpensesPage = () => {
                                                     <DotsThreeVerticalIcon className="size-3.5" />
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
-                                                <DropdownMenuItem
-                                                    onClick={() =>
-                                                        handleEdit(expense)
-                                                    }
-                                                >
-                                                    <PencilSimpleIcon className="size-4" />
-                                                    Edit
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    onClick={() =>
-                                                        setDeletingExpense(
-                                                            expense,
-                                                        )
-                                                    }
-                                                    className="text-destructive"
-                                                >
-                                                    <TrashIcon className="size-4" />
-                                                    Delete
-                                                </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() =>
+                                                            handleEdit(expense)
+                                                        }
+                                                    >
+                                                        <PencilSimpleIcon className="size-4" />
+                                                        Edit
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() =>
+                                                            setDeletingExpense(
+                                                                expense,
+                                                            )
+                                                        }
+                                                        className="text-destructive"
+                                                    >
+                                                        <TrashIcon className="size-4" />
+                                                        Delete
+                                                    </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </td>

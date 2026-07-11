@@ -8,5 +8,6 @@ export const ROUTES = {
     ADMIN_EMPLOYEES: "/admin/employees",
     ADMIN_ORDERS: "/admin/orders",
     ADMIN_EXPENSES: "/admin/expenses",
+    ADMIN_DISCOUNTS: "/admin/discounts",
     ADMIN_SETTINGS: "/admin/settings",
 } as const;

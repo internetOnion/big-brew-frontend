@@ -6,19 +6,20 @@ import {
     useEffect,
     type ReactNode,
 } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { MenuItem } from "@/types/menu";
 import type { CartItem } from "@/types/cart";
 import { generateCartId } from "@/lib/utils";
 import type { CustomizeOptions } from "@/types/cart";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
-import { orderKeys } from "@/lib/query-keys";
+import { orderKeys, discountKeys } from "@/lib/query-keys";
 import type {
     Order,
     CreateOrderPayload,
     OrderType,
     PaymentMethod,
+    Discount,
 } from "@/types/order";
 import {
     loadCart,
@@ -39,6 +40,10 @@ interface POSContextValue {
     customizeItem: MenuItem | null;
     customizeInitial: CustomizeOptions | undefined;
     discountId: string | null;
+    activeDiscounts: Discount[];
+    discountAmount: number;
+    discountQualified: boolean;
+    discountHint: string | null;
     subtotal: number;
     total: number;
     setOrderType: (t: OrderType) => void;
@@ -69,13 +74,142 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
     >(undefined);
     const [discountId, setDiscountId] = useState<string | null>(null);
 
+    const { data: activeDiscounts = [] } = useQuery<Discount[]>({
+        queryKey: discountKeys.active,
+        queryFn: async () => {
+            const { data } = await api.get<Discount[]>(
+                ENDPOINTS.DISCOUNTS.ACTIVE,
+                { silent: true },
+            );
+            return data;
+        },
+        staleTime: 10_000,
+        refetchInterval: 15_000,
+        refetchOnWindowFocus: true,
+    });
+
     const subtotal = useMemo(() => {
         return cartItems.reduce((sum, item) => sum + item.price, 0);
     }, [cartItems]);
 
+    const discountAmount = useMemo(() => {
+        if (!discountId) return 0;
+        const discount = activeDiscounts.find((d) => d.id === discountId);
+        if (!discount) return 0;
+
+        // Order-level percentage
+        if (
+            discount.type === "percentage" &&
+            discount.appliesTo === "order" &&
+            discount.value
+        ) {
+            return subtotal * (parseFloat(discount.value) / 100);
+        }
+        // Item-level percentage
+        if (
+            discount.type === "percentage" &&
+            discount.appliesTo === "item" &&
+            discount.itemId &&
+            discount.value
+        ) {
+            const itemTotal = cartItems
+                .filter((ci) => ci.menuId === discount.itemId)
+                .reduce((sum, ci) => sum + ci.price, 0);
+            return itemTotal * (parseFloat(discount.value) / 100);
+        }
+        // Order-level fixed
+        if (
+            discount.type === "fixed_amount" &&
+            discount.appliesTo === "order" &&
+            discount.value
+        ) {
+            return Math.min(parseFloat(discount.value), subtotal);
+        }
+        // Item-level fixed
+        if (
+            discount.type === "fixed_amount" &&
+            discount.appliesTo === "item" &&
+            discount.itemId &&
+            discount.value
+        ) {
+            const itemTotal = cartItems
+                .filter((ci) => ci.menuId === discount.itemId)
+                .reduce((sum, ci) => sum + ci.price, 0);
+            return Math.min(parseFloat(discount.value), itemTotal);
+        }
+        // BOGO
+        if (discount.type === "bogo") {
+            const buyCartItems = cartItems.filter(
+                (ci) => ci.menuId === discount.buyItemId,
+            );
+            const buyQty = buyCartItems.reduce(
+                (sum, ci) => sum + ci.quantity,
+                0,
+            );
+
+            // Same-item BOGO: need >= 2
+            if (discount.buyItemId === discount.freeItemId) {
+                if (buyQty < 2) return 0;
+                return buyCartItems[0]?.unitPrice ?? 0;
+            }
+
+            // Different-item BOGO: free item must be in cart
+            const freeCartItem = cartItems.find(
+                (ci) => ci.menuId === discount.freeItemId,
+            );
+            if (!freeCartItem) return 0;
+            return freeCartItem.unitPrice;
+        }
+
+        return 0;
+    }, [discountId, activeDiscounts, subtotal, cartItems]);
+
+    const discountQualified = useMemo(() => {
+        if (!discountId) return true;
+        const discount = activeDiscounts.find((d) => d.id === discountId);
+        if (!discount) return true;
+        if (discount.type !== "bogo") return true;
+
+        const buyCartItems = cartItems.filter(
+            (ci) => ci.menuId === discount.buyItemId,
+        );
+        const buyQty = buyCartItems.reduce((sum, ci) => sum + ci.quantity, 0);
+
+        if (discount.buyItemId === discount.freeItemId) {
+            return buyQty >= 2;
+        }
+        return (
+            buyQty > 0 &&
+            cartItems.some((ci) => ci.menuId === discount.freeItemId)
+        );
+    }, [discountId, activeDiscounts, cartItems]);
+
+    const discountHint = useMemo(() => {
+        if (!discountId) return null;
+        const discount = activeDiscounts.find((d) => d.id === discountId);
+        if (!discount || discount.type !== "bogo") return null;
+        if (discountQualified) return null;
+
+        const buyItemName =
+            cartItems.find((ci) => ci.menuId === discount.buyItemId)?.name ??
+            "the buy item";
+
+        if (discount.buyItemId === discount.freeItemId) {
+            return `Add 1 more ${buyItemName} to qualify`;
+        }
+
+        const freeItemName =
+            cartItems.find((ci) => ci.menuId === discount.freeItemId)?.name ??
+            "the free item";
+        if (!cartItems.some((ci) => ci.menuId === discount.buyItemId)) {
+            return `Add ${buyItemName} to qualify`;
+        }
+        return `Add ${freeItemName} to qualify`;
+    }, [discountId, activeDiscounts, cartItems, discountQualified]);
+
     const total = useMemo(() => {
-        return subtotal;
-    }, [subtotal]);
+        return subtotal - discountAmount;
+    }, [subtotal, discountAmount]);
 
     useEffect(() => {
         saveCart(cartItems);
@@ -262,6 +396,10 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
                 customizeItem,
                 customizeInitial,
                 discountId,
+                activeDiscounts,
+                discountAmount,
+                discountQualified,
+                discountHint,
                 subtotal,
                 total,
                 setOrderType,

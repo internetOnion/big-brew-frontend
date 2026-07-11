@@ -93,7 +93,10 @@ const IngredientCreatePage = () => {
                             value={unit}
                             onValueChange={(v) => setUnit(v ?? "g")}
                         >
-                            <SelectTrigger id="ingredient-unit" className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs">
+                            <SelectTrigger
+                                id="ingredient-unit"
+                                className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs"
+                            >
                                 <SelectValue>
                                     {(val) =>
                                         val === "g"

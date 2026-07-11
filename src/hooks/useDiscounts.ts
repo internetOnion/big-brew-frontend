@@ -20,6 +20,11 @@ export const useDiscounts = () => {
     });
 };
 
+const invalidateAll = (queryClient: ReturnType<typeof useQueryClient>) => {
+    queryClient.invalidateQueries({ queryKey: discountKeys.all });
+    queryClient.invalidateQueries({ queryKey: discountKeys.active });
+};
+
 export const useCreateDiscount = () => {
     const queryClient = useQueryClient();
     return useMutation({
@@ -27,11 +32,40 @@ export const useCreateDiscount = () => {
             const { data } = await api.post(ENDPOINTS.DISCOUNTS.BASE, payload);
             return data;
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: discountKeys.all,
-            });
+        onMutate: async (payload) => {
+            await queryClient.cancelQueries({ queryKey: discountKeys.all });
+            const previous = queryClient.getQueryData<AdminDiscount[]>(
+                discountKeys.all,
+            );
+            queryClient.setQueryData<AdminDiscount[]>(
+                discountKeys.all,
+                (old) => {
+                    const optimistic: AdminDiscount = {
+                        id: `temp-${Date.now()}`,
+                        name: payload.name,
+                        type: payload.type,
+                        value: payload.value != null ? String(payload.value) : null,
+                        appliesTo: payload.applies_to ?? "order",
+                        itemId: payload.item_id ?? null,
+                        buyItemId: payload.buy_item_id,
+                        freeItemId: payload.free_item_id,
+                        isActive: payload.is_active ?? true,
+                        startsAt: payload.starts_at ?? null,
+                        endsAt: payload.ends_at ?? null,
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString(),
+                    };
+                    return [optimistic, ...(old ?? [])];
+                },
+            );
+            return { previous };
         },
+        onError: (_err, _vars, context) => {
+            if (context?.previous) {
+                queryClient.setQueryData(discountKeys.all, context.previous);
+            }
+        },
+        onSettled: () => invalidateAll(queryClient),
     });
 };
 
@@ -48,11 +82,43 @@ export const useUpdateDiscount = () => {
             );
             return data;
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: discountKeys.all,
-            });
+        onMutate: async ({ id, ...payload }) => {
+            await queryClient.cancelQueries({ queryKey: discountKeys.all });
+            const previous = queryClient.getQueryData<AdminDiscount[]>(
+                discountKeys.all,
+            );
+            queryClient.setQueryData<AdminDiscount[]>(
+                discountKeys.all,
+                (old) =>
+                    old?.map((d) =>
+                        d.id === id
+                            ? {
+                                  ...d,
+                                  ...(payload.name !== undefined && {
+                                      name: payload.name,
+                                  }),
+                                  ...(payload.is_active !== undefined && {
+                                      isActive: payload.is_active,
+                                  }),
+                                  ...(payload.starts_at !== undefined && {
+                                      startsAt: payload.starts_at,
+                                  }),
+                                  ...(payload.ends_at !== undefined && {
+                                      endsAt: payload.ends_at,
+                                  }),
+                                  updatedAt: new Date().toISOString(),
+                              }
+                            : d,
+                    ) ?? [],
+            );
+            return { previous };
         },
+        onError: (_err, _vars, context) => {
+            if (context?.previous) {
+                queryClient.setQueryData(discountKeys.all, context.previous);
+            }
+        },
+        onSettled: () => invalidateAll(queryClient),
     });
 };
 
@@ -62,10 +128,22 @@ export const useDeleteDiscount = () => {
         mutationFn: async (id: string) => {
             await api.delete(ENDPOINTS.DISCOUNTS.BY_ID(id));
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: discountKeys.all,
-            });
+        onMutate: async (id) => {
+            await queryClient.cancelQueries({ queryKey: discountKeys.all });
+            const previous = queryClient.getQueryData<AdminDiscount[]>(
+                discountKeys.all,
+            );
+            queryClient.setQueryData<AdminDiscount[]>(
+                discountKeys.all,
+                (old) => old?.filter((d) => d.id !== id) ?? [],
+            );
+            return { previous };
         },
+        onError: (_err, _vars, context) => {
+            if (context?.previous) {
+                queryClient.setQueryData(discountKeys.all, context.previous);
+            }
+        },
+        onSettled: () => invalidateAll(queryClient),
     });
 };

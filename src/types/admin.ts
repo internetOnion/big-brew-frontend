@@ -102,6 +102,8 @@ export interface AdminDiscount {
     name: string;
     type: "percentage" | "fixed_amount" | "bogo";
     value: string | null;
+    appliesTo: "order" | "item";
+    itemId: string | null;
     buyItemId: string | null;
     freeItemId: string | null;
     isActive: boolean;
@@ -115,6 +117,8 @@ export interface CreateDiscountPayload {
     name: string;
     type: "percentage" | "fixed_amount" | "bogo";
     value: number | null;
+    applies_to?: "order" | "item";
+    item_id?: string | null;
     buy_item_id: string | null;
     free_item_id: string | null;
     is_active?: boolean;

@@ -161,7 +161,10 @@ const EmployeeCreatePage = () => {
                                 value={role}
                                 onValueChange={(v) => setRole(v ?? "barista")}
                             >
-                                <SelectTrigger id="employee-role" className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
+                                <SelectTrigger
+                                    id="employee-role"
+                                    className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
+                                >
                                     <SelectValue>
                                         {(val) =>
                                             ROLES.find((r) => r.value === val)
@@ -249,7 +252,11 @@ const EmployeeCreatePage = () => {
                                         onClick={() =>
                                             setShowPassword(!showPassword)
                                         }
-                                        aria-label={showPassword ? "Hide password" : "Show password"}
+                                        aria-label={
+                                            showPassword
+                                                ? "Hide password"
+                                                : "Show password"
+                                        }
                                         className="absolute top-1/2 right-2 flex cursor-pointer -translate-y-1/2 items-center text-(--admin-text-muted) transition-colors hover:text-(--admin-text)"
                                     >
                                         {showPassword ? (
@@ -290,7 +297,11 @@ const EmployeeCreatePage = () => {
                                                 !showConfirmPassword,
                                             )
                                         }
-                                        aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                                        aria-label={
+                                            showConfirmPassword
+                                                ? "Hide password"
+                                                : "Show password"
+                                        }
                                         className="absolute top-1/2 right-2 flex cursor-pointer -translate-y-1/2 items-center text-(--admin-text-muted) transition-colors hover:text-(--admin-text)"
                                     >
                                         {showConfirmPassword ? (

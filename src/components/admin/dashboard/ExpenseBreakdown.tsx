@@ -124,7 +124,9 @@ const ExpenseBreakdown = ({
                         />
                         <Tooltip
                             content={
-                                <CustomTooltip currencySymbol={currencySymbol} />
+                                <CustomTooltip
+                                    currencySymbol={currencySymbol}
+                                />
                             }
                         />
                         <Bar

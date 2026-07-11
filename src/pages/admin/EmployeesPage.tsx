@@ -185,9 +185,9 @@ const EmployeesPage = () => {
                 </h1>
 
                 <Button
-                        size="sm"
-                        onClick={() => navigate("/admin/employees/new")}
-                        className="h-7 max-md:min-h-[44px] gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80 cursor-pointer"
+                    size="sm"
+                    onClick={() => navigate("/admin/employees/new")}
+                    className="h-7 max-md:min-h-[44px] gap-1.5 bg-(--admin-primary) text-[11px] text-white hover:bg-(--admin-primary)/80 cursor-pointer"
                 >
                     <PlusIcon className="size-3" />
                     Add
@@ -293,9 +293,14 @@ const EmployeesPage = () => {
                                                     )
                                                 }
                                                 onKeyDown={(e) => {
-                                                    if (e.key === "Enter" || e.key === " ") {
+                                                    if (
+                                                        e.key === "Enter" ||
+                                                        e.key === " "
+                                                    ) {
                                                         e.preventDefault();
-                                                        navigate(`/admin/employees/${emp.id}`);
+                                                        navigate(
+                                                            `/admin/employees/${emp.id}`,
+                                                        );
                                                     }
                                                 }}
                                                 tabIndex={0}
@@ -344,7 +349,8 @@ const EmployeesPage = () => {
                                                         <DropdownMenu>
                                                             <DropdownMenuTrigger
                                                                 aria-label="Actions"
-                                                                className="flex size-7 max-md:min-h-[44px] max-md:min-w-[44px] shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text) cursor-pointer">
+                                                                className="flex size-7 max-md:min-h-[44px] max-md:min-w-[44px] shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text) cursor-pointer"
+                                                            >
                                                                 <DotsThreeVerticalIcon className="size-4" />
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent

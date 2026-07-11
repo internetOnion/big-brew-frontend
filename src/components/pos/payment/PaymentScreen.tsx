@@ -32,7 +32,15 @@ const prefersReducedMotion =
         : false;
 
 const PaymentScreen = () => {
-    const { total, subtotal, cartItems, submitOrder } = usePOS();
+    const {
+        total,
+        subtotal,
+        cartItems,
+        submitOrder,
+        discountAmount,
+        discountId,
+        activeDiscounts,
+    } = usePOS();
     const navigate = useNavigate();
     const [entered, setEntered] = useState("");
     const [currency, setCurrency] = useState<Currency>("USD");
@@ -215,6 +223,9 @@ const PaymentScreen = () => {
                     isProcessing={isProcessing}
                     onConfirm={handleConfirmPayment}
                     resetInput={() => setEntered("")}
+                    discountAmount={discountAmount}
+                    discountId={discountId}
+                    activeDiscounts={activeDiscounts}
                 />
             </div>
 

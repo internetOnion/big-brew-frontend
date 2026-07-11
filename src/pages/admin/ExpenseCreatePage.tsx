@@ -5,6 +5,7 @@ import { ArrowLeftIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { DatePicker } from "@/components/ui/date-picker";
 import {
     Select,
     SelectContent,
@@ -70,7 +71,10 @@ const ExpenseCreatePage = () => {
                 </h2>
                 <div className="grid gap-3">
                     <div className="grid gap-1.5">
-                        <Label htmlFor="expense-description" className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="expense-description"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Description
                         </Label>
                         <Input
@@ -84,7 +88,10 @@ const ExpenseCreatePage = () => {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div className="grid gap-1.5">
-                            <Label htmlFor="expense-amount" className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="expense-amount"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 Amount
                             </Label>
                             <Input
@@ -100,14 +107,20 @@ const ExpenseCreatePage = () => {
                             />
                         </div>
                         <div className="grid gap-1.5">
-                            <Label htmlFor="expense-category" className="text-[11px] text-(--admin-text-secondary)">
+                            <Label
+                                htmlFor="expense-category"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
                                 Category
                             </Label>
                             <Select
                                 value={category || undefined}
                                 onValueChange={(v) => setCategory(v ?? "")}
                             >
-                                <SelectTrigger id="expense-category" className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs">
+                                <SelectTrigger
+                                    id="expense-category"
+                                    className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs"
+                                >
                                     <SelectValue placeholder="Select category" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -124,16 +137,21 @@ const ExpenseCreatePage = () => {
                         </div>
                     </div>
                     <div className="grid gap-1.5">
-                        <Label htmlFor="expense-date" className="text-[11px] text-(--admin-text-secondary)">
+                        <Label className="text-[11px] text-(--admin-text-secondary)">
                             Date
                         </Label>
-                        <Input
-                            id="expense-date"
-                            type="date"
-                            value={recordedAt}
-                            onChange={(e) => setRecordedAt(e.target.value)}
-                            className="h-8 max-md:min-h-[44px] w-full max-w-[200px] border-(--admin-border) bg-(--admin-card) text-xs"
-                        />
+                        <div className="w-full max-w-[200px]">
+                            <DatePicker
+                                value={new Date(recordedAt + "T00:00:00")}
+                                onChange={(date) =>
+                                    setRecordedAt(
+                                        date
+                                            ? format(date, "yyyy-MM-dd")
+                                            : todayStr,
+                                    )
+                                }
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -144,7 +162,9 @@ const ExpenseCreatePage = () => {
                     disabled={!canSubmit || createMutation.isPending}
                     className="h-8 max-md:min-h-[44px] bg-(--admin-primary) text-xs text-white hover:bg-(--admin-primary)/80"
                 >
-                    {createMutation.isPending ? "Creating..." : "Create Expense"}
+                    {createMutation.isPending
+                        ? "Creating..."
+                        : "Create Expense"}
                 </Button>
                 <Button
                     variant="ghost"

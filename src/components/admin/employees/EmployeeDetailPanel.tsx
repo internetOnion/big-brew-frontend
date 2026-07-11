@@ -205,7 +205,8 @@ const EmployeeDetailPanel = ({
                                     </div>
                                     <div className="flex shrink-0 items-center gap-2">
                                         <span className="text-[11px] font-mono font-medium text-(--admin-text)">
-                                            {currencySymbol}{order.total}
+                                            {currencySymbol}
+                                            {order.total}
                                         </span>
                                         <Badge
                                             variant="outline"

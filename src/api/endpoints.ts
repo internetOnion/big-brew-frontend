@@ -72,6 +72,7 @@ export const ENDPOINTS = {
     },
     DISCOUNTS: {
         BASE: "/discounts",
+        ACTIVE: "/discounts/active",
         BY_ID: (id: string) => `/discounts/${id}`,
     },
     CATEGORIES: {
