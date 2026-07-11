@@ -98,7 +98,7 @@ const DiscountsPage = () => {
     const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
     const [deleteDialogId, setDeleteDialogId] = useState<string | null>(null);
     const menuItemName = (id: string | null) => {
-        if (!id) return "—";
+        if (!id) return "Any item";
         return menuItems?.find((m) => m.id === id)?.name ?? id;
     };
 
@@ -117,7 +117,7 @@ const DiscountsPage = () => {
             }
             return base;
         }
-        return "Buy 1 Get 1";
+        return `Buy ${menuItemName(discount.buyItemId)} → Get ${menuItemName(discount.freeItemId)} free`;
     };
 
     const formatDateRange = (discount: AdminDiscount) => {
@@ -327,12 +327,17 @@ const DiscountsPage = () => {
                                   : filtered.map((discount) => (
                                         <tr
                                             key={discount.id}
-                                            className="transition-colors hover:bg-(--admin-hover)"
+                                            className="cursor-pointer transition-colors hover:bg-(--admin-hover)"
+                                            onClick={() =>
+                                                navigate(
+                                                    `/admin/discounts/${discount.id}`,
+                                                )
+                                            }
                                         >
                                             <td className="px-4 py-2.5 text-[12px] font-medium text-(--admin-text)">
                                                 {discount.name}
                                                 {discount.type === "bogo" && (
-                                                    <span className="ml-1 block text-[10px] font-normal text-(--admin-text-muted)">
+                                                    <span className="block text-[10px] font-normal text-(--admin-text-muted)">
                                                         {menuItemName(
                                                             discount.buyItemId,
                                                         )}{" "}
@@ -380,6 +385,9 @@ const DiscountsPage = () => {
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger
                                                         aria-label="Actions"
+                                                        onClick={(e) =>
+                                                            e.stopPropagation()
+                                                        }
                                                         className="flex size-7 max-md:min-h-[44px] max-md:min-w-[44px] shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text) cursor-pointer"
                                                     >
                                                         <DotsThreeVerticalIcon className="size-4" />

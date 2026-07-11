@@ -44,7 +44,10 @@ export const useCreateDiscount = () => {
                         id: `temp-${Date.now()}`,
                         name: payload.name,
                         type: payload.type,
-                        value: payload.value != null ? String(payload.value) : null,
+                        value:
+                            payload.value != null
+                                ? String(payload.value)
+                                : null,
                         appliesTo: payload.applies_to ?? "order",
                         itemId: payload.item_id ?? null,
                         buyItemId: payload.buy_item_id,

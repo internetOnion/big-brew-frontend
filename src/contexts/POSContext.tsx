@@ -139,26 +139,50 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
         }
         // BOGO
         if (discount.type === "bogo") {
-            const buyCartItems = cartItems.filter(
-                (ci) => ci.menuId === discount.buyItemId,
-            );
+            const buyCartItems = discount.buyItemId
+                ? cartItems.filter((ci) => ci.menuId === discount.buyItemId)
+                : cartItems;
             const buyQty = buyCartItems.reduce(
                 (sum, ci) => sum + ci.quantity,
                 0,
             );
 
-            // Same-item BOGO: need >= 2
-            if (discount.buyItemId === discount.freeItemId) {
-                if (buyQty < 2) return 0;
-                return buyCartItems[0]?.unitPrice ?? 0;
+            if (discount.buyItemId && discount.freeItemId) {
+                // Both specific
+                if (discount.buyItemId === discount.freeItemId) {
+                    if (buyQty < 2) return 0;
+                    return (
+                        Math.floor(buyQty / 2) *
+                        (buyCartItems[0]?.unitPrice ?? 0)
+                    );
+                }
+                const freeCartItem = cartItems.find(
+                    (ci) => ci.menuId === discount.freeItemId,
+                );
+                if (!freeCartItem) return 0;
+                return freeCartItem.unitPrice;
             }
 
-            // Different-item BOGO: free item must be in cart
-            const freeCartItem = cartItems.find(
-                (ci) => ci.menuId === discount.freeItemId,
-            );
-            if (!freeCartItem) return 0;
-            return freeCartItem.unitPrice;
+            if (discount.freeItemId) {
+                // Buy any, get specific free
+                if (buyQty < 2) return 0;
+                const freeCartItem = cartItems.find(
+                    (ci) => ci.menuId === discount.freeItemId,
+                );
+                return freeCartItem?.unitPrice ?? 0;
+            }
+
+            // Buy specific or any, get cheapest free
+            if (buyQty === 0) return 0;
+            const cheapest = [...cartItems].sort(
+                (a, b) => a.unitPrice - b.unitPrice,
+            )[0];
+            if (!cheapest) return 0;
+            return discount.buyItemId
+                ? cheapest.unitPrice
+                : buyQty >= 2
+                  ? cheapest.unitPrice
+                  : 0;
         }
 
         return 0;
@@ -170,18 +194,30 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
         if (!discount) return true;
         if (discount.type !== "bogo") return true;
 
-        const buyCartItems = cartItems.filter(
-            (ci) => ci.menuId === discount.buyItemId,
-        );
+        const buyCartItems = discount.buyItemId
+            ? cartItems.filter((ci) => ci.menuId === discount.buyItemId)
+            : cartItems;
         const buyQty = buyCartItems.reduce((sum, ci) => sum + ci.quantity, 0);
 
-        if (discount.buyItemId === discount.freeItemId) {
-            return buyQty >= 2;
+        if (discount.buyItemId && discount.freeItemId) {
+            if (discount.buyItemId === discount.freeItemId) {
+                return buyQty >= 2;
+            }
+            return (
+                buyQty > 0 &&
+                cartItems.some((ci) => ci.menuId === discount.freeItemId)
+            );
         }
-        return (
-            buyQty > 0 &&
-            cartItems.some((ci) => ci.menuId === discount.freeItemId)
-        );
+
+        if (discount.freeItemId) {
+            return (
+                buyQty >= 2 &&
+                cartItems.some((ci) => ci.menuId === discount.freeItemId)
+            );
+        }
+
+        // Buy specific or any, get cheapest free
+        return discount.buyItemId ? buyQty > 0 : buyQty >= 2;
     }, [discountId, activeDiscounts, cartItems]);
 
     const discountHint = useMemo(() => {
@@ -190,21 +226,46 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
         if (!discount || discount.type !== "bogo") return null;
         if (discountQualified) return null;
 
-        const buyItemName =
-            cartItems.find((ci) => ci.menuId === discount.buyItemId)?.name ??
-            "the buy item";
+        const buyCartItems = discount.buyItemId
+            ? cartItems.filter((ci) => ci.menuId === discount.buyItemId)
+            : cartItems;
+        const buyQty = buyCartItems.reduce((sum, ci) => sum + ci.quantity, 0);
+        const buyItemName = buyCartItems[0]?.name ?? "the buy item";
 
-        if (discount.buyItemId === discount.freeItemId) {
-            return `Add 1 more ${buyItemName} to qualify`;
+        if (discount.buyItemId && discount.freeItemId) {
+            if (discount.buyItemId === discount.freeItemId) {
+                return `Add 1 more ${buyItemName} to qualify`;
+            }
+            const freeItemName =
+                cartItems.find((ci) => ci.menuId === discount.freeItemId)
+                    ?.name ?? "the free item";
+            if (!cartItems.some((ci) => ci.menuId === discount.buyItemId)) {
+                return `Add ${buyItemName} to qualify`;
+            }
+            return `Add ${freeItemName} to qualify`;
         }
 
-        const freeItemName =
-            cartItems.find((ci) => ci.menuId === discount.freeItemId)?.name ??
-            "the free item";
-        if (!cartItems.some((ci) => ci.menuId === discount.buyItemId)) {
-            return `Add ${buyItemName} to qualify`;
+        if (discount.freeItemId) {
+            // Buy any, get specific free
+            if (buyQty < 2)
+                return `Add ${2 - buyQty} more item${buyQty === 0 ? "s" : ""} to qualify`;
+            const freeItemName =
+                cartItems.find((ci) => ci.menuId === discount.freeItemId)
+                    ?.name ?? "the free item";
+            if (!cartItems.some((ci) => ci.menuId === discount.freeItemId)) {
+                return `Add ${freeItemName} to qualify`;
+            }
+            return null;
         }
-        return `Add ${freeItemName} to qualify`;
+
+        // Buy specific or any, get cheapest free
+        if (discount.buyItemId) {
+            return buyQty > 0 ? null : `Add ${buyItemName} to qualify`;
+        }
+        // Buy any, get any
+        return buyQty >= 2
+            ? null
+            : `Add ${2 - buyQty} more item${buyQty === 0 ? "s" : ""} to qualify`;
     }, [discountId, activeDiscounts, cartItems, discountQualified]);
 
     const total = useMemo(() => {

@@ -51,8 +51,8 @@ const toFormData = (d: AdminDiscount): DiscountFormData => ({
     value: d.value ?? "",
     appliesTo: d.appliesTo,
     itemId: d.itemId ?? "",
-    buyItemId: d.buyItemId ?? "",
-    freeItemId: d.freeItemId ?? "",
+    buyItemId: d.buyItemId ?? "__any__",
+    freeItemId: d.freeItemId ?? "__any__",
     isActive: d.isActive,
     startsAt: d.startsAt ? d.startsAt.slice(0, 10) : "",
     endsAt: d.endsAt ? d.endsAt.slice(0, 10) : "",
@@ -73,8 +73,10 @@ const toPayload = (form: DiscountFormData): CreateDiscountPayload => {
             value: null,
             applies_to: "item",
             item_id: null,
-            buy_item_id: form.buyItemId || null,
-            free_item_id: form.freeItemId || null,
+            buy_item_id:
+                form.buyItemId === "__any__" ? null : form.buyItemId || null,
+            free_item_id:
+                form.freeItemId === "__any__" ? null : form.freeItemId || null,
         };
     }
 
@@ -157,8 +159,8 @@ const DiscountForm = ({
                 e.itemId = "Select an item for item-level discounts";
         }
         if (form.type === "bogo") {
-            if (!form.buyItemId) e.buyItemId = "Buy item is required";
-            if (!form.freeItemId) e.freeItemId = "Free item is required";
+            if (!form.buyItemId && !form.freeItemId)
+                e.buyItemId = "At least one item is required";
         }
         if (form.startsAt && form.endsAt && form.startsAt > form.endsAt) {
             e.endsAt = "End date must be after start date";
@@ -234,7 +236,12 @@ const DiscountForm = ({
                             }
                         >
                             <SelectTrigger className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs">
-                                <SelectValue />
+                                <SelectValue placeholder="Select type">
+                                    {(v) =>
+                                        TYPE_OPTIONS.find((t) => t.value === v)
+                                            ?.label
+                                    }
+                                </SelectValue>
                             </SelectTrigger>
                             <SelectContent>
                                 {TYPE_OPTIONS.map((t) => (
@@ -294,7 +301,12 @@ const DiscountForm = ({
                                 }
                             >
                                 <SelectTrigger className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs">
-                                    <SelectValue placeholder="Select an item" />
+                                    <SelectValue placeholder="Select an item">
+                                        {(v) =>
+                                            menuItems?.find((i) => i.id === v)
+                                                ?.name
+                                        }
+                                    </SelectValue>
                                 </SelectTrigger>
                                 <SelectContent>
                                     {menuItems?.map((item) => (
@@ -380,9 +392,20 @@ const DiscountForm = ({
                                     }
                                 >
                                     <SelectTrigger className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs">
-                                        <SelectValue placeholder="Customer buys..." />
+                                        <SelectValue placeholder="Customer buys...">
+                                            {(v) =>
+                                                v === "__any__"
+                                                    ? "Any item"
+                                                    : menuItems?.find(
+                                                          (i) => i.id === v,
+                                                      )?.name
+                                            }
+                                        </SelectValue>
                                     </SelectTrigger>
                                     <SelectContent>
+                                        <SelectItem value="__any__">
+                                            Any item
+                                        </SelectItem>
                                         {menuItems?.map((item) => (
                                             <SelectItem
                                                 key={item.id}
@@ -410,9 +433,20 @@ const DiscountForm = ({
                                     }
                                 >
                                     <SelectTrigger className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs">
-                                        <SelectValue placeholder="Customer gets free..." />
+                                        <SelectValue placeholder="Customer gets free...">
+                                            {(v) =>
+                                                v === "__any__"
+                                                    ? "Any item"
+                                                    : menuItems?.find(
+                                                          (i) => i.id === v,
+                                                      )?.name
+                                            }
+                                        </SelectValue>
                                     </SelectTrigger>
                                     <SelectContent>
+                                        <SelectItem value="__any__">
+                                            Any item
+                                        </SelectItem>
                                         {menuItems?.map((item) => (
                                             <SelectItem
                                                 key={item.id}
