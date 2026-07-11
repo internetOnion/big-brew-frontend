@@ -190,9 +190,14 @@ const InventoryPage = () => {
                                                 )
                                             }
                                             onKeyDown={(e) => {
-                                                if (e.key === "Enter" || e.key === " ") {
+                                                if (
+                                                    e.key === "Enter" ||
+                                                    e.key === " "
+                                                ) {
                                                     e.preventDefault();
-                                                    navigate(`/admin/inventory/${ing.id}`);
+                                                    navigate(
+                                                        `/admin/inventory/${ing.id}`,
+                                                    );
                                                 }
                                             }}
                                             tabIndex={0}
@@ -233,7 +238,8 @@ const InventoryPage = () => {
                                                     <DropdownMenu>
                                                         <DropdownMenuTrigger
                                                             aria-label="Actions"
-                                                            className="flex size-7 max-md:min-h-[44px] max-md:min-w-[44px] shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text) cursor-pointer">
+                                                            className="flex size-7 max-md:min-h-[44px] max-md:min-w-[44px] shrink-0 items-center justify-center rounded-md border border-(--admin-border) text-(--admin-text-secondary) transition-colors hover:bg-(--admin-hover) hover:text-(--admin-text) cursor-pointer"
+                                                        >
                                                             <DotsThreeVerticalIcon className="size-4" />
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent

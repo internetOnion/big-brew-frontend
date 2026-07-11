@@ -111,7 +111,10 @@ const StockAdjustDialog = ({
                                 setReason(v ?? "manual_restock")
                             }
                         >
-                            <SelectTrigger id="adjust-reason" className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs">
+                            <SelectTrigger
+                                id="adjust-reason"
+                                className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs"
+                            >
                                 <SelectValue>
                                     {(val) =>
                                         reasonOptions.find(

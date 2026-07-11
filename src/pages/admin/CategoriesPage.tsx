@@ -122,7 +122,10 @@ const CategoriesPage = () => {
                 {isLoading ? (
                     <div className="divide-y divide-(--admin-border)">
                         {Array.from({ length: 3 }).map((_, i) => (
-                            <div key={i} className="flex items-center gap-2 px-4 py-2.5">
+                            <div
+                                key={i}
+                                className="flex items-center gap-2 px-4 py-2.5"
+                            >
                                 <Skeleton className="h-4 flex-1 bg-(--admin-hover)" />
                                 <Skeleton className="h-4 w-12 bg-(--admin-hover)" />
                             </div>
@@ -313,7 +316,9 @@ const CategoriesPage = () => {
                                     deleteMutation.mutate(deletingId, {
                                         onSuccess: () => setDeletingId(null),
                                         onError: () => {
-                                            toast.error("Failed to delete category");
+                                            toast.error(
+                                                "Failed to delete category",
+                                            );
                                             setDeletingId(null);
                                         },
                                     });

@@ -7,6 +7,7 @@ import {
     UsersIcon,
     ClipboardTextIcon,
     ReceiptIcon,
+    TagIcon,
     GearSixIcon,
     ListIcon,
     SignOutIcon,
@@ -30,6 +31,7 @@ const navItems = [
     { to: "/admin/employees", icon: UsersIcon, label: "Employees" },
     { to: "/admin/orders", icon: ClipboardTextIcon, label: "Orders" },
     { to: "/admin/expenses", icon: ReceiptIcon, label: "Expenses" },
+    { to: "/admin/discounts", icon: TagIcon, label: "Discounts" },
     { to: "/admin/settings", icon: GearSixIcon, label: "Settings" },
 ];
 
@@ -141,7 +143,10 @@ const AdminLayout = () => {
 
             {/* Desktop sidebar */}
             <aside className="admin-sidebar hidden w-56 shrink-0 bg-(--admin-sidebar) md:block">
-                <SidebarContent onNavClick={closeSidebar} onLogout={handleLogout} />
+                <SidebarContent
+                    onNavClick={closeSidebar}
+                    onLogout={handleLogout}
+                />
             </aside>
 
             {/* Mobile sidebar */}
@@ -187,7 +192,10 @@ const AdminLayout = () => {
                     className="w-56 border-r border-(--admin-sidebar-border) bg-(--admin-sidebar) p-0"
                 >
                     <SheetTitle className="sr-only">Navigation</SheetTitle>
-                    <SidebarContent onNavClick={closeSidebar} onLogout={handleLogout} />
+                    <SidebarContent
+                        onNavClick={closeSidebar}
+                        onLogout={handleLogout}
+                    />
                 </SheetContent>
             </Sheet>
         </div>

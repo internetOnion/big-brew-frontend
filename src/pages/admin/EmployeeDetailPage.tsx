@@ -264,7 +264,10 @@ const EmployeeDetailPage = () => {
                                         setRole(v ?? "barista")
                                     }
                                 >
-                                    <SelectTrigger id="detail-role" className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
+                                    <SelectTrigger
+                                        id="detail-role"
+                                        className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
+                                    >
                                         <SelectValue>
                                             {(val) =>
                                                 ROLES.find(
@@ -444,7 +447,8 @@ const EmployeeDetailPage = () => {
                                             </div>
                                             <div className="flex shrink-0 items-center gap-2">
                                                 <span className="font-mono text-[11px] font-medium text-(--admin-text)">
-                                                    {currencySymbol}{order.total}
+                                                    {currencySymbol}
+                                                    {order.total}
                                                 </span>
                                                 <Badge
                                                     variant="outline"
@@ -540,10 +544,7 @@ const EmployeeDetailPage = () => {
                         >
                             Cancel
                         </Button>
-                        <Button
-                            onClick={handleDelete}
-                            variant="destructive"
-                        >
+                        <Button onClick={handleDelete} variant="destructive">
                             Delete
                         </Button>
                     </DialogFooter>

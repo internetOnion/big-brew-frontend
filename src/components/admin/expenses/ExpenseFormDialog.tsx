@@ -80,7 +80,10 @@ const ExpenseFormDialog = ({
                 </DialogHeader>
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1.5">
-                        <Label htmlFor="edit-expense-description" className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="edit-expense-description"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Description
                         </Label>
                         <Input
@@ -93,7 +96,10 @@ const ExpenseFormDialog = ({
                         />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                        <Label htmlFor="edit-expense-amount" className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="edit-expense-amount"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Amount
                         </Label>
                         <Input
@@ -109,14 +115,20 @@ const ExpenseFormDialog = ({
                         />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                        <Label htmlFor="edit-expense-category" className="text-[11px] text-(--admin-text-secondary)">
+                        <Label
+                            htmlFor="edit-expense-category"
+                            className="text-[11px] text-(--admin-text-secondary)"
+                        >
                             Category
                         </Label>
                         <Select
                             value={category || undefined}
                             onValueChange={(v) => setCategory(v ?? "")}
                         >
-                            <SelectTrigger id="edit-expense-category" className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs">
+                            <SelectTrigger
+                                id="edit-expense-category"
+                                className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) text-xs"
+                            >
                                 <SelectValue placeholder="Select category" />
                             </SelectTrigger>
                             <SelectContent>

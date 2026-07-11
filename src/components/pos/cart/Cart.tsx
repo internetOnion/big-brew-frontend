@@ -16,6 +16,11 @@ export const Cart = () => {
         changeQuantity,
         startEdit,
         resetCart,
+        discountId,
+        setDiscountId,
+        activeDiscounts,
+        discountAmount,
+        discountHint,
     } = usePOS();
     const navigate = useNavigate();
 
@@ -25,7 +30,10 @@ export const Cart = () => {
         [cartItems],
     );
     const tax = useMemo(() => subtotal * 0.07, [subtotal]);
-    const total = useMemo(() => subtotal + tax, [subtotal, tax]);
+    const total = useMemo(
+        () => subtotal + tax - discountAmount,
+        [subtotal, tax, discountAmount],
+    );
 
     return (
         <div className="flex h-full w-[270px] shrink-0 flex-col overflow-hidden border-l border-(--pos-border) bg-(--pos-card)">
@@ -95,6 +103,11 @@ export const Cart = () => {
                 subtotal={subtotal}
                 tax={tax}
                 total={total}
+                discountAmount={discountAmount}
+                discountId={discountId}
+                activeDiscounts={activeDiscounts}
+                onDiscountChange={setDiscountId}
+                discountHint={discountHint}
                 isEmpty={cartItems.length === 0}
                 onConfirm={onConfirm}
                 onReset={resetCart}

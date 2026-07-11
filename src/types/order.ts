@@ -116,6 +116,9 @@ export interface Discount {
     name: string;
     type: DiscountType;
     value: string | null;
+    maxDiscountAmount: string | null;
+    appliesTo: "order" | "item";
+    itemId: string | null;
     buyItemId: string | null;
     freeItemId: string | null;
     isActive: boolean;

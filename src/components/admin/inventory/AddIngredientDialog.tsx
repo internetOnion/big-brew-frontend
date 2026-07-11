@@ -93,7 +93,10 @@ const AddIngredientDialog = ({ open, onClose }: AddIngredientDialogProps) => {
                             value={unit}
                             onValueChange={(v) => setUnit(v ?? "g")}
                         >
-                            <SelectTrigger id="dialog-ingredient-unit" className="h-8 border-(--admin-border) bg-(--admin-card) text-xs">
+                            <SelectTrigger
+                                id="dialog-ingredient-unit"
+                                className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
+                            >
                                 <SelectValue>
                                     {(val) =>
                                         val === "g"

@@ -37,6 +37,11 @@ const MenuItemCreatePage = lazy(
     () => import("./pages/admin/MenuItemCreatePage"),
 );
 const CategoriesPage = lazy(() => import("./pages/admin/CategoriesPage"));
+const DiscountsPage = lazy(() => import("./pages/admin/DiscountsPage"));
+const DiscountCreatePage = lazy(
+    () => import("./pages/admin/DiscountCreatePage"),
+);
+const DiscountEditPage = lazy(() => import("./pages/admin/DiscountEditPage"));
 
 const App = () => {
     return (
@@ -98,6 +103,18 @@ const App = () => {
                                 element={<ExpenseCategoriesPage />}
                             />
                             <Route path="expenses" element={<ExpensesPage />} />
+                            <Route
+                                path="discounts"
+                                element={<DiscountsPage />}
+                            />
+                            <Route
+                                path="discounts/new"
+                                element={<DiscountCreatePage />}
+                            />
+                            <Route
+                                path="discounts/:id"
+                                element={<DiscountEditPage />}
+                            />
                             <Route
                                 path="settings"
                                 element={<AdminSettingsPage />}

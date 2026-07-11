@@ -93,7 +93,10 @@ const RecipeTab = ({
                         value={selectedIngredientId}
                         onValueChange={(v) => onIngredientIdChange(v ?? "")}
                     >
-                        <SelectTrigger id="recipe-ingredient" className="h-8 border-(--admin-border) bg-(--admin-card) text-xs w-40">
+                        <SelectTrigger
+                            id="recipe-ingredient"
+                            className="h-8 border-(--admin-border) bg-(--admin-card) text-xs w-40"
+                        >
                             <SelectValue placeholder="Select...">
                                 {(val) =>
                                     ingredients?.find((i) => i.id === val)

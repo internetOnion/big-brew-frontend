@@ -6,19 +6,20 @@ import {
     useEffect,
     type ReactNode,
 } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { MenuItem } from "@/types/menu";
 import type { CartItem } from "@/types/cart";
 import { generateCartId } from "@/lib/utils";
 import type { CustomizeOptions } from "@/types/cart";
 import api from "@/api/api";
 import { ENDPOINTS } from "@/api/endpoints";
-import { orderKeys } from "@/lib/query-keys";
+import { orderKeys, discountKeys } from "@/lib/query-keys";
 import type {
     Order,
     CreateOrderPayload,
     OrderType,
     PaymentMethod,
+    Discount,
 } from "@/types/order";
 import {
     loadCart,
@@ -39,6 +40,10 @@ interface POSContextValue {
     customizeItem: MenuItem | null;
     customizeInitial: CustomizeOptions | undefined;
     discountId: string | null;
+    activeDiscounts: Discount[];
+    discountAmount: number;
+    discountQualified: boolean;
+    discountHint: string | null;
     subtotal: number;
     total: number;
     setOrderType: (t: OrderType) => void;
@@ -69,13 +74,209 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
     >(undefined);
     const [discountId, setDiscountId] = useState<string | null>(null);
 
+    const { data: activeDiscounts = [] } = useQuery<Discount[]>({
+        queryKey: discountKeys.active,
+        queryFn: async () => {
+            const { data } = await api.get<Discount[]>(
+                ENDPOINTS.DISCOUNTS.ACTIVE,
+                { silent: true },
+            );
+            return data;
+        },
+        staleTime: 10_000,
+        refetchInterval: 15_000,
+        refetchOnWindowFocus: true,
+    });
+
     const subtotal = useMemo(() => {
         return cartItems.reduce((sum, item) => sum + item.price, 0);
     }, [cartItems]);
 
+    const discountAmount = useMemo(() => {
+        if (!discountId) return 0;
+        const discount = activeDiscounts.find((d) => d.id === discountId);
+        if (!discount) return 0;
+
+        // Order-level percentage
+        if (
+            discount.type === "percentage" &&
+            discount.appliesTo === "order" &&
+            discount.value
+        ) {
+            const raw = subtotal * (parseFloat(discount.value) / 100);
+            return discount.maxDiscountAmount
+                ? Math.min(raw, parseFloat(discount.maxDiscountAmount))
+                : raw;
+        }
+        // Item-level percentage
+        if (
+            discount.type === "percentage" &&
+            discount.appliesTo === "item" &&
+            discount.itemId &&
+            discount.value
+        ) {
+            const itemTotal = cartItems
+                .filter((ci) => ci.menuId === discount.itemId)
+                .reduce((sum, ci) => sum + ci.price, 0);
+            const raw = itemTotal * (parseFloat(discount.value) / 100);
+            return discount.maxDiscountAmount
+                ? Math.min(raw, parseFloat(discount.maxDiscountAmount))
+                : raw;
+        }
+        // Order-level fixed
+        if (
+            discount.type === "fixed_amount" &&
+            discount.appliesTo === "order" &&
+            discount.value
+        ) {
+            return Math.min(parseFloat(discount.value), subtotal);
+        }
+        // Item-level fixed
+        if (
+            discount.type === "fixed_amount" &&
+            discount.appliesTo === "item" &&
+            discount.itemId &&
+            discount.value
+        ) {
+            const itemTotal = cartItems
+                .filter((ci) => ci.menuId === discount.itemId)
+                .reduce((sum, ci) => sum + ci.price, 0);
+            return Math.min(parseFloat(discount.value), itemTotal);
+        }
+        // BOGO
+        if (discount.type === "bogo") {
+            const buyCartItems = discount.buyItemId
+                ? cartItems.filter((ci) => ci.menuId === discount.buyItemId)
+                : cartItems;
+            const buyQty = buyCartItems.reduce(
+                (sum, ci) => sum + ci.quantity,
+                0,
+            );
+
+            if (discount.buyItemId && discount.freeItemId) {
+                // Both specific
+                if (discount.buyItemId === discount.freeItemId) {
+                    if (buyQty < 2) return 0;
+                    return (
+                        Math.floor(buyQty / 2) *
+                        (buyCartItems[0]?.unitPrice ?? 0)
+                    );
+                }
+                const freeCartItem = cartItems.find(
+                    (ci) => ci.menuId === discount.freeItemId,
+                );
+                if (!freeCartItem) return 0;
+                return freeCartItem.unitPrice;
+            }
+
+            if (discount.freeItemId) {
+                // Buy any, get specific free
+                if (buyQty < 2) return 0;
+                const freeCartItem = cartItems.find(
+                    (ci) => ci.menuId === discount.freeItemId,
+                );
+                return freeCartItem?.unitPrice ?? 0;
+            }
+
+            // Buy specific or any, get cheapest free
+            if (buyQty === 0) return 0;
+            const cheapest = [...cartItems].sort(
+                (a, b) => a.unitPrice - b.unitPrice,
+            )[0];
+            if (!cheapest) return 0;
+            return discount.buyItemId
+                ? cheapest.unitPrice
+                : buyQty >= 2
+                  ? cheapest.unitPrice
+                  : 0;
+        }
+
+        return 0;
+    }, [discountId, activeDiscounts, subtotal, cartItems]);
+
+    const discountQualified = useMemo(() => {
+        if (!discountId) return true;
+        const discount = activeDiscounts.find((d) => d.id === discountId);
+        if (!discount) return true;
+        if (discount.type !== "bogo") return true;
+
+        const buyCartItems = discount.buyItemId
+            ? cartItems.filter((ci) => ci.menuId === discount.buyItemId)
+            : cartItems;
+        const buyQty = buyCartItems.reduce((sum, ci) => sum + ci.quantity, 0);
+
+        if (discount.buyItemId && discount.freeItemId) {
+            if (discount.buyItemId === discount.freeItemId) {
+                return buyQty >= 2;
+            }
+            return (
+                buyQty > 0 &&
+                cartItems.some((ci) => ci.menuId === discount.freeItemId)
+            );
+        }
+
+        if (discount.freeItemId) {
+            return (
+                buyQty >= 2 &&
+                cartItems.some((ci) => ci.menuId === discount.freeItemId)
+            );
+        }
+
+        // Buy specific or any, get cheapest free
+        return discount.buyItemId ? buyQty > 0 : buyQty >= 2;
+    }, [discountId, activeDiscounts, cartItems]);
+
+    const discountHint = useMemo(() => {
+        if (!discountId) return null;
+        const discount = activeDiscounts.find((d) => d.id === discountId);
+        if (!discount || discount.type !== "bogo") return null;
+        if (discountQualified) return null;
+
+        const buyCartItems = discount.buyItemId
+            ? cartItems.filter((ci) => ci.menuId === discount.buyItemId)
+            : cartItems;
+        const buyQty = buyCartItems.reduce((sum, ci) => sum + ci.quantity, 0);
+        const buyItemName = buyCartItems[0]?.name ?? "the buy item";
+
+        if (discount.buyItemId && discount.freeItemId) {
+            if (discount.buyItemId === discount.freeItemId) {
+                return `Add 1 more ${buyItemName} to qualify`;
+            }
+            const freeItemName =
+                cartItems.find((ci) => ci.menuId === discount.freeItemId)
+                    ?.name ?? "the free item";
+            if (!cartItems.some((ci) => ci.menuId === discount.buyItemId)) {
+                return `Add ${buyItemName} to qualify`;
+            }
+            return `Add ${freeItemName} to qualify`;
+        }
+
+        if (discount.freeItemId) {
+            // Buy any, get specific free
+            if (buyQty < 2)
+                return `Add ${2 - buyQty} more item${buyQty === 0 ? "s" : ""} to qualify`;
+            const freeItemName =
+                cartItems.find((ci) => ci.menuId === discount.freeItemId)
+                    ?.name ?? "the free item";
+            if (!cartItems.some((ci) => ci.menuId === discount.freeItemId)) {
+                return `Add ${freeItemName} to qualify`;
+            }
+            return null;
+        }
+
+        // Buy specific or any, get cheapest free
+        if (discount.buyItemId) {
+            return buyQty > 0 ? null : `Add ${buyItemName} to qualify`;
+        }
+        // Buy any, get any
+        return buyQty >= 2
+            ? null
+            : `Add ${2 - buyQty} more item${buyQty === 0 ? "s" : ""} to qualify`;
+    }, [discountId, activeDiscounts, cartItems, discountQualified]);
+
     const total = useMemo(() => {
-        return subtotal;
-    }, [subtotal]);
+        return subtotal - discountAmount;
+    }, [subtotal, discountAmount]);
 
     useEffect(() => {
         saveCart(cartItems);
@@ -262,6 +463,10 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
                 customizeItem,
                 customizeInitial,
                 discountId,
+                activeDiscounts,
+                discountAmount,
+                discountQualified,
+                discountHint,
                 subtotal,
                 total,
                 setOrderType,

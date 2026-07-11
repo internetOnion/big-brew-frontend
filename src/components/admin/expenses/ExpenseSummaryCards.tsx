@@ -34,8 +34,7 @@ const ExpenseSummaryCards = ({
     );
 
     const entryCount = useMemo(
-        () =>
-            summary?.byCategory?.reduce((sum, c) => sum + c.count, 0) ?? 0,
+        () => summary?.byCategory?.reduce((sum, c) => sum + c.count, 0) ?? 0,
         [summary],
     );
 
