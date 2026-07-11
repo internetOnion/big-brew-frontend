@@ -103,7 +103,10 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
             discount.appliesTo === "order" &&
             discount.value
         ) {
-            return subtotal * (parseFloat(discount.value) / 100);
+            const raw = subtotal * (parseFloat(discount.value) / 100);
+            return discount.maxDiscountAmount
+                ? Math.min(raw, parseFloat(discount.maxDiscountAmount))
+                : raw;
         }
         // Item-level percentage
         if (
@@ -115,7 +118,10 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
             const itemTotal = cartItems
                 .filter((ci) => ci.menuId === discount.itemId)
                 .reduce((sum, ci) => sum + ci.price, 0);
-            return itemTotal * (parseFloat(discount.value) / 100);
+            const raw = itemTotal * (parseFloat(discount.value) / 100);
+            return discount.maxDiscountAmount
+                ? Math.min(raw, parseFloat(discount.maxDiscountAmount))
+                : raw;
         }
         // Order-level fixed
         if (

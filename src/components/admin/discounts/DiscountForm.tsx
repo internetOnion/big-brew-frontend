@@ -23,6 +23,7 @@ export interface DiscountFormData {
     name: string;
     type: DiscountType;
     value: string;
+    maxDiscountAmount: string;
     appliesTo: "order" | "item";
     itemId: string;
     buyItemId: string;
@@ -49,6 +50,7 @@ const toFormData = (d: AdminDiscount): DiscountFormData => ({
     name: d.name,
     type: d.type,
     value: d.value ?? "",
+    maxDiscountAmount: d.maxDiscountAmount ?? "",
     appliesTo: d.appliesTo,
     itemId: d.itemId ?? "",
     buyItemId: d.buyItemId ?? "__any__",
@@ -83,6 +85,9 @@ const toPayload = (form: DiscountFormData): CreateDiscountPayload => {
     return {
         ...base,
         value: form.value ? Number(form.value) : null,
+        max_discount_amount: form.maxDiscountAmount
+            ? Number(form.maxDiscountAmount)
+            : null,
         applies_to: form.appliesTo,
         item_id: form.appliesTo === "item" ? form.itemId || null : null,
         buy_item_id: null,
@@ -109,6 +114,7 @@ const DiscountForm = ({
                   name: "",
                   type: "percentage",
                   value: "",
+                  maxDiscountAmount: "",
                   appliesTo: "order",
                   itemId: "",
                   buyItemId: "",
@@ -373,6 +379,46 @@ const DiscountForm = ({
                             {errors.value && (
                                 <p className="text-[10px] text-destructive">
                                     {errors.value}
+                                </p>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Max discount amount (percentage only) */}
+                    {form.type === "percentage" && (
+                        <div className="grid gap-1.5">
+                            <Label
+                                htmlFor="max-discount-amount"
+                                className="text-[11px] text-(--admin-text-secondary)"
+                            >
+                                Max Discount ({currencySymbol}){" "}
+                                <span className="text-(--admin-text-muted)">
+                                    (optional)
+                                </span>
+                            </Label>
+                            <div className="relative">
+                                <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-(--admin-text-muted)">
+                                    {currencySymbol}
+                                </span>
+                                <Input
+                                    id="max-discount-amount"
+                                    type="number"
+                                    min="0"
+                                    step="0.01"
+                                    value={form.maxDiscountAmount}
+                                    onChange={(e) =>
+                                        updateField(
+                                            "maxDiscountAmount",
+                                            e.target.value,
+                                        )
+                                    }
+                                    placeholder="e.g. 10.00"
+                                    className="h-8 max-md:min-h-[44px] border-(--admin-border) bg-(--admin-card) pl-7 text-xs text-(--admin-text) focus-visible:ring-(--admin-accent)"
+                                />
+                            </div>
+                            {errors.maxDiscountAmount && (
+                                <p className="text-[10px] text-destructive">
+                                    {errors.maxDiscountAmount}
                                 </p>
                             )}
                         </div>

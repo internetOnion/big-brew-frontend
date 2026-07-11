@@ -102,6 +102,7 @@ export interface AdminDiscount {
     name: string;
     type: "percentage" | "fixed_amount" | "bogo";
     value: string | null;
+    maxDiscountAmount: string | null;
     appliesTo: "order" | "item";
     itemId: string | null;
     buyItemId: string | null;
@@ -117,6 +118,7 @@ export interface CreateDiscountPayload {
     name: string;
     type: "percentage" | "fixed_amount" | "bogo";
     value: number | null;
+    max_discount_amount?: number | null;
     applies_to?: "order" | "item";
     item_id?: string | null;
     buy_item_id: string | null;

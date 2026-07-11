@@ -48,6 +48,10 @@ export const useCreateDiscount = () => {
                             payload.value != null
                                 ? String(payload.value)
                                 : null,
+                        maxDiscountAmount:
+                            payload.max_discount_amount != null
+                                ? String(payload.max_discount_amount)
+                                : null,
                         appliesTo: payload.applies_to ?? "order",
                         itemId: payload.item_id ?? null,
                         buyItemId: payload.buy_item_id,
@@ -99,6 +103,37 @@ export const useUpdateDiscount = () => {
                                   ...d,
                                   ...(payload.name !== undefined && {
                                       name: payload.name,
+                                  }),
+                                  ...(payload.type !== undefined && {
+                                      type: payload.type,
+                                  }),
+                                  ...(payload.value !== undefined && {
+                                      value:
+                                          payload.value != null
+                                              ? String(payload.value)
+                                              : null,
+                                  }),
+                                  ...(payload.max_discount_amount !==
+                                      undefined && {
+                                      maxDiscountAmount:
+                                          payload.max_discount_amount != null
+                                              ? String(
+                                                    payload
+                                                        .max_discount_amount,
+                                                )
+                                              : null,
+                                  }),
+                                  ...(payload.applies_to !== undefined && {
+                                      appliesTo: payload.applies_to,
+                                  }),
+                                  ...(payload.item_id !== undefined && {
+                                      itemId: payload.item_id ?? null,
+                                  }),
+                                  ...(payload.buy_item_id !== undefined && {
+                                      buyItemId: payload.buy_item_id,
+                                  }),
+                                  ...(payload.free_item_id !== undefined && {
+                                      freeItemId: payload.free_item_id,
                                   }),
                                   ...(payload.is_active !== undefined && {
                                       isActive: payload.is_active,
