@@ -12,6 +12,7 @@ import {
     ListIcon,
     SignOutIcon,
     MonitorIcon,
+    DesktopIcon,
 } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useAuth } from "@/hooks/useAuth";
@@ -29,6 +30,7 @@ const navItems = [
     { to: "/admin/menu", icon: ForkKnifeIcon, label: "Menu" },
     { to: "/admin/inventory", icon: PackageIcon, label: "Inventory" },
     { to: "/admin/employees", icon: UsersIcon, label: "Employees" },
+    { to: "/admin/terminals", icon: DesktopIcon, label: "Terminals" },
     { to: "/admin/orders", icon: ClipboardTextIcon, label: "Orders" },
     { to: "/admin/expenses", icon: ReceiptIcon, label: "Expenses" },
     { to: "/admin/discounts", icon: TagIcon, label: "Discounts" },

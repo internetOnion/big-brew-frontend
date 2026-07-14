@@ -55,3 +55,7 @@ export const discountKeys = {
     all: ["discounts"] as const,
     active: ["discounts", "active"] as const,
 };
+
+export const terminalKeys = {
+    all: ["terminals"] as const,
+};

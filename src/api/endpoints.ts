@@ -90,4 +90,8 @@ export const ENDPOINTS = {
         BASE: "/settings",
         LOGO: "/settings/logo",
     },
+    TERMINALS: {
+        BASE: "/terminals",
+        BY_ID: (id: string) => `/terminals/${id}`,
+    },
 } as const;
