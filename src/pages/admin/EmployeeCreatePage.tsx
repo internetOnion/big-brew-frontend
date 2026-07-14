@@ -39,7 +39,7 @@ const EmployeeCreatePage = () => {
 
     const createBaristaMutation = useMutation({
         mutationFn: async () => {
-            const { data } = await api.post(ENDPOINTS.EMPLOYEES.BASE, {
+            const { data } = await api.post(ENDPOINTS.AUTH.SIGNUP, {
                 name: name.trim(),
                 role: "barista",
                 pin: pin || undefined,

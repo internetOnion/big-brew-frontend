@@ -52,60 +52,69 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
         setPinError(null);
     };
 
+    const isManager = role === "manager";
+
     const handleSubmit = () => {
-        createEmployee.mutate(
-            {
-                name: name.trim(),
-                email: email.trim(),
-                password,
-                role: role as "barista" | "manager",
-                pin: pin || undefined,
+        const payload: Record<string, unknown> = {
+            name: name.trim(),
+            role: role as "barista" | "manager",
+            pin: pin || undefined,
+        };
+        if (isManager) {
+            payload.email = email.trim();
+            payload.password = password;
+        }
+        createEmployee.mutate(payload as any, {
+            onSuccess: () => {
+                toast.success(`${name.trim()} added to the team`);
+                setName("");
+                setEmail("");
+                setPassword("");
+                setConfirmPassword("");
+                setShowPassword(false);
+                setShowConfirmPassword(false);
+                setRole("barista");
+                setPin("");
+                setPinError(null);
+                onClose();
             },
-            {
-                onSuccess: () => {
-                    toast.success(`${name.trim()} added to the team`);
-                    setName("");
-                    setEmail("");
-                    setPassword("");
-                    setConfirmPassword("");
-                    setShowPassword(false);
-                    setShowConfirmPassword(false);
-                    setRole("barista");
-                    setPin("");
-                    setPinError(null);
-                    onClose();
-                },
-                onError: (error) => {
-                    const msg =
-                        (
-                            error as {
-                                response?: {
-                                    data?: { message?: string; error?: string };
+            onError: (error) => {
+                const msg =
+                    (
+                        error as {
+                            response?: {
+                                data?: {
+                                    message?: string;
+                                    error?: string;
                                 };
-                            }
-                        )?.response?.data?.message ||
-                        (
-                            error as {
-                                response?: {
-                                    data?: { message?: string; error?: string };
+                            };
+                        }
+                    )?.response?.data?.message ||
+                    (
+                        error as {
+                            response?: {
+                                data?: {
+                                    message?: string;
+                                    error?: string;
                                 };
-                            }
-                        )?.response?.data?.error ||
-                        "Failed to create employee";
-                    toast.error(msg);
-                    setPinError(msg);
-                },
+                            };
+                        }
+                    )?.response?.data?.error ||
+                    "Failed to create employee";
+                toast.error(msg);
+                setPinError(msg);
             },
-        );
+        });
     };
 
     const isPasswordMismatch =
         confirmPassword.length > 0 && password !== confirmPassword;
-    const isValid =
-        name.trim() &&
-        email.trim() &&
-        password.length >= 6 &&
-        password === confirmPassword;
+    const isValid = isManager
+        ? name.trim() &&
+          email.trim() &&
+          password.length >= 8 &&
+          password === confirmPassword
+        : name.trim();
 
     return (
         <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
@@ -126,93 +135,11 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                         </Label>
                         <Input
                             id="dialog-full-name"
+                            value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Jane Smith"
                             className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
                         />
-                    </div>
-
-                    <div className="grid gap-1.5">
-                        <Label
-                            htmlFor="dialog-email"
-                            className="text-[11px] text-(--admin-text-secondary)"
-                        >
-                            Email
-                        </Label>
-                        <Input
-                            id="dialog-email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="jane@bigbrew.com"
-                            className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
-                        />
-                    </div>
-
-                    <div className="grid gap-1.5">
-                        <Label
-                            htmlFor="dialog-password"
-                            className="text-[11px] text-(--admin-text-secondary)"
-                        >
-                            Password
-                        </Label>
-                        <div className="relative">
-                            <Input
-                                id="dialog-password"
-                                type={showPassword ? "text" : "password"}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Min 6 characters"
-                                className="h-8 border-(--admin-border) bg-(--admin-card) pr-8 text-xs"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                                className="absolute top-1/2 right-2 flex cursor-pointer -translate-y-1/2 items-center text-(--admin-text-muted) transition-colors hover:text-(--admin-text)"
-                            >
-                                {showPassword ? (
-                                    <EyeSlashIcon className="size-3.5" />
-                                ) : (
-                                    <EyeIcon className="size-3.5" />
-                                )}
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="grid gap-1.5">
-                        <Label
-                            htmlFor="dialog-confirm-password"
-                            className="text-[11px] text-(--admin-text-secondary)"
-                        >
-                            Confirm Password
-                        </Label>
-                        <div className="relative">
-                            <Input
-                                id="dialog-confirm-password"
-                                type={showConfirmPassword ? "text" : "password"}
-                                onChange={(e) =>
-                                    setConfirmPassword(e.target.value)
-                                }
-                                placeholder="Re-enter password"
-                                className="h-8 border-(--admin-border) bg-(--admin-card) pr-8 text-xs"
-                            />
-                            <button
-                                type="button"
-                                onClick={() =>
-                                    setShowConfirmPassword(!showConfirmPassword)
-                                }
-                                className="absolute top-1/2 right-2 flex cursor-pointer -translate-y-1/2 items-center text-(--admin-text-muted) transition-colors hover:text-(--admin-text)"
-                            >
-                                {showConfirmPassword ? (
-                                    <EyeSlashIcon className="size-3.5" />
-                                ) : (
-                                    <EyeIcon className="size-3.5" />
-                                )}
-                            </button>
-                        </div>
-                        {isPasswordMismatch && (
-                            <p className="text-[10px] font-medium text-destructive">
-                                Passwords don&apos;t match
-                            </p>
-                        )}
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -271,6 +198,105 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                             )}
                         </div>
                     </div>
+
+                    {isManager && (
+                        <>
+                            <div className="grid gap-1.5">
+                                <Label
+                                    htmlFor="dialog-email"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
+                                    Email
+                                </Label>
+                                <Input
+                                    id="dialog-email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="jane@bigbrew.com"
+                                    className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
+                                />
+                            </div>
+
+                            <div className="grid gap-1.5">
+                                <Label
+                                    htmlFor="dialog-password"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
+                                    Password
+                                </Label>
+                                <div className="relative">
+                                    <Input
+                                        id="dialog-password"
+                                        type={
+                                            showPassword ? "text" : "password"
+                                        }
+                                        onChange={(e) =>
+                                            setPassword(e.target.value)
+                                        }
+                                        placeholder="Min 8 characters"
+                                        className="h-8 border-(--admin-border) bg-(--admin-card) pr-8 text-xs"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setShowPassword(!showPassword)
+                                        }
+                                        className="absolute top-1/2 right-2 flex cursor-pointer -translate-y-1/2 items-center text-(--admin-text-muted) transition-colors hover:text-(--admin-text)"
+                                    >
+                                        {showPassword ? (
+                                            <EyeSlashIcon className="size-3.5" />
+                                        ) : (
+                                            <EyeIcon className="size-3.5" />
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="grid gap-1.5">
+                                <Label
+                                    htmlFor="dialog-confirm-password"
+                                    className="text-[11px] text-(--admin-text-secondary)"
+                                >
+                                    Confirm Password
+                                </Label>
+                                <div className="relative">
+                                    <Input
+                                        id="dialog-confirm-password"
+                                        type={
+                                            showConfirmPassword
+                                                ? "text"
+                                                : "password"
+                                        }
+                                        onChange={(e) =>
+                                            setConfirmPassword(e.target.value)
+                                        }
+                                        placeholder="Re-enter password"
+                                        className="h-8 border-(--admin-border) bg-(--admin-card) pr-8 text-xs"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setShowConfirmPassword(
+                                                !showConfirmPassword,
+                                            )
+                                        }
+                                        className="absolute top-1/2 right-2 flex cursor-pointer -translate-y-1/2 items-center text-(--admin-text-muted) transition-colors hover:text-(--admin-text)"
+                                    >
+                                        {showConfirmPassword ? (
+                                            <EyeSlashIcon className="size-3.5" />
+                                        ) : (
+                                            <EyeIcon className="size-3.5" />
+                                        )}
+                                    </button>
+                                </div>
+                                {isPasswordMismatch && (
+                                    <p className="text-[10px] font-medium text-destructive">
+                                        Passwords don&apos;t match
+                                    </p>
+                                )}
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 <DialogFooter>

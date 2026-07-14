@@ -297,6 +297,16 @@ const EmployeeDetailPage = () => {
                                     </p>
                                 </div>
                             )}
+                            {!employee.email && (
+                                <div className="grid gap-1.5">
+                                    <Label className="text-[11px] text-(--admin-text-muted)">
+                                        Login Account
+                                    </Label>
+                                    <p className="text-[12px] text-(--admin-text-muted) italic">
+                                        No login account
+                                    </p>
+                                </div>
+                            )}
                             <div className="flex flex-wrap items-center gap-2 pt-1">
                                 <Button
                                     onClick={handleSave}
