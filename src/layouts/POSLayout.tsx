@@ -4,12 +4,12 @@ import CustomizeModal from "@/components/pos/customize";
 import { usePOS } from "@/hooks/usePos";
 import { useAuth } from "@/hooks/useAuth";
 import { Separator } from "@/components/ui/separator";
-import { MonitorIcon } from "@phosphor-icons/react";
+import { MonitorIcon, SignOutIcon } from "@phosphor-icons/react";
 
 const POSLayout = () => {
     const { customizeItem, customizeInitial, closeCustomize, addItem } =
         usePOS();
-    const { user } = useAuth();
+    const { userType, logout } = useAuth();
     const navigate = useNavigate();
 
     const now = new Date();
@@ -23,6 +23,11 @@ const POSLayout = () => {
         minute: "2-digit",
         hour12: true,
     });
+
+    const handleLogout = async () => {
+        await logout();
+        navigate("/login");
+    };
 
     return (
         <div className="pos-theme flex h-screen w-screen flex-col overflow-hidden bg-(--pos-bg)">
@@ -54,15 +59,22 @@ const POSLayout = () => {
                         orientation="vertical"
                         className="h-6 bg-(--pos-border)"
                     />
-                    {user?.role !== "barista" && (
+                    {userType === "employee" && (
                         <button
                             onClick={() => navigate("/admin")}
-                            className="flex w-full items-center gap-2.5 rounded-lg bg-(--pos-accent) px-2.5 py-1.5 text-[13px] text-white transition-opacity duration-150 hover:opacity-85 cursor-pointer"
+                            className="flex items-center gap-2.5 rounded-lg bg-(--pos-accent) px-2.5 py-1.5 text-[13px] text-white transition-opacity duration-150 hover:opacity-85 cursor-pointer"
                         >
                             <MonitorIcon className="size-[15px] shrink-0" />
                             Admin
                         </button>
                     )}
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-1.5 rounded-lg border border-(--pos-border) bg-(--pos-card) px-2.5 py-1.5 text-[12px] text-(--pos-text-muted) transition-colors duration-150 hover:bg-(--pos-hover) cursor-pointer"
+                    >
+                        <SignOutIcon className="size-[13px] shrink-0" />
+                        Logout
+                    </button>
                 </div>
             </div>
 

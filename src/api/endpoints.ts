@@ -1,6 +1,7 @@
 export const ENDPOINTS = {
     AUTH: {
         LOGIN: "/auth/login",
+        TERMINAL_LOGIN: "/auth/terminal-login",
         LOGOUT: "/auth/logout",
         REFRESH: "/auth/refresh",
         VERIFY_PIN: "/auth/verify-pin",

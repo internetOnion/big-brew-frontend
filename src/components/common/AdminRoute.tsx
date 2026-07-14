@@ -2,9 +2,9 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
 const AdminRoute = () => {
-    const { user } = useAuth();
+    const { userType } = useAuth();
 
-    if (user?.role === "barista") {
+    if (userType === "terminal") {
         return <Navigate to="/" replace />;
     }
 

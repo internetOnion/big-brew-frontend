@@ -6,22 +6,28 @@ import { LoginBrandingPanel } from "@/components/common/LoginBrandingPanel";
 import { LoginForm } from "@/components/common/LoginForm";
 import { motion } from "motion/react";
 
-const getRedirectPath = (role: string): string => {
-    if (role === "barista") return ROUTES.POS;
-    return ROUTES.ADMIN;
-};
-
 const LoginPage = () => {
     const navigate = useNavigate();
-    const { login, isLoading, isAuthenticated, isInitialized, user } =
-        useAuth();
+    const {
+        login,
+        terminalLogin,
+        isLoading,
+        isAuthenticated,
+        isInitialized,
+        user,
+        userType,
+    } = useAuth();
     const [error, setError] = useState("");
 
     useEffect(() => {
         if (isInitialized && isAuthenticated && user) {
-            navigate(getRedirectPath(user.role), { replace: true });
+            if (userType === "terminal") {
+                navigate(ROUTES.POS, { replace: true });
+            } else {
+                navigate(ROUTES.ADMIN, { replace: true });
+            }
         }
-    }, [isInitialized, isAuthenticated, user, navigate]);
+    }, [isInitialized, isAuthenticated, user, userType, navigate]);
 
     if (!isInitialized || isAuthenticated) return null;
 
@@ -34,10 +40,17 @@ const LoginPage = () => {
         }
 
         try {
-            const loggedInUser = await login(email, password);
-            navigate(getRedirectPath(loggedInUser.role), { replace: true });
+            // Try employee login first
+            await login(email, password);
+            navigate(ROUTES.ADMIN, { replace: true });
         } catch {
-            setError("Invalid email or password. Please try again.");
+            try {
+                // Fall back to terminal login
+                await terminalLogin(email, password);
+                navigate(ROUTES.POS, { replace: true });
+            } catch {
+                setError("Invalid email or password. Please try again.");
+            }
         }
     };
 
