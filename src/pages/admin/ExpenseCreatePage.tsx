@@ -114,7 +114,7 @@ const ExpenseCreatePage = () => {
                                 Category
                             </Label>
                             <Select
-                                value={category || undefined}
+                                value={category}
                                 onValueChange={(v) => setCategory(v ?? "")}
                             >
                                 <SelectTrigger

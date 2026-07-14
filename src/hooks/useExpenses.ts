@@ -116,6 +116,8 @@ export const useDeleteExpense = () => {
             });
             for (const [queryKey, cached] of previous) {
                 if (!cached) continue;
+                if (!Array.isArray((cached as unknown as Record<string, unknown>).data))
+                    continue;
                 queryClient.setQueryData<PaginatedResponse>(queryKey, (old) =>
                     old
                         ? {

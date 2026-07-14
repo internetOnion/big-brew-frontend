@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { endOfDay, format } from "date-fns";
+import { endOfDay, format, startOfDay } from "date-fns";
 import { toast } from "sonner";
 import {
     DotsThreeVerticalIcon,
@@ -55,7 +55,7 @@ const PAGE_SIZE = 20;
 
 const ExpensesPage = () => {
     const [dateRange, setDateRange] = useState<DateRange>({
-        from: new Date(),
+        from: startOfDay(new Date()),
         to: endOfDay(new Date()),
     });
     const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
