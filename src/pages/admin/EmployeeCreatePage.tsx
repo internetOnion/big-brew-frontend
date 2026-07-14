@@ -20,7 +20,6 @@ import {
 const ROLES = [
     { value: "barista", label: "Barista" },
     { value: "manager", label: "Manager" },
-    { value: "owner", label: "Owner" },
 ] as const;
 
 const EmployeeCreatePage = () => {

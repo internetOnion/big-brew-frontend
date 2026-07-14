@@ -118,8 +118,7 @@ export const useUpdateDiscount = () => {
                                       maxDiscountAmount:
                                           payload.max_discount_amount != null
                                               ? String(
-                                                    payload
-                                                        .max_discount_amount,
+                                                    payload.max_discount_amount,
                                                 )
                                               : null,
                                   }),

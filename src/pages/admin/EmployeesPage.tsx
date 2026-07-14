@@ -54,13 +54,10 @@ const ROLES = [
     { value: "", label: "All Roles" },
     { value: "barista", label: "Barista" },
     { value: "manager", label: "Manager" },
-    { value: "owner", label: "Owner" },
 ] as const;
 
 const roleBadge = (role: string) => {
     switch (role) {
-        case "owner":
-            return "border-(--admin-primary)/30 bg-(--admin-primary)/10 text-(--admin-primary)";
         case "manager":
             return "border-(--admin-warning)/30 bg-(--admin-warning)/10 text-(--admin-warning)";
         default:
@@ -393,23 +390,20 @@ const EmployeesPage = () => {
                                                                         ? "Deactivate"
                                                                         : "Reactivate"}
                                                                 </DropdownMenuItem>
-                                                                {emp.role !==
-                                                                    "owner" && (
-                                                                    <DropdownMenuItem
-                                                                        variant="destructive"
-                                                                        onClick={(
-                                                                            e,
-                                                                        ) =>
-                                                                            handleDeleteClick(
-                                                                                e as unknown as React.MouseEvent,
-                                                                                emp,
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        <TrashIcon className="size-4" />
-                                                                        Delete
-                                                                    </DropdownMenuItem>
-                                                                )}
+                                                                <DropdownMenuItem
+                                                                    variant="destructive"
+                                                                    onClick={(
+                                                                        e,
+                                                                    ) =>
+                                                                        handleDeleteClick(
+                                                                            e as unknown as React.MouseEvent,
+                                                                            emp,
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <TrashIcon className="size-4" />
+                                                                    Delete
+                                                                </DropdownMenuItem>
                                                             </DropdownMenuContent>
                                                         </DropdownMenu>
                                                     </div>

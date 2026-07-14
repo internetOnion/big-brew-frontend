@@ -7,7 +7,7 @@ export interface ExpenseCategory {
 export interface AdminEmployee {
     id: string;
     name: string;
-    role: "barista" | "manager" | "owner";
+    role: "barista" | "manager";
     supabaseUid: string | null;
     email?: string;
     isActive?: boolean;
@@ -17,14 +17,14 @@ export interface CreateEmployeePayload {
     name: string;
     email: string;
     password: string;
-    role: "barista" | "manager" | "owner";
+    role: "barista" | "manager";
     pin?: string;
 }
 
 export interface UpdateEmployeePayload {
     name?: string;
     email?: string;
-    role?: "barista" | "manager" | "owner";
+    role?: "barista" | "manager";
     pin?: string;
     password?: string;
 }

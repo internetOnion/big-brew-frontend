@@ -23,7 +23,6 @@ import {
 const ROLES = [
     { value: "barista", label: "Barista" },
     { value: "manager", label: "Manager" },
-    { value: "owner", label: "Owner" },
 ] as const;
 
 interface CreateEmployeeDialogProps {
@@ -59,7 +58,7 @@ const CreateEmployeeDialog = ({ open, onClose }: CreateEmployeeDialogProps) => {
                 name: name.trim(),
                 email: email.trim(),
                 password,
-                role: role as "barista" | "manager" | "owner",
+                role: role as "barista" | "manager",
                 pin: pin || undefined,
             },
             {

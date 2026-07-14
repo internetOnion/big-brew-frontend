@@ -44,7 +44,6 @@ import type { Order } from "@/types/order";
 const ROLES = [
     { value: "barista", label: "Barista" },
     { value: "manager", label: "Manager" },
-    { value: "owner", label: "Owner" },
 ] as const;
 
 const statusBadgeVariant = (status: string) => {
@@ -155,7 +154,7 @@ const EmployeeDetailPage = () => {
             await updateMutation.mutateAsync({
                 id,
                 name: name.trim(),
-                role: role as "barista" | "manager" | "owner",
+                role: role as "barista" | "manager",
             });
             toast.success("Employee updated");
         } catch {
@@ -320,19 +319,15 @@ const EmployeeDetailPage = () => {
                                 >
                                     {isActive ? "Deactivate" : "Reactivate"}
                                 </Button>
-                                {employee.role !== "owner" && (
-                                    <Button
-                                        variant="outline"
-                                        onClick={() =>
-                                            setShowDeleteDialog(true)
-                                        }
-                                        disabled={deleteMutation.isPending}
-                                        className="h-8 border-destructive/30 text-xs text-destructive hover:bg-destructive/10"
-                                    >
-                                        <TrashIcon className="size-3" />
-                                        Delete
-                                    </Button>
-                                )}
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setShowDeleteDialog(true)}
+                                    disabled={deleteMutation.isPending}
+                                    className="h-8 border-destructive/30 text-xs text-destructive hover:bg-destructive/10"
+                                >
+                                    <TrashIcon className="size-3" />
+                                    Delete
+                                </Button>
                             </div>
                         </div>
                     </div>
