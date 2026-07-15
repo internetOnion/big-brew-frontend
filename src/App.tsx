@@ -43,6 +43,7 @@ const DiscountCreatePage = lazy(
 );
 const DiscountEditPage = lazy(() => import("./pages/admin/DiscountEditPage"));
 const TerminalsPage = lazy(() => import("./pages/admin/TerminalsPage"));
+const TerminalEditPage = lazy(() => import("./pages/admin/TerminalEditPage"));
 
 const App = () => {
     return (
@@ -97,6 +98,10 @@ const App = () => {
                             <Route
                                 path="terminals"
                                 element={<TerminalsPage />}
+                            />
+                            <Route
+                                path="terminals/:id"
+                                element={<TerminalEditPage />}
                             />
                             <Route path="orders" element={<OrdersPage />} />
                             <Route

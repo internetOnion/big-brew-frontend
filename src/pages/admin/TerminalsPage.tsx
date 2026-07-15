@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
     PlusIcon,
@@ -39,12 +40,12 @@ import {
 
 const TerminalsPage = () => {
     const { data: terminals, isLoading } = useTerminals();
+    const navigate = useNavigate();
     const createTerminal = useCreateTerminal();
     const updateTerminal = useUpdateTerminal();
     const deleteTerminal = useDeleteTerminal();
 
     const [showCreateDialog, setShowCreateDialog] = useState(false);
-    const [editTerminal, setEditTerminal] = useState<Terminal | null>(null);
     const [deleteDialogTerminal, setDeleteDialogTerminal] =
         useState<Terminal | null>(null);
     const [toggleDialogTerminal, setToggleDialogTerminal] =
@@ -56,22 +57,11 @@ const TerminalsPage = () => {
     const [createPassword, setCreatePassword] = useState("");
     const [showCreatePassword, setShowCreatePassword] = useState(false);
 
-    // Edit form state
-    const [editName, setEditName] = useState("");
-    const [editPassword, setEditPassword] = useState("");
-    const [showEditPassword, setShowEditPassword] = useState(false);
-
     const resetCreateForm = () => {
         setCreateName("");
         setCreateEmail("");
         setCreatePassword("");
         setShowCreatePassword(false);
-    };
-
-    const resetEditForm = () => {
-        setEditName("");
-        setEditPassword("");
-        setShowEditPassword(false);
     };
 
     const handleCreate = () => {
@@ -114,52 +104,6 @@ const TerminalsPage = () => {
                 },
             },
         );
-    };
-
-    const handleEditOpen = (terminal: Terminal) => {
-        setEditTerminal(terminal);
-        setEditName(terminal.name);
-        setEditPassword("");
-        setShowEditPassword(false);
-    };
-
-    const handleEdit = () => {
-        if (!editTerminal) return;
-        const payload: { id: string; name?: string; password?: string } = {
-            id: editTerminal.id,
-        };
-        if (editName.trim() !== editTerminal.name) {
-            payload.name = editName.trim();
-        }
-        if (editPassword) {
-            payload.password = editPassword;
-        }
-        updateTerminal.mutate(payload, {
-            onSuccess: () => {
-                toast.success("Terminal updated");
-                resetEditForm();
-                setEditTerminal(null);
-            },
-            onError: (error) => {
-                const msg =
-                    (
-                        error as {
-                            response?: {
-                                data?: { message?: string; error?: string };
-                            };
-                        }
-                    )?.response?.data?.message ||
-                    (
-                        error as {
-                            response?: {
-                                data?: { message?: string; error?: string };
-                            };
-                        }
-                    )?.response?.data?.error ||
-                    "Failed to update terminal";
-                toast.error(msg);
-            },
-        });
     };
 
     const handleToggleStatus = () => {
@@ -270,7 +214,12 @@ const TerminalsPage = () => {
                                         return (
                                             <tr
                                                 key={terminal.id}
-                                                className="transition-colors hover:bg-(--admin-hover)"
+                                                onClick={() =>
+                                                    navigate(
+                                                        `/admin/terminals/${terminal.id}`,
+                                                    )
+                                                }
+                                                className="cursor-pointer transition-colors hover:bg-(--admin-hover)"
                                             >
                                                 <td className="px-4 py-2.5 text-[12px] font-medium text-(--admin-text)">
                                                     {terminal.name}
@@ -292,7 +241,12 @@ const TerminalsPage = () => {
                                                             : "Inactive"}
                                                     </span>
                                                 </td>
-                                                <td className="px-2 py-2.5 text-right">
+                                                <td
+                                                    className="px-2 py-2.5 text-right"
+                                                    onClick={(e) =>
+                                                        e.stopPropagation()
+                                                    }
+                                                >
                                                     <div className="flex justify-end">
                                                         <DropdownMenu>
                                                             <DropdownMenuTrigger
@@ -308,8 +262,8 @@ const TerminalsPage = () => {
                                                             >
                                                                 <DropdownMenuItem
                                                                     onClick={() =>
-                                                                        handleEditOpen(
-                                                                            terminal,
+                                                                        navigate(
+                                                                            `/admin/terminals/${terminal.id}`,
                                                                         )
                                                                     }
                                                                 >
@@ -454,89 +408,6 @@ const TerminalsPage = () => {
                             {createTerminal.isPending
                                 ? "Creating..."
                                 : "Create Terminal"}
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-
-            {/* Edit Dialog */}
-            <Dialog
-                open={editTerminal !== null}
-                onOpenChange={(v) => {
-                    if (!v) {
-                        resetEditForm();
-                        setEditTerminal(null);
-                    }
-                }}
-            >
-                <DialogContent className="max-w-sm border-(--admin-border) bg-(--admin-card)">
-                    <DialogHeader>
-                        <DialogTitle className="text-(--admin-text)">
-                            Edit Terminal
-                        </DialogTitle>
-                    </DialogHeader>
-                    <div className="flex flex-col gap-4">
-                        <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
-                                Name
-                            </Label>
-                            <Input
-                                value={editName}
-                                onChange={(e) => setEditName(e.target.value)}
-                                className="h-8 border-(--admin-border) bg-(--admin-card) text-xs"
-                            />
-                        </div>
-                        <div className="grid gap-1.5">
-                            <Label className="text-[11px] text-(--admin-text-secondary)">
-                                New Password (leave blank to keep current)
-                            </Label>
-                            <div className="relative">
-                                <Input
-                                    type={
-                                        showEditPassword ? "text" : "password"
-                                    }
-                                    value={editPassword}
-                                    onChange={(e) =>
-                                        setEditPassword(e.target.value)
-                                    }
-                                    placeholder="Leave blank to keep current"
-                                    className="h-8 border-(--admin-border) bg-(--admin-card) pr-8 text-xs"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        setShowEditPassword(!showEditPassword)
-                                    }
-                                    className="absolute top-1/2 right-2 flex cursor-pointer -translate-y-1/2 items-center text-(--admin-text-muted) transition-colors hover:text-(--admin-text)"
-                                >
-                                    {showEditPassword ? (
-                                        <EyeSlashIcon className="size-3.5" />
-                                    ) : (
-                                        <EyeIcon className="size-3.5" />
-                                    )}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <DialogFooter>
-                        <Button
-                            variant="ghost"
-                            onClick={() => {
-                                resetEditForm();
-                                setEditTerminal(null);
-                            }}
-                            className="text-(--admin-text-secondary)"
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            onClick={handleEdit}
-                            disabled={updateTerminal.isPending}
-                            className="bg-(--admin-primary) text-white hover:bg-(--admin-primary)/80"
-                        >
-                            {updateTerminal.isPending
-                                ? "Saving..."
-                                : "Save Changes"}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
