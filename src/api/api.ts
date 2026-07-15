@@ -61,6 +61,14 @@ api.interceptors.response.use(
         const { status } = error.response;
 
         if (status === 401 && !originalRequest._retry) {
+            const url = originalRequest.url || "";
+            if (
+                url.includes("/auth/login") ||
+                url.includes("/auth/terminal-login")
+            ) {
+                return Promise.reject(error);
+            }
+
             if (isRefreshing) {
                 return new Promise((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
