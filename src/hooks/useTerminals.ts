@@ -48,26 +48,20 @@ export const useCreateTerminal = () => {
             const previous = queryClient.getQueryData<Terminal[]>(
                 terminalKeys.all,
             );
-            queryClient.setQueryData<Terminal[]>(
-                terminalKeys.all,
-                (old) => {
-                    const optimistic: Terminal = {
-                        id: `temp-${Date.now()}`,
-                        name: payload.name,
-                        email: payload.email,
-                        isActive: true,
-                    };
-                    return [optimistic, ...(old ?? [])];
-                },
-            );
+            queryClient.setQueryData<Terminal[]>(terminalKeys.all, (old) => {
+                const optimistic: Terminal = {
+                    id: `temp-${Date.now()}`,
+                    name: payload.name,
+                    email: payload.email,
+                    isActive: true,
+                };
+                return [optimistic, ...(old ?? [])];
+            });
             return { previous };
         },
         onError: (_err, _vars, context) => {
             if (context?.previous) {
-                queryClient.setQueryData(
-                    terminalKeys.all,
-                    context.previous,
-                );
+                queryClient.setQueryData(terminalKeys.all, context.previous);
             }
         },
         onSettled: () => {
@@ -112,10 +106,7 @@ export const useUpdateTerminal = () => {
         },
         onError: (_err, _vars, context) => {
             if (context?.previous) {
-                queryClient.setQueryData(
-                    terminalKeys.all,
-                    context.previous,
-                );
+                queryClient.setQueryData(terminalKeys.all, context.previous);
             }
         },
         onSettled: () => {

@@ -34,19 +34,19 @@ No test runner, linter, or CI. Prettier ignores `node_modules`, `dist`, `*.local
 
 ## Wiring
 
-**Entry order** (main.tsx): `StrictMode > QueryClientProvider > AuthProvider > IconProvider > BrowserRouter > App`. `Toaster` inside BrowserRouter. `ReactQueryDevtools` inside QueryClientProvider but outside AuthProvider.
+**Entry order** (main.tsx): `StrictMode > QueryClientProvider > AuthProvider > IconProvider > Root`. `Root` renders `BrowserRouter > App + Toaster` once auth is initialized. `ReactQueryDevtools` sits inside `QueryClientProvider` but outside `AuthProvider`.
 
-`Root` wrapper checks `isInitialized` from `useAuth()` — renders `LoadingScreen` until session refresh resolves. LoginPage is the **only eager-loaded page**; all other pages use `React.lazy()` with `Suspense` → `LoadingScreen`.
+`Root` checks `isInitialized` from `useAuth()` and renders `LoadingScreen` until session refresh resolves. `LoginPage` is the **only eager-loaded page**; every other page uses `React.lazy()` + `Suspense` → `LoadingScreen`.
 
 **Auth**: Email/password login + PIN verify. Module-level `accessToken` in api.ts (not React state). On mount, silent `POST /auth/refresh` with `{ silent: true }` to restore session. Interceptor queues concurrent 401 retries during refresh. `useAuth()` from `@/hooks/useAuth`. `ProtectedRoute` → `/login` if unauthenticated. `AdminRoute` redirects `barista` role to `/`.
 
 **POS** (`/` route): `POSPage` wraps `CategoryProvider > POSProvider > POSLayout`. POSLayout renders `OrderQueue` + child route (`MenuView` at `/`, `PaymentView` at `/payment`). `CustomizeModal` shown when `customizeItem` is set. Consume via `usePOS()` from `@/hooks/usePos`. Cart→API payload built in `src/lib/order-payload.ts`. Route constants in `src/lib/constants.ts`. `generateCartId()` in `src/lib/utils.ts` uses `crypto.randomUUID()`.
 
-**Admin** (`/admin`): `AdminLayout` with sidebar nav + mobile sheet. 19 lazy-loaded pages (Dashboard, Menu, MenuItemCreate/Edit, Categories, Inventory, IngredientCreate/Detail, Employees, EmployeeCreate/Detail, Orders, Expenses, ExpenseCreate, ExpenseCategories, Discounts, DiscountCreate/Edit, Settings).
+**Admin** (`/admin`): `AdminLayout` with sidebar nav + mobile sheet. Lazy-loaded pages under `src/pages/admin/` — Dashboard, Menu, MenuItemCreate/Edit, Categories, Inventory, IngredientCreate/Detail, Employees, EmployeeCreate/Detail, Orders, Expenses, ExpenseCreate, ExpenseCategories, Discounts, DiscountCreate/Edit, Terminals, TerminalEdit, Settings. (`Terminal*` added after the original 19; count is not authoritative — list isn't either, just open the dir.)
 
 ## Shadcn CLI Gotchas
 
 - After `npx shadcn@latest add`, files land under `@/components/` — move to `src/components/ui/`
 - Community registry imports may hardcode wrong paths — fix manually
-- `@fontsource-variable/geist` imports reappear after re-init — delete
+- `@fontsource-variable/geist` is a stale shadcn-init dep — never use
 - VS Code schema warning on `components.json` is harmless

@@ -84,7 +84,7 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
             return data;
         },
         staleTime: 10_000,
-        refetchInterval: 15_000,
+        refetchInterval: 30_000,
         refetchOnWindowFocus: true,
     });
 

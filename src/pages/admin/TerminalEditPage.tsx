@@ -137,9 +137,7 @@ const TerminalEditPage = () => {
                             />
                             <button
                                 type="button"
-                                onClick={() =>
-                                    setShowPassword(!showPassword)
-                                }
+                                onClick={() => setShowPassword(!showPassword)}
                                 className="absolute top-1/2 right-2 flex -translate-y-1/2 cursor-pointer items-center text-(--admin-text-muted) transition-colors hover:text-(--admin-text)"
                             >
                                 {showPassword ? (
