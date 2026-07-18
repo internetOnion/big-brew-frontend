@@ -115,8 +115,8 @@ const PaymentScreen = () => {
         try {
             const order = await submitOrder(
                 method,
+                employee.pin,
                 amountReceived,
-                employee.id,
             );
             setCompletedOrder(order);
             setSuccess(true);

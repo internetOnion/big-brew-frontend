@@ -57,8 +57,8 @@ interface POSContextValue {
     closeCustomize: () => void;
     submitOrder: (
         paymentMethod: PaymentMethod,
+        pin: string,
         amountReceived?: number,
-        confirmedBy?: string,
     ) => Promise<Order>;
 }
 
@@ -437,16 +437,16 @@ const POSProvider = ({ children }: { children: ReactNode }) => {
     const submitOrder = useCallback(
         async (
             paymentMethod: "cash" | "qr",
+            pin: string,
             amountReceived?: number,
-            confirmedBy?: string,
         ): Promise<Order> => {
             const payload = buildOrderPayload(
                 cartItems,
                 orderType,
                 discountId,
                 paymentMethod,
+                pin,
                 amountReceived,
-                confirmedBy,
             );
 
             return submitOrderMutation.mutateAsync(payload);

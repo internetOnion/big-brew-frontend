@@ -120,14 +120,6 @@ const OrderDetailModal = ({ order, open, onClose }: OrderDetailModalProps) => {
                                 </div>
                                 <div>
                                     <span className="text-(--admin-text-muted)">
-                                        Confirmed by
-                                    </span>
-                                    <p className="text-(--admin-text-secondary)">
-                                        {order.confirmedBy?.name ?? "—"}
-                                    </p>
-                                </div>
-                                <div>
-                                    <span className="text-(--admin-text-muted)">
                                         Created at
                                     </span>
                                     <p className="text-(--admin-text-secondary)">
