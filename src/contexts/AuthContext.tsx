@@ -76,6 +76,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 setAccessToken(data.data?.access_token);
                 await fetchUser();
             } catch {
+                // ponytail: clear stale cookie so the next login isn't haunted
+                // by "session expired". Add server-side reason code when we need
+                // to differentiate expired vs revoked.
+                document.cookie =
+                    "refresh_token=; Path=/api/auth; Max-Age=0; SameSite=None; Secure";
                 setAccessToken(null);
                 setUser(null);
                 setUserType(null);

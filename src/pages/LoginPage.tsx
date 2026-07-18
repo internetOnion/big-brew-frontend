@@ -55,10 +55,10 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="flex flex-col min-h-screen bg-background lg:flex-row">
+        <div className="flex min-h-screen flex-col bg-background md:flex-row">
             <LoginBrandingPanel />
             <motion.div
-                className="flex flex-1 items-center justify-center"
+                className="flex flex-1 items-center justify-center px-6 py-12 md:px-10"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.15 }}

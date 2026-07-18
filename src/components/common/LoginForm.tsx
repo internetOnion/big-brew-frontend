@@ -28,8 +28,8 @@ export const LoginForm = ({ onSubmit, isLoading, error }: LoginFormProps) => {
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
         >
-            <div className="mb-12">
-                <h2 className="font-sans text-3xl font-bold text-foreground">
+            <div className="mb-8 md:mb-12">
+                <h2 className="font-sans text-2xl font-bold text-foreground md:text-3xl">
                     Welcome back
                 </h2>
                 <p className="mt-2 font-mono text-sm text-muted-foreground">
