@@ -2,9 +2,26 @@ import axios from "axios";
 import { toast } from "sonner";
 import { ENDPOINTS } from "./endpoints";
 
-let accessToken: string | null = null;
+const TOKEN_KEY = "bb_access_token";
+
 export const setAccessToken = (token: string | null) => {
-    accessToken = token;
+    try {
+        if (token) {
+            sessionStorage.setItem(TOKEN_KEY, token);
+        } else {
+            sessionStorage.removeItem(TOKEN_KEY);
+        }
+    } catch {
+        // SSR or storage full — noop
+    }
+};
+
+export const getAccessToken = (): string | null => {
+    try {
+        return sessionStorage.getItem(TOKEN_KEY);
+    } catch {
+        return null;
+    }
 };
 
 let onTokenRefreshed: ((token: string) => void) | null = null;
@@ -22,8 +39,9 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-    if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`;
+    const token = getAccessToken();
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
 });
@@ -49,6 +67,20 @@ api.interceptors.response.use(
     (response) => response,
     async (error) => {
         if (!error.response) {
+            const config = error.config;
+            const method = (config?.method || "").toLowerCase();
+            const isIdempotent = method === "get" || method === "head";
+
+            if (
+                error.code === "ECONNABORTED" &&
+                isIdempotent &&
+                !config?._retry
+            ) {
+                config._retry = true;
+                await new Promise((r) => setTimeout(r, 250));
+                return api(config);
+            }
+
             if (error.code === "ECONNABORTED") {
                 toast.error("Request timed out. Please try again");
             } else {
