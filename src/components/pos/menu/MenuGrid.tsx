@@ -39,7 +39,9 @@ export const MenuGrid = () => {
                 .includes(search.toLowerCase());
             const matchesCategory =
                 activeCategory === "all" || item.category.id === activeCategory;
-            return matchesSearch && matchesCategory;
+            return (
+                matchesSearch && matchesCategory && item.isAvailable !== false
+            );
         });
     }, [items, search, activeCategory]);
 

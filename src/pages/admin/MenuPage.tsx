@@ -71,7 +71,9 @@ const MenuPage = () => {
                 )
                     return false;
                 return true;
-            }),
+            })
+            ?.slice()
+            .sort((a, b) => a.name.localeCompare(b.name)),
         [items, search, categoryFilter, availabilityFilter],
     );
 
